@@ -1,0 +1,4 @@
+https://developer.fedoraproject.org/tech/languages/c/c_installation.html
+
+$ clang -std=c11 your_source.c -o your_binary
+
