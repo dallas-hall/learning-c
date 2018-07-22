@@ -7,8 +7,12 @@ int main(void)
 	printf("Press ctrl+D to send an EOF character.\n");	
 	int16_t c;
 
-	// put getchar inside the while loop, it must be inside brackets because
-	// != has higher precedence than =, so without brackets it won't work.
+	/*
+	Pur the getchar() call inside the while loop. This needs to be inside parentheses.
+	!= has a higher precedence than =, so without the parentheses the relational test
+	is done before the assignment statement. This would set the variable to being
+	either 0 or 1, depending on if EOF was returned.
+	*/
 	while((c = getchar() )!= EOF) {
 		putchar(c);
 	}
