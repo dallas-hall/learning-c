@@ -1,10 +1,12 @@
 #include <stdio.h>
+// import the new int types library
+#include <inttypes.h>
 
 // void here means don't take any arguments
 int main(void)
 {
 	float f, c;
-	int8_t lower, upper, increment;
+	int16_t lower, upper, increment;
 
 	lower = 0;
 	upper = 300;
