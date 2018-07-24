@@ -13,7 +13,7 @@ int main(void)
 	is done before the assignment statement. This would set the variable to being
 	either 0 or 1, depending on if EOF was returned.
 	*/
-	while((c = getchar() )!= EOF) {
+	while(EOF != (c = getchar())) {
 		putchar(c);
 	}
 	return 0;
