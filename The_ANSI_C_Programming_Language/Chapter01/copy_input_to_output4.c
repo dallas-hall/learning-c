@@ -15,11 +15,11 @@ int main(void)
 	either 0 or 1, depending on if EOF was returned.
 
 	*/
-	while(c = getchar() != EOF) {
-		// 1 for non-EOF chars
+	while(EOF != (c = getchar())) {
+		// Prints out ASCII code point for non-EOF chars
 		printf("%d%s", c, "\n");
 	}
-	// 0 for EOF chars.	
+	// -1 for EOF chars.	
 	printf("%d%s", c, "\n");
 	return 0;
 }

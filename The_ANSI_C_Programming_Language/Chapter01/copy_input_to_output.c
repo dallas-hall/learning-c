@@ -8,7 +8,7 @@ int main(void)
 	int16_t c;
 	c = getchar();
 
-	while(c != EOF) {
+	while(EOF != c) {
 		putchar(c);
 		c = getchar();
 	}
