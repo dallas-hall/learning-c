@@ -1,0 +1,1 @@
+clang -Weverything -g3 source.c -o source.out
