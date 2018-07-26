@@ -7,6 +7,8 @@ int main(void)
 	charCount = 0;
 
 	printf("Enter some text. The characeters will be counted and displayed at the end.\n");
+	printf("Type ctrl+d to finish.\n");
+
 	while(EOF != (getchar())) {
 		++charCount;
 	}
