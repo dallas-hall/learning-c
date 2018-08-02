@@ -25,7 +25,7 @@ int main(void)
 	}
 
 	if (current_max_length > 0) /* there was a line */
-		printf("The longest_line line was:\n%s", longest_line);
+		printf("The longest_line line was:\n%sAnd it had %d characters.\n", longest_line, current_max_length);
 
 	return 0;
 }
