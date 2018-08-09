@@ -2,27 +2,26 @@
 #include <inttypes.h>
 
 // function prototypes
+// Using the signed 64 integer int64_t so there is room for larger numbers.
 int64_t power(int64_t base, size_t n);
 
 int main(void)
 {
 	printf("Displaying the first 16 powers of 2.\n");
-	for (int i = 0; i < 16; i++) {
+	// Using the unsigned integer size_t. This is an unassigned integer of at least 16 bits. All unsigned integers are handled as positive numbers.
+	// Note: the overflow happens at 63 when using int64_t.
+	for (size_t i = 0; i < 32; i++) {
+		// %lu is an unsigned integer aka long
 		// Using PRId64 to print out the int64_t
-		// The explicit size_t cast is to remove the implict cast warning, of int to size_t
-		printf("2 ** %d\t%" PRId64 "\n", i, power(2, (size_t) i));
+		printf("2 ** %lu\t%" PRId64 "\n", i, power(2,  i));
 	}
 	return 0;
 }
 
-// base is now using 64 bit int for larger numbers.
-// n is now using size_t which is an unsigned integer of at least 16 bits. This stops a negative number from being passed. As all unsigned integers are handled as positive integers only.
 int64_t power(int64_t base, size_t n)
 {
-	// Using 64 instead of 32 to hold moar numbers. 
 	int64_t result = 1;
-	// The explicit cast here is for the same reason as above.
-	for (int i = 1; (size_t) i <= n; i++) {
+	for (size_t i = 1; i <= n; i++) {
 		result = result * base;	
 	}
 
