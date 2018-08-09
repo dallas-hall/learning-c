@@ -31,7 +31,7 @@ int main(void)
 		}
 	}
 	else {
-		printf("The line was less than 16 characters long so it wasn't printed.");
+		printf("The line was less than 16 characters long so it wasn't printed.\n");
 	}
 	return 0;
 }
