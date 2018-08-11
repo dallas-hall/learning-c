@@ -58,18 +58,11 @@ int main(void)
 	int16_t int16_t_min, int16_t_max;
 	int32_t int32_t_min, int32_t_max;
 	int64_t int64_t_min, int64_t_max;
-
-	// Fastest at least signed 8, 16, 32, & 64 bits
-	int_fast8_t int_fast8_t_min, int_fast8_t_max;
-	int_fast16_t int_fast16_t_min, int_fast16_t_max;
-	int_fast32_t int_fast32_t_min, int_fast32_t_max;
-	int_fast64_t int_fast64_t_min, int_fast64_t_max; 
-
-	// Smallest at least signed 8, 16, 32, & 64 bits
-	int_least8_t int_least8_t_min, int_least8_t_max;
-	int_least16_t int_least16_t_min, int_least16_t_max;
-	int_least32_t int_least32_t_min, int_least32_t_max;
-	int_least64_t int_least64_t_min, int_least64_t_max; 
+	// Unsigned
+	uint8_t uint8_t_min, uint8_t_max;
+	uint16_t uint16_t_min, uint16_t_max;
+	uint32_t uint32_t_min, uint32_t_max;
+	uint64_t uint64_t_min, uint64_t_max;
 
 	int8_t_min = INT8_MIN;
 	int8_t_max = INT8_MAX;
@@ -80,13 +73,75 @@ int main(void)
 	int64_t_min = INT64_MIN;
 	int64_t_max = INT64_MAX;
 
+	uint8_t_min = 0;
+	uint8_t_max = UINT8_MAX;
+	uint16_t_min = 0;
+	uint16_t_max = UINT16_MAX;
+	uint32_t_min = 0; 
+	uint32_t_max = UINT32_MAX;
+	uint64_t_min = 0;
+	uint64_t_max = UINT64_MAX;
+
+	// Fastest at least signed 8, 16, 32, & 64 bits
+	int_fast8_t int_fast8_t_min, int_fast8_t_max;
+	int_fast16_t int_fast16_t_min, int_fast16_t_max;
+	int_fast32_t int_fast32_t_min, int_fast32_t_max;
+	int_fast64_t int_fast64_t_min, int_fast64_t_max; 
+	// Unsigned
+	uint_fast8_t uint_fast8_t_min, uint_fast8_t_max;
+	uint_fast16_t uint_fast16_t_min, uint_fast16_t_max;
+	uint_fast32_t uint_fast32_t_min, uint_fast32_t_max;
+	uint_fast64_t uint_fast64_t_min, uint_fast64_t_max; 
+
+	int_fast8_t_min = INT_FAST8_MIN;
+	int_fast8_t_max = INT_FAST8_MAX;
+	int_fast16_t_min = INT_FAST16_MIN;
+	int_fast16_t_max = INT_FAST16_MAX;
+	int_fast32_t_min = INT_FAST32_MIN;
+	int_fast32_t_max = INT_FAST32_MAX;
+	int_fast64_t_min = INT_FAST64_MIN;
+	int_fast64_t_max = INT_FAST64_MAX;
+
+	uint_fast8_t_min = 0;
+	uint_fast8_t_max = UINT_FAST8_MAX;
+	uint_fast16_t_min = 0;
+	uint_fast16_t_max = UINT_FAST16_MAX;
+	uint_fast32_t_min = 0;
+	uint_fast32_t_max = UINT_FAST32_MAX;
+	uint_fast64_t_min = 0;
+	uint_fast64_t_max = UINT_FAST64_MAX;
+	
+	// Smallest at least signed 8, 16, 32, & 64 bits
+	int_least8_t int_least8_t_min, int_least8_t_max;
+	int_least16_t int_least16_t_min, int_least16_t_max;
+	int_least32_t int_least32_t_min, int_least32_t_max;
+	int_least64_t int_least64_t_min, int_least64_t_max; 
+	// Unsigned
+	uint_least8_t uint_least8_t_min, uint_least8_t_max;
+	uint_least16_t uint_least16_t_min, uint_least16_t_max;
+	uint_least32_t uint_least32_t_min, uint_least32_t_max;
+	uint_least64_t uint_least64_t_min, uint_least64_t_max; 
+
 	printf("The C11 SIGNED number ranges are:\n");
 	// PRId prints out a signed integer with the corresponding bit amount.  
 	printf("int8_t min:\t%" PRId8 "\t\nint8_t max:\t%" PRId8 "\n", int8_t_min, int8_t_max);
-
 	printf("int16_t min:\t%" PRId16 "\t\nint16_t max:\t%" PRId16 "\n", int16_t_min, int16_t_max);
 	printf("int32_t min:\t%" PRId32 "\t\nint32_t max:\t%" PRId32 "\n", int32_t_min, int32_t_max);
-	printf("int64_t min:\t%" PRId64 "\t\nint64_t max:\t%" PRId64 "\n", int64_t_min, int64_t_max);
+	printf("int64_t min:\t%" PRId64 "\t\nint64_t max:\t%" PRId64 "\n\n", int64_t_min, int64_t_max);
+
+	printf("The C11 UNSIGNED number ranges are:\n");
+	// PRIu prints out an unsigned integer with the corresponding bit amount.  
+	printf("uint8_t min:\t%" PRIu8 "\t\nuint8_t max:\t%" PRIu8 "\n", uint8_t_min, uint8_t_max);
+	printf("uint16_t min:\t%" PRIu16 "\t\nuint16_t max:\t%" PRIu16 "\n", uint16_t_min, uint16_t_max);
+	printf("uint32_t min:\t%" PRIu32 "\t\nuint32_t max:\t%" PRIu32 "\n", uint32_t_min, uint32_t_max);
+	printf("uint64_t min:\t%" PRIu64 "\t\nuint64_t max:\t%" PRIu64 "\n\n", uint64_t_min, uint64_t_max);
+
+	printf("The C11 SIGNED FAST number ranges are:\n");
+	// PRIu prints out an unsigned integer with the corresponding bit amount.  
+	printf("uint8_t min:\t%" PRIu8 "\t\nuint8_t max:\t%" PRIu8 "\n", uint8_t_min, uint8_t_max);
+	printf("uint16_t min:\t%" PRIu16 "\t\nuint16_t max:\t%" PRIu16 "\n", uint16_t_min, uint16_t_max);
+	printf("uint32_t min:\t%" PRIu32 "\t\nuint32_t max:\t%" PRIu32 "\n", uint32_t_min, uint32_t_max);
+	printf("uint64_t min:\t%" PRIu64 "\t\nuint64_t max:\t%" PRIu64 "\n\n", uint64_t_min, uint64_t_max);
 
 
 	return 0;
