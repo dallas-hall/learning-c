@@ -15,7 +15,7 @@ int main(void)
 	c = lower;
 	printf("C\tF\n");
 	while (c <= upper) {
-		f = (c * 9.0 / 5.0) + 32;  
+		f = (c * 9.0f / 5.0f) + 32;  
 		printf("%1.1f\t%3.1f\n", c, f); // right justified
 		c = c + increment;
 	}

@@ -9,9 +9,9 @@ if it is a constant value, prefer const <type> name = value over #define
 #define UPPER 300
 #define INCREMENT 20
 */
-const int8_t LOWER = 0;
-const int16_t UPPER = 300;
-const int8_t INCREMENT = 20;
+static const int8_t LOWER = 0;
+static const int16_t UPPER = 300;
+static const int8_t INCREMENT = 20;
 
 
 // this method returns an int (return code) and takes no arguments
