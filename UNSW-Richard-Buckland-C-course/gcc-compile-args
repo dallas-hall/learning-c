@@ -1,0 +1,4 @@
+# This is GNU C compiler to convert C source code into machine code
+# -Werror will stop the output file being created
+gcc -Wall -Werror -o output-filename input-filename.c
+
