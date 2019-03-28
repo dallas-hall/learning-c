@@ -1,6 +1,4 @@
 #include <stdio.h>
-// import new int types
-#include <inttypes.h>
 
 #define LOWER 0
 #define UPPER 300
