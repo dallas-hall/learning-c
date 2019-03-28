@@ -1,8 +1,10 @@
 Lecture 1 - Higher Computing
 ============================
 
-INFO: Lecture @
-<https://www.youtube.com/watch?v=hE7l6Adoiiw&t=0s&index=2&list=PLEEAD1D187A7CCD6C>
+> **Tip**
+>
+> Lecture @
+> <https://www.youtube.com/watch?v=hE7l6Adoiiw&t=0s&index=2&list=PLEEAD1D187A7CCD6C>
 
 -   ABC of people
 
@@ -45,8 +47,10 @@ INFO: Lecture @
 Lecture 2 - Inside A Computer
 =============================
 
-INFO: Lecture @
-<https://www.youtube.com/watch?v=JA_G8XbVYug&list=PLEEAD1D187A7CCD6C&index=2>
+> **Tip**
+>
+> Lecture @
+> <https://www.youtube.com/watch?v=JA_G8XbVYug&list=PLEEAD1D187A7CCD6C&index=2>
 
 -   Course will be teaching:
 
@@ -193,14 +197,17 @@ History
 
         -   Repeat until IS is HALT
 
-INFO: Online emulator @
-<https://www.flagsoft.com/cmswp/en/apps/4917emu-microprocessor-emulator/>
+> **Tip**
+>
+> Online emulator @
+> <https://www.flagsoft.com/cmswp/en/apps/4917emu-microprocessor-emulator/>
 
 Lecture 3 - Machine Code
 ========================
 
-INFO:
-<https://www.youtube.com/watch?v=gTeDX4yAdyU&list=PLEEAD1D187A7CCD6C&index=3>
+> **Tip**
+>
+> <https://www.youtube.com/watch?v=gTeDX4yAdyU&list=PLEEAD1D187A7CCD6C&index=3>
 
 -   Binary
 
@@ -224,9 +231,10 @@ INFO:
 Lecture 4 - Simple C Program
 ============================
 
-INFO:
-<https://www.youtube.com/watch?v=Y0QN2bk4OoA&index=4&list=PLEEAD1D187A7CCD6C>
-`Week01.c`
+> **Tip**
+>
+> <https://www.youtube.com/watch?v=Y0QN2bk4OoA&index=4&list=PLEEAD1D187A7CCD6C>
+> `Week01.c`
 
 -   We are using gcc as the compiler for this course
 
@@ -244,9 +252,10 @@ INFO:
 Lecture 5 - Clarity
 ===================
 
-INFO:
-<https://www.youtube.com/watch?v=F5FPlq-MeWo&list=PLEEAD1D187A7CCD6C&index=5>
-`Week02.c`
+> **Tip**
+>
+> <https://www.youtube.com/watch?v=F5FPlq-MeWo&list=PLEEAD1D187A7CCD6C&index=5>
+> `Week02.c`
 
 -   Inside every complex problem is a simple solution.
 
@@ -269,9 +278,10 @@ INFO:
 Lecture 6 - Solving Problems
 ============================
 
-INFO:
-<https://www.youtube.com/watch?v=dyiYQ8Z_nI0&list=PLEEAD1D187A7CCD6C&index=6>
-`Week02.c`
+> **Tip**
+>
+> <https://www.youtube.com/watch?v=dyiYQ8Z_nI0&list=PLEEAD1D187A7CCD6C&index=6>
+> `Week02.c`
 
 -   It is human to make mistakes, so you will always make mistakes when
     you program.
@@ -333,9 +343,9 @@ INFO:
         -   `#define VARIABLE_NAME VARIABLE_VALUE` is used to create
             CONSTANTS
 
-WARN: The biggest obstacle to learning is you!
-
 -   Problems with learning programming, or learning or doing anything!
+
+-   The biggest obstacle to learning is you!
 
     -   You need to work hard and be determined.
 
@@ -346,8 +356,9 @@ WARN: The biggest obstacle to learning is you!
 Lecture 7 - Side Effects
 ========================
 
-INFO:
-<https://www.youtube.com/watch?v=7AZhjQjYX9w&list=PLEEAD1D187A7CCD6C&index=7>
-`Week02.c`
+> **Tip**
+>
+> <https://www.youtube.com/watch?v=7AZhjQjYX9w&list=PLEEAD1D187A7CCD6C&index=7>
+> `Week02.c`
 
 \*
