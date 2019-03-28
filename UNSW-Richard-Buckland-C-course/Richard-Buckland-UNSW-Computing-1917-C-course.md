@@ -51,10 +51,16 @@ Lecture 2 - Inside A Computer
 >
 > Lecture @
 > <https://www.youtube.com/watch?v=JA_G8XbVYug&list=PLEEAD1D187A7CCD6C&index=2>
-> \* Course will be teaching: .. Computer literacy - history/ ..
-> Computer science - analyitical ability and craftsmanship. .. System
-> stream - how computers works like, memory and assembly. .. Programming
-> stream - programming in C.
+
+-   Course will be teaching:
+
+    1.  Computer literacy - history/
+
+    2.  Computer science - analyitical ability and craftsmanship.
+
+    3.  System stream - how computers works like, memory and assembly.
+
+    4.  Programming stream - programming in C.
 
 -   Course uses `gcc -Wall -o hello helloWorld.c`
 
@@ -220,7 +226,10 @@ Lecture 4 - Simple C Program
 ============================
 
 <https://www.youtube.com/watch?v=Y0QN2bk4OoA&index=4&list=PLEEAD1D187A7CCD6C>
-TIP: `Week01.c`
+
+> **Tip**
+>
+> `Week01.c`
 
 -   We are using gcc as the compiler for this course
 
@@ -239,7 +248,10 @@ Lecture 5 - Clarity
 ===================
 
 <https://www.youtube.com/watch?v=F5FPlq-MeWo&list=PLEEAD1D187A7CCD6C&index=5>
-TIP: `Week02.c`
+
+> **Tip**
+>
+> `Week02.c`
 
 -   Inside every complex problem is a simple solution.
 
@@ -339,6 +351,9 @@ Lecture 6 - Side Effects
 ========================
 
 <https://www.youtube.com/watch?v=7AZhjQjYX9w&list=PLEEAD1D187A7CCD6C&index=7>
-TIP: `Week02.c`
+
+> **Tip**
+>
+> `Week02.c`
 
 \*
