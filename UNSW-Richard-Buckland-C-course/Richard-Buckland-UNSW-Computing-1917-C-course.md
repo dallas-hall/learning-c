@@ -234,7 +234,8 @@ Lecture 4 - Simple C Program
 > **Tip**
 >
 > <https://www.youtube.com/watch?v=Y0QN2bk4OoA&index=4&list=PLEEAD1D187A7CCD6C>
-> `Week01.c`
+
+-   Source code in `Week01.c`
 
 -   We are using gcc as the compiler for this course
 
@@ -255,7 +256,8 @@ Lecture 5 - Clarity
 > **Tip**
 >
 > <https://www.youtube.com/watch?v=F5FPlq-MeWo&list=PLEEAD1D187A7CCD6C&index=5>
-> `Week02.c`
+
+-   Source code in `Week02.c`
 
 -   Inside every complex problem is a simple solution.
 
@@ -281,7 +283,8 @@ Lecture 6 - Solving Problems
 > **Tip**
 >
 > <https://www.youtube.com/watch?v=dyiYQ8Z_nI0&list=PLEEAD1D187A7CCD6C&index=6>
-> `Week02.c`
+
+-   Source code in `Week02.c`
 
 -   It is human to make mistakes, so you will always make mistakes when
     you program.
