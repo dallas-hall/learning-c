@@ -1,6 +1,4 @@
 #include <stdio.h>
-// import new int types
-#include <inttypes.h>
 
 // this method returns an int (return code) and takes no arguments
 int main(void)
