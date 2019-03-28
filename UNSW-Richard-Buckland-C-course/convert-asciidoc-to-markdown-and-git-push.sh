@@ -8,3 +8,7 @@ pandoc -f docbook -t markdown_strict Richard-Buckland-UNSW-Computing-1917-C-cour
 # Clean up
 rm Richard-Buckland-UNSW-Computing-1917-C-course.xml
 
+# git stuff
+git add Richard-Buckland-UNSW-Computing-1917-C-course.md
+git commit -m "Added new notes from lectures."
+git push gitlab
