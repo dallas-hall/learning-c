@@ -1,13 +1,12 @@
 #include <stdio.h>
-#include <inttypes.h>
 
 int main(void)
 {
-	int32_t charCount;
+	long charCount;
 	charCount = 0;
 
-	printf("Enter some text. The characeters will be counted and displayed at the end.\n");
-	printf("Type ctrl+d to finish.\n");
+	printf("Enter some text. The characters will be counted and displayed at the end.\n");
+	printf("Type ^D (ctrl + d) to finish.\n");
 
 	while(EOF != (getchar())) {
 		++charCount;
