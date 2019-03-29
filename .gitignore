@@ -52,5 +52,10 @@ Mkfile.old
 dkms.conf
 
 # IntelliJ CLion
-The_ANSI_C_Programming_Language/.idea/*
-Programming_Problem_Solving_And_Abstraction_With_C/.idea/*
+*/.idea/*
+
+# vim files
+*.swp
+
+# Asciidoc files
+*.asciidoc
