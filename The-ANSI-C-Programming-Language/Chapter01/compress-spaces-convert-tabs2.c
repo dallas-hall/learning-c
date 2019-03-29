@@ -1,20 +1,19 @@
 #include <stdio.h>
+#include <inttypes.h>
 
 int main(void)
 {
-	int previousChar, currentChar, index;
+	int32_t previousChar, currentChar, index;
 	previousChar = '\0';
 	index = 0;
 
 	printf("This program will accept input and compress multiple spaces and tabs into 1 space.\n");
-	printf("It will also replace a tab with a single space. Press ^D (ctrl + d) to exit.\n");
+	printf("It will also replace a tab with a single space. Press control+d to exit.\n");
 	while (EOF != (currentChar = getchar())) {
-		if (0 == index) { 
-			if (currentChar == '\t') {
-				currentChar = ' ';
-			}
+		if (0 == index) {
 			putchar(currentChar);
 			previousChar = currentChar;
+			index++;
 		}
 		else {
 			if ('\t' == currentChar && ' ' != previousChar) {
@@ -22,10 +21,7 @@ int main(void)
 				previousChar = ' ';
 			}
 			else if ((' ' == previousChar && ' ' == currentChar) ||
-					 (' ' == previousChar && '\t' == currentChar) ||
-					 ('\t' == previousChar && ' ' == currentChar) ||
-					 ('\t' == previousChar && '\t' == currentChar)) 
-			{
+					 (' ' == previousChar && '\t' == currentChar)) {
 				// Null statement as we don't want to do anything here.
 				;
 			}
@@ -33,8 +29,8 @@ int main(void)
 				previousChar = currentChar;
 				putchar(currentChar);
 			}
+			index++;
 		}
-		index++;
 	}
 	return 0;
 }
