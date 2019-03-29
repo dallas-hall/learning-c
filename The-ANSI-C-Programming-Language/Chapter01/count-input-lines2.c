@@ -1,8 +1,9 @@
 #include <stdio.h>
+#include <inttypes.h>
 
 int main(void)
 {
-	long currentChar, lineCount;
+	int32_t currentChar, lineCount;
 	lineCount = 0;
 
 	printf("This program will count lines using the newline character.\n");
@@ -13,6 +14,6 @@ int main(void)
 			lineCount++;
 		}
 	}
-	printf("The number of lines types was %ld\n", lineCount);
+	printf("The number of lines types was %d\n", lineCount);
 	return 0;
 }
