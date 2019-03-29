@@ -9,7 +9,7 @@ int main(void)
 	lineCount = 0;
 
 	printf("This program will count spaces, tabs, and lines.\n");
-	printf("Type some lines and press control+d when finished.\n");
+	printf("Type some lines and press ^D (ctrl + d) when finished.\n");
 
 	while(EOF != (currentChar = getchar())) {
 		if (' ' == currentChar) {
