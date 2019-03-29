@@ -1,11 +1,13 @@
 #include <stdio.h>
+#include <inttypes.h>
 
-#define START 1
-#define END 0
+// controls wordState, which is used to keep track of the start and end of words.
+static const int8_t START = 1;
+static const int8_t END = 0;
 
 int main(void)
 {
-	long currentChar, numberLines, numberWords, numberChars, wordState;
+	int32_t currentChar, numberLines, numberWords, numberChars, wordState;
 	wordState = END;
 	numberLines = 0;
 	numberWords = 0;
@@ -27,6 +29,6 @@ int main(void)
 		}
 	}
 
-	printf("Lines: %ld Words: %ld Characters: %ld\n", numberLines, numberWords, numberChars);
+	printf("Lines: %d Words: %d Characters: %d\n", numberLines, numberWords, numberChars);
 	return 0;
 }
