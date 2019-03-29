@@ -1,8 +1,9 @@
 #include <stdio.h>
+#include <inttypes.h>
 
 int main(void)
 {
-	long currentChar, spaceCount, tabCount, lineCount;
+	int32_t currentChar, spaceCount, tabCount, lineCount;
 	spaceCount = 0;
 	tabCount = 0;
 	lineCount = 0;
@@ -21,8 +22,8 @@ int main(void)
 			lineCount++;
 		}
 	}
-	printf("The number of spaces types was %ld\n", spaceCount);
-	printf("The number of tabs types was %ld\n", tabCount);
-	printf("The number of lines types was %ld\n", lineCount);
+	printf("The number of spaces types was %d\n", spaceCount);
+	printf("The number of tabs types was %d\n", tabCount);
+	printf("The number of lines types was %d\n", lineCount);
 	return 0;
 }
