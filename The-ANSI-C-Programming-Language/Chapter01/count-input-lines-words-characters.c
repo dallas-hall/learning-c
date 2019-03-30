@@ -7,9 +7,13 @@ int main(void)
 {
 	long currentChar, numberLines, numberWords, numberChars, wordState;
 	wordState = END;
+	
+	/*
 	numberLines = 0;
 	numberWords = 0;
 	numberChars = 0;
+	*/
+	numberLines = numberWords = numberChars = 0; // Same as above
 
 	printf("This program will count the number of lines, words, and characters of the text you enter.\n");
 	printf("Enter some text and press ^D (ctrl + d) to exit\n");
