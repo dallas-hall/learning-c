@@ -1,9 +1,8 @@
 #include <stdio.h>
-#include <inttypes.h>
 
 int main(void)
 {
-	int32_t currentChar;
+	int currentChar;
 
 	printf("This program writes one word per line. A word is everything that isn't a space, tab, or newline.\n");
 	printf("Enter input and type ^D (ctrl + d) to exit.\n");
