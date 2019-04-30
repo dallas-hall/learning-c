@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
 {
 	int days, hours, minutes, seconds;
 	
-	printf("Enter the amount of days as an integer.\n");
-	scanf("%d", &days);
+	printf("Enter the amount of days as an integer.\n"); // Remember to always provide a \n
+	scanf("%d", &days); // Remember the & here infront of the variable name.
 
 	hours = daysToHours(days);
 	minutes = daysToMinutes(days);
