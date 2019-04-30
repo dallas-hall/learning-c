@@ -12,8 +12,10 @@ int main (int argc, char *argv[])
 	printf("Enter an integer.\n");
 	scanf("%d", &inputNumber);
 
-	answer = sumToN(inputNumber);
-	printf("The sum of 1 to %d is %d.\n", inputNumber, answer);
+	// Need to divide last here to not have an integer division happen.
+	answer = (inputNumber * (inputNumber + 1)) / 2;
+	printf("Equation: The sum of 1 to %d is %d.\n", inputNumber, answer);
+	printf("Recursion: The sum of 1 to %d is %d.\n", inputNumber, sumToN(inputNumber));
 	return EXIT_SUCCESS;
 }
 
