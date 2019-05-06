@@ -10,7 +10,7 @@ int main(void)
 	int8_t wordLengths[maximumWordLength];
 	
 	currentWordLength = 0;
-	for (int i = 0; i < 16; i++) {
+	for (int i = 0; i < maximumWordLength; i++) {
 		wordLengths[i] = 0;
 	}
 	
@@ -43,8 +43,9 @@ int main(void)
 
 	printf("[INFO] Vertical histogram.\n");
 	int8_t length = maximumWordLength - 1;
-	// = is needed since the number is 15.
+	// >= is needed since the number is 15, we want to iterate 16 times.
 	for (int i = length; i >= 0; i--) {
+		// <= is needed so we print between 1 and 16
 		for (int j = 0; j <= length; j++) {
 			if (0 == wordLengths[j] || i >= wordLengths[j]) {
 				printf("   ");
@@ -54,9 +55,10 @@ int main(void)
 			}
 		}
 		printf("\n");
-		// if i = 0 print the row
+		// if i = 0 print the bottom row of numbers
 		if (0 == i) {
 			for (int k = 0; k < maximumWordLength; k++) {
+				// +1 is needed to print between 1 and 16
 				printf("%2d ", k + 1);
 			}
 		}
