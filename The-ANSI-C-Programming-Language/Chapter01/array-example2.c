@@ -25,11 +25,11 @@ int main(void)
 		}
 	}
 	
-	printf("Digits:");
+	printf("Digits:\n");
 	for (int i = 0; i < 10; i++) {
-		printf(" %d has %d\n", i, digit[i]);
+		printf("%d has %d\n", i, digit[i]);
 	}
-	printf("\nWhitespace: %d\nOther: %d", whitespace, other);
+	printf("\nWhitespace: %d\nOther: %d\n", whitespace, other);
 	
 	return 0;
 }
