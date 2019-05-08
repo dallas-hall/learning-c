@@ -7,6 +7,7 @@ int main()
 	int currentChar;
 	_Bool debugging = true;
 
+	int histogramHeight = 10;
 	int numbers[10];
 
 	for (int i = 0; i < 10; i++) {
@@ -20,38 +21,39 @@ int main()
 			printf("currentChar decimal number is %d\n", currentChar - '0');
 		}
 		
-		if(currentChar == '0') {
+		if(currentChar == '0' && numbers[0] < histogramHeight) {
 			numbers[0]++;
 		}
-		if(currentChar == '1') {
+		if(currentChar == '1' && numbers[0] < histogramHeight) {
 			numbers[1]++;
 		}
-		if(currentChar == '2') {
+		if(currentChar == '2' && numbers[0] < histogramHeight) {
 			numbers[2]++;
 		}
-		if(currentChar == '3') {
+		if(currentChar == '3' && numbers[0] < histogramHeight) {
 			numbers[3]++;
 		}
-		if(currentChar == '4') {
+		if(currentChar == '4' && numbers[0] < histogramHeight) {
 			numbers[4]++;
 		}
-		if(currentChar == '5') {
+		if(currentChar == '5' && numbers[0] < histogramHeight) {
 			numbers[5]++;
 		}
-		if(currentChar == '6') {
+		if(currentChar == '6' && numbers[0] < histogramHeight) {
 			numbers[6]++;
 		}
-		if(currentChar == '7') {
+		if(currentChar == '7' && numbers[0] < histogramHeight) {
 			numbers[7]++;
 		}
-		if(currentChar == '8') {
+		if(currentChar == '8' && numbers[0] < histogramHeight) {
 			numbers[8]++;
 		}
-		if(currentChar == '9') {
+		if(currentChar == '9' && numbers[0] < histogramHeight) {
 			numbers[9]++;
 		}
-	
 	}
+
+	printf("The histograms are limited to a height of %d characters.\n", histogramHeight);
 	printf("Vertical Histogram\n");
 	for (int i = 0; i < 10; i++) {
 		printf("%d: ", i);
@@ -62,6 +64,19 @@ int main()
 	}
 
 	printf("Horizontal Histogram\n");
-
+	for (int i = histogramHeight; i > 0; i--) {
+		for (int j = 0; j < 10; j++) {
+			if(numbers[j] < i) {
+				printf("   ");
+			} else {
+				printf(" * ");
+			}
+		}
+		printf("\n");
+	}
+	for (int i = 0; i < 10; i++) {
+		printf(" %d ", i);
+	}
+	printf("\n");
 	return 0;
 }
