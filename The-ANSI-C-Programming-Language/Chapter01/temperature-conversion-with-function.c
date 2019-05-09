@@ -1,15 +1,7 @@
 #include <stdio.h>
-#include <inttypes.h>
 
-static double fahrenheit2celcius(double f)
-{
-	return (5.0 / 9.0) * (f - 32.0);
-}
-
-static double celcius2fahrenheit(double c)
-{
-	return ((c * 9.0 / 5.0) + 32); 
-}
+double fahrenheit2celcius(double f);
+double celcius2fahrenheit(double c);
 
 int main(void)
 {
@@ -32,4 +24,12 @@ int main(void)
 	return 0;
 }
 
+double fahrenheit2celcius(double f)
+{
+	return (5.0 / 9.0) * (f - 32.0);
+}
 
+double celcius2fahrenheit(double c)
+{
+	return ((c * 9.0 / 5.0) + 32); 
+}
