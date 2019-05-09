@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <inttypes.h>
+
+int power(int base, int n);
 
 int main(void)
 {
@@ -10,9 +11,9 @@ int main(void)
 	return 0;
 }
 
-int32_t power(int32_t base, int32_t n)
+int power(int base, int n)
 {
-	int32_t result = 1;
+	int result = 1;
 
 	for (int i = 1; i <= n; i++) {
 		result = result * base;	
