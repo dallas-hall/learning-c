@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <inttypes.h>
 
 #define MAXLINE 1000 /* maximum input line length */
 
@@ -16,7 +15,7 @@ int main(void)
 	char longest[MAXLINE]; /* longest line saved here */
 	max = 0;
 
-	printf("Type some lines, the longest line will be stored and displayed back at the end.\nPress control + d to exit.\n");
+	printf("Type some lines, the longest line will be stored and displayed back at the end.\nPress ^D (control + d) to exit.\n");
 	while ((len = get_line(line, MAXLINE)) > 0) {
 		if (len > max) {
 		max = len;
@@ -33,14 +32,14 @@ int main(void)
 /* getline: read a line into s, return length */
 int get_line(char s[], int limit)
 {
-	int i;
-	int32_t c;
+	int i, c;
+	c = 0;
 
 	for (i = 0; i < limit - 1 && EOF != (c = getchar()) && '\n' != c; i++) {
-		s[i] = c;
+		s[i] = (char) c; // Need to cast or will get an implicit cast warning.
 	}
 	if ('\n' == c) {
-		s[i] = c;
+		s[i] = (char) c;
 		i++;
 	}
 
