@@ -405,3 +405,9 @@ As instead, one must write
       current = new_pointer;
     }
 ```
+# Boolean print function
+```
+static inline char*const boolstr(const bool b) {
+    return (b) ? "true" : "false";
+}
+```
