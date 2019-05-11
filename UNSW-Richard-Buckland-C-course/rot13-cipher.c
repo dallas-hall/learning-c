@@ -7,6 +7,8 @@
 
 // Function prototypes
 char applyRot13(char c);
+void printAllUppercaseRot13(void); // void is needed for a 0 paramater function
+void printAllLowercaseRot13(void);
 
 // Functions
 int main(int argc, char *argv[])
@@ -15,7 +17,10 @@ int main(int argc, char *argv[])
 
   printf("Enter a character to be ROT13 shifted.\n");
   scanf("%c", &c);
-  printf("The character %c after ROT13 is %c\n.", c, applyRot13(c));
+  printf("The character %c after ROT13 is %c.\n", c, applyRot13(c));
+
+  printAllUppercaseRot13();
+  printAllLowercaseRot13();
   return EXIT_SUCCESS;
 }
 
@@ -40,4 +45,22 @@ char applyRot13(char c)
     answer = c - SHIFT_NUMBER;
   }
   return answer;
+}
+
+void printAllUppercaseRot13()
+{
+  printf("ROT13 applied to A-Z:\n");
+  for (int i = 65; i <= 90; i++) {
+    printf("%c", applyRot13((char) i));
+  }
+  printf("\n");
+}
+
+void printAllLowercaseRot13()
+{
+  printf("ROT13 applied to a-z:\n");
+  for (int i = 97; i <= 122; i++) {
+    printf("%c", applyRot13((char) i));
+  }
+  printf("\n");
 }
