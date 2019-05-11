@@ -1,6 +1,7 @@
 // Guass trick, add 1 to n
 #include <stdio.h> // Has scanf and printf
 #include <stdlib.h> // Has EXIT_SUCCESS
+#include <assert.h> // For assertions
 
 // Function prototypes
 int sumToN(int n);
@@ -21,6 +22,7 @@ int main (int argc, char *argv[])
 
 int sumToN(int n)
 {
+	assert(n >= 0);
 	int sum;
 
 	// Base condition to exit the recursive function
