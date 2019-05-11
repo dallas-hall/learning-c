@@ -24,11 +24,7 @@ int main(int argc, char *argv[])
 
 bool isNumberEven(int n)
 {
-  if (n % 2 == 0) {
-    return true;
-  } else {
-    return false;
-  }
+  return (n % 2 == 0);
 }
 
 // https://www.mathsisfun.com/prime-composite-number.html
