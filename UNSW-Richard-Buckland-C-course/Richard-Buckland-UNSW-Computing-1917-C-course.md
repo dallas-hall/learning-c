@@ -364,4 +364,182 @@ Lecture 7 - Side Effects
 > <https://www.youtube.com/watch?v=7AZhjQjYX9w&list=PLEEAD1D187A7CCD6C&index=7>
 > `Week02.c`
 
+-   This one is broken.
+
+Lecture 8 - Simple C Program
+============================
+
+> **Tip**
+>
+> <https://www.youtube.com/watch?v=hFSY9cWjO8o&list=PLEEAD1D187A7CCD6C&index=8>
+> `countdown.c`
+
+-   Don’t use single letter variable names.
+
+-   Methods needs to be explicitly declared. This is basically the Java
+    method signature.
+
+    -   These are called function prototypes.
+
+-   Ordering
+
+    -   includes
+
+    -   function prototypes
+
+    -   `main` function
+
+        -   variables
+
+        -   code
+
+    -   all other functions
+
+-   Tips
+
+    -   Make sure you practice everyday!
+
+    -   Before programming think about your problem first.
+
+        -   Solve the problem on paper first.
+
+    -   When you finish writing the program, refactor it and make it
+        cleaner and better.
+
+Lecture 9 - Simple Recursive Function
+=====================================
+
+> **Tip**
+>
+> <https://www.youtube.com/watch?v=nxiObVwQ8MM&list=PLEEAD1D187A7CCD6C&index=9>
+> `Week03.c`
+
+-   Practice with:
+
+    -   What you learnt previously.
+
+    -   Something that you want to solve.
+
+-   Triangular numbers (This is what Guass did)
+
+    -   1 + 2 + 3 … + 100
+
+    -   100 \* 101 / 2
+
+-   Switch equality tests to let the compiler catch simple errors.
+
+    -   `n == 0` to `0 == n`
+
+-   This course is not purely about C. It is teaching you how to think
+    like a programmer / computer scientist.
+
+-   A variety of variable types.
+
+    -   `char` is *%c*
+
+    -   `int` is *%d*
+
+    -   `long` is *%ld*
+
+    -   `float` is *%f*
+
+    -   *double* is *%Lf*
+
+-   hexadecimal printing is *%x*
+
+-   Floating point numbers get rounding errors. Double has less rounding
+    errors because its larger. Should use double over float because of
+    the less rounding errors.
+
+> **Tip**
+>
+> `int` and `long` are represented differently on different machines.
+
+-   Endian
+
+    -   MSB (most signifcant bit) stores the largest part of the number
+
+    -   LSB (least signifcant bit) stores the smallest part of the
+        number
+
+    -   Big Endian has the MSB first in the memory. MSB … LSB or one
+        hundred is 100
+
+    -   Little Endian has the MSB last in the memory. LSB … MSB or one
+        hundred is 001
+
+> **Tip**
+>
+> Everything that you learn will be hard and painful at the start. Keep
+> going so you can do something really fun at the end.
+
+Lecture 10 - Functions
+======================
+
+> **Tip**
+>
+> <https://www.youtube.com/watch?v=q2YOaJzOxMQ&list=PLEEAD1D187A7CCD6C&index=10>
+
+-   Functions are great for design.
+
+-   Functions have 3 great advantages.
+
+    1.  Abstraction - not caring about the details so you can
+        concentrate on what is important. Seeing the forest from the
+        trees.
+
+        1.  E.g. Transistor diagrams into logic gates.
+
+    2.  Code reuse
+
+        1.  If you are writing something over and over again, you should
+            be writing it as a function.
+
+    3.  Name space / scope - variables inside a function only have scope
+        inside the function they live in.
+
+Lecture 11 & 12 - Revision Lectures
+===================================
+
+> **Tip**
+>
+> <https://www.youtube.com/watch?v=IjxoGH17wdo&list=PLEEAD1D187A7CCD6C&index=11>
+> &
+> <https://www.youtube.com/watch?v=2dgjEv5Mg-4&list=PLEEAD1D187A7CCD6C&index=12>
+> `funciton-example.c`
+
+-   `if else` is better than multiple `if` statements because the
+    `if else` will stop checking once equality is found, whereas the
+    multiple `if` statements will continually check even after equality
+    is found.
+
+-   `void` is the return type for functions that don’t return anything.
+
+-   Use functions for any code that is repeated. Remember that functions
+    can call other functions.
+
+-   Pairing integer division an modulo you can extract numbers.
+
+    -   Modulo by 10 will get the last number
+
+    -   Integer division by 10 will remove the last number
+
+    -   2 other common ways. For example n = 1,234
+
+        1.  Get the tens digit `(n % 100) / 10` is 3
+
+        2.  Get the hundreds digit `(n / 10) % 10` is 3
+
+-   Get the program working first, and then refactor to make it better.
+
+-   An important part of learning is reflection. Write down your
+    thoughts of the process after its finished. This really helps you
+    think about the process of learning, problem solving, analysis,
+    etcetera.
+
+Lecture 13 -
+============
+
+TIP:
+
 \*
