@@ -11,4 +11,4 @@ rm Richard-Buckland-UNSW-Computing-1917-C-course.xml
 # git stuff
 git add Richard-Buckland-UNSW-Computing-1917-C-course.md
 git commit -m "Added new notes from lectures."
-git push gitlab
+git push
