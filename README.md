@@ -11,3 +11,13 @@ Eventually I will be doing:
 
 * Modern C to use modern practices as the above sources are quite old and use deprecated concepts.
 * C How To Program 8th Edition
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+	printf("Good bye world.");
+	return EXIT_SUCCESS;
+}
+```
