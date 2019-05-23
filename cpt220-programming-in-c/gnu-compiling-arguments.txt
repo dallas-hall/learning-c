@@ -1,0 +1,6 @@
+# Compiler options
+g++ -ansi -Wall -pedantic input.c -o output.out
+
+# More modern compiler
+scl enable devtoolset-7 bash
+
