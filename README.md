@@ -1,7 +1,13 @@
+# Learning C
 Learning C with a variety of sources.
 
-* The famous ANSI C Programming Langauge book.
-* A UNSW C course which is published on YouTube.
-* A UniMelb course, which is based on the textbook from the UNSW course.
+* CPT220 at university, which includes the following textbooks
+  * The famous ANSI C Programming Langauge book.
+  * C How To Program 6th Edition
 
-Eventually I will be doing Modern C to use modern practices as the above sources are quite old and use deprecated concepts.
+## TODO
+
+Eventually I will be doing:
+
+* Modern C to use modern practices as the above sources are quite old and use deprecated concepts.
+* C How To Program 8th Edition
