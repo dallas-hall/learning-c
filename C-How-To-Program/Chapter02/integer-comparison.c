@@ -89,7 +89,7 @@ int main(void)
 
 	sum = a + b + c;
 	product = a * b * c;
-	average = (float) sum / 3;
+	average = ((float) sum) / 3;
 
 	printf("The largest of %d, %d, and %d is %d.\n", a, b, c, largest);
 	printf("The smallest of %d, %d, and %d is %d.\n", a, b, c, smallest);
