@@ -92,5 +92,43 @@ int main(void)
 		printf("\n");
 	}
 
+	printf("# Printhing shape 4, a diamond.\n");
+	for(int i = 0; i < height; i++) {
+		if (i == 0 || i == height - 1) {
+			outerSpaces = width / 2;
+			innerSpaces = 0;
+			stars = 0;
+		}
+		else if (i == 1 || i == height - 2) {
+			outerSpaces = (width / 2) - 1;
+			innerSpaces = 1;
+			stars = 1;
+		}
+		else if (i < height / 2) {
+			outerSpaces = (width / 2) - i;
+			innerSpaces += 2;
+			stars = 1;
+		}
+		else if (i == height / 2) {
+			outerSpaces = 0;
+			innerSpaces += 2;
+			stars = 1;
+		}
+		else if (i > height / 2) {
+			outerSpaces += 1;
+			innerSpaces -= 2;
+			stars = 1;
+		}
+		for (int j = 0; j < outerSpaces; j++) {
+			printf(" ");
+		}
+		for (int k = 0; k < stars; k++) {
+			printf("*");
+		}
+		for (int l = 0; l < innerSpaces; l++) {
+			printf(" ");
+		}
+		printf("*\n");
+	}
 	return EXIT_SUCCESS;
 }
