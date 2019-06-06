@@ -30,6 +30,13 @@ int main(void)
 	if (number1 != number2) {
 		printf("%d is not equal to %d\n", number1, number2);
 	}
-	
+
+	if (number1 % number2 == 0) {
+		printf("%d is a multiple of to %d\n", number2, number1);
+	}
+	else {
+		printf("%d is not a multiple of to %d\n", number2, number1);
+	}
+
 	return 0;
 }
