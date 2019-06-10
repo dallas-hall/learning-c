@@ -1,5 +1,10 @@
 # Compiler options
-g++ -ansi -Wall -pedantic input.c -o output.out
+gcc -ansi -Wall -pedantic input.c -o output.out
+
+-ansi enforces c89 standard
+-pedantic enforces the c90 iso standard, which is the internationalised version of c89
+-Wall show almost all warnings
+-o specify the output file
 
 # More modern compiler
 scl enable devtoolset-7 bash
