@@ -12,10 +12,9 @@ int main(void)
 		printf("unsigned int y = %u\n", y);
 		printf("unsigned long int z = %ld\n", z);
 
-
 		printf("\n# Comparisons\n");
 		printf("Is x < y ?\n");
-        /* y is promited to a signed long */
+        /* y is promoted to a signed long */
 		if ( x < y) { 
                 printf("-1L is smaller than 1U\n");
 		}
@@ -24,7 +23,7 @@ int main(void)
 		}
 		printf("Because x = %ld and (signed long) y = %ld\n", x, (signed long) y);
 
-		/* x and z are promoited to unsigned long */
+		/* x is promoted to unsigned long */
 		printf("\nIs x < z ?\n");
         if ( x < z) { 
                 printf("-1L is smaller than 1UL\n");
