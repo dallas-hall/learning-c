@@ -14,23 +14,29 @@ int main(void)
 	printf("Enter the amount of years to invest: ");
 	scanf("%d", &years);
 
-	printf("%4s%21s\n", "Year", "Amount on deposit");
+	printf("%4s%21s%4s\n", "Year", "Amount on deposit", "Rate");
 	for (int year = 1; year <= years; year++) {
 		amount = principle * pow(1.0 + rate, year);
-		printf("%4d%21.2f\n", year, amount);
+		printf("%4d%21.2f %.2lf\n", year, amount, rate);
 	}
 
+	// Update for an exercise
 	amount = 0;
-	printf("%4s%21s\n", "Year", "Amount on deposit");
-	for (int year = 1; year <= years; year++) {
-		if (1 == year) {
-			amount += principle * (1.0 + rate);
+	for (int i = 4; i <= 10; i++) {
+		if (i != 4) {
+			rate = (double) i / 100;
 		}
-		else {
-			amount *= (1.0 + rate);
+		printf("%4s%21s%5s\n", "Year", "Amount on deposit", "Rate");
+		for (int year = 1; year <= years; year++) {
+			if (1 == year) {
+				amount += principle * (1.0 + rate);
+			}
+			else {
+				amount *= (1.0 + rate);
+			}
+			printf("%4d%21.2f %-.2lf\n", year, amount, rate);
 		}
-		printf("%4d%21.2f\n", year, amount);
+		amount = 0;
 	}
-
 	return EXIT_SUCCESS;
 }
