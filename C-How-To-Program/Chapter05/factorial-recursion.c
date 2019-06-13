@@ -1,27 +1,33 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int factorial(int n);
+long factorial(long n);
 
 int main(void)
 {
-	int input;
+	long input;
+	int i;
 
 	printf("# Calculating Factorial - Recursion Example\nEnter a positive integer: ");
-	scanf("%d", &input);
+	scanf("%ld", &input);
 
 	if(input < 0) {
 		printf("Can only calculate factorials for positve integers.\n");
 	}
 	else {
-		printf("The factorial of %d (%d!) is %d\n", input, input, factorial(input));
+		printf("The factorial of %ld (%ld!) is %ld\n", input, input, factorial(input));
+	}
+
+	printf("\n## Calculating First 20 Factorials\n");
+	for(i = 1; i <= 20; i++) {
+		printf("The factorial of %d (%d!) is %ld\n", i, i, factorial(i));
 	}
 	return EXIT_SUCCESS;
 }
 
-int factorial(int n)
+long factorial(long n)
 {
-	int recursionResult, finalResult;
+	long recursionResult, finalResult;
 	finalResult = n;
 
 	/*
