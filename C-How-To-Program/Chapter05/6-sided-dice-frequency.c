@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 int rollDice(void);
 void testDiceFrequency(int rolls);
@@ -20,10 +21,19 @@ int main(void)
 	scanf("%d", &rolls);
 	testDiceFrequency(rolls);
 
-	printf("\n# Roll 6 Sided Dice N Times & Show Frequency (with seeding)\nEnter a seed number: ");
+	printf("\n# Roll 6 Sided Dice N Times & Show Frequency (with manual seeding)\nEnter a seed number: ");
 	scanf("%u", &seed);
 	/* Seed the random number generator */
 	srand(seed);
+	testDiceFrequency(rolls);
+
+	printf("\n# Roll 6 Sided Dice N Times & Show Frequency (with automatic seeding)\n");
+	/*
+	 * Read the computer's clock and use that value as the seed.
+	 * time returns the number of seconds since the Unix Epoch, midnight of Jan 1st, 1970.
+	 * NULL disables the formatting parameter option.
+	 */
+	srand( time(NULL));
 	testDiceFrequency(rolls);
 
 	return EXIT_SUCCESS;
