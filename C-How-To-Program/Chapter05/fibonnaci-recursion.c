@@ -33,7 +33,7 @@ long fibonnaci(long n)
 	long recursionResult1, recursionResult2, finalResult;
 	
 	if (0 == n) {
-		finalResult = 0;
+		finalResult = n;
 	}
 	else if (1 == n) {
 		finalResult = 1;
