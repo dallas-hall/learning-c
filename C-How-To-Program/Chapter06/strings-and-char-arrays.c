@@ -34,7 +34,7 @@ int main(void)
 	 */ 
 	printf("\n### Printing printf\n%s\n", string1);
 
-	printf("\n## string2 - String Literal\n### Printing For Loop");	
+	printf("\n## string2 - String Literal\n### Printing For Loop\n");	
 	for (i = 0; string2[i] != '\0'; i++) {
 		printf("%c", string2[i]);
 	}
@@ -44,7 +44,7 @@ int main(void)
 	 */ 
 	printf("\n### Printing printf\n%s\n", (char *) &string2);
 
-	printf("\n## string3 - Character List\n### Printing For Loop");	
+	printf("\n## string3 - Character List\n### Printing For Loop\n");	
 	for (i = 0; string3[i] != '\0'; i++) {
 		printf("%c", string3[i]);
 	}
