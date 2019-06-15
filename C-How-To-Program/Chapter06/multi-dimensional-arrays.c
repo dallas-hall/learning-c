@@ -15,6 +15,7 @@ int main(void)
 	printf("# Multi-dimensional Arrays - 2d array example\n");
 	srand(time(NULL));
 
+	printf("## Intialising & Printing\n");
 	for (i = 0; i < SIZE_1ST_DIMENSION; i++) {
 		for (j = 0; j < SIZE_2ND_DIMENSION; j++) {
 			a[i][j] = rand() % 10;
@@ -27,6 +28,21 @@ int main(void)
 		}
 		printf("\n");
 	}
+
+	printf("\n## Updating & Printing\n");
+	for (i = 0; i < SIZE_1ST_DIMENSION; i++) {
+		for (j = 0; j < SIZE_2ND_DIMENSION; j++) {
+			a[i][j] += 1 ;
+		}
+	}
+
+	for (i = 0; i < SIZE_1ST_DIMENSION; i++) {
+		for (j = 0; j < SIZE_2ND_DIMENSION; j++) {
+			printf("a[%d][%d] is %d\t", i, j, a[i][j]);
+		}
+		printf("\n");
+	}
+
 
 	printf("\n# Multi-dimensional Arrays - 3d array example\n");
 	for (i = 0; i < SIZE_1ST_DIMENSION; i++) {
