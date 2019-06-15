@@ -17,7 +17,7 @@ int main(void)
 	int responses[RESPONSE_SIZE];
 	/* Initialise all values to 0 */
 	int frequency[FREQ_SIZE] = {0};
-	int i, lines;
+	int i, j, lines;
 	double mean, median, mode;
 
 	printf("# Array Statistics - 40 Elements With Values 1-10\n");
@@ -49,9 +49,18 @@ int main(void)
 	}
 
 	for(i = 0; i < FREQ_SIZE; i++) {
-		printf("%d was %d\n", i + 1, frequency[i]);
+		printf("%d had %d response(s).\n", i + 1, frequency[i]);
+	
 	}
-
+	
+	printf("\n## Printing Histogram Of Responses\n");
+	for (i = 0;i < FREQ_SIZE; i++) {
+		printf("%2d\t", i + 1);
+		for(j = 0; j < frequency[i]; j++) {
+			printf("*");
+		}
+		printf("\n");
+	}
 
 	return EXIT_SUCCESS;
 }
