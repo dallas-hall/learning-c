@@ -37,18 +37,17 @@ void printArray(int a[], int size)
 	int i;
 
 	printf("\n## Printing Array\n");
-	for(i = 0; i < SIZE; i++) {
+	for(i = 0; i < size; i++) {
 		if (i == 0) {
 			printf("[%d, ", a[i]);
 		}
-		else if ( i != SIZE - 1) {
+		else if ( i != size - 1) {
 			printf("%d, ", a[i]);
 		}
 		else {
 			printf("%d]\n", a[i]);
 		}
 	}
-	printf("\n");
 }
 
 void bubbleSortAsc(int a[], int size)
@@ -56,14 +55,14 @@ void bubbleSortAsc(int a[], int size)
 	int i, j, value, position;
 	printf("\n## Bubble Sorting - ascending\n");
 
-	for (i = 0; i < SIZE; i++) {
+	for (i = 0; i < size; i++) {
 		/*
 		 * The current index is stored as the assumed smallest.
 		 * The subsequent search will see if that is true.
 		 */ 
 		value = a[i];
 		position = i;
-		for (j = i + 1; j < SIZE; j++) {
+		for (j = i + 1; j < size; j++) {
 			/*
 			 * Keep testing to see if any values are smaller.
 			 * Replace if they are.
@@ -88,16 +87,16 @@ void bubbleSortAsc(int a[], int size)
 void bubbleSortDesc(int a[], int size)
 {
 	int i, j, value, position;
-	printf("## Bubble Sorting - descending\n");
+	printf("\n## Bubble Sorting - descending\n");
 
-	for (i = 0; i < SIZE; i++) {
+	for (i = 0; i < size; i++) {
 		/*
 		 * The current index is stored as the assumed largest.
 		 * The subsequent search will see if that is true.
 		 */ 
 		value = a[i];
 		position = i;
-		for (j = i + 1; j < SIZE; j++) {
+		for (j = i + 1; j < size; j++) {
 			/*
 			 * Keep testing to see if any values are larger.
 			 * Replace if they are.
