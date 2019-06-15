@@ -5,14 +5,17 @@
 #define RESPONSES_SIZE 40
 #define FREQ_SIZE 10
 
-void printArray(int a[], int size);
+/*
+ * The const keyword here force the function to not be able to make changes to the array.
+ */ 
+void printArray(const int a[], int size);
 void bubbleSortAsc(int a[], int size);
 void bubbleSortDesc(int a[], int size);
-void printResponses(int a[], int size);
-void printFrequency(int a[], int size);
-void printMean(int a[], int size);
+void printResponses(const int a[], int size);
+void printFrequency(const int a[], int size);
+void printMean(const int a[], int size);
 void printMedian(int a[], int size);
-void printMode(int a[], int size);
+void printMode(const int a[], int size);
 
 int main(void)
 {
@@ -46,7 +49,7 @@ int main(void)
 	return EXIT_SUCCESS;
 }
 
-void printArray(int a[], int size)
+void printArray(const int a[], int size)
 {
 	int i;
 
@@ -132,7 +135,7 @@ void bubbleSortDesc(int a[], int size)
 	printf("Done.\n");
 }
 
-void printResponses(int a[], int size)
+void printResponses(const int a[], int size)
 {
 	int i, lines;
 
@@ -149,7 +152,7 @@ void printResponses(int a[], int size)
 
 }
 
-void printFrequency(int a[], int size)
+void printFrequency(const int a[], int size)
 {
 	int i, j;
 	/*
@@ -185,7 +188,7 @@ void printFrequency(int a[], int size)
 /*
  * Sorting doesn't matter for this.
  */ 
-void printMean(int a[], int size)
+void printMean(const int a[], int size)
 {
 	int i, total;
 	double mean;
@@ -236,7 +239,7 @@ void printMedian(int a[], int size)
 /*
  * Sorting doesn't matter for this.
  */ 
-void printMode(int a[], int size)
+void printMode(const int a[], int size)
 {
 	int i, mode, value;
 	/*
