@@ -10,6 +10,9 @@ void bubbleSortAsc(int a[], int size);
 void bubbleSortDesc(int a[], int size);
 void printResponses(int a[], int size);
 void printFrequency(int a[], int size);
+void printMean(int a[], int size);
+void printMedian(int a[], int size);
+void printMode(int a[], int size);
 
 int main(void)
 {
@@ -35,6 +38,9 @@ int main(void)
 	printArray(responses, RESPONSES_SIZE);
 	printResponses(responses, RESPONSES_SIZE);
 	printFrequency(responses, RESPONSES_SIZE);
+	printMean(responses, RESPONSES_SIZE);
+	printMode(responses, RESPONSES_SIZE);
+	printMedian(responses, RESPONSES_SIZE);
 	
 
 	return EXIT_SUCCESS;
@@ -152,7 +158,7 @@ void printFrequency(int a[], int size)
 	 */
 	int frequency[FREQ_SIZE] = {0};
 
-	printf("\n## Printing Frequency Of Reponses\n");
+	printf("\n## Printing Frequency Of Reponses - how many times they all appear\n");
 	for (i = 0; i < size; i++) {
 		/* 
 		 * Increment the number inside of frequency[i]
@@ -174,4 +180,98 @@ void printFrequency(int a[], int size)
 		}
 		printf("\n");
 	}
+}
+
+/*
+ * Sorting doesn't matter for this.
+ */ 
+void printMean(int a[], int size)
+{
+	int i, total;
+	double mean;
+
+	printf("\n## Printing Mean Of Responses - average\n");
+	total = 0;
+	for (i = 0; i < size; i++) {
+		total += a[i];
+	}
+	mean = (double) total / size;
+	printf("The mean of %d response values is %.2f\n", size, mean);
+}
+
+/*
+ * Sorting does matter for this.
+ * Using bubble sorting, ascending.
+ */ 
+void printMedian(int a[], int size)
+{
+	int middle;
+	double median;
+
+	bubbleSortAsc(a, size);
+	printArray(a, 40);
+	
+	printf("\n## Printing Median Of Responses - middle value\n");
+	if (size % 2 != 0) {
+		/*
+		 * Make an even number, divide by 2.
+		 * Add one to get the middle.
+		 */
+		middle = (size - 1) / 2;
+		median = (double) a[middle];
+	}
+	else {
+		/*
+		 * Need - 1 because arrays start at 0
+		 */ 
+		middle =  (size / 2) - 1;
+		/*
+		 * When the size is even, the median should be the mean (average) of the 2 middle elements.
+		 */ 
+		median = (a[middle] + a[middle + 1]) / 2.0;
+	}
+	printf("The median of %d response values is %.2f\n", size, median);
+}
+
+/*
+ * Sorting doesn't matter for this.
+ */ 
+void printMode(int a[], int size)
+{
+	int i, mode, value;
+	/*
+	 * Initialise all values to 0
+	 * C90 doesn't like variable sized objects. Using constant.
+	 */
+	int f[FREQ_SIZE] = {0};
+
+	printf("\n## Printing Mode Of Responses - most frequent value \n");
+	for (i = 0; i < size; i++) {
+		/* 
+		 * Increment the number inside of frequency[i]
+		 * Remember -1 as arrays start at 0
+		 */
+		++f[a[i] - 1];
+	}
+
+	/*
+	 * Assume index is the mode, test that assumption.
+	 */ 
+	mode = 0;
+	value = f[0];
+	/*
+	 * Skip 0 as we alway got the value.
+	 */ 
+	for(i = 1; i < FREQ_SIZE; i++) {
+		if (f[i] > value) {
+			mode = i;
+			value = f[i];
+		}
+	}
+	/*
+	 * Increment mode by one, because arrays start at 0.
+	 * The true value is mode + 1
+	 */ 
+	++mode;
+	printf("The mode of the %d response values is: %d\n", size, mode);
 }
