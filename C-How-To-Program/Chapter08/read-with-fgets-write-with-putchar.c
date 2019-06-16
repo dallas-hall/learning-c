@@ -21,7 +21,7 @@ int main(void)
 	 * Use putchar to print each character.
 	 */ 
 	for(i = 0; i < BUFFER; i++) {
-		if(input[i] == EOF || input[i] == '\0') {
+		if(input[i] == EOF || input[i] == '\n') {
 			break;
 		} else {
 			putchar(input[i]);
