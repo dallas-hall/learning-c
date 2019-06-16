@@ -4,8 +4,12 @@
 
 #define SIZE 10
 
+/*
+ * int * const array is the same as int array[]
+ * These are constant pointers with non-constant data
+ */ 
 void bubbleSortAsc(int * const array, const int size);
-void bubbleSortDesc(int * const array, const int size);
+void bubbleSortDesc(int array[], const int size);
 void swap(int *element1Pointer, int *element2Pointer);
 void printIntArray(const int *intPointer, const int size);
 
@@ -67,7 +71,7 @@ void bubbleSortAsc(int * const array, const int size)
 	printf("Done.\n");
 }
 
-void bubbleSortDesc(int * const array, const int size)
+void bubbleSortDesc(int array[], const int size)
 {
 	int i, j;
 
