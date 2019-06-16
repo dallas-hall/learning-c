@@ -9,7 +9,7 @@ int main(void)
 	char s2[15];
 	
 	puts("# String Copy Functions");
-	puts("## strcpy");
+	puts("## strcpy(s2, s1) - s1 into s2");
 	printf("Before strcpy\ns1 is \"%s\"\ns2 is \"%s\"\n", s1, s2);
 	strcpy(s2, s1);
 	printf("After strcpy\ns1 is \"%s\"\ns2 is \"%s\"\n", s1, s2);
@@ -17,7 +17,7 @@ int main(void)
 	/* Reset the char array to nothing */
 	s2[0] = '\0';
 	
-	puts("\n## strncpy");
+	puts("\n## strncpy(s2, s1, 6) - s1 for 6 into s2");
 	printf("Before strncpy\ns1 is \"%s\"\ns2 is \"%s\"\n", s1, s2);
 	/*
 	 * Copy first 6 characters from s1 into s2.
