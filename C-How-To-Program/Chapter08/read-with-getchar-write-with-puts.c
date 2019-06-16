@@ -15,7 +15,7 @@ int main(void)
 	 * Read characters from stdin until a) newline b) EOF or c) buffer exhausted
 	 * Store these into an array with the size of BUFFER.
 	 */ 
-	while (EOF != (c = getchar()) || '\0' != (c = getchar())) {
+	while (EOF != (c = getchar()) || '\n' != (c = getchar())) {
 		input[i] = c;
 		i++;
 		if(i == BUFFER - 2) {
