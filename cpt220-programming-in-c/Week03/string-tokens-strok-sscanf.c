@@ -47,9 +47,38 @@ int sumDelimitedInts(char s[], char delimiter[])
 	return count;
 }
 
+int sumDelimitedInts2(char s[], char delimiter)
+{
+	int count, i, j;
+	char currentInt[MAX_INPUT] = {0};
+
+	puts("sumDelimitedInts2 call");
+	printf("del is %c\n", delimiter);
+	printf("s is %s\n", s);
+
+	count = 0;
+	j = 0;
+	for(i = 0; i < strlen(s); i++) {
+		printf("s[%d] is %c\n", i, s[i]);
+		if(s[i] == delimiter || s[i] == '\n') {
+			printf("all currentInt is %s\n", currentInt);
+			count += getIntFromString(currentInt);
+			j = 0;
+		}
+		else {
+			currentInt[j] = s[i];
+			printf("currentInt[%d] = %c\n", j, s[i]);
+			j++;
+		}
+	}
+
+	return count;
+}
+
 int main(void)
 {
 	char ints[MAX_INPUT + EXTRA_CHARS];
+	char ints2[MAX_INPUT + EXTRA_CHARS];
 	char delimiter[1 + EXTRA_CHARS];
 	int i, total;
 
@@ -72,12 +101,17 @@ int main(void)
 	}
 
 	/* minus 1 for the new line */
-	for (i = 0; i < strlen(ints) - 1; i++) {
+	for (i = 0; ints[i] != '\0'; i++) {
 		putchar(ints[i]);
+		ints2[i] = ints[i];
 	}
+	ints2[i] = '\0';
 	puts("");
 
 	total = sumDelimitedInts(ints, delimiter);
+	printf("The total was %d\n", total);
+
+	total = sumDelimitedInts2(ints2, delimiter[0]);
 	printf("The total was %d\n", total);
 
 	return EXIT_SUCCESS;
