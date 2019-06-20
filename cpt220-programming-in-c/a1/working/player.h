@@ -47,7 +47,15 @@ struct player
 /**
  * you may add your own data structures to this module
  **/
+ /*
+ fgets adds a '\n' and '\0' to each string, we need to account for that.
+ */
+#define FGETS_EXTRA_CHARS 2
 
+#define MAX_BOARD_LENGTH 24
+int pieciesLocation[MAX_BOARD_LENGTH];
+
+BOOLEAN getName(char s[], int size, struct player* aplayer);
 /**
  * end of the student's data structures for this module
  **/

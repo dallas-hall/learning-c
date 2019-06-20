@@ -63,8 +63,29 @@ play_game(struct falsible_long seed)
                 normal_print("%s\n", "[DEBUG] game.c - Trying to create the board.");
         }
         board_init(thegame.game_board);
-        printBoard(thegame.game_board);
-        printBoardReverse(thegame.game_board);
+        if(DEBUGGING)
+        {
+                printBoard(thegame.game_board);
+                printBoardReverse(thegame.game_board);
+        }
+
+        if(DEBUGGING)
+        {
+                normal_print("%s\n", "[DEBUG] game.c - Trying to create the players.");
+        }
+        /*
+        Need to send the address here, so use &
+        */
+        player_init(thegame.current_player, &thegame);
+        player_init(thegame.other_player, &thegame);
+        if(DEBUGGING)
+        {
+                normal_print("%s\n", "[DEBUG] game.c - Trying to print created the players.");
+                /*
+                Need to use -> since its a pointer to a pointer
+                */
+                printf("The first player entered is %s\n", thegame.current_player->name);
+        }
 
         /**
          * if initialisation of the game failed, we should quit
