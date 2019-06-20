@@ -155,8 +155,6 @@ board_init(board the_board)
               else {
                 the_board[row][column] = P_EMPTY;
               }
-
-              printf("[DEBUG] board.c - The value of piece at row[%d]column[%d] is %d\n", row, column, the_board[row][column]);
             }
           }
         }
@@ -167,3 +165,38 @@ board_init(board the_board)
 /**
  * You may provide your own function definitions here for this module
  **/
+void printBoard(board the_board)
+{
+  int row, column;
+  if(DEBUGGING) {
+    printf("%s\n", "[DEBUG] board.c - Entering printBoard.");
+  }
+  for(row = 0; row < BOARD_HEIGHT; row++) {
+    for(column = 0; column < BOARD_WIDTH; column++) {
+        if(DEBUGGING) {
+          printf("[%d][%d] %d\t", row, column, the_board[row][column]);
+          if (column == BOARD_WIDTH - 1) {
+            printf("\n");
+          }
+        }
+      }
+    }
+}
+
+void printBoardReverse(board the_board)
+{
+  int row, column;
+  if(DEBUGGING) {
+    printf("%s\n", "[DEBUG] board.c - Entering printBoard.");
+  }
+  for(row = BOARD_HEIGHT - 1; row >= 0 ; row--) {
+    for(column = BOARD_WIDTH - 1; column >= 0; column--) {
+        if(DEBUGGING) {
+          printf("[%d][%d] %d\t", row, column, the_board[row][column]);
+          if (column == 0) {
+            printf("\n");
+          }
+        }
+      }
+    }
+}
