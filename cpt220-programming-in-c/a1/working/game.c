@@ -60,7 +60,7 @@ play_game(struct falsible_long seed)
 
         if(DEBUGGING)
         {
-                normal_print("%s\n", "[DEBUG] Trying to create board.");
+                normal_print("%s\n", "[DEBUG] game.c - Trying to create the board.");
         }
         board_init(thegame.game_board);
 
