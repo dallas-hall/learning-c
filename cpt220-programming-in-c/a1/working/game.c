@@ -63,6 +63,8 @@ play_game(struct falsible_long seed)
                 normal_print("%s\n", "[DEBUG] game.c - Trying to create the board.");
         }
         board_init(thegame.game_board);
+        printBoard(thegame.game_board);
+        printBoardReverse(thegame.game_board);
 
         /**
          * if initialisation of the game failed, we should quit

@@ -47,4 +47,6 @@ typedef enum piece board[BOARD_HEIGHT][BOARD_WIDTH];
  * free to add more of your own.
  **/
 void board_init(board);
+void printBoard(board the_board);
+void printBoardReverse(board the_board);
 #endif
