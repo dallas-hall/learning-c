@@ -190,10 +190,10 @@ void printBoardReverse(board the_board)
     printf("%s\n", "[DEBUG] board.c - Entering printBoard.");
   }
   for(row = BOARD_HEIGHT - 1; row >= 0 ; row--) {
-    for(column = BOARD_WIDTH - 1; column >= 0; column--) {
+    for(column = 0; column < BOARD_WIDTH; column++) {
         if(DEBUGGING) {
           printf("[%d][%d] %d\t", row, column, the_board[row][column]);
-          if (column == 0) {
+          if (column == BOARD_WIDTH - 1) {
             printf("\n");
           }
         }
