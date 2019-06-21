@@ -46,13 +46,13 @@ void determine_player_order(struct game *thegame)
 		 * And then once we have the right element, use dot notation to access
 		 * to correct field.
 		 */
-		normal_print("Player 1, %s, rolled %d and %d, totalling %d\n",
+		normal_print("Player 1 named %s rolled %d and %d, totalling %d.\n",
 					 thegame->players[0].name, die1, die2, playerOneTotal);
 
 		die1 = rollDice();
 		die2 = rollDice();
 		playerTwoTotal += die1 + die2;
-		normal_print("Player 2, %s, rolled %d and %d, totalling %d\n",
+		normal_print("Player 2 named %s, rolled %d and %d, totalling %d.\n",
 					 thegame->players[1].name, die1, die2, playerTwoTotal);
 
 		if (playerOneTotal == playerTwoTotal) {
@@ -72,20 +72,20 @@ void determine_player_order(struct game *thegame)
 			thegame->current_player = &thegame->players[0];
 			thegame->other_player = &thegame->players[1];
 
-			printf("Player 1, %s%s%s, will go first, has the token ",
+			printf("Player 1 named %s%s%s will go first, They have the token ",
 				   color_strings[COLOR_WHITE], thegame->players[0].name,
 				   color_strings[COLOR_RESET]);
 			printf("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN,
 				   color_strings[COLOR_RESET]);
-			printf(" and is moving %sCLOCKWISE%s around the board.\n",
+			printf(" and are moving %sCLOCKWISE%s around the board.\n",
 				   color_strings[COLOR_WHITE], color_strings[COLOR_RESET]);
 
-			printf("Player 2, %s%s%s, will go second, has the token ",
+			printf("Player 2 name %s%s%s will go second. They have the token ",
 				   color_strings[COLOR_RED], thegame->players[1].name,
 				   color_strings[COLOR_RESET]);
 			printf("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
 				   color_strings[COLOR_RESET]);
-			printf(" and is moving %sANTICLOCKWISE%s around the board.\n",
+			printf(" and are moving %sANTICLOCKWISE%s around the board.\n",
 				   color_strings[COLOR_RED], color_strings[COLOR_RESET]);
 
 			done = TRUE;
@@ -99,20 +99,20 @@ void determine_player_order(struct game *thegame)
 			thegame->other_player = &thegame->players[0];
 			thegame->current_player = &thegame->players[1];
 
-			printf("Player 2, %s%s%s, will go first, has the token ",
+			printf("Player 2 named %s%s%s, will go first. They have the token ",
 				   color_strings[COLOR_WHITE], thegame->players[1].name,
 				   color_strings[COLOR_RESET]);
 			printf("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN,
 				   color_strings[COLOR_RESET]);
-			printf(" and is moving %sCLOCKWISE%s around the board.\n",
+			printf(" and are moving %sCLOCKWISE%s around the board.\n",
 				   color_strings[COLOR_WHITE], color_strings[COLOR_RESET]);
 
-			printf("Player 1, %s%s%s, will go second, has the token ",
+			printf("Player 1 named %s%s%s will go second They have the token ",
 				   color_strings[COLOR_RED], thegame->players[0].name,
 				   color_strings[COLOR_RESET]);
 			printf("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
 				   color_strings[COLOR_RESET]);
-			printf(" and is moving %sANTICLOCKWISE%s around the board.\n",
+			printf(" and are moving %sANTICLOCKWISE%s around the board.\n",
 				   color_strings[COLOR_RED], color_strings[COLOR_RESET]);
 
 			done = TRUE;
