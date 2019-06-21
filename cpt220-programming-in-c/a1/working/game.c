@@ -19,9 +19,8 @@ int DEBUGGING = 1;
  * for this function, please see the assignment requirements.
  **/
 BOOLEAN
-game_init(struct game* thegame)
-{
-        return FALSE;
+game_init(struct game *thegame) {
+	return FALSE;
 }
 
 /**
@@ -30,72 +29,76 @@ game_init(struct game* thegame)
  * on what is required here.
  **/
 void
-play_game(struct falsible_long seed)
-{
-        /**
-         * declare and allocate memory for the main game struct
-         **/
-        struct game thegame;
-        BOOLEAN quit = FALSE;
-        char* heading = NULL;
+play_game(struct falsible_long seed) {
+	/**
+	 * declare and allocate memory for the main game struct
+	 **/
+	struct game thegame;
+	BOOLEAN quit = FALSE;
+	char *heading = NULL;
 
-        /**
-         * set the seed in the game struct - set to the current time if no
-         * seed was provided.
-         **/
-        if (seed.success)
-        {
-                thegame.seed = seed.thelong;
-        }
-        else
-        {
-                thegame.seed = time(NULL);
-        }
-        /* print the heading */
-        heading = "Welcome to CPT220 Backgammon";
-        normal_print("%s\n", heading);
-        PUTLINE('-', strlen(heading));
-        normal_print("The seed number being used is: %d\n", seed);
-        PUTLINE('-', strlen(heading));
+	/**
+	 * set the seed in the game struct - set to the current time if no
+	 * seed was provided.
+	 **/
+	if (seed.success) {
+		thegame.seed = seed.thelong;
+	} else {
+		thegame.seed = time(NULL);
+	}
 
-        if(DEBUGGING)
-        {
-                normal_print("%s\n", "[DEBUG] game.c - Trying to create the board.");
-        }
-        board_init(thegame.game_board);
+	/* print the heading */
+	heading = "Welcome to CPT220 Backgammon";
+	normal_print("%s\n", heading);
+	PUTLINE('-', strlen(heading));
+	normal_print("The seed number being used is: %d\n", seed);
+	PUTLINE('-', strlen(heading));
 
-        if(DEBUGGING)
-        {
-                printBoard(thegame.game_board);
-                printBoardReverse(thegame.game_board);
-                normal_print("%s\n", "[DEBUG] game.c - Trying to create the players.");
-        }
+	if (DEBUGGING) {
+		normal_print("%s\n", "[DEBUG] game.c - Trying to create the board.");
+	}
+	board_init(thegame.game_board);
 
-        /*
-        Need to send the address here, so use &
-        */
-        player_init(thegame.current_player, &thegame);
-        player_init(thegame.other_player, &thegame);
-        if(DEBUGGING)
-        {
-                normal_print("%s\n", "[DEBUG] game.c - Trying to print created the players.");
-                /*
-                Need to use -> since its a pointer.
-                */
-                printf("The first player entered is %s\n", thegame.current_player -> name);
-        }
+	if (DEBUGGING) {
+		printBoard(thegame.game_board);
+		printBoardReverse(thegame.game_board);
+		normal_print("%s\n", "[DEBUG] game.c - Trying to create the players.");
+	}
 
-        /**
-         * if initialisation of the game failed, we should quit
-         **/
-        if (!game_init(&thegame))
-        {
-                return;
-        }
-        /* implement game loop logic here */
-        while (!quit)
-        {
-        }
+	thegame.players[0].name[0] = '\0';
+	thegame.players[1].name[0] = '\0';
+
+	/*
+	Need to send the address here, so use &
+	*/
+	player_init(thegame.other_player, &thegame);
+	player_init(thegame.current_player, &thegame);
+
+	if (DEBUGGING) {
+		normal_print("%s\n",
+					 "[DEBUG] game.c - Trying to print created the players.");
+		/*
+		Need to use -> since its a pointer.
+		*/
+		printf("The first player - thegame.current_player->name is %s\n",
+			   thegame.current_player->name);
+		printf("The first player - thegame.players[0].name is  %s\n",
+			   thegame.players[0].name);
+		printf("The second player - thegame.other_player->name is %s\n",
+			   thegame.other_player->name);
+		printf("The second player - thegame.players[1].name is  %s\n",
+			   thegame.players[1].name);
+	}
+
+	/**
+	 * if initialisation of the game failed, we should quit
+	 **/
+	if (!game_init(&thegame)) {
+		return;
+	}
+	/* implement game loop logic here */
+	while (!quit) {
+	}
 }
 
 /**
@@ -105,6 +108,5 @@ play_game(struct falsible_long seed)
  * everyone will be able to do this.
  **/
 void
-swap_players(struct player** first, struct player** second)
-{
+swap_players(struct player **first, struct player **second) {
 }
