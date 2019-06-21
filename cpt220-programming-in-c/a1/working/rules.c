@@ -23,7 +23,8 @@
  * their direction to anticlockwise, their token to O and their color to
  * red.
  **/
-void determine_player_order(struct game *thegame) {
+void determine_player_order(struct game *thegame)
+{
 }
 
 /**
@@ -33,7 +34,8 @@ void determine_player_order(struct game *thegame) {
  **/
 BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 					   const struct player *curplayer, const int dicerolls[],
-					   struct move_pair changes[]) {
+					   struct move_pair changes[])
+{
 	return FALSE;
 }
 
@@ -42,7 +44,8 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
  * in the "changes" array in the validate_moves() function.
  **/
 BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
-					struct player *curplayer) {
+					struct player *curplayer)
+{
 	return FALSE;
 }
 
@@ -51,6 +54,7 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
  * when they have no tokens on the board and there are no tokens in their bar
  * list.
  **/
-BOOLEAN has_won_game(const struct player *curplayer) {
+BOOLEAN has_won_game(const struct player *curplayer)
+{
 	return FALSE;
 }

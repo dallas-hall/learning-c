@@ -19,7 +19,8 @@ int DEBUGGING = 1;
  * for this function, please see the assignment requirements.
  **/
 BOOLEAN
-game_init(struct game *thegame) {
+game_init(struct game *thegame)
+{
 	return FALSE;
 }
 
@@ -29,7 +30,8 @@ game_init(struct game *thegame) {
  * on what is required here.
  **/
 void
-play_game(struct falsible_long seed) {
+play_game(struct falsible_long seed)
+{
 	/**
 	 * declare and allocate memory for the main game struct
 	 **/
@@ -108,5 +110,6 @@ play_game(struct falsible_long seed) {
  * everyone will be able to do this.
  **/
 void
-swap_players(struct player **first, struct player **second) {
+swap_players(struct player **first, struct player **second)
+{
 }

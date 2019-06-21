@@ -15,7 +15,8 @@ const char *color_strings[NUM_COLORS] = {"\x1b[31m", "\x1b[37m", "\x1b[0m"};
  * input - only call this function when there is an actual buffer overflow as
  * otherwise you will have additional problems
  **/
-void clear_buffer(void) {
+void clear_buffer(void)
+{
 	int ch;
 	/* while there are still chars to read and we have not reached
 	 * the newline char, keep reading */
@@ -29,7 +30,8 @@ void clear_buffer(void) {
  * wish to change our output target (such as using a gui) we could change our
  * implementation here and it would not affect any other code in our project.
  **/
-int normal_print(const char format[], ...) {
+int normal_print(const char format[], ...)
+{
 	int char_count;
 	va_list vlist;
 	va_start(vlist, format);
@@ -43,7 +45,8 @@ int normal_print(const char format[], ...) {
  * standard practice to output all error messages to stderr rather than
  * stdout (where printf sends messages).
  **/
-int error_print(const char format[], ...) {
+int error_print(const char format[], ...)
+{
 	int char_count = 0;
 	va_list vlist;
 	char_count += fprintf(stderr, "Error: ");
@@ -57,5 +60,6 @@ int error_print(const char format[], ...) {
  * defines how to print the board given the orientation passed in. Pleas
  * see the asssignment specifications for further details.
  **/
-void board_print(board theboard, enum orientation orient) {
+void board_print(board theboard, enum orientation orient)
+{
 }
