@@ -40,7 +40,7 @@ typedef enum piece board[BOARD_HEIGHT][BOARD_WIDTH];
  **/
 #define PRINT_HEIGHT 33
 #define PRINT_WIDTH 73
-
+#include "io.h"
 /**
  * end of the declarations added by the student for this module
  **/
@@ -58,5 +58,9 @@ void prettyPrintBoard(board the_board);
 void printBoardReverse(board the_board);
 
 void prettyPrintBoardReverse(board the_board);
+
+enum piece getPiece(int row, int column);
+
+void setPiece(int x, int y, board the_board);
 
 #endif
