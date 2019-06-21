@@ -146,14 +146,14 @@ void prettyPrintStartBoard(board the_board)
 	}
 
 	/*
-	 * These need to be decremented
 	 * Use for printing the board numbers.
+	 * These need to be decremented
 	 */
 	topNumber = 12;
 	bottomNumber = 13;
 	/*
+	 * Used for printing tokens.
  	 * These need to be incremented.
- 	 * Used for printing tokens.
  	 */
 	rowOffset = 0;
 	columnOffset = 0;
@@ -258,6 +258,119 @@ void prettyPrintStartBoardReverse(board the_board)
 	/*
 	 * TODO reverse pretty print above
 	 */
+	int row, column, topNumber, bottomNumber, rowOffset, columnOffset, currentPiece;
+
+	if (DEBUGGING_BOARD) {
+		printf("%s\n", "[DEBUG] board.c - Entering prettyPrintBoard.");
+	}
+
+	/*
+	 * These need to be decremented
+	 * Use for printing the board numbers.
+	 */
+	topNumber = 12;
+	bottomNumber = 13;
+	/*
+	 * Used for printing tokens.
+	 * rowOffset need to be decremented for reverse printing.
+ 	 * columnOffset need to be incremented.
+ 	 */
+	rowOffset = 13;
+	columnOffset = 0;
+	for (row = 0; row < PRINT_HEIGHT; row++) {
+		for (column = 0; column < PRINT_WIDTH; column++) {
+			/*
+			 * Only print the - for the top, bottom, and every even row.
+			 */
+			if (row == 0 || row % 2 == 0 || row == PRINT_HEIGHT - 1) {
+				printf("-");
+			}
+				/*
+				 * Only print the board numbers on the second and second last row.
+				 */
+			else if (row == 1 || row == PRINT_HEIGHT - 2) {
+				if (column == 0 || column % 6 == 0 ||
+					column == PRINT_WIDTH - 1) {
+					printf("|");
+				}
+				/*
+				 * Print topNumber only on row 1.
+				 * Print bottomNumber only on row 32
+				 * Print each number in the first space of each column.
+				 */
+				switch (column) {
+					case 1:
+					case 7:
+					case 13:
+					case 19:
+					case 25:
+					case 31:
+					case 37:
+					case 43:
+					case 49:
+					case 55:
+					case 61:
+					case 66:
+						if (row == 1) {
+							printf("  %2d ", topNumber);
+							--topNumber;
+						}
+						else if (row == PRINT_HEIGHT - 2) {
+							printf("  %2d ", bottomNumber);
+							++bottomNumber;
+						}
+						break;
+				}
+			}
+				/*
+				 * Only print the '|', ' ', and tokens on every odd row.
+				 */
+			else if (row % 2 == 1) {
+				if (column == 0 || column % 6 == 0 ||
+					column == PRINT_WIDTH - 1) {
+					printf("|");
+				}
+					/*
+					 * Skip every 3rd spot as this might have a player token.
+					 * TODO - add logic for player printing token
+					 */
+				else if (column % 3 != 0) {
+					printf(" ");
+				}
+				else {
+					if (DEBUGGING_BOARD) {
+						printf("x: %d y: %d", rowOffset, columnOffset);
+					}
+					currentPiece = getPiece(rowOffset, columnOffset);
+					if (currentPiece == 0) {
+						printf(" ");
+					}
+					else if (currentPiece == 1) {
+						printf("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
+							   color_strings[COLOR_RESET]);
+
+					}
+					else if (currentPiece == 2) {
+						printf("%s%c%s", color_strings[COLOR_WHITE],
+							   WHITE_TOKEN, color_strings[COLOR_RESET]);
+
+					}
+					++columnOffset;
+				}
+
+			}
+		}
+		/*
+		 * Decrement row offset so we have the correct row next run - reverse
+		 * Reset the column offset so we have the current column next run
+		 */
+		if (row >= 3 && row % 2 != 0) {
+			--rowOffset;
+			columnOffset = 0;
+		}
+
+		printf("\n");
+	}
 }
 
 enum piece getPiece(int row, int column)
