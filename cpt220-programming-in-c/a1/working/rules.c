@@ -46,16 +46,21 @@ void determine_player_order(struct game *thegame)
 		 * And then once we have the right element, use dot notation to access
 		 * to correct field.
 		 */
-		normal_print("The first player %s rolled %d and %d, totalling %d\n",
+		normal_print("Player 1, %s, rolled %d and %d, totalling %d\n",
 					 thegame->players[0].name, die1, die2, playerOneTotal);
 
 		die1 = rollDice();
 		die2 = rollDice();
 		playerTwoTotal += die1 + die2;
-		normal_print("The second player %s rolled %d and %d, totalling %d\n",
+		normal_print("Player 2, %s, rolled %d and %d, totalling %d\n",
 					 thegame->players[1].name, die1, die2, playerTwoTotal);
 
 		if (playerOneTotal == playerTwoTotal) {
+			/*
+			 * Reset for the next roll
+			 */
+			playerOneTotal = 0;
+			playerTwoTotal = 0;
 			continue;
 		} else if (playerOneTotal > playerTwoTotal) {
 			thegame->players[0].token = P_WHITE;
@@ -63,6 +68,9 @@ void determine_player_order(struct game *thegame)
 
 			thegame->players[0].orientation = OR_CLOCKWISE;
 			thegame->players[1].orientation = OR_ANTICLOCKWISE;
+
+			thegame->current_player = &thegame->players[0];
+			thegame->other_player = &thegame->players[1];
 
 			printf("Player 1, %s%s%s, will go first, has the token ",
 				   color_strings[COLOR_WHITE], thegame->players[0].name,
@@ -87,6 +95,9 @@ void determine_player_order(struct game *thegame)
 
 			thegame->players[0].orientation = OR_ANTICLOCKWISE;
 			thegame->players[1].orientation = OR_CLOCKWISE;
+
+			thegame->other_player = &thegame->players[0];
+			thegame->current_player = &thegame->players[1];
 
 			printf("Player 2, %s%s%s, will go first, has the token ",
 				   color_strings[COLOR_WHITE], thegame->players[1].name,
