@@ -63,16 +63,14 @@ play_game(struct falsible_long seed)
                 normal_print("%s\n", "[DEBUG] game.c - Trying to create the board.");
         }
         board_init(thegame.game_board);
+
         if(DEBUGGING)
         {
                 printBoard(thegame.game_board);
                 printBoardReverse(thegame.game_board);
-        }
-
-        if(DEBUGGING)
-        {
                 normal_print("%s\n", "[DEBUG] game.c - Trying to create the players.");
         }
+
         /*
         Need to send the address here, so use &
         */
@@ -82,9 +80,9 @@ play_game(struct falsible_long seed)
         {
                 normal_print("%s\n", "[DEBUG] game.c - Trying to print created the players.");
                 /*
-                Need to use -> since its a pointer to a pointer
+                Need to use -> since its a pointer.
                 */
-                printf("The first player entered is %s\n", thegame.current_player->name);
+                printf("The first player entered is %s\n", thegame.current_player -> name);
         }
 
         /**
