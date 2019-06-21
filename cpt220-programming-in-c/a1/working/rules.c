@@ -75,6 +75,10 @@ void determine_player_order(struct game *thegame)
 			thegame->current_player = &thegame->players[0];
 			thegame->other_player = &thegame->players[1];
 
+			/*
+			 * Worked out how to print the colours with the discussion here
+			 * https://stackoverflow.com/a/3219471
+			 */
 			printf("Player 1 named %s%s%s will go first, They have the token ",
 				   color_strings[COLOR_WHITE], thegame->players[0].name,
 				   color_strings[COLOR_RESET]);

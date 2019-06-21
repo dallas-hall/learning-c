@@ -22,6 +22,9 @@ BOOLEAN player_init(struct player *aplayer, struct game *thegame)
 	Got the idea from https://www.tutorialspoint.com/cprogramming/c_structures.htm
 	*/
 
+	/*
+	 * TODO - Initialise bar_list
+	 */
 	struct player newPlayer;
 	newPlayer.name[0] = '\0';
 	newPlayer.score = 0;
