@@ -1,7 +1,7 @@
 /******************************************************************************
- * Student Name    :
- * RMIT Student ID :
- * COURSE CODE     :
+ * Student Name    :  Dallas Hall
+ * RMIT Student ID :  s3461243
+ * COURSE CODE     :  CPT220 / OLA00
  *
  * Startup code provided by Paul Miller for use in "Programming in C",
  * study period 2, 2019.
@@ -23,8 +23,7 @@
  * their direction to anticlockwise, their token to O and their color to
  * red.
  **/
-void determine_player_order(struct game* thegame)
-{
+void determine_player_order(struct game *thegame) {
 }
 
 /**
@@ -33,10 +32,9 @@ void determine_player_order(struct game* thegame)
  * the changes array so they can be applied in apply_moves.
  **/
 BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
-                       const struct player* curplayer, const int dicerolls[],
-                       struct move_pair changes[])
-{
-        return FALSE;
+					   const struct player *curplayer, const int dicerolls[],
+					   struct move_pair changes[]) {
+	return FALSE;
 }
 
 /**
@@ -44,9 +42,8 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
  * in the "changes" array in the validate_moves() function.
  **/
 BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
-                    struct player* curplayer)
-{
-        return FALSE;
+					struct player *curplayer) {
+	return FALSE;
 }
 
 /**
@@ -54,7 +51,6 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
  * when they have no tokens on the board and there are no tokens in their bar
  * list.
  **/
-BOOLEAN has_won_game(const struct player* curplayer)
-{
-        return FALSE;
+BOOLEAN has_won_game(const struct player *curplayer) {
+	return FALSE;
 }

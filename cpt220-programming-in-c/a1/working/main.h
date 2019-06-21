@@ -1,7 +1,7 @@
 /******************************************************************************
  * Student Name    :  Dallas Hall
  * RMIT Student ID :  s3461243
- * COURSE CODE     :  CPT220
+ * COURSE CODE     :  CPT220 / OLA00
  *
  * Startup code provided by Paul Miller for use in "Programming in C",
  * study period 2, 2019.
@@ -16,8 +16,8 @@
  **/
 enum
 {
-        MINARGS = 1,
-        MAXARGS
+	MINARGS = 1,
+	MAXARGS
 };
 
 #define SEED_ARG 1

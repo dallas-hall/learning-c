@@ -1,13 +1,14 @@
 /******************************************************************************
  * Student Name    :  Dallas Hall
  * RMIT Student ID :  s3461243
- * COURSE CODE     :  CPT220
+ * COURSE CODE     :  CPT220 / OLA00
  *
  * Startup code provided by Paul Miller for use in "Programming in C",
  * study period 2, 2019.
  *****************************************************************************/
 #include "shared.h"
 #include <string.h>
+
 #ifndef BOARD_H
 #define BOARD_H
 #define BOARD_WIDTH 12
@@ -22,10 +23,10 @@
  **/
 enum piece
 {
-        P_EMPTY,
-        P_RED,
-        P_WHITE,
-        P_INVALID = -1
+	P_EMPTY,
+	P_RED,
+	P_WHITE,
+	P_INVALID = -1
 };
 
 /**
@@ -47,6 +48,9 @@ typedef enum piece board[BOARD_HEIGHT][BOARD_WIDTH];
  * free to add more of your own.
  **/
 void board_init(board);
+
 void printBoard(board the_board);
+
 void printBoardReverse(board the_board);
+
 #endif

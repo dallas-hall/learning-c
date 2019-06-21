@@ -1,7 +1,7 @@
 /******************************************************************************
  * Student Name    :  Dallas Hall
  * RMIT Student ID :  s3461243
- * COURSE CODE     :  CPT220
+ * COURSE CODE     :  CPT220 / OLA00
  *
  * Startup code provided by Paul Miller for use in "Programming in C",
  * study period 2, 2019.
@@ -9,6 +9,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 #ifndef SHARED_H
 #define SHARED_H
 /**
@@ -16,8 +17,8 @@
  **/
 typedef enum
 {
-        FALSE,
-        TRUE
+	FALSE,
+	TRUE
 } BOOLEAN;
 
 /**
@@ -26,8 +27,8 @@ typedef enum
  **/
 struct falsible_long
 {
-        long thelong;
-        BOOLEAN success;
+	long thelong;
+	BOOLEAN success;
 };
 
 /**
@@ -36,8 +37,8 @@ struct falsible_long
  **/
 enum orientation
 {
-        OR_CLOCKWISE,
-        OR_ANTICLOCKWISE
+	OR_CLOCKWISE,
+	OR_ANTICLOCKWISE
 };
 
 /**
@@ -46,7 +47,7 @@ enum orientation
  **/
 struct move
 {
-        int index, count;
+	int index, count;
 };
 extern const struct move error_move;
 

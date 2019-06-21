@@ -1,7 +1,7 @@
 /******************************************************************************
  * Student Name    :  Dallas Hall
  * RMIT Student ID :  s3461243
- * COURSE CODE     :  CPT220
+ * COURSE CODE     :  CPT220 / OLA00
  *
  * Startup code provided by Paul Miller for use in "Programming in C",
  * study period 2, 2019.
@@ -38,14 +38,14 @@
  **/
 enum input_result
 {
-        /* the operation failed */
-        IR_FAILURE,
-        /* the operation succeeded */
-        IR_SUCCESS,
-        /* the user has chosen to skip their turn */
-        IR_SKIP_TURN,
-        /* the user has chosen to quit the game */
-        IR_QUIT
+	/* the operation failed */
+			IR_FAILURE,
+	/* the operation succeeded */
+			IR_SUCCESS,
+	/* the user has chosen to skip their turn */
+			IR_SKIP_TURN,
+	/* the user has chosen to quit the game */
+			IR_QUIT
 };
 
 /**
@@ -58,7 +58,7 @@ enum input_result
  * the array of strings that specify the ansi colour codes for turning on and
  * off specific colours.
  **/
-extern const char* color_strings[];
+extern const char *color_strings[];
 
 /**
  * the colors that are possible - these match directly to array indexes in the
@@ -66,9 +66,9 @@ extern const char* color_strings[];
  **/
 enum color
 {
-        COLOR_RED,
-        COLOR_WHITE,
-        COLOR_RESET
+	COLOR_RED,
+	COLOR_WHITE,
+	COLOR_RESET
 };
 
 /**
@@ -76,10 +76,10 @@ enum color
  **/
 enum token
 {
-        RED_TOKEN = 'X',
-        WHITE_TOKEN = 'O',
-        EMPTY_TOKEN = ' ',
-        INVALID_TOKEN = EOF
+	RED_TOKEN = 'X',
+	WHITE_TOKEN = 'O',
+	EMPTY_TOKEN = ' ',
+	INVALID_TOKEN = EOF
 };
 
 /**
