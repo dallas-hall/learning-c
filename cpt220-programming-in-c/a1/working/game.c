@@ -123,7 +123,6 @@ void play_game(struct falsible_long seed)
 	 * Print the board
 	 */
 	prettyPrintBoard(thegame.game_board);
-
 	/**
 	 * if initialisation of the game failed, we should quit
 	 **/
