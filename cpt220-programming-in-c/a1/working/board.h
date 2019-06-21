@@ -55,9 +55,9 @@ void printBoard(board the_board);
 
 void printBoardReverse(board the_board);
 
-void prettyPrintStartBoard(board the_board);
+void prettyPrintStartBoard();
 
-void prettyPrintStartBoardReverse(board the_board);
+void prettyPrintStartBoardReverse();
 
 enum piece getPiece(int row, int column);
 

@@ -10,6 +10,11 @@
 
 const int DEBUGGING_BOARD = 0;
 
+/*
+ * Not sure how introducing the structures below would make it any better.
+ * In my opinion the nested for loops Would be harder to read and slower
+ * with the multiple table lookups.
+ */
 const int fiveWhiteAt13[5][2] = {
 		{0, 0},
 		{1, 0},
@@ -137,7 +142,7 @@ void printBoardReverse(board the_board)
 /*
  * Pretty board printing for playing.
  */
-void prettyPrintStartBoard(board the_board)
+void prettyPrintStartBoard()
 {
 	int row, column, topNumber, bottomNumber, rowOffset, columnOffset, currentPiece;
 
@@ -253,7 +258,7 @@ void prettyPrintStartBoard(board the_board)
 	}
 }
 
-void prettyPrintStartBoardReverse(board the_board)
+void prettyPrintStartBoardReverse()
 {
 	/*
 	 * TODO reverse pretty print above
