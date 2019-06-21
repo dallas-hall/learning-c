@@ -71,8 +71,8 @@ play_game(struct falsible_long seed)
 	thegame.players[1].name[0] = '\0';
 
 	/*
-	Need to send the address here, so use &
-	*/
+	 * Need to send the address here, so use &
+	 */
 	player_init(thegame.other_player, &thegame);
 	player_init(thegame.current_player, &thegame);
 
@@ -80,8 +80,8 @@ play_game(struct falsible_long seed)
 		normal_print("%s\n",
 					 "[DEBUG] game.c - Trying to print created the players.");
 		/*
-		Need to use -> since its a pointer.
-		*/
+		 * Need to use -> since its a pointer.
+		 */
 		printf("The first player - thegame.current_player->name is %s\n",
 			   thegame.current_player->name);
 		printf("The first player - thegame.players[0].name is  %s\n",
@@ -91,6 +91,18 @@ play_game(struct falsible_long seed)
 		printf("The second player - thegame.players[1].name is  %s\n",
 			   thegame.players[1].name);
 	}
+
+	/*
+	 * Determine the player order.
+	 * Need to pass the address here with &
+	 *
+	 * I based this off of the material in chapter 5 of C How To Program 6e
+	 * srand will make sure rand produces different number sequences.
+	 * time() returns how many seconds since the Unix Epoch (1/1/1970).
+	 * NULL parameter for time means apply no formatting.
+	 */
+	srand(time(NULL));
+	determine_player_order(&thegame);
 
 	/**
 	 * if initialisation of the game failed, we should quit

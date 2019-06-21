@@ -1,12 +1,16 @@
 Student Name    :   Dallas Hall
 RMIT Student ID :   s3461243
 COURSE CODE     :   CPT220 / OLA00
-Program Code    :   ???????????????????????????????????????????
+Program Code    :   ??????????????????????????????????????????? <---------------------------- TODO LOLOLOLOLOL
 
 How to compile and execute the program
 ---------------------------------------
 
-gcc -ansi -Wall -pedantic bar_list.c board.c game.c helpers.c io.c main.c player.c rules.c -o backgammon.out
+gcc -ansi -Wall -pedantic bar_list.c board.c game.c helpers.c io.c main.c
+player.c rules.c -o backgammon.out
+
+I created a file called compile-flags with the above inside of it, made it
+executable and just ran ./compile-flags to generate the binary.out file.
 
 Approaches taken to solving the set problems
 ---------------------------------------------
@@ -24,3 +28,9 @@ really old quick.
 really helped. I also used this to format the code consistently. I wrote the
 code in CLion, used the debugger where necessary, and compiled with gcc on
 my Fedora box. Then uploaded to RMIT and compiled with gcc again.
+
+4) I also used top down design approach, as described in the text book
+C How To Program 6e.
+
+5) Used grep -inr 'search-term' * inside of my working directory when looking
+for stuff.

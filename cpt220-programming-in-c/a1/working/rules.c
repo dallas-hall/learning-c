@@ -25,6 +25,47 @@
  **/
 void determine_player_order(struct game *thegame)
 {
+	BOOLEAN done = FALSE;
+	int playerOneTotal, playerTwoTotal;
+	int die1, die2;
+
+	playerOneTotal = 0;
+	playerTwoTotal = 0;
+
+	do {
+		die1 = rollDice();
+		die2 = rollDice();
+		playerOneTotal += die1 + die2;
+		/*
+		 * We need to thegame -> players because thegame has a pointer to the
+		 * players array.
+		 *
+		 * And because its an array, we need to use players[subscript] to
+		 * pick the right element.
+		 *
+		 * And then once we have the right element, use dot notation to access
+		 * to correct field.
+		 */
+		normal_print("The first player %s rolled %d and %d, totalling %d\n",
+					 thegame->players[0].name, die1, die2, playerOneTotal);
+
+		die1 = rollDice();
+		die2 = rollDice();
+		playerTwoTotal += die1 + die2;
+		normal_print("The second player %s rolled %d and %d, totalling %d\n",
+					 thegame->players[1].name, die1, die2, playerTwoTotal);
+
+		if (playerOneTotal == playerTwoTotal) {
+			continue;
+		} else if (playerOneTotal > playerTwoTotal) {
+			printf("Player 1, %s, will go first.\n", thegame->players[0].name);
+			done = TRUE;
+		} else {
+			printf("Player 2, %s,  will go first.\n", thegame->players[1].name);
+			done = TRUE;
+		}
+
+	} while (!done);
 }
 
 /**
