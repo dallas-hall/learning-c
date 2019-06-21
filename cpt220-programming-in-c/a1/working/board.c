@@ -139,6 +139,9 @@ void board_init(board the_board)
 /**
  * You may provide your own function definitions here for this module
  **/
+/*
+ * Basic board printing for debugging.
+ */
 void printBoard(board the_board)
 {
 	int row, column;
@@ -161,7 +164,7 @@ void printBoardReverse(board the_board)
 {
 	int row, column;
 	if (DEBUGGING) {
-		printf("%s\n", "[DEBUG] board.c - Entering printBoard.");
+		printf("%s\n", "[DEBUG] board.c - Entering printBoardReverse.");
 	}
 	for (row = BOARD_HEIGHT - 1; row >= 0; row--) {
 		for (column = 0; column < BOARD_WIDTH; column++) {
@@ -174,3 +177,56 @@ void printBoardReverse(board the_board)
 		}
 	}
 }
+
+/*
+ * Pretty board printing for playing.
+ */
+void prettyPrintBoard(board the_board)
+{
+	int row, column, i, spaces, topNumber, bottomNumber;
+
+	if (DEBUGGING) {
+		printf("%s\n", "[DEBUG] board.c - Entering prettyPrintBoard.");
+	}
+
+	/*
+	 * These need to be decremented
+	 */
+	topNumber = 12;
+	bottomNumber = 13;
+	spaces = PRINT_SPACE_PREFIX;
+	for (row = 0; row < PRINT_HEIGHT; row++) {
+		for (column = 0; column < PRINT_WIDTH; column++) {
+			if (row == 0 || row % 2 == 0 || row == PRINT_HEIGHT - 1) {
+				printf("-");
+			} else if (row % 2 == 1) {
+				if (column == 0 || column % 6 == 0 ||
+					column == PRINT_WIDTH - 1) {
+					printf("|");
+				} else {
+					printf(" ");
+				}
+			}
+		}
+		printf("\n");
+	}
+}
+
+void prettyPrintBoardReverse(board the_board)
+{
+	int row, column;
+	if (DEBUGGING) {
+		printf("%s\n", "[DEBUG] board.c - Entering prettyPrintBoardReverse.");
+	}
+	for (row = BOARD_HEIGHT - 1; row >= 0; row--) {
+		for (column = 0; column < BOARD_WIDTH; column++) {
+			if (DEBUGGING) {
+				printf("[%d][%d] %d\t", row, column, the_board[row][column]);
+				if (column == BOARD_WIDTH - 1) {
+					printf("\n");
+				}
+			}
+		}
+	}
+}
+

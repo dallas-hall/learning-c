@@ -119,6 +119,11 @@ void play_game(struct falsible_long seed)
 		printOtherPlayer(&thegame);
 	}
 
+	/*
+	 * Print the board
+	 */
+	prettyPrintBoard(thegame.game_board);
+
 	/**
 	 * if initialisation of the game failed, we should quit
 	 **/
@@ -143,7 +148,8 @@ void play_game(struct falsible_long seed)
 void swap_players(struct player **first, struct player **second)
 {
 	/*
-	 * Use * to dereference the pointer to a pointer.
+	 * Use * during declaration to signal this variable holds a pointer.
+	 * Use * during assignment to dereference the pointer to a pointer.
 	 */
 	struct player *swap = *first;
 	*first = *second;
