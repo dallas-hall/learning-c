@@ -58,10 +58,52 @@ void determine_player_order(struct game *thegame)
 		if (playerOneTotal == playerTwoTotal) {
 			continue;
 		} else if (playerOneTotal > playerTwoTotal) {
-			printf("Player 1, %s, will go first.\n", thegame->players[0].name);
+			thegame->players[0].token = P_WHITE;
+			thegame->players[1].token = P_RED;
+
+			thegame->players[0].orientation = OR_CLOCKWISE;
+			thegame->players[1].orientation = OR_ANTICLOCKWISE;
+
+			printf("Player 1, %s%s%s, will go first, has the token ",
+				   color_strings[COLOR_WHITE], thegame->players[0].name,
+				   color_strings[COLOR_RESET]);
+			printf("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN,
+				   color_strings[COLOR_RESET]);
+			printf(" and is moving %sCLOCKWISE%s around the board.\n",
+				   color_strings[COLOR_WHITE], color_strings[COLOR_RESET]);
+
+			printf("Player 2, %s%s%s, will go second, has the token ",
+				   color_strings[COLOR_RED], thegame->players[1].name,
+				   color_strings[COLOR_RESET]);
+			printf("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
+				   color_strings[COLOR_RESET]);
+			printf(" and is moving %sANTICLOCKWISE%s around the board.\n",
+				   color_strings[COLOR_RED], color_strings[COLOR_RESET]);
+
 			done = TRUE;
 		} else {
-			printf("Player 2, %s,  will go first.\n", thegame->players[1].name);
+			thegame->players[0].token = P_RED;
+			thegame->players[1].token = P_WHITE;
+
+			thegame->players[0].orientation = OR_ANTICLOCKWISE;
+			thegame->players[1].orientation = OR_CLOCKWISE;
+
+			printf("Player 2, %s%s%s, will go first, has the token ",
+				   color_strings[COLOR_WHITE], thegame->players[1].name,
+				   color_strings[COLOR_RESET]);
+			printf("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN,
+				   color_strings[COLOR_RESET]);
+			printf(" and is moving %sCLOCKWISE%s around the board.\n",
+				   color_strings[COLOR_WHITE], color_strings[COLOR_RESET]);
+
+			printf("Player 1, %s%s%s, will go second, has the token ",
+				   color_strings[COLOR_RED], thegame->players[0].name,
+				   color_strings[COLOR_RESET]);
+			printf("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
+				   color_strings[COLOR_RESET]);
+			printf(" and is moving %sANTICLOCKWISE%s around the board.\n",
+				   color_strings[COLOR_RED], color_strings[COLOR_RESET]);
+
 			done = TRUE;
 		}
 
