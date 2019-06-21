@@ -69,7 +69,8 @@ int main(int argc, char *argv[])
 	if (argc != MAXARGS) {
 		play_game(seed);
 		return EXIT_SUCCESS;
-	} else {
+	}
+	else {
 		/* retrieve the seed from argv 1 */
 		seed = longfromstr(argv[SEED_ARG]);
 		/* if we did not succeed in retrieving the seed,

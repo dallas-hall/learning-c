@@ -54,7 +54,12 @@ extern const struct move error_move;
 /*
  * The debugging toggle, which is set inside of game.c
  * https://stackoverflow.com/questions/1433204/how-do-i-use-extern-to-share-variables-between-source-files/1433387#1433387
+ *
+ * Decided to use a dedicated variable per file, otherwise its just pages
+ * and pages of [DEBUG] messages when turned on.
+ *
+ * extern int DEBUGGING;
  */
-extern int DEBUGGING;
+
 
 #endif
