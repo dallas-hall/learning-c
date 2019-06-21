@@ -38,6 +38,9 @@ typedef enum piece board[BOARD_HEIGHT][BOARD_WIDTH];
 /**
  * You may add your own data structures here to manage this module
  **/
+#define PRINT_HEIGHT 33
+#define PRINT_WIDTH 73
+#define PRINT_SPACE_PREFIX 2
 
 /**
  * end of the declarations added by the student for this module
@@ -51,6 +54,10 @@ void board_init(board);
 
 void printBoard(board the_board);
 
+void prettyPrintBoard(board the_board);
+
 void printBoardReverse(board the_board);
+
+void prettyPrintBoardReverse(board the_board);
 
 #endif
