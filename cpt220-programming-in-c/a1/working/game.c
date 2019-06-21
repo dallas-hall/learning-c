@@ -19,8 +19,7 @@ int DEBUGGING = 0;
  * initialise the game structure passed in. For full details of the requirements
  * for this function, please see the assignment requirements.
  **/
-BOOLEAN
-game_init(struct game *thegame)
+BOOLEAN game_init(struct game *thegame)
 {
 	return FALSE;
 }
@@ -30,8 +29,7 @@ game_init(struct game *thegame)
  * won the game. Please see the assignment specifications for the full detail
  * on what is required here.
  **/
-void
-play_game(struct falsible_long seed)
+void play_game(struct falsible_long seed)
 {
 	/**
 	 * declare and allocate memory for the main game struct
@@ -68,6 +66,10 @@ play_game(struct falsible_long seed)
 		normal_print("%s\n", "[DEBUG] game.c - Trying to create the players.");
 	}
 
+	/*
+	 * Setting these to empty so I can use later to determine which player
+	 * pointer was passed.
+	 */
 	thegame.players[0].name[0] = '\0';
 	thegame.players[1].name[0] = '\0';
 
@@ -128,13 +130,22 @@ play_game(struct falsible_long seed)
 	}
 }
 
+/*
+ * TODO - Check this
+ */
+
 /**
  * swap the players by swapping the pointers. Please note this is an advanced
  * and optional requirement but should be straight forward if you have
  * understood pointers. This is an optional requirement as I don't expect
  * everyone will be able to do this.
  **/
-void
-swap_players(struct player **first, struct player **second)
+void swap_players(struct player **first, struct player **second)
 {
+	/*
+	 * Use * to dereference the pointer to a pointer.
+	 */
+	struct player *swap = *first;
+	*first = *second;
+	*second = *first;
 }
