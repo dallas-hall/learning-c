@@ -59,12 +59,10 @@ enum
  * global functions you will need to implement to complete this module. You
  * may feel the need to add more functions and you should feel free to do so.
  **/
-BOOLEAN
-game_init(struct game *thegame);
+BOOLEAN game_init(struct game *thegame);
 
 void play_game(struct falsible_long);
 
-void
-swap_players(struct player **, struct player **);
+void swap_players(struct player **, struct player **);
 
 #endif

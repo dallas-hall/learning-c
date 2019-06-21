@@ -9,6 +9,8 @@
 #include "player.h"
 #include "game.h"
 
+const int DEBUGGING_PLAYER = 0;
+
 /**
  * do the work to initialise a player here. Please refer to the assignment
  * specifications for what you need to do here.
@@ -33,7 +35,7 @@ BOOLEAN player_init(struct player *aplayer, struct game *thegame)
 	newPlayer.orientation = 0;
 	aplayer = &newPlayer;
 
-	if (DEBUGGING) {
+	if (DEBUGGING_PLAYER) {
 		printf("[DEBUG] player.c - aplayer -> name before getName is %s\n",
 			   aplayer->name);
 		printf("[DEBUG] player.c - aplayer -> score before getName is %d\n",
@@ -50,7 +52,7 @@ BOOLEAN player_init(struct player *aplayer, struct game *thegame)
 	Assign the newly created player to the players array in game.
 	*/
 	if (strlen(thegame->players[0].name) == 0) {
-		if (DEBUGGING) {
+		if (DEBUGGING_PLAYER) {
 			printf("[DEBUG] player.c - setting thegame -> players[0]\n");
 		}
 		thegame->players[0] = *aplayer;
@@ -64,15 +66,16 @@ BOOLEAN player_init(struct player *aplayer, struct game *thegame)
 		 */
 		thegame->current_player = &thegame->players[0];
 
-	} else if (strlen(thegame->players[1].name) == 0) {
-		if (DEBUGGING) {
+	}
+	else if (strlen(thegame->players[1].name) == 0) {
+		if (DEBUGGING_PLAYER) {
 			printf("[DEBUG] player.c - setting thegame -> players[1]\n");
 		}
 		thegame->players[1] = *aplayer;
 		thegame->other_player = &thegame->players[1];
 	}
 
-	if (DEBUGGING) {
+	if (DEBUGGING_PLAYER) {
 		printf("[DEBUG] player.c - aplayer -> name after getName is %s\n",
 			   aplayer->name);
 		printf("[DEBUG] player.c - aplayer -> score after getName is %d\n",
@@ -108,13 +111,14 @@ BOOLEAN
 getName(char s[], int size, struct player *aplayer, struct game *thegame)
 {
 	int i;
-	if (DEBUGGING) {
+	if (DEBUGGING_PLAYER) {
 		printf("%s\n", "[DEBUG] player.c - Entering getName.");
 	}
 
 	if (strlen(thegame->players[0].name) == 0) {
 		normal_print("Player 1, enter your name (max 20 characters): ", s);
-	} else if (strlen(thegame->players[1].name) == 0) {
+	}
+	else if (strlen(thegame->players[1].name) == 0) {
 		normal_print("Player 2, enter your name (max 20 characters): ", s);
 	}
 
@@ -149,7 +153,7 @@ getName(char s[], int size, struct player *aplayer, struct game *thegame)
 		return getName(s, size, aplayer, thegame);
 	}
 
-	if (DEBUGGING) {
+	if (DEBUGGING_PLAYER) {
 		printf("[DEBUG] player.c - strlen(s) before removing \\n is %ld\n",
 			   strlen(s));
 		printf("[DEBUG] player.c - s is %s\n", s);
@@ -161,7 +165,7 @@ getName(char s[], int size, struct player *aplayer, struct game *thegame)
 
 	s[strlen(s) - 1] = '\0';
 
-	if (DEBUGGING) {
+	if (DEBUGGING_PLAYER) {
 		printf("[DEBUG] player.c - strlen(s) after removing \\n is %ld\n",
 			   strlen(s));
 		printf("[DEBUG] player.c - s is %s\n", s);
@@ -178,7 +182,7 @@ getName(char s[], int size, struct player *aplayer, struct game *thegame)
 	 */
 	strcpy(aplayer->name, s);
 
-	if (DEBUGGING) {
+	if (DEBUGGING_PLAYER) {
 		printf("[DEBUG] player.c - aplayer -> name is %s\n", aplayer->name);
 		printf("%s\n",
 			   "[DEBUG] player.c - Printing aplayer -> name with for loop.");

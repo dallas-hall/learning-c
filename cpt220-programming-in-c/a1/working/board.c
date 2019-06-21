@@ -8,6 +8,8 @@
  *****************************************************************************/
 #include "board.h"
 
+const int DEBUGGING_BOARD = 0;
+
 const int fiveWhiteAt13[5][2] = {
 		{0, 0},
 		{1, 0},
@@ -73,13 +75,13 @@ void board_init(board the_board)
 {
 	int row, column;
 
-	if (DEBUGGING) {
+	if (DEBUGGING_BOARD) {
 		printf("%s\n", "[DEBUG] board.c - Entering board_init.");
 	}
 
 	for (row = 0; row < BOARD_HEIGHT; row++) {
 		for (column = 0; column < BOARD_WIDTH; column++) {
-			if (DEBUGGING) {
+			if (DEBUGGING_BOARD) {
 				printf("[DEBUG] board.c - Creating piece at row[%d]column[%d]\n",
 					   row, column);
 			}
@@ -99,12 +101,12 @@ void board_init(board the_board)
 void printBoard(board the_board)
 {
 	int row, column;
-	if (DEBUGGING) {
+	if (DEBUGGING_BOARD) {
 		printf("%s\n", "[DEBUG] board.c - Entering printBoard.");
 	}
 	for (row = 0; row < BOARD_HEIGHT; row++) {
 		for (column = 0; column < BOARD_WIDTH; column++) {
-			if (DEBUGGING) {
+			if (DEBUGGING_BOARD) {
 				printf("[%d][%d] %d\t", row, column, the_board[row][column]);
 				if (column == BOARD_WIDTH - 1) {
 					printf("\n");
@@ -117,12 +119,12 @@ void printBoard(board the_board)
 void printBoardReverse(board the_board)
 {
 	int row, column;
-	if (DEBUGGING) {
+	if (DEBUGGING_BOARD) {
 		printf("%s\n", "[DEBUG] board.c - Entering printBoardReverse.");
 	}
 	for (row = BOARD_HEIGHT - 1; row >= 0; row--) {
 		for (column = 0; column < BOARD_WIDTH; column++) {
-			if (DEBUGGING) {
+			if (DEBUGGING_BOARD) {
 				printf("[%d][%d] %d\t", row, column, the_board[row][column]);
 				if (column == BOARD_WIDTH - 1) {
 					printf("\n");
@@ -135,11 +137,11 @@ void printBoardReverse(board the_board)
 /*
  * Pretty board printing for playing.
  */
-void prettyPrintBoard(board the_board)
+void prettyPrintStartBoard(board the_board)
 {
 	int row, column, topNumber, bottomNumber, rowOffset, columnOffset, currentPiece;
 
-	if (DEBUGGING) {
+	if (DEBUGGING_BOARD) {
 		printf("%s\n", "[DEBUG] board.c - Entering prettyPrintBoard.");
 	}
 
@@ -216,19 +218,21 @@ void prettyPrintBoard(board the_board)
 					printf(" ");
 				}
 				else {
-					if (DEBUGGING) {
+					if (DEBUGGING_BOARD) {
 						printf("x: %d y: %d", rowOffset, columnOffset);
 					}
-					currentPiece =  getPiece(rowOffset, columnOffset);
-					if(currentPiece == 0) {
+					currentPiece = getPiece(rowOffset, columnOffset);
+					if (currentPiece == 0) {
 						printf(" ");
 					}
 					else if (currentPiece == 1) {
-						printf("%s%c%s", color_strings[COLOR_RED], RED_TOKEN, color_strings[COLOR_RESET]);
+						printf("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
+							   color_strings[COLOR_RESET]);
 
 					}
 					else if (currentPiece == 2) {
-						printf("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN, color_strings[COLOR_RESET]);
+						printf("%s%c%s", color_strings[COLOR_WHITE],
+							   WHITE_TOKEN, color_strings[COLOR_RESET]);
 
 					}
 					++columnOffset;
@@ -249,7 +253,7 @@ void prettyPrintBoard(board the_board)
 	}
 }
 
-void prettyPrintBoardReverse(board the_board)
+void prettyPrintStartBoardReverse(board the_board)
 {
 	/*
 	 * TODO reverse pretty print above

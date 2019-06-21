@@ -56,7 +56,8 @@ fgets adds a '\n' and '\0' to each string, we need to account for that.
 #define MAX_BOARD_LENGTH 24
 int pieciesLocation[MAX_BOARD_LENGTH];
 
-BOOLEAN getName(char s[], int size, struct player *aplayer, struct game *thegame);
+BOOLEAN
+getName(char s[], int size, struct player *aplayer, struct game *thegame);
 
 void printCurrentPlayer(struct game *thegame);
 
@@ -71,7 +72,6 @@ void printOtherPlayer(struct game *thegame);
  **/
 BOOLEAN player_init(struct player *, struct game *);
 
-enum input_result
-player_take_turn(struct player *);
+enum input_result player_take_turn(struct player *);
 
 #endif

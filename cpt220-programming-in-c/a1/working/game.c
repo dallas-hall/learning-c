@@ -12,8 +12,14 @@
  * The extern variable for this is inside shared.h
  * The controls debug message printing, 1 = on and 0 = off
  * https://stackoverflow.com/questions/1433204/how-do-i-use-extern-to-share-variables-between-source-files/1433387#1433387
+ * 
+ * Decided to use a dedicated variable per file, otherwise its just pages
+ * and pages of [DEBUG] messages when turned on.
+ * 
+ * int DEBUGGING = 0;
  */
-int DEBUGGING = 0;
+
+const int DEBUGGING_GAME = 0;
 
 /**
  * initialise the game structure passed in. For full details of the requirements
@@ -55,12 +61,12 @@ void play_game(struct falsible_long seed)
 	normal_print("The seed number being used is: %d\n", seed);
 	PUTLINE('-', strlen(heading));
 
-	if (DEBUGGING) {
+	if (DEBUGGING_GAME) {
 		normal_print("%s\n", "[DEBUG] game.c - Trying to create the board.");
 	}
 	board_init(thegame.game_board);
 
-	if (DEBUGGING) {
+	if (DEBUGGING_GAME) {
 		printBoard(thegame.game_board);
 		printBoardReverse(thegame.game_board);
 		normal_print("%s\n", "[DEBUG] game.c - Trying to create the players.");
@@ -79,7 +85,7 @@ void play_game(struct falsible_long seed)
 	player_init(thegame.other_player, &thegame);
 	player_init(thegame.current_player, &thegame);
 
-	if (DEBUGGING) {
+	if (DEBUGGING_GAME) {
 		normal_print("%s\n",
 					 "[DEBUG] game.c - Trying to print created the players.");
 		/*
@@ -107,14 +113,14 @@ void play_game(struct falsible_long seed)
 	 * Needed the address operator to get the right data type,
 	 */
 	srand(time(&thegame.seed));
-	if (DEBUGGING) {
+	if (DEBUGGING_GAME) {
 		printCurrentPlayer(&thegame);
 		printOtherPlayer(&thegame);
 	}
 
 	determine_player_order(&thegame);
 
-	if (DEBUGGING) {
+	if (DEBUGGING_GAME) {
 		printCurrentPlayer(&thegame);
 		printOtherPlayer(&thegame);
 	}
@@ -122,7 +128,9 @@ void play_game(struct falsible_long seed)
 	/*
 	 * Print the board
 	 */
-	prettyPrintBoard(thegame.game_board);
+	prettyPrintStartBoard(thegame.game_board);
+	printf("\n");
+	prettyPrintStartBoardReverse(thegame.game_board);
 	/**
 	 * if initialisation of the game failed, we should quit
 	 **/
