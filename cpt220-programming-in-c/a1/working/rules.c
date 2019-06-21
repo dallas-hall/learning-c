@@ -88,7 +88,7 @@ void determine_player_order(struct game *thegame)
 			printf(" and are moving %sCLOCKWISE%s around the board.\n",
 				   color_strings[COLOR_WHITE], color_strings[COLOR_RESET]);
 
-			printf("Player 2 name %s%s%s will go second. They have the token ",
+			printf("Player 2 named %s%s%s will go second. They have the token ",
 				   color_strings[COLOR_RED], thegame->players[1].name,
 				   color_strings[COLOR_RESET]);
 			printf("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
