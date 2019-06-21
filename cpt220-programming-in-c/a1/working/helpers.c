@@ -15,7 +15,8 @@
  * be a rather convenient function so I often implement it in my ansi C code.
  **/
 char *
-strdup(const char *orig) {
+strdup(const char *orig)
+{
 	/**
 	 * allocate sufficient memory for the string, including the nul
 	 * terminator
@@ -41,7 +42,8 @@ strdup(const char *orig) {
  * wraparound on an 80 column display
  **/
 char *
-fold(const char origline[]) {
+fold(const char origline[])
+{
 	/* get the length of the string so we know when we have finished
 	 * processing it
 	 */

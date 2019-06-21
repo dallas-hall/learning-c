@@ -12,8 +12,8 @@
  * function converts string data to a long and sets its BOOLEAN member to FALSE
  * if anything goes wrong.
  **/
-struct falsible_long
-longfromstr(const char *str) {
+struct falsible_long longfromstr(const char *str)
+{
 	/**
 	 * pointer to the next character after what we successfully parses with
 	 * strtol().
@@ -58,8 +58,8 @@ longfromstr(const char *str) {
 /**
  * main function that kickstatts the program
  **/
-int
-main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 	/**
 	 * a falsible number - set it to 0 as if no seed is passed it that's
 	 *what it should be.

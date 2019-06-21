@@ -9,6 +9,7 @@
 #include "board.h"
 #include "io.h"
 #include "shared.h"
+
 #ifndef RULES_H
 #define RULES_H
 /**
@@ -25,8 +26,8 @@ struct player;
  **/
 enum direction
 {
-        DIR_UP,
-        DIR_DOWN
+	DIR_UP,
+	DIR_DOWN
 };
 
 /**
@@ -38,8 +39,8 @@ enum direction
  **/
 struct piece_location
 {
-        int x, y;
-        enum direction direction;
+	int x, y;
+	enum direction direction;
 };
 
 /**
@@ -48,8 +49,8 @@ struct piece_location
  **/
 struct move_pair
 {
-        struct piece_location start;
-        struct piece_location end;
+	struct piece_location start;
+	struct piece_location end;
 };
 
 /**
@@ -64,8 +65,12 @@ struct move_pair
  * functions that you will need to implement in rules.c
  **/
 void determine_player_order(struct game *);
+
 BOOLEAN validate_moves(const struct move[], int, const struct player *,
-                       const int[], struct move_pair[]);
+					   const int[], struct move_pair[]);
+
 BOOLEAN apply_moves(const struct move_pair[], int, struct player *);
+
 BOOLEAN has_won_game(const struct player *);
+
 #endif

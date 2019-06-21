@@ -12,14 +12,16 @@
  * just initialise the bar_list by setting the total count of elements in the
  * bar_list to 0 - so it's an empty list
  **/
-void barlist_init(struct bar_list *alist) {
+void barlist_init(struct bar_list *alist)
+{
 	alist->token_count = 0;
 }
 
 /**
  * adds an token to the bar_list
  **/
-BOOLEAN barlist_push(struct bar_list *alist, enum piece thepiece) {
+BOOLEAN barlist_push(struct bar_list *alist, enum piece thepiece)
+{
 	if (alist->token_count == MAX_BAR) {
 		return FALSE;
 	}
@@ -30,7 +32,8 @@ BOOLEAN barlist_push(struct bar_list *alist, enum piece thepiece) {
 /**
  * removes a token from the bar_list
  **/
-enum piece barlist_pop(struct bar_list *thelist) {
+enum piece barlist_pop(struct bar_list *thelist)
+{
 	if (thelist->token_count == 0) {
 		return P_INVALID;
 	}
@@ -40,6 +43,7 @@ enum piece barlist_pop(struct bar_list *thelist) {
 /**
  * sets the bar_list back to being an empty list
  **/
-void barlist_delete(struct bar_list *thelist) {
+void barlist_delete(struct bar_list *thelist)
+{
 	thelist->token_count = 0;
 }

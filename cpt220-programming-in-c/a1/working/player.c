@@ -13,8 +13,8 @@
  * do the work to initialise a player here. Please refer to the assignment
  * specifications for what you need to do here.
  **/
-BOOLEAN
-player_init(struct player *aplayer, struct game *thegame) {
+BOOLEAN player_init(struct player *aplayer, struct game *thegame)
+{
 	char input[MAXPROMPTLEN];
 	BOOLEAN done = FALSE;
 	/*
@@ -89,30 +89,37 @@ player_init(struct player *aplayer, struct game *thegame) {
  * functions called from here. Please refer to the assignment specifications
  * for details on what you need to do here.
  **/
-enum input_result
-player_take_turn(struct player *current_player) {
+enum input_result player_take_turn(struct player *current_player)
+{
 	return IR_FAILURE;
 }
 
 /*
-  This function reads in input from stdnin
-  I have taken the concepts from /home/el9/E70949/shared/prog_in_c/tutes/week03/getname.c and chapter 8 from C How to program textbook.
-*/
-BOOLEAN getName(char s[], int size, struct player *aplayer) {
+ * This function reads in input from stdnin
+ * I have taken the concepts from /home/el9/E70949/shared/prog_in_c/tutes/week03/getname.c and chapter 8 from C How to program textbook.
+ */
+BOOLEAN getName(char s[], int size, struct player *aplayer)
+{
 	int i;
 	if (DEBUGGING) {
 		printf("%s\n", "[DEBUG] player.c - Entering getName.");
 	}
 	normal_print("Enter your name (max 20 characters): ", s);
+
 	/*
 	 * Need to account for the '\n' and '\0' that fgets adds.
 	 * If the char last isn't '\n' then we know we didn't receive all the input.
 	 * We need to remove the '\n' as well.
 	 */
+
 	if (fgets(s, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
 		return FALSE;
 	}
-	/* Remember that strlen doesn't include the \0 in its count */
+
+	/*
+	 * Remember that strlen doesn't include the \0 in its count
+	 */
+
 	if (s[strlen(s) - 1] != '\n') {
 		error_print("Buffer overflow.\n");
 		clear_buffer();
@@ -134,7 +141,11 @@ BOOLEAN getName(char s[], int size, struct player *aplayer) {
 			   strlen(s));
 		printf("[DEBUG] player.c - s is %s\n", s);
 	}
-	/* Replace \n with \0 */
+
+	/*
+	 * Replace \n with \0
+	 */
+
 	s[strlen(s) - 1] = '\0';
 
 	if (DEBUGGING) {
@@ -149,7 +160,9 @@ BOOLEAN getName(char s[], int size, struct player *aplayer) {
 		printf("\n");
 	}
 
-	/* Copy the input string into the player */
+	/*
+	 * Copy the input string into the player
+	 */
 	strcpy(aplayer->name, s);
 
 	if (DEBUGGING) {
@@ -164,3 +177,4 @@ BOOLEAN getName(char s[], int size, struct player *aplayer) {
 
 	return TRUE;
 }
+

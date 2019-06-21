@@ -16,7 +16,8 @@
  * requirements
  **/
 void
-board_init(board the_board) {
+board_init(board the_board)
+{
 	int row, column;
 	if (DEBUGGING) {
 		printf("%s\n", "[DEBUG] board.c - Entering board_init.");
@@ -143,7 +144,8 @@ board_init(board the_board) {
 /**
  * You may provide your own function definitions here for this module
  **/
-void printBoard(board the_board) {
+void printBoard(board the_board)
+{
 	int row, column;
 	if (DEBUGGING) {
 		printf("%s\n", "[DEBUG] board.c - Entering printBoard.");
@@ -160,7 +162,8 @@ void printBoard(board the_board) {
 	}
 }
 
-void printBoardReverse(board the_board) {
+void printBoardReverse(board the_board)
+{
 	int row, column;
 	if (DEBUGGING) {
 		printf("%s\n", "[DEBUG] board.c - Entering printBoard.");
