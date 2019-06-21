@@ -1,11 +1,26 @@
-Student Name    :
-RMIT Student ID :
-COURSE CODE     :
-Program Code    :
+Student Name    :   Dallas Hall
+RMIT Student ID :   s3461243
+COURSE CODE     :   CPT220 / OLA00
+Program Code    :   ???????????????????????????????????????????
 
 How to compile and execute the program
 ---------------------------------------
 
+gcc -ansi -Wall -pedantic bar_list.c board.c game.c helpers.c io.c main.c player.c rules.c -o backgammon.out
+
 Approaches taken to solving the set problems
 ---------------------------------------------
 
+1) I use pen and paper or computer software sometimes to help visualise what
+I was doing. For example, I went through all the c and h files and mapped
+out with boxes how they all relate. Another example was using a spreadsheet
+to visualise the board was I was initialising the game state.
+
+2) When coding in vim, LOTS OF PRINT DEBUGS!!! I was doing this so I could
+inspect variables and their state at all stages of processing. But this got
+really old quick.
+
+3) So then I just started running the program inside of the CLion debugger which
+really helped. I also used this to format the code consistently. I wrote the
+code in CLion, used the debugger where necessary, and compiled with gcc on
+my Fedora box. Then uploaded to RMIT and compiled with gcc again.
