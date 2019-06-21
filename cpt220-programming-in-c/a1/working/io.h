@@ -74,10 +74,15 @@ enum color
 /**
  * tokens that are possible in the game
  **/
+/*
+ * I changed the tokens around because the assignment spec, page 10, said:
+ * First played will be WHITE with a token of X, other player is RED with token
+ * of O.
+ */
 enum token
 {
-	RED_TOKEN = 'X',
-	WHITE_TOKEN = 'O',
+	RED_TOKEN = 'O',
+	WHITE_TOKEN = 'X',
 	EMPTY_TOKEN = ' ',
 	INVALID_TOKEN = EOF
 };
