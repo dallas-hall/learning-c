@@ -12,7 +12,7 @@
  * The extern variable for this is inside shared.h
  * The controls debug message printing, 1 = on and 0 = off
  */
-int DEBUGGING = 1;
+int DEBUGGING = 0;
 
 /**
  * initialise the game structure passed in. For full details of the requirements
@@ -102,7 +102,17 @@ play_game(struct falsible_long seed)
 	 * NULL parameter for time means apply no formatting.
 	 */
 	srand(time(NULL));
+	if (DEBUGGING) {
+		printCurrentPlayer(&thegame);
+		printOtherPlayer(&thegame);
+	}
+
 	determine_player_order(&thegame);
+
+	if (DEBUGGING) {
+		printCurrentPlayer(&thegame);
+		printOtherPlayer(&thegame);
+	}
 
 	/**
 	 * if initialisation of the game failed, we should quit
