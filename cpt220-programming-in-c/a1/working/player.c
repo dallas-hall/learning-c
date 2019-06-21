@@ -18,15 +18,22 @@ player_init(struct player* aplayer, struct game* thegame)
 {
         char input[MAXPROMPTLEN];
         BOOLEAN done = FALSE;
-        /*aplayer -> name[0] = 0;*/
+        /* Intialise the new player details */
+        struct player newPlayer;
+        newPlayer.name[0] = 0;
+        newPlayer.score = 0;
+        newPlayer.curgame = thegame;
+        newPlayer.orientation = 0;
+        aplayer = &newPlayer;
 
         if(DEBUGGING) {
-                printf("%s\n", "[DEBUG] player.c - Entering player_init.");
+                printf("[DEBUG] player.c - aplayer -> name is %s\n", aplayer -> name);
+                printf("[DEBUG] player.c - aplayer -> score is %d\n", aplayer -> score);
+                printf("[DEBUG] player.c - aplayer -> orientation is %d\n", aplayer -> orientation);
         }
         do {
                 done = getName(input, MAXPROMPTLEN, aplayer);
         } while (!done);
-
 
         return TRUE;
 }
@@ -55,12 +62,13 @@ BOOLEAN getName(char s[], int size, struct player* aplayer)
         normal_print("Enter your name (max 20 characters): ", s);
         /*
          * Need to account for the '\n' and '\0' that fgets adds.
-         * If the last isn't '\n' then we know we didn't receive all the input.
+         * If the char last isn't '\n' then we know we didn't receive all the input.
          * We need to remove the '\n' as well.
          */
         if(fgets(s, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
                 return FALSE;
         }
+        /* Remember that strlen doesn't include the \0 in its count */
         if (s[strlen(s) - 1] != '\n')
         {
                 error_print("[ERROR] buffer overflow.\n");
@@ -77,6 +85,7 @@ BOOLEAN getName(char s[], int size, struct player* aplayer)
                 printf("[DEBUG] player.c - strlen(s) before removing \\n is %ld\n", strlen(s));
                 printf("[DEBUG] player.c - s is %s\n", s);
         }
+        /* Replace \n with \0 */
         s[strlen(s) - 1] = '\0';
 
         if(DEBUGGING) {
@@ -90,15 +99,17 @@ BOOLEAN getName(char s[], int size, struct player* aplayer)
                 printf("\n");
         }
 
+
         strcpy(aplayer -> name, s);
 
-        /*if(DEBUGGING) {
-                printf("%s\n", "[DEBUG] player.c - Printing aplayer -> name with for loop..");
-                s[strlen(s) - 1] = 0;
-                for (i = 0; i < strlen(s); i++) {
+        if(DEBUGGING) {
+                printf("[DEBUG] player.c - aplayer -> name is %s\n", aplayer -> name);
+                printf("%s\n", "[DEBUG] player.c - Printing aplayer -> name with for loop.");
+                for(i = 0; i < strlen(s); i++) {
                         printf("%c", aplayer -> name[i]);
                 }
-        }*/
+                printf("\n");
+        }
 
         return TRUE;
 }
