@@ -85,3 +85,17 @@ fold(const char origline[])
 	}
 	return copy;
 }
+
+/*
+ * I based this off of the material in chapter 5 of C How To Program 6e
+ */
+int rollDice(void)
+{
+	/*
+	 * rand() produces a random number between 0 and at least 32767
+	 * We can scale the results by using % (modulo).
+	 * In this case % 6 generates a number between 0 and 5.
+	 * We want a number between 1 and 6, so we add 1 before returning.
+	 */
+	return 1 + (rand() % 6);
+}

@@ -16,7 +16,7 @@
 /**
  * you may add your own data structures for the helpers module here
  **/
-
+int rollDice(void);
 /**
  * end of students data structures.
  **/
