@@ -11,6 +11,7 @@
 /*
  * The extern variable for this is inside shared.h
  * The controls debug message printing, 1 = on and 0 = off
+ * https://stackoverflow.com/questions/1433204/how-do-i-use-extern-to-share-variables-between-source-files/1433387#1433387
  */
 int DEBUGGING = 0;
 
@@ -99,9 +100,11 @@ play_game(struct falsible_long seed)
 	 * I based this off of the material in chapter 5 of C How To Program 6e
 	 * srand will make sure rand produces different number sequences.
 	 * time() returns how many seconds since the Unix Epoch (1/1/1970).
-	 * NULL parameter for time means apply no formatting.
+	 * Was initially using NULL parameter, which for time means apply no
+	 * formatting. But then I decided to use the supplied seed number.
+	 * Needed the address operator to get the right data type,
 	 */
-	srand(time(NULL));
+	srand(time(&thegame.seed));
 	if (DEBUGGING) {
 		printCurrentPlayer(&thegame);
 		printOtherPlayer(&thegame);

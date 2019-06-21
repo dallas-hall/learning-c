@@ -59,10 +59,13 @@ void determine_player_order(struct game *thegame)
 			/*
 			 * Reset for the next roll
 			 */
+			printf("The result was a draw, re-rolling.\n");
 			playerOneTotal = 0;
 			playerTwoTotal = 0;
 			continue;
 		} else if (playerOneTotal > playerTwoTotal) {
+			printf("Player 2 named %s wins the roll!\n",
+				   thegame->players[0].name);
 			thegame->players[0].token = P_WHITE;
 			thegame->players[1].token = P_RED;
 
@@ -90,6 +93,8 @@ void determine_player_order(struct game *thegame)
 
 			done = TRUE;
 		} else {
+			printf("Player 2 named %s wins the roll!\n",
+				   thegame->players[1].name);
 			thegame->players[0].token = P_RED;
 			thegame->players[1].token = P_WHITE;
 
