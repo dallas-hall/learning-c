@@ -129,13 +129,13 @@ void play_game(struct falsible_long seed)
 	 * Print the board
 	 */
 	printf("\nThe current board state, as %s see's it.\n", thegame.current_player->name);
-	prettyPrintStartBoard(thegame.game_board);
+	prettyPrintBoard(thegame.game_board);
 
 	/*
 	 * Print the board in reverse.
  	 */
 	printf("\nThe current board state, as %s see's it.\n", thegame.other_player->name);
-	prettyPrintStartBoardReverse(thegame.game_board);
+	prettyPrintBoardReverse(thegame.game_board);
 
 	/**
 	 * if initialisation of the game failed, we should quit

@@ -55,9 +55,9 @@ void printBoard(board the_board);
 
 void printBoardReverse(board the_board);
 
-void prettyPrintStartBoard();
+void prettyPrintBoard(board the_board);
 
-void prettyPrintStartBoardReverse();
+void prettyPrintBoardReverse(board the_board);
 
 /*
  * Uses nested if statements for starting positions.
@@ -73,5 +73,11 @@ void setStartPiece(int x, int y, board the_board);
 enum piece getStartPieceArray(int row, int column);
 
 void setStartPieceArray(int row, int column, board the_board);
+
+/*
+ * Read the current state of the board
+ */
+enum piece getPieceFromBoardState(int x, int y, board the_board);
+
 
 #endif
