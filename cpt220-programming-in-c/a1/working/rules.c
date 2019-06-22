@@ -28,6 +28,7 @@ void determine_player_order(struct game *thegame)
 	BOOLEAN done = FALSE;
 	int playerOneTotal, playerTwoTotal;
 	int die1, die2;
+	char output[256];
 
 	playerOneTotal = 0;
 	playerTwoTotal = 0;
@@ -79,26 +80,33 @@ void determine_player_order(struct game *thegame)
 			/*
 			 * Worked out how to print the colours with the discussion here
 			 * https://stackoverflow.com/a/3219471
+			 *
+			 * Got sprintf idea from Chapter 8, C How To Program 6e
+			 *
+			 * Sometimes this folds, sometimes it doesn't not sure why???
+			 * It is the same logic as in io.c and that works fine every time.
+			 *
+			 * I BLAME YOU MR FOLD FUNCTION!
 			 */
-			normal_print(
-					"Player 1 named %s%s%s will go first, They have the token ",
-					color_strings[COLOR_WHITE], thegame->players[0].name,
-					color_strings[COLOR_RESET]);
-			normal_print("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN,
-						 color_strings[COLOR_RESET]);
-			normal_print(" and are moving %sCLOCKWISE%s around the board.\n",
-						 color_strings[COLOR_WHITE],
-						 color_strings[COLOR_RESET]);
 
-			normal_print(
-					"Player 2 named %s%s%s will go second. They have the token ",
-					color_strings[COLOR_RED], thegame->players[1].name,
+			sprintf(output,
+					"Player 1 named %s%s%s will go first. They have the token %s%c%s and are moving %sCLOCKWISE%s around the board.\n",
+					color_strings[COLOR_WHITE], thegame->players[0].name,
+					color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
+					WHITE_TOKEN,
+					color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
 					color_strings[COLOR_RESET]);
-			normal_print("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
-						 color_strings[COLOR_RESET]);
-			normal_print(
-					" and are moving %sANTICLOCKWISE%s around the board.\n",
-					color_strings[COLOR_RED], color_strings[COLOR_RESET]);
+			normal_print(fold(output));
+			output[0] = '\0';
+
+			sprintf(output,
+					"Player 2 named %s%s%s will go first. They have the token %s%c%s and are moving %sANTICLOCKWISE%s around the board.\n",
+					color_strings[COLOR_RED], thegame->players[1].name,
+					color_strings[COLOR_RESET], color_strings[COLOR_RED],
+					WHITE_TOKEN,
+					color_strings[COLOR_RESET], color_strings[COLOR_RED],
+					color_strings[COLOR_RESET]);
+			normal_print(fold(output));
 
 			done = TRUE;
 		}
