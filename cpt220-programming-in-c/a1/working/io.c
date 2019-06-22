@@ -340,7 +340,37 @@ void printBoardFooterMessage()
 	/*
 	 * Store the pointer to the game object.
 	 */
-	struct game * theGame = getGame();
-	printf("The current board state, as %s see's it.\n",
-		   theGame->current_player->name);
+	struct game *theGame = getGame();
+	char *name = theGame->current_player->name;
+	int score = theGame->current_player->score;
+	char *colour;
+	char *direction;
+	char token;
+	char barCount[6]; /* including the '\0' */
+
+	if (theGame->current_player->orientation == OR_CLOCKWISE) {
+		colour = "white";
+		direction = "clockwise";
+		token = 'X';
+	}
+	else {
+		colour = "red";
+		direction = "anticlockwise";
+		token = 'O';
+	}
+
+	/*
+	 * TODO - check what happens with a number, and fold output to 80
+	 */
+	if(theGame->current_player->bar_list.token_count == 0) {
+		strcpy(barCount, "empty");
+	}
+	else {
+		sprintf(barCount, "%d", theGame->current_player->bar_list.token_count);
+	}
+
+	printf("It is your turn %s. Your score is %d, your colour is %s", name,
+		   score, colour);
+	printf(", your token is %c, your direction is %s, and your bar list is %s.\n",
+		   token, direction, barCount);
 }
