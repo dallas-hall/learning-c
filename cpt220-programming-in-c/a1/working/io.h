@@ -119,7 +119,9 @@ enum token
 /**
  * You may add your own data structures here to help with processing of i/o.
  **/
+void printBoard(board the_board);
 
+void printBoardReverse(board the_board);
 /**
  * student's data structure declarations end here.
  **/

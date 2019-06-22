@@ -71,16 +71,13 @@ void board_print(board theboard, enum orientation orient)
 	}
 
 	/*
-	 * I feel so dirty doing it this way, but I created my solution in
-	 * board.c before seeing this.
-	 */
+	 * Use for printing the board numbers.
+ 	 * These need to be decremented
+ 	 */
+	topNumber = 12;
+	bottomNumber = 13;
 	if (orient == OR_CLOCKWISE) {
-		/*
-		 * Use for printing the board numbers.
-		 * These need to be decremented
-		 */
-		topNumber = 12;
-		bottomNumber = 13;
+
 		/*
 		 * Used for printing tokens.
 		  * These need to be incremented.
@@ -142,7 +139,6 @@ void board_print(board theboard, enum orientation orient)
 					}
 						/*
 						 * Skip every 3rd spot as this might have a player token.
-						 * TODO - add logic for printing from the saved state
 						 */
 					else if (column % 3 != 0) {
 						printf(" ");
@@ -188,12 +184,7 @@ void board_print(board theboard, enum orientation orient)
 		}
 	}
 	else if (orient == OR_ANTICLOCKWISE) {
-		/*
- * These need to be decremented
- * Use for printing the board numbers.
- */
-		topNumber = 12;
-		bottomNumber = 13;
+
 		/*
 		 * Used for printing tokens.
 		 * rowOffset need to be decremented for reverse printing.
@@ -256,7 +247,6 @@ void board_print(board theboard, enum orientation orient)
 					}
 						/*
 						 * Skip every 3rd spot as this might have a player token.
-						 * TODO - add logic for printing from the saved state
 						 */
 					else if (column % 3 != 0) {
 						printf(" ");
@@ -303,3 +293,36 @@ void board_print(board theboard, enum orientation orient)
 	}
 }
 
+/*
+ * Basic board printing for debugging.
+ */
+void printBoard(board the_board)
+{
+	int row, column;
+	if (DEBUGGING_IO) {
+		printf("%s\n", "[DEBUG] board.c - Entering printBoard.");
+	}
+	for (row = 0; row < BOARD_HEIGHT; row++) {
+		for (column = 0; column < BOARD_WIDTH; column++) {
+			printf("[%d][%d] %d\t", row, column, the_board[row][column]);
+			if (column == BOARD_WIDTH - 1) {
+				printf("\n");
+			}
+		}
+	}
+}
+
+void printBoardReverse(board the_board)
+{
+	int row, column;
+	if (DEBUGGING_IO) {
+		printf("%s\n", "[DEBUG] board.c - Entering printBoardReverse.");
+	}
+	for (row = BOARD_HEIGHT - 1; row >= 0; row--) {
+		for (column = 0; column < BOARD_WIDTH; column++) {
+			printf("[%d][%d] %d\t", row, column, the_board[row][column]);
+			if (column == BOARD_WIDTH - 1) {
+			}
+		}
+	}
+}
