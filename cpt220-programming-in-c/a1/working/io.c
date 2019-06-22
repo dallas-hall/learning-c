@@ -274,7 +274,7 @@ void printBoardFooterMessage()
 	}
 
 	/*
-	 * TODO - check what happens with a number, and fold output to 80
+	 * TODO - check what happens with a number
 	 */
 	if (theGame->current_player->bar_list.token_count == 0) {
 		strcpy(barCount, "empty");
@@ -285,7 +285,7 @@ void printBoardFooterMessage()
 	}
 
 	/*
-	 * Got the idea to use sprintf from chapter 08, C How To Program
+	 * Got the idea to use sprintf from chapter 08, C How To Program 6e
 	 */
 
 	if (theGame->current_player->orientation == OR_CLOCKWISE) {
