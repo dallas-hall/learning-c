@@ -283,3 +283,125 @@ void printBoardFooterMessage()
 	printf(", your token is %c, your direction is %s, and your bar list is %s.\n",
 		   token, direction, barCount);
 }
+
+BOOLEAN getPlayerName(struct player * currentPlayer)
+{
+	char input[MAXPROMPTLEN];
+	struct game gamePointer = *getGame();
+
+	int i;
+
+	if (DEBUGGING_IO) {
+		printf("%s\n", "[DEBUG] player.c - Entering getName.");
+	}
+
+	if (strlen(gamePointer.players[0].name) == 0) {
+		normal_print("Player 1, enter your name (max 20 characters): ", input);
+	}
+	else if (strlen(gamePointer.players[1].name) == 0) {
+		normal_print("Player 2, enter your name (max 20 characters): ", input);
+	}
+
+	/*
+ * Need to account for the '\n' and '\0' that fgets adds.
+ * If the char last isn't '\n' then we know we didn't receive all the input.
+ * We need to remove the '\n' as well.
+ */
+
+	if (fgets(input, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
+		return FALSE;
+	}
+
+	/*
+	 * Remember that strlen doesn't include the \0 in its count
+	 */
+
+	if (input[strlen(input) - 1] != '\n') {
+		error_print("Buffer overflow.\n");
+		clear_buffer();
+		return getPlayerName(currentPlayer);
+	}
+
+	if (strlen(input) > NAME_LEN + 1) {
+		error_print("Input too long, less than 20 only.\n");
+		return getPlayerName(currentPlayer);
+	}
+
+	if (strlen(input) < MIN_NAME_LEN) {
+		error_print("Input too short, greater than 1 only.\n");
+		return getPlayerName(currentPlayer);
+	}
+
+	if (DEBUGGING_IO) {
+		printf("[DEBUG] player.c - strlen(s) before removing \\n is %ld\n",
+			   strlen(input));
+		printf("[DEBUG] player.c - s is %s\n", input);
+	}
+
+	/*
+ * Replace \n with \0
+ */
+
+	input[strlen(input) - 1] = '\0';
+
+	if (DEBUGGING_IO) {
+		printf("[DEBUG] player.c - strlen(s) after removing \\n is %ld\n",
+			   strlen(input));
+		printf("[DEBUG] player.c - s is %s\n", input);
+
+		printf("%s\n", "[DEBUG] player.c - Printing s with for loop.");
+		for (i = 0; i < strlen(input); i++) {
+			printf("%c", input[i]);
+		}
+		printf("\n");
+	}
+
+	/*
+	 * Copy the input string into the player
+	 */
+	strcpy(currentPlayer->name, input);
+
+
+	if (DEBUGGING_IO) {
+		printf("[DEBUG] player.c - aplayer -> name is %s\n", currentPlayer->name);
+		printf("%s\n",
+			   "[DEBUG] player.c - Printing aplayer -> name with for loop.");
+		for (i = 0; i < strlen(input); i++) {
+			printf("%c", currentPlayer->name[i]);
+		}
+		printf("\n");
+	}
+
+	return TRUE;
+}
+
+/*
+ * The next 2 functions are used during debugging, so we can see which pointer
+ * is currently inside of current_player or other_player.
+ */
+void printCurrentPlayer(struct game *thegame)
+{
+	printf("[DEBUG] player.c - printCurrentPlayer\n");
+	printf("thegame->current_player.name is %s\n",
+		   thegame->current_player->name);
+	printf("thegame->current_player.score is %d\n",
+		   thegame->current_player->score);
+	printf("thegame->current_player.token is %d\n",
+		   thegame->current_player->token);
+	printf("thegame->current_player.orientation is %d\n",
+		   thegame->current_player->orientation);
+	printf("thegame->current_player.bar_list.token_count is %d\n",
+		   thegame->current_player->bar_list.token_count);
+}
+
+void printOtherPlayer(struct game *thegame)
+{
+	printf("[DEBUG] player.c - printOtherPlayer\n");
+	printf("thegame->other_player.name is %s\n", thegame->other_player->name);
+	printf("thegame->other_player.score is %d\n", thegame->other_player->score);
+	printf("thegame->other_player.token is %d\n", thegame->other_player->token);
+	printf("thegame->other_player.orientation is %d\n",
+		   thegame->other_player->orientation);
+	printf("thegame->current_player.bar_list.token_count is %d\n",
+		   thegame->current_player->bar_list.token_count);
+}

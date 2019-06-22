@@ -143,4 +143,10 @@ void printBoardHeaderMessage();
 
 void printBoardFooterMessage();
 
+BOOLEAN getPlayerName();
+
+void printCurrentPlayer();
+
+void printOtherPlayer();
+
 #endif

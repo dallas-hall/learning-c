@@ -66,11 +66,4 @@ BOOLEAN player_init(struct player *, struct game *);
 
 enum input_result player_take_turn(struct player *);
 
-BOOLEAN
-getName(char s[], int size, struct player *aplayer, struct game *thegame);
-
-void printCurrentPlayer(struct game *thegame);
-
-void printOtherPlayer(struct game *thegame);
-
 #endif
