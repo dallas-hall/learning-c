@@ -113,6 +113,10 @@ enum input_result player_take_turn(struct player *current_player)
  *  139 | getName(char s[], int size, struct player *aplayer, struct game *thegame);
  *
  *  Couldn't work out how to resolve.
+ *
+ *  I assume I would have to redesign this to not use the aplayer and thegame.
+ *  Just read in a name, validate it, and return the string and then assign
+ *  it in here.
  */
 BOOLEAN
 getName(char s[], int size, struct player *aplayer, struct game *thegame)
