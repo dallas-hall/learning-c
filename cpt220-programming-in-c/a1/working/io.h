@@ -97,13 +97,13 @@ enum token
  * for example, PUTCHARS('-', 5) would print out 5 dashes.
  **/
 #define PUTCHARS(ch, count)                                                    \
-		{                                                                      \
-				int char_count;                                                \
-				for (char_count = 0; char_count < (int)count; ++char_count)    \
-				{                                                              \
-						putchar(ch);                                           \
-				}                                                              \
-		}
+        {                                                                      \
+                int char_count;                                                \
+                for (char_count = 0; char_count < (int)count; ++char_count)    \
+                {                                                              \
+                        putchar(ch);                                           \
+                }                                                              \
+        }
 
 /**
  * this is also a macro. it prints out a line of characters in a row followed
@@ -111,17 +111,15 @@ enum token
  * character I would call this macro as PUTLINE('-', 80)
  **/
 #define PUTLINE(ch, count)                                                     \
-		{                                                                      \
-				PUTCHARS(ch, count);                                           \
-				putchar('\n');                                                 \
-		}
+        {                                                                      \
+                PUTCHARS(ch, count);                                           \
+                putchar('\n');                                                 \
+        }
 
 /**
  * You may add your own data structures here to help with processing of i/o.
  **/
-void printBoard(board the_board);
 
-void printBoardReverse(board the_board);
 /**
  * student's data structure declarations end here.
  **/
@@ -136,5 +134,13 @@ int normal_print(const char format[], ...);
 int error_print(const char format[], ...);
 
 void board_print(board, enum orientation);
+
+void printBoard(board the_board);
+
+void printBoardReverse(board the_board);
+
+void printBoardHeaderMessage();
+
+void printBoardFooterMessage();
 
 #endif
