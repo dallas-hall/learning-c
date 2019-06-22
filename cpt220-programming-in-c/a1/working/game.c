@@ -19,7 +19,11 @@
  * int DEBUGGING = 0;
  */
 
-const int DEBUGGING_GAME = 1;
+const int DEBUGGING_GAME = 0;
+
+/*
+ * Used to create a game object getter.
+ */
 struct game * theGamePointer;
 
 /**
