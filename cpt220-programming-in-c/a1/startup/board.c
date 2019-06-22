@@ -18,6 +18,7 @@
 void
 board_init(board the_board)
 {
+        normal_print("%s\n", "Entering board_init");
 }
 
 /**

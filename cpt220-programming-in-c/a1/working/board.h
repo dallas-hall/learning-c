@@ -59,8 +59,19 @@ void prettyPrintStartBoard();
 
 void prettyPrintStartBoardReverse();
 
-enum piece getPiece(int row, int column);
+/*
+ * Uses nested if statements for starting positions.
+ */
 
-void setPiece(int x, int y, board the_board);
+enum piece getStartPiece(int row, int column);
+
+void setStartPiece(int x, int y, board the_board);
+
+/*
+ * Uses a 2d array of starting pieces.
+ */
+enum piece getStartPieceArray(int row, int column);
+
+void setStartPieceArray(int row, int column, board the_board);
 
 #endif
