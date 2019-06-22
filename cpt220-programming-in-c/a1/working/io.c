@@ -68,7 +68,7 @@ void board_print(board theboard, enum orientation orient)
 	int row, column, topNumber, bottomNumber, rowOffset, columnOffset, currentPiece;
 
 	if (DEBUGGING_IO) {
-		printf("%s\n", "[DEBUG] io.c - Entering board_print.");
+		normal_print("%s\n", "[DEBUG] io.c - Entering board_print.");
 	}
 
 	printBoardHeaderMessage();
@@ -97,7 +97,7 @@ void board_print(board theboard, enum orientation orient)
 			 * Only print the - for the top, bottom, and every even row.
 			 */
 			if (row == 0 || row % 2 == 0 || row == PRINT_HEIGHT - 1) {
-				printf("-");
+				normal_print("-");
 			}
 				/*
 				 * Only print the board numbers on the second and second last row.
@@ -105,7 +105,7 @@ void board_print(board theboard, enum orientation orient)
 			else if (row == 1 || row == PRINT_HEIGHT - 2) {
 				if (column == 0 || column % 6 == 0 ||
 					column == PRINT_WIDTH - 1) {
-					printf("|");
+					normal_print("|");
 				}
 				/*
 				 * Print topNumber only on row 1.
@@ -127,22 +127,22 @@ void board_print(board theboard, enum orientation orient)
 					case 66:
 						if (orient == OR_CLOCKWISE) {
 							if (row == 1) {
-								printf("  %2d ", topNumber);
+								normal_print("  %2d ", topNumber);
 								--topNumber;
 							}
 							else if (row == PRINT_HEIGHT - 2) {
-								printf("  %2d ", bottomNumber);
+								normal_print("  %2d ", bottomNumber);
 								++bottomNumber;
 							}
 							break;
 						}
 						else if (orient == OR_ANTICLOCKWISE) {
 							if (row == 1) {
-								printf("  %2d ", topNumber);
+								normal_print("  %2d ", topNumber);
 								++topNumber;
 							}
 							else if (row == PRINT_HEIGHT - 2) {
-								printf("  %2d ", bottomNumber);
+								normal_print("  %2d ", bottomNumber);
 								--bottomNumber;
 							}
 						}
@@ -154,17 +154,17 @@ void board_print(board theboard, enum orientation orient)
 			else if (row % 2 == 1) {
 				if (column == 0 || column % 6 == 0 ||
 					column == PRINT_WIDTH - 1) {
-					printf("|");
+					normal_print("|");
 				}
 					/*
 					 * Skip every 3rd spot as this might have a player token.
 					 */
 				else if (column % 3 != 0) {
-					printf(" ");
+					normal_print(" ");
 				}
 				else {
 					if (DEBUGGING_IO) {
-						printf("x: %d y: %d", rowOffset, columnOffset);
+						normal_print("x: %d y: %d", rowOffset, columnOffset);
 					}
 					/*currentPiece = getStartPiece(rowOffset, columnOffset);*/
 					/*currentPiece = getStartPieceArray(rowOffset, columnOffset);*/
@@ -172,17 +172,17 @@ void board_print(board theboard, enum orientation orient)
 														  columnOffset,
 														  theboard);
 					if (currentPiece == 0) {
-						printf(" ");
+						normal_print(" ");
 					}
 					else if (currentPiece == 1) {
-						printf("%s%c%s", color_strings[COLOR_RED],
-							   RED_TOKEN,
-							   color_strings[COLOR_RESET]);
+						normal_print("%s%c%s", color_strings[COLOR_RED],
+									 RED_TOKEN,
+									 color_strings[COLOR_RESET]);
 
 					}
 					else if (currentPiece == 2) {
-						printf("%s%c%s", color_strings[COLOR_WHITE],
-							   WHITE_TOKEN, color_strings[COLOR_RESET]);
+						normal_print("%s%c%s", color_strings[COLOR_WHITE],
+									 WHITE_TOKEN, color_strings[COLOR_RESET]);
 
 					}
 					++columnOffset;
@@ -199,7 +199,7 @@ void board_print(board theboard, enum orientation orient)
 			columnOffset = 0;
 		}
 
-		printf("\n");
+		normal_print("\n");
 	}
 
 	printBoardFooterMessage();
@@ -212,36 +212,40 @@ void printBoard(board the_board)
 {
 	int row, column;
 	if (DEBUGGING_IO) {
-		printf("%s\n", "[DEBUG] board.c - Entering printBoard.");
+		normal_print("%s\n", "[DEBUG] board.c - Entering printBoard.");
 	}
 	for (row = 0; row < BOARD_HEIGHT; row++) {
 		for (column = 0; column < BOARD_WIDTH; column++) {
-			printf("[%d][%d] %d\t", row, column, the_board[row][column]);
+			normal_print("[%d][%d] %d\t", row, column, the_board[row][column]);
 			if (column == BOARD_WIDTH - 1) {
-				printf("\n");
+				normal_print("\n");
 			}
 		}
 	}
+	normal_print("\n");
 }
 
 void printBoardReverse(board the_board)
 {
 	int row, column;
+
 	if (DEBUGGING_IO) {
-		printf("%s\n", "[DEBUG] board.c - Entering printBoardReverse.");
+		normal_print("%s\n", "[DEBUG] board.c - Entering printBoardReverse.");
 	}
 	for (row = BOARD_HEIGHT - 1; row >= 0; row--) {
 		for (column = 0; column < BOARD_WIDTH; column++) {
-			printf("[%d][%d] %d\t", row, column, the_board[row][column]);
+			normal_print("[%d][%d] %d\t", row, column, the_board[row][column]);
 			if (column == BOARD_WIDTH - 1) {
+				normal_print("\n");
 			}
 		}
 	}
+	normal_print("\n");
 }
 
 void printBoardHeaderMessage()
 {
-	printf("\nCPT220 Backgammon - Current Board State\n");
+	normal_print("\nCPT220 Backgammon - Current Board State\n");
 }
 
 void printBoardFooterMessage()
@@ -275,16 +279,19 @@ void printBoardFooterMessage()
 		strcpy(barCount, "empty");
 	}
 	else {
-		sprintf(barCount, "%d", theGame->current_player->bar_list.token_count);
+		normal_print(barCount, "%d",
+					 theGame->current_player->bar_list.token_count);
 	}
 
-	printf("It is your turn %s. Your score is %d, your colour is %s", name,
-		   score, colour);
-	printf(", your token is %c, your direction is %s, and your bar list is %s.\n",
-		   token, direction, barCount);
+	normal_print("It is your turn %s. Your score is %d, your colour is %s",
+				 name,
+				 score, colour);
+	normal_print(
+			", your token is %c, your direction is %s, and your bar list is %s.\n",
+			token, direction, barCount);
 }
 
-enum input_result getPlayerName(struct player * currentPlayer)
+enum input_result getPlayerName(struct player *currentPlayer)
 {
 	char input[MAXPROMPTLEN];
 	struct game gamePointer = *getGame();
@@ -292,7 +299,7 @@ enum input_result getPlayerName(struct player * currentPlayer)
 	int i;
 
 	if (DEBUGGING_IO) {
-		printf("%s\n", "[DEBUG] player.c - Entering getName.");
+		normal_print("%s\n", "[DEBUG] player.c - Entering getName.");
 	}
 
 	if (strlen(gamePointer.players[0].name) == 0) {
@@ -333,9 +340,10 @@ enum input_result getPlayerName(struct player * currentPlayer)
 	}
 
 	if (DEBUGGING_IO) {
-		printf("[DEBUG] player.c - strlen(s) before removing \\n is %ld\n",
-			   strlen(input));
-		printf("[DEBUG] player.c - s is %s\n", input);
+		normal_print(
+				"[DEBUG] player.c - strlen(s) before removing \\n is %ld\n",
+				strlen(input));
+		normal_print("[DEBUG] player.c - s is %s\n", input);
 	}
 
 	/*
@@ -345,15 +353,15 @@ enum input_result getPlayerName(struct player * currentPlayer)
 	input[strlen(input) - 1] = '\0';
 
 	if (DEBUGGING_IO) {
-		printf("[DEBUG] player.c - strlen(s) after removing \\n is %ld\n",
-			   strlen(input));
-		printf("[DEBUG] player.c - s is %s\n", input);
+		normal_print("[DEBUG] player.c - strlen(s) after removing \\n is %ld\n",
+					 strlen(input));
+		normal_print("[DEBUG] player.c - s is %s\n", input);
 
-		printf("%s\n", "[DEBUG] player.c - Printing s with for loop.");
+		normal_print("%s\n", "[DEBUG] player.c - Printing s with for loop.");
 		for (i = 0; i < strlen(input); i++) {
-			printf("%c", input[i]);
+			normal_print("%c", input[i]);
 		}
-		printf("\n");
+		normal_print("\n");
 	}
 
 	/*
@@ -363,13 +371,14 @@ enum input_result getPlayerName(struct player * currentPlayer)
 
 
 	if (DEBUGGING_IO) {
-		printf("[DEBUG] player.c - aplayer -> name is %s\n", currentPlayer->name);
-		printf("%s\n",
-			   "[DEBUG] player.c - Printing aplayer -> name with for loop.");
+		normal_print("[DEBUG] player.c - aplayer -> name is %s\n",
+					 currentPlayer->name);
+		normal_print("%s\n",
+					 "[DEBUG] player.c - Printing aplayer -> name with for loop.");
 		for (i = 0; i < strlen(input); i++) {
-			printf("%c", currentPlayer->name[i]);
+			normal_print("%c", currentPlayer->name[i]);
 		}
-		printf("\n");
+		normal_print("\n");
 	}
 
 	return IR_SUCCESS;
@@ -381,27 +390,30 @@ enum input_result getPlayerName(struct player * currentPlayer)
  */
 void printCurrentPlayer(struct game *thegame)
 {
-	printf("[DEBUG] player.c - printCurrentPlayer\n");
-	printf("thegame->current_player.name is %s\n",
-		   thegame->current_player->name);
-	printf("thegame->current_player.score is %d\n",
-		   thegame->current_player->score);
-	printf("thegame->current_player.token is %d\n",
-		   thegame->current_player->token);
-	printf("thegame->current_player.orientation is %d\n",
-		   thegame->current_player->orientation);
-	printf("thegame->current_player.bar_list.token_count is %d\n",
-		   thegame->current_player->bar_list.token_count);
+	normal_print("[DEBUG] player.c - printCurrentPlayer\n");
+	normal_print("thegame->current_player.name is %s\n",
+				 thegame->current_player->name);
+	normal_print("thegame->current_player.score is %d\n",
+				 thegame->current_player->score);
+	normal_print("thegame->current_player.token is %d\n",
+				 thegame->current_player->token);
+	normal_print("thegame->current_player.orientation is %d\n",
+				 thegame->current_player->orientation);
+	normal_print("thegame->current_player.bar_list.token_count is %d\n\n",
+				 thegame->current_player->bar_list.token_count);
 }
 
 void printOtherPlayer(struct game *thegame)
 {
-	printf("[DEBUG] player.c - printOtherPlayer\n");
-	printf("thegame->other_player.name is %s\n", thegame->other_player->name);
-	printf("thegame->other_player.score is %d\n", thegame->other_player->score);
-	printf("thegame->other_player.token is %d\n", thegame->other_player->token);
-	printf("thegame->other_player.orientation is %d\n",
-		   thegame->other_player->orientation);
-	printf("thegame->current_player.bar_list.token_count is %d\n",
-		   thegame->current_player->bar_list.token_count);
+	normal_print("[DEBUG] player.c - printOtherPlayer\n");
+	normal_print("thegame->other_player.name is %s\n",
+				 thegame->other_player->name);
+	normal_print("thegame->other_player.score is %d\n",
+				 thegame->other_player->score);
+	normal_print("thegame->other_player.token is %d\n",
+				 thegame->other_player->token);
+	normal_print("thegame->other_player.orientation is %d\n",
+				 thegame->other_player->orientation);
+	normal_print("thegame->current_player.bar_list.token_count is %d\n\n",
+				 thegame->current_player->bar_list.token_count);
 }

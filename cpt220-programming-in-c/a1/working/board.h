@@ -40,6 +40,7 @@ typedef enum piece board[BOARD_HEIGHT][BOARD_WIDTH];
  **/
 #define PRINT_HEIGHT 33
 #define PRINT_WIDTH 73
+
 #include "io.h"
 /**
  * end of the declarations added by the student for this module
@@ -68,6 +69,8 @@ void setStartPieceArray(int row, int column, board the_board);
 
 /*
  * Read the current state of the board
+ * Replaces the functions getStartPiece and getStartPieceArray
  */
 enum piece getPieceFromBoardState(int x, int y, board the_board);
+
 #endif

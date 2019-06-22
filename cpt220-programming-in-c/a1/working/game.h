@@ -68,6 +68,6 @@ void swap_players(struct player **, struct player **);
 /*
  * Return the pointer to the game object
  */
-struct game * getGame();
+struct game *getGame();
 
 #endif

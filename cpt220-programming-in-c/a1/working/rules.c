@@ -59,14 +59,14 @@ void determine_player_order(struct game *thegame)
 			/*
 			 * Reset for the next roll
 			 */
-			printf("The result was a draw, re-rolling.\n");
+			normal_print("The result was a draw, re-rolling.\n");
 			playerOneTotal = 0;
 			playerTwoTotal = 0;
 			continue;
 		}
 		else if (playerOneTotal > playerTwoTotal) {
-			printf("Player 1 named %s wins the roll!\n",
-				   thegame->players[0].name);
+			normal_print("Player 1 named %s wins the roll!\n",
+						 thegame->players[0].name);
 			thegame->players[0].token = P_WHITE;
 			thegame->players[1].token = P_RED;
 
@@ -80,27 +80,31 @@ void determine_player_order(struct game *thegame)
 			 * Worked out how to print the colours with the discussion here
 			 * https://stackoverflow.com/a/3219471
 			 */
-			printf("Player 1 named %s%s%s will go first, They have the token ",
-				   color_strings[COLOR_WHITE], thegame->players[0].name,
-				   color_strings[COLOR_RESET]);
-			printf("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN,
-				   color_strings[COLOR_RESET]);
-			printf(" and are moving %sCLOCKWISE%s around the board.\n",
-				   color_strings[COLOR_WHITE], color_strings[COLOR_RESET]);
+			normal_print(
+					"Player 1 named %s%s%s will go first, They have the token ",
+					color_strings[COLOR_WHITE], thegame->players[0].name,
+					color_strings[COLOR_RESET]);
+			normal_print("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN,
+						 color_strings[COLOR_RESET]);
+			normal_print(" and are moving %sCLOCKWISE%s around the board.\n",
+						 color_strings[COLOR_WHITE],
+						 color_strings[COLOR_RESET]);
 
-			printf("Player 2 named %s%s%s will go second. They have the token ",
-				   color_strings[COLOR_RED], thegame->players[1].name,
-				   color_strings[COLOR_RESET]);
-			printf("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
-				   color_strings[COLOR_RESET]);
-			printf(" and are moving %sANTICLOCKWISE%s around the board.\n",
-				   color_strings[COLOR_RED], color_strings[COLOR_RESET]);
+			normal_print(
+					"Player 2 named %s%s%s will go second. They have the token ",
+					color_strings[COLOR_RED], thegame->players[1].name,
+					color_strings[COLOR_RESET]);
+			normal_print("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
+						 color_strings[COLOR_RESET]);
+			normal_print(
+					" and are moving %sANTICLOCKWISE%s around the board.\n",
+					color_strings[COLOR_RED], color_strings[COLOR_RESET]);
 
 			done = TRUE;
 		}
 		else {
-			printf("Player 2 named %s wins the roll!\n",
-				   thegame->players[1].name);
+			normal_print("Player 2 named %s wins the roll!\n",
+						 thegame->players[1].name);
 			thegame->players[0].token = P_RED;
 			thegame->players[1].token = P_WHITE;
 
@@ -110,21 +114,25 @@ void determine_player_order(struct game *thegame)
 			thegame->other_player = &thegame->players[0];
 			thegame->current_player = &thegame->players[1];
 
-			printf("Player 2 named %s%s%s, will go first. They have the token ",
-				   color_strings[COLOR_WHITE], thegame->players[1].name,
-				   color_strings[COLOR_RESET]);
-			printf("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN,
-				   color_strings[COLOR_RESET]);
-			printf(" and are moving %sCLOCKWISE%s around the board.\n",
-				   color_strings[COLOR_WHITE], color_strings[COLOR_RESET]);
+			normal_print(
+					"Player 2 named %s%s%s, will go first. They have the token ",
+					color_strings[COLOR_WHITE], thegame->players[1].name,
+					color_strings[COLOR_RESET]);
+			normal_print("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN,
+						 color_strings[COLOR_RESET]);
+			normal_print(" and are moving %sCLOCKWISE%s around the board.\n",
+						 color_strings[COLOR_WHITE],
+						 color_strings[COLOR_RESET]);
 
-			printf("Player 1 named %s%s%s will go second They have the token ",
-				   color_strings[COLOR_RED], thegame->players[0].name,
-				   color_strings[COLOR_RESET]);
-			printf("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
-				   color_strings[COLOR_RESET]);
-			printf(" and are moving %sANTICLOCKWISE%s around the board.\n",
-				   color_strings[COLOR_RED], color_strings[COLOR_RESET]);
+			normal_print(
+					"Player 1 named %s%s%s will go second They have the token ",
+					color_strings[COLOR_RED], thegame->players[0].name,
+					color_strings[COLOR_RESET]);
+			normal_print("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
+						 color_strings[COLOR_RESET]);
+			normal_print(
+					" and are moving %sANTICLOCKWISE%s around the board.\n",
+					color_strings[COLOR_RED], color_strings[COLOR_RESET]);
 
 			done = TRUE;
 		}
