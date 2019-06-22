@@ -8,12 +8,12 @@
  *****************************************************************************/
 #include "board.h"
 
-const int DEBUGGING_BOARD = 1;
+const int DEBUGGING_BOARD = 0;
 
 /*
- * Not sure how introducing the structures below would make it any better.
- * In my opinion the nested for loops Would be harder to read and slower
- * with the multiple table lookups.
+ * 2d array holding the starting position coordinates.
+ * The arrays are in order as they would be seen on the board according to
+ * the spec.
  */
 const int fiveWhiteAt13[5][2] = {
 		{0, 0},
@@ -139,7 +139,7 @@ void printBoardReverse(board the_board)
 /*
  * Pretty board printing for playing.
  */
-void prettyPrintStartBoard()
+void prettyPrintBoard(board the_board)
 {
 	int row, column, topNumber, bottomNumber, rowOffset, columnOffset, currentPiece;
 
@@ -214,7 +214,7 @@ void prettyPrintStartBoard()
 				}
 					/*
 					 * Skip every 3rd spot as this might have a player token.
-					 * TODO - add logic for player printing token
+					 * TODO - add logic for printing from the saved state
 					 */
 				else if (column % 3 != 0) {
 					printf(" ");
@@ -223,7 +223,11 @@ void prettyPrintStartBoard()
 					if (DEBUGGING_BOARD) {
 						printf("x: %d y: %d", rowOffset, columnOffset);
 					}
-					currentPiece = getStartPiece(rowOffset, columnOffset);
+					/*currentPiece = getStartPiece(rowOffset, columnOffset);*/
+					/*currentPiece = getStartPieceArray(rowOffset, columnOffset);*/
+					currentPiece = getPieceFromBoardState(rowOffset,
+														  columnOffset,
+														  the_board);
 					if (currentPiece == 0) {
 						printf(" ");
 					}
@@ -255,7 +259,7 @@ void prettyPrintStartBoard()
 	}
 }
 
-void prettyPrintStartBoardReverse()
+void prettyPrintBoardReverse(board the_board)
 {
 	int row, column, topNumber, bottomNumber, rowOffset, columnOffset, currentPiece;
 
@@ -331,7 +335,7 @@ void prettyPrintStartBoardReverse()
 				}
 					/*
 					 * Skip every 3rd spot as this might have a player token.
-					 * TODO - add logic for player printing token
+					 * TODO - add logic for printing from the saved state
 					 */
 				else if (column % 3 != 0) {
 					printf(" ");
@@ -340,7 +344,11 @@ void prettyPrintStartBoardReverse()
 					if (DEBUGGING_BOARD) {
 						printf("x: %d y: %d", rowOffset, columnOffset);
 					}
-					currentPiece = getStartPiece(rowOffset, columnOffset);
+					/*currentPiece = getStartPiece(rowOffset, columnOffset);*/
+					/*currentPiece = getStartPieceArray(rowOffset, columnOffset);*/
+					currentPiece = getPieceFromBoardState(rowOffset,
+														  columnOffset,
+														  the_board);
 					if (currentPiece == 0) {
 						printf(" ");
 					}
@@ -374,10 +382,6 @@ void prettyPrintStartBoardReverse()
 
 enum piece getStartPiece(int row, int column)
 {
-	/*
- 	 * TODO - Move this into an array.
- 	 */
-
 	/* White's 5 pieces at 13 */
 	if (row == 0 && column == 0) {
 		return P_WHITE;
@@ -485,15 +489,157 @@ enum piece getStartPiece(int row, int column)
 
 enum piece getStartPieceArray(int row, int column)
 {
+	int i, x, y;
+	if (DEBUGGING_BOARD) {
+		printf("%s\n", "[DEBUG] board.c - Entering getStartPieceArray.");
+	}
+
+	/*
+	 * Search the arrays with 5 coordinates
+	 * The arrays are organised in starting position order.
+	 *
+	 * Top half of the board
+	 */
+	for (i = 0; i < 5; i++) {
+		/*
+		 * Get the column and row
+		 */
+		x = fiveWhiteAt13[i][0];
+		y = fiveWhiteAt13[i][1];
+
+		if (DEBUGGING_BOARD) {
+			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+				   row, column);
+		}
+		if (x == row && y == column) {
+			return P_WHITE;
+		}
+	}
+
+	for (i = 0; i < 3; i++) {
+		/*
+		 * Get the column and row
+		 */
+		x = threeRedAt17[i][0];
+		y = threeRedAt17[i][1];
+
+		if (DEBUGGING_BOARD) {
+			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+				   row, column);
+		}
+		if (x == row && y == column) {
+			return P_RED;
+		}
+	}
+
+	for (i = 0; i < 5; i++) {
+		/*
+		 * Get the column and row
+		 */
+		x = fiveRedAt19[i][0];
+		y = fiveRedAt19[i][1];
+
+		if (DEBUGGING_BOARD) {
+			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+				   row, column);
+		}
+		if (x == row && y == column) {
+			return P_RED;
+		}
+	}
+
+	for (i = 0; i < 2; i++) {
+		/*
+		 * Get the column and row
+		 */
+		x = twoWhiteAt24[i][0];
+		y = twoWhiteAt24[i][1];
+
+		if (DEBUGGING_BOARD) {
+			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+				   row, column);
+		}
+		if (x == row && y == column) {
+			return P_WHITE;
+		}
+	}
+
+	/*
+	 * Bottom half of the board
+	 */
+
+	for (i = 0; i < 5; i++) {
+		/*
+		 * Get the column and row
+		 */
+		x = fiveRedAt12[i][0];
+		y = fiveRedAt12[i][1];
+
+		if (DEBUGGING_BOARD) {
+			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+				   row, column);
+		}
+		if (x == row && y == column) {
+			return P_RED;
+		}
+	}
+
+	for (i = 0; i < 3; i++) {
+		/*
+		 * Get the column and row
+		 */
+		x = threeWhiteAt8[i][0];
+		y = threeWhiteAt8[i][1];
+
+		if (DEBUGGING_BOARD) {
+			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+				   row, column);
+		}
+		if (x == row && y == column) {
+			return P_WHITE;
+		}
+
+	}
+
+	for (i = 0; i < 5; i++) {
+
+		/*
+		 * Get the column and row
+		 */
+		x = fiveWhiteAt6[i][0];
+		y = fiveWhiteAt6[i][1];
+
+		if (DEBUGGING_BOARD) {
+			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+				   row, column);
+		}
+		if (x == row && y == column) {
+			return P_WHITE;
+		}
+
+	}
+
+	for (i = 0; i < 2; i++) {
+		/*
+ 		 * Get the column and row
+ 		 */
+		x = twoRedAt1[i][0];
+		y = twoRedAt1[i][1];
+
+		if (DEBUGGING_BOARD) {
+			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+				   row, column);
+		}
+		if (x == row && y == column) {
+			return P_RED;
+		}
+	}
+
 	return P_EMPTY;
 }
 
 void setStartPiece(int row, int column, board the_board)
 {
-	/*
- 	 * TODO - Move this into an array.
- 	 */
-
 	/* White's 5 pieces at 13 */
 	if (row == 0 && column == 0) {
 		the_board[row][column] = P_WHITE;
@@ -760,4 +906,9 @@ void setStartPieceArray(int row, int column, board the_board)
 	}
 
 	the_board[row][column] = P_EMPTY;
+}
+
+enum piece getPieceFromBoardState(int x, int y, board the_board)
+{
+	return the_board[x][y];
 }
