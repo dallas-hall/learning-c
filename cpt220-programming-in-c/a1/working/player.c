@@ -25,15 +25,23 @@ BOOLEAN player_init(struct player *aplayer, struct game *thegame)
 	*/
 	struct bar_list newBarList;
 	struct player newPlayer;
+	int i;
 
 	barlist_init(&newBarList);
 
+	/*
+	 * Initialise the player with sane defaults.
+	 */
 	newPlayer.name[0] = '\0';
 	newPlayer.score = 0;
 	newPlayer.curgame = thegame;
 	newPlayer.bar_list = newBarList;
 	newPlayer.orientation = 0;
 	aplayer = &newPlayer;
+
+	for (i = 0; i < MAX_BAR; i++) {
+		newPlayer.bar_list.bar_array[i] = P_EMPTY;
+	}
 
 	if (DEBUGGING_PLAYER) {
 		printf("[DEBUG] player.c - aplayer -> name before getName is %s\n",

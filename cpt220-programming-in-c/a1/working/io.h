@@ -143,7 +143,7 @@ void printBoardHeaderMessage();
 
 void printBoardFooterMessage();
 
-BOOLEAN getPlayerName();
+enum input_result getPlayerName();
 
 void printCurrentPlayer();
 

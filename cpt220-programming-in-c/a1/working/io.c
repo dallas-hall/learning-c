@@ -284,7 +284,7 @@ void printBoardFooterMessage()
 		   token, direction, barCount);
 }
 
-BOOLEAN getPlayerName(struct player * currentPlayer)
+enum input_result getPlayerName(struct player * currentPlayer)
 {
 	char input[MAXPROMPTLEN];
 	struct game gamePointer = *getGame();
@@ -309,7 +309,7 @@ BOOLEAN getPlayerName(struct player * currentPlayer)
  */
 
 	if (fgets(input, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
-		return FALSE;
+		return IR_FAILURE;
 	}
 
 	/*
@@ -372,7 +372,7 @@ BOOLEAN getPlayerName(struct player * currentPlayer)
 		printf("\n");
 	}
 
-	return TRUE;
+	return IR_SUCCESS;
 }
 
 /*
