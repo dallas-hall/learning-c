@@ -106,6 +106,13 @@ enum input_result player_take_turn(struct player *current_player)
 /*
  * This function reads in input from stdnin
  * I have taken the concepts from /home/el9/E70949/shared/prog_in_c/tutes/week03/getname.c and chapter 8 from C How to program textbook.
+ *
+ * Tried moving this into io.c but was getting the following error:
+ *
+ * io.h:139:60: warning: ‘struct game’ declared inside parameter list will not be visible outside of this definition or declaration
+ *  139 | getName(char s[], int size, struct player *aplayer, struct game *thegame);
+ *
+ *  Couldn't work out how to resolve.
  */
 BOOLEAN
 getName(char s[], int size, struct player *aplayer, struct game *thegame)
@@ -210,6 +217,8 @@ void printCurrentPlayer(struct game *thegame)
 		   thegame->current_player->token);
 	printf("thegame->current_player.orientation is %d\n",
 		   thegame->current_player->orientation);
+	printf("thegame->current_player.bar_list.token_count is %d\n",
+		   thegame->current_player->bar_list.token_count);
 }
 
 void printOtherPlayer(struct game *thegame)
@@ -220,4 +229,6 @@ void printOtherPlayer(struct game *thegame)
 	printf("thegame->other_player.token is %d\n", thegame->other_player->token);
 	printf("thegame->other_player.orientation is %d\n",
 		   thegame->other_player->orientation);
+	printf("thegame->current_player.bar_list.token_count is %d\n",
+		   thegame->current_player->bar_list.token_count);
 }
