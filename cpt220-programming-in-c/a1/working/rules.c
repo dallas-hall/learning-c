@@ -65,7 +65,7 @@ void determine_player_order(struct game *thegame)
 			continue;
 		}
 		else if (playerOneTotal > playerTwoTotal) {
-			printf("Player 2 named %s wins the roll!\n",
+			printf("Player 1 named %s wins the roll!\n",
 				   thegame->players[0].name);
 			thegame->players[0].token = P_WHITE;
 			thegame->players[1].token = P_RED;

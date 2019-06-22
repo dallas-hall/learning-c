@@ -150,7 +150,7 @@ void play_game(struct falsible_long seed)
 	 * Need to use & here so we get the address of the pointer
 	 */
 	swap_players(&thegame.current_player, &thegame.other_player);
-	board_print(thegame.game_board, thegame.other_player->orientation);
+	board_print(thegame.game_board, thegame.current_player->orientation);
 
 
 	/**

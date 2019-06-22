@@ -76,9 +76,10 @@ void board_print(board theboard, enum orientation orient)
 	 * Use for printing the board numbers.
  	 * These need to be decremented
  	 */
-	topNumber = 12;
-	bottomNumber = 13;
+
 	if (orient == OR_CLOCKWISE) {
+		topNumber = 12;
+		bottomNumber = 13;
 
 		/*
 		 * Used for printing tokens.
@@ -186,7 +187,8 @@ void board_print(board theboard, enum orientation orient)
 		}
 	}
 	else if (orient == OR_ANTICLOCKWISE) {
-
+		topNumber = 13;
+		bottomNumber = 12;
 		/*
 		 * Used for printing tokens.
 		 * rowOffset need to be decremented for reverse printing.
@@ -230,11 +232,11 @@ void board_print(board theboard, enum orientation orient)
 						case 66:
 							if (row == 1) {
 								printf("  %2d ", topNumber);
-								--topNumber;
+								++topNumber;
 							}
 							else if (row == PRINT_HEIGHT - 2) {
 								printf("  %2d ", bottomNumber);
-								++bottomNumber;
+								--bottomNumber;
 							}
 							break;
 					}
