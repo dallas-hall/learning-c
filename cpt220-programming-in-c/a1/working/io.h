@@ -73,12 +73,11 @@ enum color
 
 /**
  * tokens that are possible in the game
- **/
-/*
+ *
  * I changed the tokens around because the assignment spec, page 10, said:
  * First played will be WHITE with a token of X, other player is RED with token
  * of O.
- */
+ **/
 enum token
 {
 	RED_TOKEN = 'O',
@@ -98,13 +97,13 @@ enum token
  * for example, PUTCHARS('-', 5) would print out 5 dashes.
  **/
 #define PUTCHARS(ch, count)                                                    \
-        {                                                                      \
-                int char_count;                                                \
-                for (char_count = 0; char_count < (int)count; ++char_count)    \
-                {                                                              \
-                        putchar(ch);                                           \
-                }                                                              \
-        }
+		{                                                                      \
+				int char_count;                                                \
+				for (char_count = 0; char_count < (int)count; ++char_count)    \
+				{                                                              \
+						putchar(ch);                                           \
+				}                                                              \
+		}
 
 /**
  * this is also a macro. it prints out a line of characters in a row followed
@@ -112,10 +111,10 @@ enum token
  * character I would call this macro as PUTLINE('-', 80)
  **/
 #define PUTLINE(ch, count)                                                     \
-        {                                                                      \
-                PUTCHARS(ch, count);                                           \
-                putchar('\n');                                                 \
-        }
+		{                                                                      \
+				PUTCHARS(ch, count);                                           \
+				putchar('\n');                                                 \
+		}
 
 /**
  * You may add your own data structures here to help with processing of i/o.

@@ -125,17 +125,20 @@ void play_game(struct falsible_long seed)
 		printOtherPlayer(&thegame);
 	}
 
+
 	/*
+	 * TODO move this into io.c and board_print
 	 * Print the board
 	 */
+	board_print(thegame.game_board, thegame.current_player->orientation);
 	printf("\nThe current board state, as %s see's it.\n", thegame.current_player->name);
-	prettyPrintBoard(thegame.game_board);
 
 	/*
 	 * Print the board in reverse.
  	 */
 	printf("\nThe current board state, as %s see's it.\n", thegame.other_player->name);
-	prettyPrintBoardReverse(thegame.game_board);
+	board_print(thegame.game_board, thegame.other_player->orientation);
+
 
 	/**
 	 * if initialisation of the game failed, we should quit
