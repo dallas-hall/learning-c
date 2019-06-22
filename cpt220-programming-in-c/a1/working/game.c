@@ -20,6 +20,7 @@
  */
 
 const int DEBUGGING_GAME = 0;
+struct game * theGame;
 
 /**
  * initialise the game structure passed in. For full details of the requirements
@@ -53,6 +54,11 @@ void play_game(struct falsible_long seed)
 	} else {
 		thegame.seed = time(NULL);
 	}
+
+	/*
+ 	 * Used to pass around the game object when needed, like into io.c
+     */
+	theGame = &thegame;
 
 	/* print the heading */
 	heading = "Welcome to CPT220 Backgammon";
@@ -127,16 +133,14 @@ void play_game(struct falsible_long seed)
 
 
 	/*
-	 * TODO move this into io.c and board_print
 	 * Print the board
 	 */
 	board_print(thegame.game_board, thegame.current_player->orientation);
-	printf("\nThe current board state, as %s see's it.\n", thegame.current_player->name);
 
 	/*
 	 * Print the board in reverse.
  	 */
-	printf("\nThe current board state, as %s see's it.\n", thegame.other_player->name);
+
 	board_print(thegame.game_board, thegame.other_player->orientation);
 
 
@@ -170,4 +174,14 @@ void swap_players(struct player **first, struct player **second)
 	struct player *swap = *first;
 	*first = *second;
 	*second = *first;
+}
+
+/*
+ * Return the pointer to the game object.
+ * Do this my returning the address.
+ * Used to pass the game object around when needed. Such as into io.c
+ */
+struct game * getGame()
+{
+	return theGame;
 }

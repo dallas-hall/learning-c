@@ -23,15 +23,15 @@ BOOLEAN player_init(struct player *aplayer, struct game *thegame)
 	Intialise the new player details
 	Got the idea from https://www.tutorialspoint.com/cprogramming/c_structures.htm
 	*/
-
-	/*
-	 * TODO - Initialise bar_list
-	 */
+	struct bar_list newBarList;
 	struct player newPlayer;
+
+	barlist_init(&newBarList);
+
 	newPlayer.name[0] = '\0';
 	newPlayer.score = 0;
 	newPlayer.curgame = thegame;
-	/*newPlayer.bar_list = NULL;*/
+	newPlayer.bar_list = newBarList;
 	newPlayer.orientation = 0;
 	aplayer = &newPlayer;
 

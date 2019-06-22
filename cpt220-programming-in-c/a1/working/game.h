@@ -65,4 +65,9 @@ void play_game(struct falsible_long);
 
 void swap_players(struct player **, struct player **);
 
+/*
+ * Return the pointer to the game object
+ */
+struct game * getGame();
+
 #endif

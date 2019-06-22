@@ -7,6 +7,7 @@
  * study period 2, 2019.
  *****************************************************************************/
 #include "io.h"
+#include "game.h"
 
 const int DEBUGGING_IO = 0;
 
@@ -70,6 +71,7 @@ void board_print(board theboard, enum orientation orient)
 		printf("%s\n", "[DEBUG] io.c - Entering board_print.");
 	}
 
+	printBoardHeaderMessage();
 	/*
 	 * Use for printing the board numbers.
  	 * These need to be decremented
@@ -291,6 +293,7 @@ void board_print(board theboard, enum orientation orient)
 			printf("\n");
 		}
 	}
+	printBoardFooterMessage();
 }
 
 /*
@@ -325,4 +328,19 @@ void printBoardReverse(board the_board)
 			}
 		}
 	}
+}
+
+void printBoardHeaderMessage()
+{
+	printf("\nCPT220 Backgammon - Current Board State\n");
+}
+
+void printBoardFooterMessage()
+{
+	/*
+	 * Store the pointer to the game object.
+	 */
+	struct game * theGame = getGame();
+	printf("The current board state, as %s see's it.\n",
+		   theGame->current_player->name);
 }
