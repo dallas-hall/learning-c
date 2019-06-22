@@ -14,8 +14,7 @@
  * data. Please note that this function is implemented in C99 but I find it to
  * be a rather convenient function so I often implement it in my ansi C code.
  **/
-char *
-strdup(const char *orig)
+char *strdup(const char *orig)
 {
 	/**
 	 * allocate sufficient memory for the string, including the nul
@@ -41,8 +40,7 @@ strdup(const char *orig)
  * function that folds a string passed in so that it can be printed with no
  * wraparound on an 80 column display
  **/
-char *
-fold(const char origline[])
+char *fold(const char origline[])
 {
 	/* get the length of the string so we know when we have finished
 	 * processing it

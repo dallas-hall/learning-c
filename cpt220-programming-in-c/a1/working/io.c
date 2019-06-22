@@ -260,6 +260,7 @@ void printBoardFooterMessage()
 	char *direction;
 	char token;
 	char barCount[6]; /* including the '\0' */
+	char output[256];
 
 	if (theGame->current_player->orientation == OR_CLOCKWISE) {
 		colour = "white";
@@ -283,12 +284,35 @@ void printBoardFooterMessage()
 					 theGame->current_player->bar_list.token_count);
 	}
 
-	normal_print("It is your turn %s. Your score is %d, your colour is %s",
+	/*
+	 * Got the idea to use sprintf from chapter 08, C How To Program
+	 */
+
+	if (theGame->current_player->orientation == OR_CLOCKWISE) {
+		sprintf(output,
+				"It is your turn %s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
+				name, score, color_strings[COLOR_WHITE], colour,
+				color_strings[COLOR_RESET], color_strings[COLOR_WHITE], token,
+				color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
+				direction, color_strings[COLOR_RESET], barCount);
+	}
+	else {
+		sprintf(output,
+				"It is your turn %s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
+				name, score, color_strings[COLOR_RED], colour,
+				color_strings[COLOR_RESET], color_strings[COLOR_RED], token,
+				color_strings[COLOR_RESET], color_strings[COLOR_RED],
+				direction, color_strings[COLOR_RESET], barCount);
+	}
+	normal_print(fold(output));
+
+
+	/*normal_print("It is your turn %s. Your score is %d, your colour is %s",
 				 name,
 				 score, colour);
 	normal_print(
 			", your token is %c, your direction is %s, and your bar list is %s.\n",
-			token, direction, barCount);
+			token, direction, barCount);*/
 }
 
 enum input_result getPlayerName(struct player *currentPlayer)
