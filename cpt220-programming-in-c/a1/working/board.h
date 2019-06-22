@@ -51,14 +51,6 @@ typedef enum piece board[BOARD_HEIGHT][BOARD_WIDTH];
  **/
 void board_init(board);
 
-void printBoard(board the_board);
-
-void printBoardReverse(board the_board);
-
-void prettyPrintBoard(board the_board);
-
-void prettyPrintBoardReverse(board the_board);
-
 /*
  * Uses nested if statements for starting positions.
  */
