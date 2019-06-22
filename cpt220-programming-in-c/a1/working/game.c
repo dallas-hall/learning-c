@@ -19,8 +19,8 @@
  * int DEBUGGING = 0;
  */
 
-const int DEBUGGING_GAME = 0;
-struct game * theGame;
+const int DEBUGGING_GAME = 1;
+struct game * theGamePointer;
 
 /**
  * initialise the game structure passed in. For full details of the requirements
@@ -58,7 +58,7 @@ void play_game(struct falsible_long seed)
 	/*
  	 * Used to pass around the game object when needed, like into io.c
      */
-	theGame = &thegame;
+	theGamePointer = &thegame;
 
 	/* print the heading */
 	heading = "Welcome to CPT220 Backgammon";
@@ -138,9 +138,14 @@ void play_game(struct falsible_long seed)
 	board_print(thegame.game_board, thegame.current_player->orientation);
 
 	/*
+	 * Player swap.
 	 * Print the board in reverse.
  	 */
 
+	/*
+	 * Need to use & here so we get the address of the pointer
+	 */
+	swap_players(&thegame.current_player, &thegame.other_player);
 	board_print(thegame.game_board, thegame.other_player->orientation);
 
 
@@ -155,10 +160,6 @@ void play_game(struct falsible_long seed)
 	}
 }
 
-/*
- * TODO - Check this
- */
-
 /**
  * swap the players by swapping the pointers. Please note this is an advanced
  * and optional requirement but should be straight forward if you have
@@ -172,8 +173,23 @@ void swap_players(struct player **first, struct player **second)
 	 * Use * during assignment to dereference the pointer to a pointer.
 	 */
 	struct player *swap = *first;
+
+	if(DEBUGGING_GAME) {
+		printf("\n[DEBUG] - game.swap_players - BEFORE\n");
+		printCurrentPlayer(theGamePointer);
+		printOtherPlayer(theGamePointer);
+		printf("\n");
+	}
+
 	*first = *second;
-	*second = *first;
+	*second = swap;
+
+	if(DEBUGGING_GAME) {
+		printf("[DEBUG] - game.swap_players - AFTER\n");
+		printCurrentPlayer(theGamePointer);
+		printOtherPlayer(theGamePointer);
+		printf("\n");
+	}
 }
 
 /*
@@ -183,5 +199,5 @@ void swap_players(struct player **first, struct player **second)
  */
 struct game * getGame()
 {
-	return theGame;
+	return theGamePointer;
 }
