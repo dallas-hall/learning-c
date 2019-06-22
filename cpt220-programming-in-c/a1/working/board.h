@@ -78,6 +78,4 @@ void setStartPieceArray(int row, int column, board the_board);
  * Read the current state of the board
  */
 enum piece getPieceFromBoardState(int x, int y, board the_board);
-
-
 #endif
