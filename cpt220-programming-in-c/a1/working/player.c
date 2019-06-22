@@ -44,12 +44,15 @@ BOOLEAN player_init(struct player *aplayer, struct game *thegame)
 	}
 
 	if (DEBUGGING_PLAYER) {
-		printf("[DEBUG] player.c - aplayer -> name before getName is %s\n",
-			   aplayer->name);
-		printf("[DEBUG] player.c - aplayer -> score before getName is %d\n",
-			   aplayer->score);
-		printf("[DEBUG] player.c - aplayer -> orientation before getName is %d\n",
-			   aplayer->orientation);
+		normal_print(
+				"[DEBUG] player.c - aplayer -> name before getName is %s\n",
+				aplayer->name);
+		normal_print(
+				"[DEBUG] player.c - aplayer -> score before getName is %d\n",
+				aplayer->score);
+		normal_print(
+				"[DEBUG] player.c - aplayer -> orientation before getName is %d\n",
+				aplayer->orientation);
 	}
 
 	do {
@@ -61,7 +64,7 @@ BOOLEAN player_init(struct player *aplayer, struct game *thegame)
 	*/
 	if (strlen(thegame->players[0].name) == 0) {
 		if (DEBUGGING_PLAYER) {
-			printf("[DEBUG] player.c - setting thegame -> players[0]\n");
+			normal_print("[DEBUG] player.c - setting thegame -> players[0]\n");
 		}
 		thegame->players[0] = *aplayer;
 		/*
@@ -77,26 +80,30 @@ BOOLEAN player_init(struct player *aplayer, struct game *thegame)
 	}
 	else if (strlen(thegame->players[1].name) == 0) {
 		if (DEBUGGING_PLAYER) {
-			printf("[DEBUG] player.c - setting thegame -> players[1]\n");
+			normal_print("[DEBUG] player.c - setting thegame -> players[1]\n");
 		}
 		thegame->players[1] = *aplayer;
 		thegame->other_player = &thegame->players[1];
 	}
 
 	if (DEBUGGING_PLAYER) {
-		printf("[DEBUG] player.c - aplayer -> name after getName is %s\n",
-			   aplayer->name);
-		printf("[DEBUG] player.c - aplayer -> score after getName is %d\n",
-			   aplayer->score);
-		printf("[DEBUG] player.c - aplayer -> orientation after getName is %d\n",
-			   aplayer->orientation);
+		normal_print("[DEBUG] player.c - aplayer -> name after getName is %s\n",
+					 aplayer->name);
+		normal_print(
+				"[DEBUG] player.c - aplayer -> score after getName is %d\n",
+				aplayer->score);
+		normal_print(
+				"[DEBUG] player.c - aplayer -> orientation after getName is %d\n",
+				aplayer->orientation);
 
-		printf("thegame -> current_player -> name is %s\n",
-			   thegame->current_player->name);
-		/*printf("thegame -> other_player -> name is %s\n", thegame -> other_player -> name);*/
+		normal_print("thegame -> current_player -> name is %s\n",
+					 thegame->current_player->name);
+		/*normal_print("thegame -> other_player -> name is %s\n", thegame -> other_player -> name);*/
 
-		printf("thegame -> players[0].name is %s\n", thegame->players[0].name);
-		printf("thegame -> players[1].name is %s\n", thegame->players[1].name);
+		normal_print("thegame -> players[0].name is %s\n",
+					 thegame->players[0].name);
+		normal_print("thegame -> players[1].name is %s\n",
+					 thegame->players[1].name);
 	}
 	return TRUE;
 }

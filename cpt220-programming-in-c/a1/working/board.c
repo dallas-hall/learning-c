@@ -81,14 +81,15 @@ void board_init(board the_board)
 	int row, column;
 
 	if (DEBUGGING_BOARD) {
-		printf("%s\n", "[DEBUG] board.c - Entering board_init.");
+		normal_print("%s\n", "[DEBUG] board.c - Entering board_init.");
 	}
 
 	for (row = 0; row < BOARD_HEIGHT; row++) {
 		for (column = 0; column < BOARD_WIDTH; column++) {
 			if (DEBUGGING_BOARD) {
-				printf("[DEBUG] board.c - Creating piece at row[%d]column[%d]\n",
-					   row, column);
+				normal_print(
+						"[DEBUG] board.c - Creating piece at row[%d]column[%d]\n",
+						row, column);
 			}
 			/* setStartPiece(row, column, the_board); */
 			setStartPieceArray(row, column, the_board);
@@ -210,7 +211,7 @@ enum piece getStartPieceArray(int row, int column)
 {
 	int i, x, y;
 	if (DEBUGGING_BOARD) {
-		printf("%s\n", "[DEBUG] board.c - Entering getStartPieceArray.");
+		normal_print("%s\n", "[DEBUG] board.c - Entering getStartPieceArray.");
 	}
 
 	/*
@@ -227,8 +228,8 @@ enum piece getStartPieceArray(int row, int column)
 		y = fiveWhiteAt13[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			return P_WHITE;
@@ -243,8 +244,8 @@ enum piece getStartPieceArray(int row, int column)
 		y = threeRedAt17[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			return P_RED;
@@ -259,8 +260,8 @@ enum piece getStartPieceArray(int row, int column)
 		y = fiveRedAt19[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			return P_RED;
@@ -275,8 +276,8 @@ enum piece getStartPieceArray(int row, int column)
 		y = twoWhiteAt24[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			return P_WHITE;
@@ -295,8 +296,8 @@ enum piece getStartPieceArray(int row, int column)
 		y = fiveRedAt12[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			return P_RED;
@@ -311,8 +312,8 @@ enum piece getStartPieceArray(int row, int column)
 		y = threeWhiteAt8[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			return P_WHITE;
@@ -329,8 +330,8 @@ enum piece getStartPieceArray(int row, int column)
 		y = fiveWhiteAt6[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			return P_WHITE;
@@ -346,8 +347,8 @@ enum piece getStartPieceArray(int row, int column)
 		y = twoRedAt1[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			return P_RED;
@@ -464,11 +465,15 @@ void setStartPiece(int row, int column, board the_board)
 
 }
 
+/*
+ * I realised after writing all of the above that I could just replace it with
+ * this guy and the guy below. Thanks guys!
+ */
 void setStartPieceArray(int row, int column, board the_board)
 {
 	int i, x, y;
 	if (DEBUGGING_BOARD) {
-		printf("%s\n", "[DEBUG] board.c - Entering getStartPieceArray.");
+		normal_print("%s\n", "[DEBUG] board.c - Entering getStartPieceArray.");
 	}
 
 	/*
@@ -485,8 +490,8 @@ void setStartPieceArray(int row, int column, board the_board)
 		y = fiveWhiteAt13[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			the_board[row][column] = P_WHITE;
@@ -506,8 +511,8 @@ void setStartPieceArray(int row, int column, board the_board)
 		y = threeRedAt17[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			the_board[row][column] = P_RED;
@@ -523,8 +528,8 @@ void setStartPieceArray(int row, int column, board the_board)
 		y = fiveRedAt19[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			the_board[row][column] = P_RED;
@@ -540,8 +545,8 @@ void setStartPieceArray(int row, int column, board the_board)
 		y = twoWhiteAt24[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			the_board[row][column] = P_WHITE;
@@ -561,8 +566,8 @@ void setStartPieceArray(int row, int column, board the_board)
 		y = fiveRedAt12[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			the_board[row][column] = P_RED;
@@ -578,8 +583,8 @@ void setStartPieceArray(int row, int column, board the_board)
 		y = threeWhiteAt8[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			the_board[row][column] = P_WHITE;
@@ -597,8 +602,8 @@ void setStartPieceArray(int row, int column, board the_board)
 		y = fiveWhiteAt6[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			the_board[row][column] = P_WHITE;
@@ -615,8 +620,8 @@ void setStartPieceArray(int row, int column, board the_board)
 		y = twoRedAt1[i][1];
 
 		if (DEBUGGING_BOARD) {
-			printf("x is %d. y is %d. row is %d. column is %d.\n", x, y,
-				   row, column);
+			normal_print("x is %d. y is %d. row is %d. column is %d.\n", x, y,
+						 row, column);
 		}
 		if (x == row && y == column) {
 			the_board[row][column] = P_RED;

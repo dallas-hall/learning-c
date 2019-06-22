@@ -24,7 +24,7 @@ const int DEBUGGING_GAME = 0;
 /*
  * Used to create a game object getter.
  */
-struct game * theGamePointer;
+struct game *theGamePointer;
 
 /**
  * initialise the game structure passed in. For full details of the requirements
@@ -55,7 +55,8 @@ void play_game(struct falsible_long seed)
 	 **/
 	if (seed.success) {
 		thegame.seed = seed.thelong;
-	} else {
+	}
+	else {
 		thegame.seed = time(NULL);
 	}
 
@@ -101,14 +102,14 @@ void play_game(struct falsible_long seed)
 		/*
 		 * Need to use -> since its a pointer.
 		 */
-		printf("The first player - thegame.current_player->name is %s\n",
-			   thegame.current_player->name);
-		printf("The first player - thegame.players[0].name is  %s\n",
-			   thegame.players[0].name);
-		printf("The second player - thegame.other_player->name is %s\n",
-			   thegame.other_player->name);
-		printf("The second player - thegame.players[1].name is  %s\n",
-			   thegame.players[1].name);
+		normal_print("The first player - thegame.current_player->name is %s\n",
+					 thegame.current_player->name);
+		normal_print("The first player - thegame.players[0].name is  %s\n",
+					 thegame.players[0].name);
+		normal_print("The second player - thegame.other_player->name is %s\n",
+					 thegame.other_player->name);
+		normal_print("The second player - thegame.players[1].name is  %s\n",
+					 thegame.players[1].name);
 	}
 
 	/*
@@ -178,21 +179,21 @@ void swap_players(struct player **first, struct player **second)
 	 */
 	struct player *swap = *first;
 
-	if(DEBUGGING_GAME) {
-		printf("\n[DEBUG] - game.swap_players - BEFORE\n");
+	if (DEBUGGING_GAME) {
+		normal_print("[DEBUG] - game.swap_players - BEFORE\n");
 		printCurrentPlayer(theGamePointer);
 		printOtherPlayer(theGamePointer);
-		printf("\n");
+		normal_print("\n");
 	}
 
 	*first = *second;
 	*second = swap;
 
-	if(DEBUGGING_GAME) {
-		printf("[DEBUG] - game.swap_players - AFTER\n");
+	if (DEBUGGING_GAME) {
+		normal_print("[DEBUG] - game.swap_players - AFTER\n");
 		printCurrentPlayer(theGamePointer);
 		printOtherPlayer(theGamePointer);
-		printf("\n");
+		normal_print("\n");
 	}
 }
 
@@ -201,7 +202,7 @@ void swap_players(struct player **first, struct player **second)
  * Do this my returning the address.
  * Used to pass the game object around when needed. Such as into io.c
  */
-struct game * getGame()
+struct game *getGame()
 {
 	return theGamePointer;
 }
