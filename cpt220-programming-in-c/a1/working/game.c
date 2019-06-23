@@ -23,6 +23,7 @@ const int DEBUGGING_GAME = 0;
 
 /*
  * Used to create a game object getter.
+ * The * means we are using a pointer.
  */
 struct game *theGamePointer;
 
@@ -130,12 +131,10 @@ void play_game(struct falsible_long seed)
 	}
 
 	determine_player_order(&thegame);
-
 	if (DEBUGGING_GAME) {
 		printCurrentPlayer(&thegame);
 		printOtherPlayer(&thegame);
 	}
-
 
 	/*
 	 * Print the board
@@ -145,9 +144,7 @@ void play_game(struct falsible_long seed)
 	/*
 	 * Player swap.
 	 * Print the board in reverse.
- 	 */
-
-	/*
+	 *
 	 * Need to use & here so we get the address of the pointer
 	 */
 	swap_players(&thegame.current_player, &thegame.other_player);
@@ -198,9 +195,8 @@ void swap_players(struct player **first, struct player **second)
 }
 
 /*
- * Return the pointer to the game object.
- * Do this my returning the address.
- * Used to pass the game object around when needed. Such as into io.c
+ * Return the pointer (*) to the game object.
+ * This is used to pass the game object around when needed. Such as into io.c
  */
 struct game *getGame()
 {
