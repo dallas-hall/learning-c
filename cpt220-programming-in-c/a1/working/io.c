@@ -372,9 +372,9 @@ enum input_result getPlayerName(struct player *currentPlayer)
 	 * Need to do -1 so we ignore the \n that is still there
 	 */
 	for (i = 0; i < strlen(input) - 1; i++) {
-		if (!isgraph(input[i])) {
+		if (!isalnum(input[i])) {
 			sprintf(output,
-					"Invalid character(s) found. Please use only ASCII letters, numbers, and punctuation. But excluding tabs and spaces.\n");
+					"Invalid character(s) found. Please use only letters and numbers.\n");
 			error_print(fold(output));
 			return getPlayerName(currentPlayer);
 		}
