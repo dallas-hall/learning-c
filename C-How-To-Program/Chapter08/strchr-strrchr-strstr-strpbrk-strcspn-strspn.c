@@ -28,6 +28,7 @@ int main(void)
 	
 	puts("\n## strstr(string, string) - search the string for the first occurance of the second, return string pointer with the remainder of the string.");
 	printf("Searching \"%s\" for \"%s\". \"%s\" was found\n", s1, s2, strstr(s1, s2));
+	printf("Searching \"%s\" for \"%s\". \"%s\" was found\n", s1, s3, strstr(s1, s3));
 	
 	puts("\n## strpbrk(string, string) - search the string for the first occurance of anything from the second string, return a pointer of NULL");
 	printf("Searching \"%s\" for \"%s\". '%c' was found\n", s1, s2, *strpbrk(s1, s2));
