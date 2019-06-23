@@ -318,6 +318,7 @@ void printBoardFooterMessage()
 enum input_result getPlayerName(struct player *currentPlayer)
 {
 	char input[MAXPROMPTLEN];
+	char output[256];
 	struct game gamePointer = *getGame();
 
 	int i;
@@ -368,7 +369,8 @@ enum input_result getPlayerName(struct player *currentPlayer)
 	 */
 	for(i = 0; i < strlen(input) - 1; i++) {
 		if(!isgraph(input[i])) {
-			error_print("Unacceptable character found. Please use only ASCII letters, numbers, and punctuation.\n");
+			sprintf(output, "Invalid character(s) found. Please use only ASCII letters, numbers, and punctuation. But excluding tabs and spaces.\n");
+			error_print(fold(output));
 			return getPlayerName(currentPlayer);
 		}
 	}
