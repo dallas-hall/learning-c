@@ -52,7 +52,7 @@ int error_print(const char format[], ...)
 {
 	int char_count = 0;
 	va_list vlist;
-	char_count += fprintf(stderr, "Error: ");
+	char_count += fprintf(stderr, "[ERROR] ");
 	va_start(vlist, format);
 	char_count += vfprintf(stderr, format, vlist);
 
@@ -361,6 +361,16 @@ enum input_result getPlayerName(struct player *currentPlayer)
 	if (strlen(input) < MIN_NAME_LEN) {
 		error_print("Input too short, greater than 1 only.\n");
 		return getPlayerName(currentPlayer);
+	}
+
+	/*
+	 * Need to do -1 so we ignore the \n that is still there
+	 */
+	for(i = 0; i < strlen(input) - 1; i++) {
+		if(!isgraph(input[i])) {
+			error_print("Unacceptable character found. Please use only ASCII letters, numbers, and punctuation.\n");
+			return getPlayerName(currentPlayer);
+		}
 	}
 
 	if (DEBUGGING_IO) {
