@@ -151,7 +151,8 @@ void play_game(struct falsible_long seed)
 	theGamePointer = &thegame;
 
 	/* print the heading */
-	heading = "Welcome to CPT220 Backgammon";
+	heading = "Welcome to Dallas` CPT220 Backgammon";
+	PUTLINE('-', strlen(heading));
 	normal_print("%s\n", heading);
 	PUTLINE('-', strlen(heading));
 	normal_print("The seed number being used is: %d\n", seed);
@@ -168,6 +169,12 @@ void play_game(struct falsible_long seed)
 	while (!quit) {
 		quit = (BOOLEAN) printPromptAndGetInput("Type quit or press ^D (control + D) to exit.\n");
 	}
+
+	/* print the exit message */
+	heading = "Thanks for playing Dallas` CPT220 Backgammon.";
+	PUTLINE('-', strlen(heading));
+	normal_print("%s\n", heading);
+	PUTLINE('-', strlen(heading));
 }
 
 /**
