@@ -103,7 +103,7 @@ void determine_player_order(struct game *thegame)
 					"Player 2 named %s%s%s will go first. They have the token %s%c%s and are moving %sANTICLOCKWISE%s around the board.\n",
 					color_strings[COLOR_RED], thegame->players[1].name,
 					color_strings[COLOR_RESET], color_strings[COLOR_RED],
-					WHITE_TOKEN,
+					RED_TOKEN,
 					color_strings[COLOR_RESET], color_strings[COLOR_RED],
 					color_strings[COLOR_RESET]);
 			normal_print(fold(output));
