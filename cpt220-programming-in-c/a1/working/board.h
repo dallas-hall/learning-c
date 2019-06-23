@@ -62,6 +62,7 @@ void setStartPiece(int x, int y, board the_board);
 
 /*
  * Uses a 2d array of starting pieces.
+ * Replaces getStartPiece and setStartPiece.
  */
 enum piece getStartPieceArray(int row, int column);
 

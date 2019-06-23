@@ -33,7 +33,90 @@ struct game *theGamePointer;
  **/
 BOOLEAN game_init(struct game *thegame)
 {
-	return FALSE;
+	BOOLEAN gameInitialised = FALSE;
+
+	if (DEBUGGING_GAME) {
+		normal_print("%s\n", "[DEBUG] game.c - Trying to create the board.");
+	}
+	/*
+	 * Need to use -> in here as we are going through a pointer.
+	 */
+	board_init(thegame->game_board);
+
+	if (DEBUGGING_GAME) {
+		printBoard(thegame->game_board);
+		printBoardReverse(thegame->game_board);
+		normal_print("%s\n", "[DEBUG] game.c - Trying to create the players.");
+	}
+
+	/*
+	 * Setting these to empty so I can use later to determine which player
+ 	 * pointer was passed.
+	 */
+	thegame->players[0].name[0] = '\0';
+	thegame->players[1].name[0] = '\0';
+
+	/*
+	 * Need don't need & here because we are using a pointer.
+	 */
+	player_init(thegame->other_player, thegame);
+	player_init(thegame->current_player, thegame);
+
+	if (DEBUGGING_GAME) {
+		normal_print("%s\n",
+					 "[DEBUG] game.c - Trying to print created the players.");
+		/*
+		 * Need to use -> since its a pointer.
+		 */
+		normal_print("The first player - thegame->current_player->name is %s\n",
+					 thegame->current_player->name);
+		normal_print("The first player - thegame.players[0].name is  %s\n",
+					 thegame->players[0].name);
+		normal_print("The second player - thegame.other_player->name is %s\n",
+					 thegame->other_player->name);
+		normal_print("The second player - thegame.players[1].name is  %s\n",
+					 thegame->players[1].name);
+	}
+
+	/*
+	 * Determine the player order.
+	 * Need don't need & here because we are using a pointer.
+	 * I based this off of the material in chapter 5 of C How To Program 6e
+ 	 * srand will make sure rand produces different number sequences.
+	 * time() returns how many seconds since the Unix Epoch (1/1/1970).
+	 * Was initially using NULL parameter, which for time means apply no
+	 * formatting. But then I decided to use the supplied seed number.
+	 * Needed the address operator to get the right data type,
+ 	 */
+	srand(time(&thegame->seed));
+	if (DEBUGGING_GAME) {
+		printCurrentPlayer(thegame);
+		printOtherPlayer(thegame);
+	}
+
+	determine_player_order(thegame);
+	if (DEBUGGING_GAME) {
+		printCurrentPlayer(thegame);
+		printOtherPlayer(thegame);
+	}
+
+	/*
+	 * Print the board
+	 */
+	board_print(thegame->game_board, thegame->current_player->orientation);
+
+	/*
+	 * Player swap.
+	 * Print the board in reverse.
+	 *
+	 * Need to use & here so we get the address of the pointer
+	 */
+	swap_players(&thegame->current_player, &thegame->other_player);
+	board_print(thegame->game_board, thegame->current_player->orientation);
+
+	gameInitialised = TRUE;
+
+	return gameInitialised;
 }
 
 /**
@@ -49,6 +132,7 @@ void play_game(struct falsible_long seed)
 	struct game thegame;
 	BOOLEAN quit = FALSE;
 	char *heading = NULL;
+
 
 	/**
 	 * set the seed in the game struct - set to the current time if no
@@ -72,84 +156,6 @@ void play_game(struct falsible_long seed)
 	PUTLINE('-', strlen(heading));
 	normal_print("The seed number being used is: %d\n", seed);
 	PUTLINE('-', strlen(heading));
-
-	if (DEBUGGING_GAME) {
-		normal_print("%s\n", "[DEBUG] game.c - Trying to create the board.");
-	}
-	board_init(thegame.game_board);
-
-	if (DEBUGGING_GAME) {
-		printBoard(thegame.game_board);
-		printBoardReverse(thegame.game_board);
-		normal_print("%s\n", "[DEBUG] game.c - Trying to create the players.");
-	}
-
-	/*
-	 * Setting these to empty so I can use later to determine which player
-	 * pointer was passed.
-	 */
-	thegame.players[0].name[0] = '\0';
-	thegame.players[1].name[0] = '\0';
-
-	/*
-	 * Need to send the address here, so use &
-	 */
-	player_init(thegame.other_player, &thegame);
-	player_init(thegame.current_player, &thegame);
-
-	if (DEBUGGING_GAME) {
-		normal_print("%s\n",
-					 "[DEBUG] game.c - Trying to print created the players.");
-		/*
-		 * Need to use -> since its a pointer.
-		 */
-		normal_print("The first player - thegame.current_player->name is %s\n",
-					 thegame.current_player->name);
-		normal_print("The first player - thegame.players[0].name is  %s\n",
-					 thegame.players[0].name);
-		normal_print("The second player - thegame.other_player->name is %s\n",
-					 thegame.other_player->name);
-		normal_print("The second player - thegame.players[1].name is  %s\n",
-					 thegame.players[1].name);
-	}
-
-	/*
-	 * Determine the player order.
-	 * Need to pass the address here with &
-	 *
-	 * I based this off of the material in chapter 5 of C How To Program 6e
-	 * srand will make sure rand produces different number sequences.
-	 * time() returns how many seconds since the Unix Epoch (1/1/1970).
-	 * Was initially using NULL parameter, which for time means apply no
-	 * formatting. But then I decided to use the supplied seed number.
-	 * Needed the address operator to get the right data type,
-	 */
-	srand(time(&thegame.seed));
-	if (DEBUGGING_GAME) {
-		printCurrentPlayer(&thegame);
-		printOtherPlayer(&thegame);
-	}
-
-	determine_player_order(&thegame);
-	if (DEBUGGING_GAME) {
-		printCurrentPlayer(&thegame);
-		printOtherPlayer(&thegame);
-	}
-
-	/*
-	 * Print the board
-	 */
-	board_print(thegame.game_board, thegame.current_player->orientation);
-
-	/*
-	 * Player swap.
-	 * Print the board in reverse.
-	 *
-	 * Need to use & here so we get the address of the pointer
-	 */
-	swap_players(&thegame.current_player, &thegame.other_player);
-	board_print(thegame.game_board, thegame.current_player->orientation);
-
 
 	/**
 	 * if initialisation of the game failed, we should quit
