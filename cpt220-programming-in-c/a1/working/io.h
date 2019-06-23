@@ -149,4 +149,6 @@ void printCurrentPlayer();
 
 void printOtherPlayer();
 
+enum input_result printPromptAndGetInput(char *s);
+
 #endif

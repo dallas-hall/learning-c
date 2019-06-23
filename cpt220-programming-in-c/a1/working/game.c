@@ -59,8 +59,8 @@ BOOLEAN game_init(struct game *thegame)
 	/*
 	 * Need don't need & here because we are using a pointer.
 	 */
-	player_init(thegame->other_player, thegame);
-	player_init(thegame->current_player, thegame);
+	gameInitialised = player_init(thegame->other_player, thegame);
+	gameInitialised = player_init(thegame->current_player, thegame);
 
 	if (DEBUGGING_GAME) {
 		normal_print("%s\n",
@@ -163,8 +163,10 @@ void play_game(struct falsible_long seed)
 	if (!game_init(&thegame)) {
 		return;
 	}
+
 	/* implement game loop logic here */
 	while (!quit) {
+		quit = (BOOLEAN) printPromptAndGetInput("Type quit or press ^D (control + D) to exit.\n");
 	}
 }
 
