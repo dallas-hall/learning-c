@@ -47,14 +47,17 @@ void determine_player_order(struct game *thegame)
 		 * And then once we have the right element, use dot notation to access
 		 * to correct field.
 		 */
-		normal_print("Player 1 named %s rolled %d and %d, totalling %d.\n",
-					 thegame->players[0].name, die1, die2, playerOneTotal);
+		normal_print("Player 1 named %s%s%s rolled %d and %d, totalling %d.\n",
+					 fontEffectStrings[FONT_BOLD], thegame->players[0].name,
+					 color_strings[COLOR_RESET],
+					 die1, die2, playerOneTotal);
 
 		die1 = rollDice();
 		die2 = rollDice();
 		playerTwoTotal += die1 + die2;
-		normal_print("Player 2 named %s, rolled %d and %d, totalling %d.\n",
-					 thegame->players[1].name, die1, die2, playerTwoTotal);
+		normal_print("Player 2 named %s%s%s, rolled %d and %d, totalling %d.\n",
+					 fontEffectStrings[FONT_BOLD], thegame->players[1].name,
+					 color_strings[COLOR_RESET], die1, die2, playerTwoTotal);
 
 		if (playerOneTotal == playerTwoTotal) {
 			/*
@@ -66,8 +69,9 @@ void determine_player_order(struct game *thegame)
 			continue;
 		}
 		else if (playerOneTotal > playerTwoTotal) {
-			normal_print("Player 1 named %s wins the roll!\n",
-						 thegame->players[0].name);
+			normal_print("Player 1 named %s%s%s wins the roll!\n",
+						 fontEffectStrings[FONT_BOLD], thegame->players[0].name,
+						 color_strings[COLOR_RESET]);
 			thegame->players[0].token = P_WHITE;
 			thegame->players[1].token = P_RED;
 
@@ -91,7 +95,7 @@ void determine_player_order(struct game *thegame)
 
 			sprintf(output,
 					"Player 1 named %s%s%s will go first. They have the token %s%c%s and are moving %sCLOCKWISE%s around the board.\n",
-					color_strings[COLOR_WHITE], thegame->players[0].name,
+					fontEffectStrings[FONT_BOLD], thegame->players[0].name,
 					color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
 					WHITE_TOKEN,
 					color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
@@ -101,7 +105,7 @@ void determine_player_order(struct game *thegame)
 
 			sprintf(output,
 					"Player 2 named %s%s%s will go first. They have the token %s%c%s and are moving %sANTICLOCKWISE%s around the board.\n",
-					color_strings[COLOR_RED], thegame->players[1].name,
+					fontEffectStrings[FONT_BOLD], thegame->players[1].name,
 					color_strings[COLOR_RESET], color_strings[COLOR_RED],
 					RED_TOKEN,
 					color_strings[COLOR_RESET], color_strings[COLOR_RED],
@@ -111,8 +115,9 @@ void determine_player_order(struct game *thegame)
 			done = TRUE;
 		}
 		else {
-			normal_print("Player 2 named %s wins the roll!\n",
-						 thegame->players[1].name);
+			normal_print("Player 2 named %s%s%s wins the roll!\n",
+						 fontEffectStrings[FONT_BOLD], thegame->players[1].name,
+						 color_strings[COLOR_RESET]);
 			thegame->players[0].token = P_RED;
 			thegame->players[1].token = P_WHITE;
 
@@ -124,7 +129,7 @@ void determine_player_order(struct game *thegame)
 
 			normal_print(
 					"Player 2 named %s%s%s, will go first. They have the token ",
-					color_strings[COLOR_WHITE], thegame->players[1].name,
+					fontEffectStrings[FONT_BOLD], thegame->players[1].name,
 					color_strings[COLOR_RESET]);
 			normal_print("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN,
 						 color_strings[COLOR_RESET]);
@@ -134,7 +139,7 @@ void determine_player_order(struct game *thegame)
 
 			normal_print(
 					"Player 1 named %s%s%s will go second They have the token ",
-					color_strings[COLOR_RED], thegame->players[0].name,
+					fontEffectStrings[FONT_BOLD], thegame->players[0].name,
 					color_strings[COLOR_RESET]);
 			normal_print("%s%c%s", color_strings[COLOR_RED], RED_TOKEN,
 						 color_strings[COLOR_RESET]);
