@@ -335,11 +335,12 @@ enum input_result getPlayerName(struct player *currentPlayer)
 	}
 
 	/*
- * Need to account for the '\n' and '\0' that fgets adds.
- * If the char last isn't '\n' then we know we didn't receive all the input.
- * We need to remove the '\n' as well.
- */
-
+	 * Need to account for the '\n' and '\0' that fgets adds.
+	 * If the char last isn't '\n' then we know we didn't receive all the input.
+	 * We need to remove the '\n' as well.
+	 *
+	 * Got this idea from Chapter 08 C How To Program 6e and Paul's week 4 sumup.c
+	 */
 	if (fgets(input, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
 		return IR_FAILURE;
 	}
@@ -347,7 +348,6 @@ enum input_result getPlayerName(struct player *currentPlayer)
 	/*
 	 * Remember that strlen doesn't include the \0 in its count
 	 */
-
 	if (input[strlen(input) - 1] != '\n') {
 		error_print("Buffer overflow.\n");
 		clear_buffer();
@@ -367,9 +367,10 @@ enum input_result getPlayerName(struct player *currentPlayer)
 	/*
 	 * Need to do -1 so we ignore the \n that is still there
 	 */
-	for(i = 0; i < strlen(input) - 1; i++) {
-		if(!isgraph(input[i])) {
-			sprintf(output, "Invalid character(s) found. Please use only ASCII letters, numbers, and punctuation. But excluding tabs and spaces.\n");
+	for (i = 0; i < strlen(input) - 1; i++) {
+		if (!isgraph(input[i])) {
+			sprintf(output,
+					"Invalid character(s) found. Please use only ASCII letters, numbers, and punctuation. But excluding tabs and spaces.\n");
 			error_print(fold(output));
 			return getPlayerName(currentPlayer);
 		}
@@ -453,3 +454,60 @@ void printOtherPlayer(struct game *thegame)
 	normal_print("thegame->current_player.bar_list.token_count is %d\n\n",
 				 thegame->current_player->bar_list.token_count);
 }
+
+
+enum input_result printPromptAndGetInput(char *s)
+{
+	char input[MAXPROMPTLEN];
+	char *result;
+	const char *triggerWord = "quit";
+	int i;
+
+	normal_print("%s", s);
+
+	/*
+	 * Need to account for the '\n' and '\0' that fgets adds.
+	 * If the char last isn't '\n' then we know we didn't receive all the input.
+	 * We need to remove the '\n' as well.
+	 *
+	 * Got this idea from Chapter 08 C How To Program 6e and Paul's week 4 sumup.c
+	 */
+	if (fgets(input, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
+		/*
+		 * We want to return true here on ^D (control + D)
+		 */
+		return IR_SUCCESS;
+	}
+
+	/*
+	 * Remember that strlen doesn't include the \0 in its count
+	 */
+	if (input[strlen(input) - 1] != '\n') {
+		error_print("Buffer overflow.\n");
+		clear_buffer();
+		return printPromptAndGetInput(s);
+	}
+
+	/*
+	 * Need minus 1 so we exclude reading the \n
+	 * Converting the input to lower case and searching for quit with strstr
+	 *
+	 * Got this idea from Chapter 08 C How To Program 6e
+	 */
+	for(i = 0; i < strlen(input) - 1; i++) {
+		input[i] = tolower(input[i]);
+	}
+
+	result = strstr(input, triggerWord);
+
+	if(DEBUGGING_IO) {
+		printf("[DEBUG] %s compared to %s is %s\n", triggerWord, input, result);
+	}
+
+	if(result != NULL) {
+		return IR_SUCCESS;
+	}
+
+	return IR_FAILURE;
+}
+
