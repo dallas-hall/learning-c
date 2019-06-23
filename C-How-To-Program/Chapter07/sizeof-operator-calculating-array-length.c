@@ -24,13 +24,16 @@ int main(void)
 
 	printf("# sizeof Operator Returns Byte Size Of Object\n");
 	printf("## Array Of double[10]\n");
-	printf("The number of bytes the doubleArray uses is %ld\n", sizeof(doubleArray));
-	printf("The number of bytes the doubleArray's pointer uses is %ld\n", sizeof(&doubleArray));
+	printf("The total number of bytes the doubleArray uses is %ld\n", sizeof(doubleArray));
+	printf("The total number of bytes the doubleArray's pointer uses is %ld\n", sizeof(&doubleArray));
+	printf("The total number of bytes that doubleArray uses is %ld\n", sizeof(doubleArray[0]));
 	printf("The total number of elements in the doubleArray is calculated using sizeof(doubleArray) / sizeof(doubleArray[0]) - this is %ld\n", sizeof(doubleArray) / sizeof(doubleArray[0]));
 
 	printf("## 2d Array Of int[3][3]\n");
-	printf("The number of bytes the int2dArray uses is %ld\n", sizeof(int2dArray));
-	printf("The number of bytes the int2dArray's pointer uses is %ld\n", sizeof(&int2dArray));
+	printf("The total number of bytes the int2dArray uses is %ld\n", sizeof(int2dArray));
+	printf("The total number of bytes the int2dArray's pointer uses is %ld\n", sizeof(&int2dArray));
+	printf("The total number of bytes that int2dArray[] uses is %ld\n", sizeof(int2dArray[0]));
+	printf("The total number of bytes that int2dArray[][] uses is %ld\n", sizeof(int2dArray[0][0]));
 	printf("The total number of elements in the int2dArray[] is calculated using sizeof(int2dArray) / sizeof(int2dArray[0]) - this is %ld\n", sizeof(int2dArray) / sizeof(int2dArray[0]));
 	printf("The total number of elements in the int2dArray[][] is calculated using sizeof(int2dArray) / sizeof(int2dArray[0][0]) - this is %ld\n", sizeof(int2dArray) / sizeof(int2dArray[0][0]));
 
