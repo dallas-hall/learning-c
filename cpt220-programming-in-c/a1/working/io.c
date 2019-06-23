@@ -476,7 +476,7 @@ enum input_result printPromptAndGetInput(char *s)
 		/*
 		 * We want to return true here on ^D (control + D)
 		 */
-		return IR_SUCCESS;
+		return IR_QUIT;
 	}
 
 	/*
@@ -505,7 +505,7 @@ enum input_result printPromptAndGetInput(char *s)
 	}
 
 	if(result != NULL) {
-		return IR_SUCCESS;
+		return IR_QUIT;
 	}
 
 	return IR_FAILURE;
