@@ -55,7 +55,7 @@ void determine_player_order(struct game *thegame)
 		die1 = rollDice();
 		die2 = rollDice();
 		playerTwoTotal += die1 + die2;
-		normal_print("Player 2 named %s%s%s, rolled %d and %d, totalling %d.\n",
+		normal_print("Player 2 named %s%s%s rolled %d and %d, totalling %d.\n",
 					 fontEffectStrings[FONT_BOLD], thegame->players[1].name,
 					 color_strings[COLOR_RESET], die1, die2, playerTwoTotal);
 
@@ -104,7 +104,7 @@ void determine_player_order(struct game *thegame)
 			output[0] = '\0';
 
 			sprintf(output,
-					"Player 2 named %s%s%s will go first. They have the token %s%c%s and are moving %sANTICLOCKWISE%s around the board.\n",
+					"Player 2 named %s%s%s will go second. They have the token %s%c%s and are moving %sANTICLOCKWISE%s around the board.\n",
 					fontEffectStrings[FONT_BOLD], thegame->players[1].name,
 					color_strings[COLOR_RESET], color_strings[COLOR_RED],
 					RED_TOKEN,
@@ -128,7 +128,7 @@ void determine_player_order(struct game *thegame)
 			thegame->current_player = &thegame->players[1];
 
 			normal_print(
-					"Player 2 named %s%s%s, will go first. They have the token ",
+					"Player 2 named %s%s%s will go first. They have the token ",
 					fontEffectStrings[FONT_BOLD], thegame->players[1].name,
 					color_strings[COLOR_RESET]);
 			normal_print("%s%c%s", color_strings[COLOR_WHITE], WHITE_TOKEN,
