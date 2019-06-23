@@ -119,6 +119,12 @@ enum token
 /**
  * You may add your own data structures here to help with processing of i/o.
  **/
+#define MAX_FONT_EFFECTS 1
+extern const char *fontEffectStrings[];
+enum font
+{
+	FONT_BOLD
+};
 
 /**
  * student's data structure declarations end here.

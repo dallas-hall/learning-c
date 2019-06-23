@@ -13,6 +13,8 @@ const int DEBUGGING_IO = 0;
 
 const char *color_strings[NUM_COLORS] = {"\x1b[31m", "\x1b[37m", "\x1b[0m"};
 
+const char *fontEffectStrings[MAX_FONT_EFFECTS] = {"\x1b[1m"};
+
 /**
  * function that does buffer clearing when there is a buffer overflow on
  * input - only call this function when there is an actual buffer overflow as
@@ -290,16 +292,18 @@ void printBoardFooterMessage()
 
 	if (theGame->current_player->orientation == OR_CLOCKWISE) {
 		sprintf(output,
-				"It is your turn %s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
-				name, score, color_strings[COLOR_WHITE], colour,
+				"It is your turn %s%s%s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
+				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
+				score, color_strings[COLOR_WHITE], colour,
 				color_strings[COLOR_RESET], color_strings[COLOR_WHITE], token,
 				color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
 				direction, color_strings[COLOR_RESET], barCount);
 	}
 	else {
 		sprintf(output,
-				"It is your turn %s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
-				name, score, color_strings[COLOR_RED], colour,
+				"It is your turn %s%s%s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
+				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
+				score, color_strings[COLOR_RED], colour,
 				color_strings[COLOR_RESET], color_strings[COLOR_RED], token,
 				color_strings[COLOR_RESET], color_strings[COLOR_RED],
 				direction, color_strings[COLOR_RESET], barCount);
@@ -494,20 +498,19 @@ enum input_result printPromptAndGetInput(char *s)
 	 *
 	 * Got this idea from Chapter 08 C How To Program 6e
 	 */
-	for(i = 0; i < strlen(input) - 1; i++) {
+	for (i = 0; i < strlen(input) - 1; i++) {
 		input[i] = tolower(input[i]);
 	}
 
 	result = strstr(input, triggerWord);
 
-	if(DEBUGGING_IO) {
+	if (DEBUGGING_IO) {
 		printf("[DEBUG] %s compared to %s is %s\n", triggerWord, input, result);
 	}
 
-	if(result != NULL) {
+	if (result != NULL) {
 		return IR_QUIT;
 	}
 
 	return IR_FAILURE;
 }
-
