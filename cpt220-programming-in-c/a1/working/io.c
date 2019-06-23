@@ -265,13 +265,13 @@ void printBoardFooterMessage()
 	char output[256];
 
 	if (theGame->current_player->orientation == OR_CLOCKWISE) {
-		colour = "white";
-		direction = "clockwise";
+		colour = "WHITE";
+		direction = "CLOCKWISE";
 		token = 'X';
 	}
 	else {
-		colour = "red";
-		direction = "anticlockwise";
+		colour = "RED";
+		direction = "ANTICLOCKWISE";
 		token = 'O';
 	}
 
@@ -279,7 +279,7 @@ void printBoardFooterMessage()
 	 * TODO - check what happens with a number
 	 */
 	if (theGame->current_player->bar_list.token_count == 0) {
-		strcpy(barCount, "empty");
+		strcpy(barCount, "EMPTY");
 	}
 	else {
 		normal_print(barCount, "%d",
