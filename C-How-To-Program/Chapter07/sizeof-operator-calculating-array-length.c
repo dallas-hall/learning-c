@@ -31,7 +31,8 @@ int main(void)
 	printf("## 2d Array Of int[3][3]\n");
 	printf("The number of bytes the int2dArray uses is %ld\n", sizeof(int2dArray));
 	printf("The number of bytes the int2dArray's pointer uses is %ld\n", sizeof(&int2dArray));
-	printf("The total number of elements in the int2dArray is calculated using sizeof(int2dArray) / sizeof(int2dArray[0][0]) - this is %ld\n", sizeof(int2dArray) / sizeof(int2dArray[0][0]));
+	printf("The total number of elements in the int2dArray[] is calculated using sizeof(int2dArray) / sizeof(int2dArray[0]) - this is %ld\n", sizeof(int2dArray) / sizeof(int2dArray[0]));
+	printf("The total number of elements in the int2dArray[][] is calculated using sizeof(int2dArray) / sizeof(int2dArray[0][0]) - this is %ld\n", sizeof(int2dArray) / sizeof(int2dArray[0][0]));
 
 
 	return EXIT_SUCCESS;
