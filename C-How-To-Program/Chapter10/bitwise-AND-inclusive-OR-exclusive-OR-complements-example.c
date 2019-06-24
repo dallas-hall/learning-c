@@ -9,17 +9,46 @@
 
 
 void printBits(unsigned value);
+void printLine(int size);
 
 int main(void)
 {
-	unsigned n1, n2, mask, setBits;
+	unsigned n1, mask;
 	n1 = 65535;
 	mask = 1;
 
 	puts("# Bitwise Operators");
-	puts("# Bitwise AND Operator - &");
+	puts("## Bitwise AND Operator &");
 	printBits(n1);
 	printBits(mask);
+	printLine(CHAR_BIT * sizeof(unsigned) + 16);
+	printBits(n1 & mask);
+	
+	puts("\n## Bitwise OR Operator |");
+	n1 = 15;
+	mask = 241;
+	printBits(n1);
+	printBits(mask);
+	printLine(CHAR_BIT * sizeof(unsigned) + 16);
+	printBits(n1 | mask);
+
+	puts("\n## Bitwise exclusive OR Operator ^");
+	n1 = 139;
+	mask = 199;
+	printBits(n1);
+	printBits(mask);
+	printLine(CHAR_BIT * sizeof(unsigned) + 16);
+	printBits(n1 ^ mask);
+
+	/*
+	 * Turns all 0s to 1s and all 1s to 0s.
+	 */
+	puts("\n## One's Complement ~");
+	n1 = 21845;
+	printBits(n1);
+	printLine(CHAR_BIT * sizeof(unsigned) + 16);
+	printBits(~n1);
+	
 
 	return EXIT_SUCCESS;
 }
@@ -68,4 +97,14 @@ void printBits(unsigned value)
 	}
 	putchar('\n');
 
+}
+
+void printLine(int size)
+{
+	int i;
+
+	for(i = 0; i < size; i++) {
+		putchar('-');
+	}
+	putchar('\n');
 }
