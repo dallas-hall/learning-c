@@ -25,7 +25,7 @@ typedef struct bitCard Card;
 
 void createDeck(Card* const deck);
 void shuffleDeck(Card* const deck, int shuffleAmount);
-void dealDeck(const Card* const deck, const char* faces[], const char *suits[]);
+void dealDeck(const Card* const deck, const char* faces[], const char *suits[], const char *colours[]);
 
 int main(void)
 {
@@ -44,6 +44,8 @@ int main(void)
 	};
 
 	const char *suits[] = {"HEARTS", "DIAMONDS", "CLUBS", "SPADES"};
+	
+	const char *colours[] = {"RED", "BLACK"};
 
 	/*
 	 * Randomise rand() with the seconds since the Unix Epoch, unformatted.
@@ -52,11 +54,11 @@ int main(void)
 	puts("# Bit Card Deck - struct example");
 	puts("## Create Deck & Deal Unshuffled Deck");
 	createDeck(deck);
-	dealDeck(deck, faces, suits);
+	dealDeck(deck, faces, suits, colours);
 	printf("\n## Shuffle Deck %d Times", SHUFFLE_AMOUNT);
 	shuffleDeck(deck, SHUFFLE_AMOUNT);
 	puts("\n## Deal Shuffled Deck");
-	dealDeck(deck, faces, suits);
+	dealDeck(deck, faces, suits, colours);
 
 	return EXIT_SUCCESS;
 }
@@ -68,11 +70,13 @@ void createDeck(Card* const deck)
 	for(i = 0; i < CARDS_IN_DECK; i++) {
 		/*
 		 * i % 13 will return a number between 0 and 12, which is 13, the amount of indices the faces array has.
-		 * i / 13 will return a number between 0 and 3, which is 4, the amount of indeces the suits array has.
+		 * i / 13 will return a number between 0 and 3, which is 4, the amount of indices the suits array has.
+		 * i / 26 will return a number between 0 and 1, which is 2, the amount of indiecs the colours array has.
 		 * Because we are going from 0 to 51, we will initialise all cards in the deck.
 		 */
 		deck[i].face = (unsigned) i % FACES_IN_DECK;
 		deck[i].suit = (unsigned) i / FACES_IN_DECK;
+		deck[i].colour = (unsigned) i / (CARDS_IN_DECK / 2);  
 	}
 }
 
@@ -101,7 +105,7 @@ void shuffleDeck(Card* const deck, int shuffleAmount)
 	}
 }
 
-void dealDeck(const Card* const deck, const char* faces[], const char *suits[])
+void dealDeck(const Card* const deck, const char* faces[], const char *suits[], const char *colours[])
 {
 	int i, cardsPerLine;
 
@@ -110,6 +114,6 @@ void dealDeck(const Card* const deck, const char* faces[], const char *suits[])
 	 * Print every card in the deck. n per line.
 	 */ 
 	for (i = 0; i < CARDS_IN_DECK; i++) {
-		printf("%5s of %-8s%s", faces[deck[i].face], suits[deck[i].suit], (i + 1) % cardsPerLine ? "\t" : "\n");
+		printf("A %5s %5s of %-8s%s", colours[deck[i].colour], faces[deck[i].face], suits[deck[i].suit], (i + 1) % cardsPerLine ? "\t" : "\n");
 	}
 }
