@@ -10,7 +10,7 @@ int main(void)
 {
 	char c1, c2, c3, c4;
 
-	puts("# Packing 2 char's Into unsigned int Using Leftshift");
+	puts("# Packing Chars Into Unsigned Int With Leftshift & Inclusive OR");
 	puts("Enter four chars: ");
 	scanf("%c%c%c%c", &c1, &c2, &c3, &c4);
 
