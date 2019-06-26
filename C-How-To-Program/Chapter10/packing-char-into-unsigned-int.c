@@ -4,22 +4,27 @@
 
 void printBits(unsigned value);
 void printLine(int size);
-void packChars(char c1, char c2);
+void pack4Chars(char c1, char c2, char c3, char c4);
 
 int main(void)
 {
-	char c1, c2;
+	char c1, c2, c3, c4;
 
 	puts("# Packing 2 char's Into unsigned int Using Leftshift");
-	puts("Enter two chars: ");
-	scanf("%c%c", &c1, &c2);
+	puts("Enter four chars: ");
+	scanf("%c%c%c%c", &c1, &c2, &c3, &c4);
 
 	printf("The bits of %c is: \n", c1);
 	printBits(c1);
 	printf("The bits of %c is: \n", c2);
 	printBits(c2);
+	printf("The bits of %c is: \n", c3);
+	printBits(c1);
+	printf("The bits of %c is: \n", c4);
+	printBits(c2);
 
-	packChars(c1, c2);
+
+	pack4Chars(c1, c2, c3, c4);
 
 	return EXIT_SUCCESS;
 }
@@ -80,7 +85,7 @@ void printLine(int size)
 	putchar('\n');
 }
 
-void packChars(char c1, char c2)
+void pack4Chars(char c1, char c2, char c3, char c4)
 {
 	/*
 	 * Shifting left by 8 and then ORing together will result in both characters.
@@ -103,4 +108,15 @@ void packChars(char c1, char c2)
 	/*
 	 * Repeat the above process until you up your data type.
 	 */ 
+	c <<= 8;
+	c |= c3;
+	puts("## After c1+c2 | c3");
+	printBits(c);
+	
+	c <<= 8;
+	c |= c4;
+	puts("## After c1+c2+c3 | c4");
+	printBits(c);
+	
 }
+
