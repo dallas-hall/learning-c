@@ -1,6 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <limits.h>
+/*
+ * Defines platform specific limits to types.
+ * Located in /usr/include/limits.h
+ * CHAR_BIT is how big a char is on this system, which is 8 bits
+ */
+#include <limits.h> 
 
 void printBits(unsigned value);
 void printBitsReversed(unsigned value);
