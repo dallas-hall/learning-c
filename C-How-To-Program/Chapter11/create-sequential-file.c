@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#define FILE_PATH "./clients.csv"
+
 int main(void)
 {
 	char input;
@@ -19,7 +21,7 @@ int main(void)
 	 * w = write mode, delete all if exists and create if doesn't exist. 
 	 * a+ = append mode plus created if doesn't exist.
 	 */ 
-	if(NULL == (filePtr = fopen("clients.dat", "w"))) {
+	if(NULL == (filePtr = fopen(FILE_PATH, "w"))) {
 		fprintf(stderr, "[ERROR] File could not be opened.\n");
 	}
 	else {
