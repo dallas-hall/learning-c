@@ -14,6 +14,7 @@ int main(void)
 	 */ 
 	FILE *filePtr;
 
+	puts("# Create Sequential File");
 	/*
 	 * w = write mode, delete all if exists and create if doesn't exist. 
 	 * a+ = append mode plus created if doesn't exist.
