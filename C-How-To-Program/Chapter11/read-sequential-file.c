@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define FILE_PATH "./clients.csv"
 #define DELIMITER ";"
 
 int main(void)
@@ -18,7 +19,7 @@ int main(void)
 	/*
 	 * r = read only
 	 */
-	if (NULL == (filePointer = fopen("clients.dat",	"r"))) {
+	if (NULL == (filePointer = fopen(FILE_PATH,	"r"))) {
 		fprintf(stderr, "[ERROR] File wasn't opened.");
 	}
 	else {
