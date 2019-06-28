@@ -15,7 +15,8 @@ int main(void)
 	FILE *filePtr;
 
 	/*
-	 * w = write mode, will create a file if it doesn't exist and clobber a file if it does exist.
+	 * w = write mode, delete all if exists and create if doesn't exist. 
+	 * a+ = append mode plus created if doesn't exist.
 	 */ 
 	if(NULL == (filePtr = fopen("clients.dat", "w"))) {
 		fprintf(stderr, "[ERROR] File could not be opened.\n");
