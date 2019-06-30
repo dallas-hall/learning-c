@@ -28,6 +28,7 @@ int main(int argc, char *argsv[])
 	 */ 
 	if(argc != EXPECTED_ARGS + 1) {
 		fprintf(stderr, "[ERROR] Invalid arguments supplied. Should only be %d but got %d.\n", EXPECTED_ARGS, argc);
+		return EXIT_FAILURE;
 	}
 
 	puts("## Program Arguments");
@@ -41,6 +42,7 @@ int main(int argc, char *argsv[])
 	 */ 
 	if ((inputFilePointer = fopen(argsv[1], "r")) == NULL) {
 		fprintf(stderr, "[ERROR] Input file couldn't be opened. Does it exist?.\n");
+		return EXIT_FAILURE;
 	}
 	else {
 		printf("Opened the input file %s\n", argsv[1]);
@@ -50,6 +52,7 @@ int main(int argc, char *argsv[])
 	 */ 
 	if ((outputFilePointer = fopen(argsv[2], "w")) == NULL) {
 		fprintf(stderr, "[ERROR] Output file couldn't be opened..\n");
+		return EXIT_FAILURE;
 	}
 	else {
 		printf("Created or opened and overwrote the output file %s\n", argsv[2]);
@@ -92,6 +95,7 @@ int main(int argc, char *argsv[])
 	while (tokenPointer != NULL) {
 		if(i > MAX_INPUT_INTS) {
 			fprintf(stderr, "[ERROR] Too many integers inside the input file. Maximum is ten, but found %d\n", i);
+			return EXIT_FAILURE;
 		}
 		numbers[i] = strtol(tokenPointer, &strtolRemainderPointer, 0);
 		printf("Token poitner is %s\n", tokenPointer);
