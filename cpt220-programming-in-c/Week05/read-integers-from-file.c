@@ -3,7 +3,11 @@
 #include <string.h>
 
 #define MAX_INPUT_INTS 10
-#define EXPECTED_ARGS 2
+/*
+ * This includes the implict argv[0] which is the program's name.
+ * So we are expecting 1 user supplied argument here.
+ */ 
+#define MAX_ARGS 3
 #define DELIMITER ","
 #define BUFFER_SIZE 256
 
@@ -24,15 +28,19 @@ int main(int argc, char *argsv[])
 
 	puts("# Read Integers From File");
 	/*
-	 * Remember to add 1 because the program name is always passed
+	 * Need to minus 1 here to account for the implicit argv[0].
 	 */ 
-	if(argc != EXPECTED_ARGS + 1) {
-		fprintf(stderr, "[ERROR] Invalid arguments supplied. Should only be %d but got %d.\n", EXPECTED_ARGS, argc);
+	if(argc == 1) {
+		fprintf(stderr, "[ERROR] Not enough arguments supplied. Expected %d but got %d.\n", MAX_ARGS - 1, 0);
+		return EXIT_FAILURE;
+	}
+	if(argc > MAX_ARGS) {
+		fprintf(stderr, "[ERROR] Too many arguments supplied. Expected %d but got %d.\n", MAX_ARGS - 1, argc - 1);
 		return EXIT_FAILURE;
 	}
 
 	puts("## Program Arguments");
-	for (i = 0; i < EXPECTED_ARGS + 1; i++) {
+	for (i = 0; i < MAX_ARGS; i++) {
 		printf("Argument %d is %s\n", i, argsv[i]);
 	}
 
