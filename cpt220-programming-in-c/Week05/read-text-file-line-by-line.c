@@ -21,17 +21,18 @@ int main(int argc, char *argv[])
 	FILE *inputFilePointer;
 
 	puts("# Read Text File Line By Line");
-	if(argc < MAX_ARGS) {
-		/*
-		 * Minus 1 off the count here to remove the implicit argv[0], which is the program's name.
-		 */ 
-		fprintf(stderr, "[ERROR] Not enough arguments supplied. Found %d but require %d.\n", argc - 1, MAX_ARGS - 1);
+	/*
+	 * Need to minus 1 here to account for the implicit argv[0].
+	 */ 
+	if(argc == 1) {
+		fprintf(stderr, "[ERROR] Not enough arguments supplied. Expected %d but got %d.\n", MAX_ARGS - 1, 0);
 		return EXIT_FAILURE;
 	}
 	if(argc > MAX_ARGS) {
-		fprintf(stderr, "[ERROR] Too many arguments supplied. Found %d but require only %d.\n", argc - 1, MAX_ARGS - 1);
+		fprintf(stderr, "[ERROR] Too many arguments supplied. Expected %d but got %d.\n", MAX_ARGS - 1, argc - 1);
 		return EXIT_FAILURE;
 	}
+
 	/*
 	 * Try to open the supplied file in read only mode.
 	 * Remember the parentheses here because assignment has the lowest precedence.
