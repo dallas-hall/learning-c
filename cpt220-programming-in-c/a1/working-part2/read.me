@@ -1,0 +1,68 @@
+Student Name    :   Dallas Hall
+RMIT Student ID :   s3461243
+COURSE CODE     :   CPT220 / OLA00
+Program Code    :   Bachelor of Information Technology (OLA00 / BP162OUP15)
+
+How to compile and execute the program
+---------------------------------------
+
+gcc -ansi -Wall -pedantic bar_list.c board.c game.c helpers.c io.c main.c
+player.c rules.c -o backgammon.out
+
+I created a file called compile-flags with the above inside of it, made it
+executable and just ran ./compile-flags to generate the binary.out file.
+
+Approaches taken to solving the set problems
+---------------------------------------------
+
+1) Pen & Paper or Computer Software
+Sometimes I used pen and paper or computer software to help visualise what
+I was doing. For example, when starting the assignment I went through all the c
+and h files and mapped out with boxes inside LibreOffice Draw how they all
+relate. Another example was using a LibreOffice Calc spreadsheet to visualise
+the board when I was initialising the game state. I also used a text file to
+help me build the game board.
+
+
+2) Using Vim
+At first I started off by coding in vim without any plugins. I Googled to
+see how I can set a global variable in C, so I could set a global variable for
+controlling [DEBUG] messages across all my files. This worked out well initially.
+I basically printed [DEBUG] messages whenever I wanted to inspect variables
+and their state at all stages of processing. But then I came across a nasty bug
+that I spent a few hours on. I documented this inside of player.c, player_init.
+This is when vim was no longer enough for me to program in.
+
+
+3) Bug Hunting In CLion
+I spent hours reading my [DEBUG] messages, the source code, and tinkering
+with the code and I just couldn't work it out. So then I decided that I will
+start running the program inside of the Jetbrain's C IDE called CLion. The
+reason I did this is so I could use the debugger tools, which really helped by
+allowing me to visualise the data structures, inspect the stack, and to see what
+was going on. This was invaluable to understand what the pointers were doing.
+I also used this to format the code consistently. I then wrote the
+code in CLion, used the debugger where necessary, and compiled with gcc on
+my Fedora box. Then uploaded to RMIT and compiled with gcc again. This is the
+first time I have tried coding on vim only without an IDE it is considerably
+harder. So basically my develop process is a) code in CLion b) run and debug in
+CLion c) compile with gcc on my local Fedora machine d) push to RMIT and compile
+with gcc there.
+
+4) Top Down Design
+I also used top down design approach, as described in the text book
+C How To Program 6e. I used this when thinking through seemingly complex
+problems, like initialising the game board state.
+
+5) Searching The Filesystem
+I used grep -inr 'search-term' * inside of my working directory when looking
+for stuff. I also used the same functionality inside of CLion when working with
+that.
+
+6) Research Steps
+I used the following order of steps to problem solve any problems I came across:
+a) Read through the course's code examples.
+b) Read through the code examples from the C How To Program 6e text book.
+c) I did some online research.
+d) Asked my friend who is a very experienced C programmer..
+

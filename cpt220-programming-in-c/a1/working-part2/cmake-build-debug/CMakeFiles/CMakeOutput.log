@@ -1,0 +1,430 @@
+The system is: Linux - 5.1.11-300.fc30.x86_64 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/clang 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is Clang, found in "/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdC/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_a1a1d/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_a1a1d.dir/build.make CMakeFiles/cmTC_a1a1d.dir/build
+gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a1a1d.dir/testCCompiler.c.o
+/usr/bin/clang    -o CMakeFiles/cmTC_a1a1d.dir/testCCompiler.c.o   -c /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_a1a1d
+/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a1a1d.dir/link.txt --verbose=1
+/usr/bin/clang      CMakeFiles/cmTC_a1a1d.dir/testCCompiler.c.o  -o cmTC_a1a1d 
+gmake[1]: Leaving directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_ac9db/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_ac9db.dir/build.make CMakeFiles/cmTC_ac9db.dir/build
+gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ac9db.dir/CMakeCCompilerABI.c.o
+/usr/bin/clang    -o CMakeFiles/cmTC_ac9db.dir/CMakeCCompilerABI.c.o   -c /home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/share/cmake-3.13/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_ac9db
+/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ac9db.dir/link.txt --verbose=1
+/usr/bin/clang     -v CMakeFiles/cmTC_ac9db.dir/CMakeCCompilerABI.c.o  -o cmTC_ac9db 
+clang version 8.0.0 (Fedora 8.0.0-1.fc30)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9
+Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/9
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9
+Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
+Selected multilib: .;@m64
+ "/usr/bin/ld" --hash-style=gnu --no-add-needed --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_ac9db /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crt1.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crti.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64 -L/usr/bin/../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../.. -L/usr/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_ac9db.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtend.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crtn.o
+gmake[1]: Leaving directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:"/usr/bin/gmake" "cmTC_ac9db/fast"]
+  ignore line: [/usr/bin/gmake -f CMakeFiles/cmTC_ac9db.dir/build.make CMakeFiles/cmTC_ac9db.dir/build]
+  ignore line: [gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_ac9db.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/clang    -o CMakeFiles/cmTC_ac9db.dir/CMakeCCompilerABI.c.o   -c /home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/share/cmake-3.13/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_ac9db]
+  ignore line: [/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ac9db.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/clang     -v CMakeFiles/cmTC_ac9db.dir/CMakeCCompilerABI.c.o  -o cmTC_ac9db ]
+  ignore line: [clang version 8.0.0 (Fedora 8.0.0-1.fc30)]
+  ignore line: [Target: x86_64-unknown-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/9]
+  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Candidate multilib: 32]
+  ignore line: [@m32]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  link line: [ "/usr/bin/ld" --hash-style=gnu --no-add-needed --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_ac9db /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crt1.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crti.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64 -L/usr/bin/../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../.. -L/usr/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_ac9db.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtend.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crtn.o]
+    arg [/usr/bin/ld] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--no-add-needed] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_ac9db] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crt1.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crti.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtbegin.o] ==> ignore
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/9] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9]
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64]
+    arg [-L/usr/bin/../lib64] ==> dir [/usr/bin/../lib64]
+    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+    arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../..] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../..]
+    arg [-L/usr/bin/../lib] ==> dir [/usr/bin/../lib]
+    arg [-L/lib] ==> dir [/lib]
+    arg [-L/usr/lib] ==> dir [/usr/lib]
+    arg [CMakeFiles/cmTC_ac9db.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtend.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crtn.o] ==> ignore
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9] ==> [/usr/lib/gcc/x86_64-redhat-linux/9]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64] ==> [/usr/lib64]
+  collapse library dir [/usr/bin/../lib64] ==> [/usr/lib64]
+  collapse library dir [/lib/../lib64] ==> [/lib64]
+  collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../..] ==> [/usr/lib]
+  collapse library dir [/usr/bin/../lib] ==> [/usr/lib]
+  collapse library dir [/lib] ==> [/lib]
+  collapse library dir [/usr/lib] ==> [/usr/lib]
+  implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+  implicit dirs: [/usr/lib/gcc/x86_64-redhat-linux/9;/usr/lib64;/lib64;/usr/lib;/lib]
+  implicit fwks: []
+
+
+
+
+Detecting C [-std=c11] compiler features compiled with the following output:
+Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_e6462/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_e6462.dir/build.make CMakeFiles/cmTC_e6462.dir/build
+gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e6462.dir/feature_tests.c.o
+/usr/bin/clang   -std=c11 -o CMakeFiles/cmTC_e6462.dir/feature_tests.c.o   -c /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/feature_tests.c
+Linking C executable cmTC_e6462
+/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e6462.dir/link.txt --verbose=1
+/usr/bin/clang      CMakeFiles/cmTC_e6462.dir/feature_tests.c.o  -o cmTC_e6462 
+gmake[1]: Leaving directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:1c_restrict
+    Feature record: C_FEATURE:1c_static_assert
+    Feature record: C_FEATURE:1c_variadic_macros
+
+
+Detecting C [-std=c99] compiler features compiled with the following output:
+Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_39914/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_39914.dir/build.make CMakeFiles/cmTC_39914.dir/build
+gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_39914.dir/feature_tests.c.o
+/usr/bin/clang   -std=c99 -o CMakeFiles/cmTC_39914.dir/feature_tests.c.o   -c /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/feature_tests.c
+Linking C executable cmTC_39914
+/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_39914.dir/link.txt --verbose=1
+/usr/bin/clang      CMakeFiles/cmTC_39914.dir/feature_tests.c.o  -o cmTC_39914 
+gmake[1]: Leaving directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:1c_restrict
+    Feature record: C_FEATURE:0c_static_assert
+    Feature record: C_FEATURE:1c_variadic_macros
+
+
+Detecting C [-std=c90] compiler features compiled with the following output:
+Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_9db9d/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_9db9d.dir/build.make CMakeFiles/cmTC_9db9d.dir/build
+gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9db9d.dir/feature_tests.c.o
+/usr/bin/clang   -std=c90 -o CMakeFiles/cmTC_9db9d.dir/feature_tests.c.o   -c /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/feature_tests.c
+Linking C executable cmTC_9db9d
+/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9db9d.dir/link.txt --verbose=1
+/usr/bin/clang      CMakeFiles/cmTC_9db9d.dir/feature_tests.c.o  -o cmTC_9db9d 
+gmake[1]: Leaving directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:0c_restrict
+    Feature record: C_FEATURE:0c_static_assert
+    Feature record: C_FEATURE:0c_variadic_macros
+The system is: Linux - 5.1.11-300.fc30.x86_64 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/clang 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is Clang, found in "/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/3.14.3/CompilerIdC/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_b7077/fast 
+/usr/bin/gmake -f CMakeFiles/cmTC_b7077.dir/build.make CMakeFiles/cmTC_b7077.dir/build
+gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b7077.dir/testCCompiler.c.o
+/usr/bin/clang    -o CMakeFiles/cmTC_b7077.dir/testCCompiler.c.o   -c /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_b7077
+/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b7077.dir/link.txt --verbose=1
+/usr/bin/clang      CMakeFiles/cmTC_b7077.dir/testCCompiler.c.o  -o cmTC_b7077 
+gmake[1]: Leaving directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_57f4f/fast 
+/usr/bin/gmake -f CMakeFiles/cmTC_57f4f.dir/build.make CMakeFiles/cmTC_57f4f.dir/build
+gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.o
+/usr/bin/clang   -v -o CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.o   -c /home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/share/cmake-3.14/Modules/CMakeCCompilerABI.c
+clang version 8.0.0 (Fedora 8.0.0-1.fc30)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9
+Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/9
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9
+Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
+Selected multilib: .;@m64
+ "/usr/bin/clang-8" -cc1 -triple x86_64-unknown-linux-gnu -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model static -mthread-model posix -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -munwind-tables -fuse-init-array -target-cpu x86-64 -dwarf-column-info -debugger-tuning=gdb -v -coverage-notes-file /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.gcno -resource-dir /usr/lib64/clang/8.0.0 -internal-isystem /usr/local/include -internal-isystem /usr/lib64/clang/8.0.0/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdebug-compilation-dir /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -fobjc-runtime=gcc -fdiagnostics-show-option -o CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.o -x c /home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/share/cmake-3.14/Modules/CMakeCCompilerABI.c -faddrsig
+clang -cc1 version 8.0.0 based upon LLVM 8.0.0 default target x86_64-unknown-linux-gnu
+ignoring nonexistent directory "/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/local/include
+ /usr/lib64/clang/8.0.0/include
+ /usr/include
+End of search list.
+Linking C executable cmTC_57f4f
+/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_57f4f.dir/link.txt --verbose=1
+/usr/bin/clang     -v CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.o  -o cmTC_57f4f 
+clang version 8.0.0 (Fedora 8.0.0-1.fc30)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9
+Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/9
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9
+Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
+Selected multilib: .;@m64
+ "/usr/bin/ld" --hash-style=gnu --no-add-needed --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_57f4f /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crt1.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crti.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64 -L/usr/bin/../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../.. -L/usr/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtend.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crtn.o
+gmake[1]: Leaving directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/local/include]
+    add: [/usr/lib64/clang/8.0.0/include]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/usr/local/include] ==> [/usr/local/include]
+  collapse include dir [/usr/lib64/clang/8.0.0/include] ==> [/usr/lib64/clang/8.0.0/include]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/usr/local/include;/usr/lib64/clang/8.0.0/include;/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/gmake cmTC_57f4f/fast ]
+  ignore line: [/usr/bin/gmake -f CMakeFiles/cmTC_57f4f.dir/build.make CMakeFiles/cmTC_57f4f.dir/build]
+  ignore line: [gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/clang   -v -o CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.o   -c /home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/share/cmake-3.14/Modules/CMakeCCompilerABI.c]
+  ignore line: [clang version 8.0.0 (Fedora 8.0.0-1.fc30)]
+  ignore line: [Target: x86_64-unknown-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/9]
+  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Candidate multilib: 32]
+  ignore line: [@m32]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  ignore line: [ "/usr/bin/clang-8" -cc1 -triple x86_64-unknown-linux-gnu -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model static -mthread-model posix -mdisable-fp-elim -fmath-errno -masm-verbose -mconstructor-aliases -munwind-tables -fuse-init-array -target-cpu x86-64 -dwarf-column-info -debugger-tuning=gdb -v -coverage-notes-file /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.gcno -resource-dir /usr/lib64/clang/8.0.0 -internal-isystem /usr/local/include -internal-isystem /usr/lib64/clang/8.0.0/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdebug-compilation-dir /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -fobjc-runtime=gcc -fdiagnostics-show-option -o CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.o -x c /home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/share/cmake-3.14/Modules/CMakeCCompilerABI.c -faddrsig]
+  ignore line: [clang -cc1 version 8.0.0 based upon LLVM 8.0.0 default target x86_64-unknown-linux-gnu]
+  ignore line: [ignoring nonexistent directory "/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/local/include]
+  ignore line: [ /usr/lib64/clang/8.0.0/include]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [Linking C executable cmTC_57f4f]
+  ignore line: [/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_57f4f.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/clang     -v CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.o  -o cmTC_57f4f ]
+  ignore line: [clang version 8.0.0 (Fedora 8.0.0-1.fc30)]
+  ignore line: [Target: x86_64-unknown-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/9]
+  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/9]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Candidate multilib: 32]
+  ignore line: [@m32]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  link line: [ "/usr/bin/ld" --hash-style=gnu --no-add-needed --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_57f4f /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crt1.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crti.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64 -L/usr/bin/../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../.. -L/usr/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtend.o /usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crtn.o]
+    arg [/usr/bin/ld] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--no-add-needed] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_57f4f] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crt1.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crti.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtbegin.o] ==> ignore
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/9] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9]
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64]
+    arg [-L/usr/bin/../lib64] ==> dir [/usr/bin/../lib64]
+    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+    arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../..] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../..]
+    arg [-L/usr/bin/../lib] ==> dir [/usr/bin/../lib]
+    arg [-L/lib] ==> dir [/lib]
+    arg [-L/usr/lib] ==> dir [/usr/lib]
+    arg [CMakeFiles/cmTC_57f4f.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/crtend.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64/crtn.o] ==> ignore
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9] ==> [/usr/lib/gcc/x86_64-redhat-linux/9]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../../../lib64] ==> [/usr/lib64]
+  collapse library dir [/usr/bin/../lib64] ==> [/usr/lib64]
+  collapse library dir [/lib/../lib64] ==> [/lib64]
+  collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/9/../../..] ==> [/usr/lib]
+  collapse library dir [/usr/bin/../lib] ==> [/usr/lib]
+  collapse library dir [/lib] ==> [/lib]
+  collapse library dir [/usr/lib] ==> [/usr/lib]
+  implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+  implicit dirs: [/usr/lib/gcc/x86_64-redhat-linux/9;/usr/lib64;/lib64;/usr/lib;/lib]
+  implicit fwks: []
+
+
+
+
+Detecting C [-std=c11] compiler features compiled with the following output:
+Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_eb77f/fast 
+/usr/bin/gmake -f CMakeFiles/cmTC_eb77f.dir/build.make CMakeFiles/cmTC_eb77f.dir/build
+gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_eb77f.dir/feature_tests.c.o
+/usr/bin/clang   -std=c11 -o CMakeFiles/cmTC_eb77f.dir/feature_tests.c.o   -c /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/feature_tests.c
+Linking C executable cmTC_eb77f
+/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_eb77f.dir/link.txt --verbose=1
+/usr/bin/clang      CMakeFiles/cmTC_eb77f.dir/feature_tests.c.o  -o cmTC_eb77f 
+gmake[1]: Leaving directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:1c_restrict
+    Feature record: C_FEATURE:1c_static_assert
+    Feature record: C_FEATURE:1c_variadic_macros
+
+
+Detecting C [-std=c99] compiler features compiled with the following output:
+Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_7dbd6/fast 
+/usr/bin/gmake -f CMakeFiles/cmTC_7dbd6.dir/build.make CMakeFiles/cmTC_7dbd6.dir/build
+gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7dbd6.dir/feature_tests.c.o
+/usr/bin/clang   -std=c99 -o CMakeFiles/cmTC_7dbd6.dir/feature_tests.c.o   -c /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/feature_tests.c
+Linking C executable cmTC_7dbd6
+/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7dbd6.dir/link.txt --verbose=1
+/usr/bin/clang      CMakeFiles/cmTC_7dbd6.dir/feature_tests.c.o  -o cmTC_7dbd6 
+gmake[1]: Leaving directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:1c_restrict
+    Feature record: C_FEATURE:0c_static_assert
+    Feature record: C_FEATURE:1c_variadic_macros
+
+
+Detecting C [-std=c90] compiler features compiled with the following output:
+Change Dir: /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_35895/fast 
+/usr/bin/gmake -f CMakeFiles/cmTC_35895.dir/build.make CMakeFiles/cmTC_35895.dir/build
+gmake[1]: Entering directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_35895.dir/feature_tests.c.o
+/usr/bin/clang   -std=c90 -o CMakeFiles/cmTC_35895.dir/feature_tests.c.o   -c /home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/feature_tests.c
+Linking C executable cmTC_35895
+/home/blindcant/opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_35895.dir/link.txt --verbose=1
+/usr/bin/clang      CMakeFiles/cmTC_35895.dir/feature_tests.c.o  -o cmTC_35895 
+gmake[1]: Leaving directory '/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:0c_restrict
+    Feature record: C_FEATURE:0c_static_assert
+    Feature record: C_FEATURE:0c_variadic_macros

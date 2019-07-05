@@ -1,0 +1,1 @@
+gcc -ansi -Wall -pedantic bar_list.c board.c game.c helpers.c io.c main.c player.c rules.c -o backgammon.out
