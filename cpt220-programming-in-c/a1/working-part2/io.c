@@ -924,10 +924,10 @@ void printOtherPlayer(struct game *thegame)
 
 void printWinningMessage(struct player *currentPlayer)
 {
-	normal_print("You have won the game, %s!\n", currentPlayer->name);
+	normal_print("Congratulations! %s has won the game with a score of %d\n", currentPlayer->name, currentPlayer->score);
 }
 
 void printDrawMessage()
 {
-	normal_print("You both have drawn the game.\n");
+	normal_print("The game was a draw!\n");
 }
