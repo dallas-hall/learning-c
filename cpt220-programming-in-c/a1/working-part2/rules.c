@@ -289,7 +289,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	 * Bottom half = DIR_UP
 	 */
 	if (pieceLocation.direction == DIR_DOWN) {
-		for (i = 0; i < BOARD_HEIGHT / 2; i++) {
+		for (i = 0; i < BOARD_HEIGHT; i++) {
 
 			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
 			/*
@@ -322,7 +322,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 		currentMovePair.start = pieceLocation;
 	}
 	else if (pieceLocation.direction == DIR_UP) {
-		for (i = BOARD_HEIGHT - 1; i >= BOARD_HEIGHT / 2; i--) {
+		for (i = BOARD_HEIGHT - 1; i >= 0; i--) {
 
 			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
 			/*
@@ -379,12 +379,12 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	 */
 	columnOffset = getColumnOffset(y - moves);
 	if (pieceLocation.direction == DIR_DOWN) {
-		for (i = 0; i < BOARD_HEIGHT / 2; i++) {
+		for (i = 0; i < BOARD_HEIGHT; i++) {
 			/*
 			 * Trying to move into the bar list.
 			 * Setting both to the -1 as we don't need to know what this value is.
 			 */
-			if (columnOffset <= 0 && moves >= 1) {
+			if (columnOffset < 0 && moves >= 1) {
 				currentPieceX = -1;
 				currentPieceY = -1;
 				break;
@@ -445,13 +445,13 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 		}
 	}
 	else if (pieceLocation.direction == DIR_UP) {
-		for (i = BOARD_HEIGHT - 1; i >= BOARD_HEIGHT / 2; i--) {
+		for (i = BOARD_HEIGHT - 1; i >= 0; i--) {
 
 			/*
 			 * Trying to move into the bar list.
 			 * Setting both to the -1 as we don't need to know what this value is.
 			 */
-			if (columnOffset <= 0 && moves >= 1) {
+			if (columnOffset < 0 && moves >= 1) {
 				currentPieceX = -1;
 				currentPieceY = -1;
 				break;
