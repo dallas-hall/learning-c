@@ -233,11 +233,15 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 {
 	struct piece_location startPieceLocation;
 	struct piece_location endPieceLocation;
-	enum piece currentPlayerPiece = currentPlayer->token; /* P_WHITE or P_RED */
+	/*
+	 * P_WHITE or P_RED
+	 */
+	enum piece currentPlayerPiece = currentPlayer->token;
+	enum piece otherPlayerPiece = currentPlayer->curgame->other_player->token;
 	enum piece previousBoardPiece = P_INVALID;
 	enum piece currentBoardPiece = P_INVALID;
 	/*
-	 * -99 for invalid
+	 * -99 catch all invalid
 	 * -1 is into into the bar list
 	 * else is x, y of the board
 	 */
@@ -245,7 +249,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	int currentPieceY = -99;
 	struct move_pair currentMovePair;
 	int boardHalfToCheck;
-	BOOLEAN moveToOtherBoardHalf = FALSE;
+	int otherPlayerPieceCount;
 
 	/*
 	 * Remember this is [BOARD_HEIGHT 14][BOARD_WIDTH 12]
@@ -284,12 +288,14 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	 */
 	columnOffset = getColumnOffset(y);
 
-	/*
+	/* # FIRST PIECE
+	 *
 	 * Get the starting move position. If a value returns -99 then that is
 	 * an invalid move because either:
 	 * a) > 7 pieces exist on that column -99
 	 * b) Trying to move an empty space -98
 	 * c) Trying to move the opponents piece -99
+	 * d) Too many other player pieces -97
 	 * there already.
 	 *
 	 * This logic applies to players of both directions.
@@ -391,7 +397,8 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	}
 
 
-	/*
+	/* # SECOND PIECE
+	 *
 	 * Get the second move. Resetting original check values.
 	 *
  	 * All valid movements are reducing the column the intended amount of moves.
@@ -424,6 +431,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	currentPieceY = -99;
 	previousBoardPiece = P_INVALID;
 	currentBoardPiece = P_INVALID;
+	otherPlayerPieceCount = 0;
 
 	if (endPieceLocation.direction == DIR_DOWN) {
 		/*
@@ -432,6 +440,19 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 		boardHalfToCheck = BOARD_HEIGHT / 2;
 		for (i = 0; i <= boardHalfToCheck; i++) {
 			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
+
+			/*
+			 * If the other player has 2 or more pieces on the intended spot
+			 * to move to then it is an invalid move.
+			 */
+			if (currentBoardPiece == otherPlayerPiece) {
+				++otherPlayerPieceCount;
+				if (otherPlayerPieceCount >= 2) {
+					currentPieceX = -97;
+					currentPieceY = -97;
+					break;
+				}
+			}
 
 			/*
 			 * If the first place checked is empty, its good as this is valid
@@ -448,8 +469,9 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			else if (i != 0) {
 				previousBoardPiece = currentPlayer->curgame->game_board[i -
 																		1][columnOffset];
+
 				if (currentBoardPiece == P_EMPTY &&
-					previousBoardPiece == currentPlayerPiece) {
+						 previousBoardPiece == currentPlayerPiece) {
 					/*
 					 * If i == boardHalfToCheck then we've checked 8 places
 					 * which is too many.
@@ -474,6 +496,19 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
 
 			/*
+			 * If the other player has 2 or more pieces on the intended spot
+			 * to move to then it is an invalid move.
+			 */
+			if (currentBoardPiece == otherPlayerPiece) {
+				++otherPlayerPieceCount;
+				if (otherPlayerPieceCount >= 2) {
+					currentPieceX = -97;
+					currentPieceY = -97;
+					break;
+				}
+			}
+
+			/*
 			 * If the first place checked is empty, its good as this is valid
 			 * move for the player.
 			 */
@@ -488,8 +523,10 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			else if (i != BOARD_HEIGHT - 1) {
 				previousBoardPiece = currentPlayer->curgame->game_board[i +
 																		1][columnOffset];
+
+
 				if (currentBoardPiece == P_EMPTY &&
-					previousBoardPiece == currentPlayerPiece) {
+						 previousBoardPiece == currentPlayerPiece) {
 					/*
 					 * If i == boardHalfToCheck then we've checked 8 places
 					 * which is too many.
@@ -497,6 +534,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 					if (i == boardHalfToCheck) {
 						break;
 					}
+
 
 					currentPieceX = i;
 					currentPieceY = columnOffset;
