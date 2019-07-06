@@ -419,8 +419,7 @@ enum input_result getPlayerName(struct player *currentPlayer)
 	return IR_SUCCESS;
 }
 
-enum input_result
-getPlayerInput(struct player *currentPlayer)
+enum input_result getPlayerInput(struct player *currentPlayer, BOOLEAN doubleRolled)
 {
 	/*
 	 * Loop control
@@ -488,13 +487,13 @@ getPlayerInput(struct player *currentPlayer)
 		if (input[strlen(input) - 1] != '\n') {
 			error_print("Buffer overflow.\n");
 			clear_buffer();
-			return getPlayerInput(currentPlayer);
+			return getPlayerInput(currentPlayer, doubleRolled);
 		}
 
 		if(!validInput(input)) {
 			error_print("Invalid input. Must be n:n and for multiple input n:n;m:m\n");
 			sleep(.5);
-			return getPlayerInput(currentPlayer);
+			return getPlayerInput(currentPlayer, doubleRolled);
 		}
 
 		/*
@@ -507,10 +506,18 @@ getPlayerInput(struct player *currentPlayer)
 				normal_print("Current token is: %s\n", tokenPointer);
 			}
 
-			if(moveNumber > MAX_MOVES) {
-				error_print("Too many moves, you can only have at most %d moves.\n", MAX_MOVES);
+			/*
+			 * Need +1 here since moveNumber corresponds to array indices.
+			 */
+			if(moveNumber + 1 > MAX_MOVES && doubleRolled) {
+				error_print("Too many moves, for doubles you can only have at most %d moves.\n", MAX_MOVES);
 				sleep(.5);
-				return getPlayerInput(currentPlayer);
+				return getPlayerInput(currentPlayer, doubleRolled);
+			}
+			else if(moveNumber + 1 > MAX_MOVES - 2 && !doubleRolled) {
+				error_print("Too many moves, for normal rolls you can only have at most %d moves.\n", MAX_MOVES - 2);
+				sleep(.5);
+				return getPlayerInput(currentPlayer, doubleRolled);
 			}
 
 			if (isColumn == 1) {
@@ -519,7 +526,7 @@ getPlayerInput(struct player *currentPlayer)
 					error_print(
 							"Invalid input. Must be numbers : and ; only.\n");
 					sleep(.5);
-					return getPlayerInput(currentPlayer);
+					return getPlayerInput(currentPlayer, doubleRolled);
 				}
 				currentPlayerMoves[moveNumber].index = (int) currentNumber;
 				isColumn = 0;
@@ -530,7 +537,7 @@ getPlayerInput(struct player *currentPlayer)
 					error_print(
 							"Invalid input. Must be numbers : and ; only.\n");
 					sleep(.5);
-					return getPlayerInput(currentPlayer);
+					return getPlayerInput(currentPlayer, doubleRolled);
 				}
 				currentPlayerMoves[moveNumber].count = (int) currentNumber;
 				++moveNumber;
