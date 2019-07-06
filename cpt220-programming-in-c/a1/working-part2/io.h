@@ -165,4 +165,6 @@ void printOtherPlayer();
 
 enum input_result printPromptAndGetInput(char *s);
 
+enum input_result getPlayerInput();
+
 #endif

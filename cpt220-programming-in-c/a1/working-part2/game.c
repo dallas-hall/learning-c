@@ -100,20 +100,6 @@ BOOLEAN game_init(struct game *thegame)
 		printOtherPlayer(thegame);
 	}
 
-	/*
-	 * Print the board
-	 */
-	board_print(thegame->game_board, thegame->current_player->orientation);
-
-	/*
-	 * Player swap.
-	 * Print the board in reverse.
-	 *
-	 * Need to use & here so we get the address of the pointer
-	 */
-	swap_players(&thegame->current_player, &thegame->other_player);
-	board_print(thegame->game_board, thegame->current_player->orientation);
-
 	gameInitialised = TRUE;
 
 	return gameInitialised;
@@ -167,7 +153,21 @@ void play_game(struct falsible_long seed)
 
 	/* implement game loop logic here */
 	while (!quit) {
-		quit = (BOOLEAN) printPromptAndGetInput("Type quit or press ^D (control + D) to exit.\n");
+		/*
+		 * Print the board
+		 */
+		board_print(thegame.game_board, thegame.current_player->orientation);
+		/*
+		 * Current play takes their turn.
+		 */
+		player_take_turn(thegame.current_player);
+
+		/*
+		 * Swap current player with other player
+		 * Need to use & here so we get the address.
+		 */
+		swap_players(&thegame.current_player, &thegame.other_player);
+		/*quit = (BOOLEAN) printPromptAndGetInput("Type quit or press ^D (control + D) to exit.\n");*/
 	}
 
 	/* print the exit message */
