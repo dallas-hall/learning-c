@@ -70,7 +70,7 @@ int error_print(const char format[], ...)
  **/
 static void print_heading(void)
 {
-	char* heading = "Backgammon - Current board state";
+	char *heading = "Backgammon - Current board state";
 	puts(heading);
 	PUTLINE('-', strlen(heading));
 }
@@ -82,19 +82,15 @@ static void print_top_row(enum orientation orient)
 {
 	int xcount;
 	/* for clockwise, print the numbers 12 down to 1 */
-	if (orient == OR_CLOCKWISE)
-	{
-		for (xcount = BOARD_WIDTH; xcount > 0; --xcount)
-		{
+	if (orient == OR_CLOCKWISE) {
+		for (xcount = BOARD_WIDTH; xcount > 0; --xcount) {
 			normal_print("| %-2d ", xcount);
 		}
 	}
-	else
-	{
+	else {
 		/* for anticlockwise, print the numbers 13 to 24 */
 		for (xcount = BOARD_WIDTH + 1; xcount <= 2 * BOARD_WIDTH;
-				++xcount)
-		{
+				++xcount) {
 			normal_print("| %-2d ", xcount);
 		}
 	}
@@ -110,22 +106,18 @@ static void print_bottom_row(enum orientation orient)
 {
 	int xcount;
 	/* if the player's orientation is clockwise print 13 to 24 */
-	if (orient == OR_CLOCKWISE)
-	{
+	if (orient == OR_CLOCKWISE) {
 		for (xcount = BOARD_WIDTH + 1; xcount <= BOARD_WIDTH * 2;
-				++xcount)
-		{
+				++xcount) {
 
 			normal_print("| %-2d ", xcount);
 		}
 	}
-	else
-	{
+	else {
 		/* if the player's orientation is anticlockwise, print the
 		 * numbers 12 down to 1
 		 */
-		for (xcount = BOARD_WIDTH; xcount > 0; --xcount)
-		{
+		for (xcount = BOARD_WIDTH; xcount > 0; --xcount) {
 
 			normal_print("| %-2d ", xcount);
 		}
@@ -141,13 +133,11 @@ static void print_row(int rownum, board theboard)
 {
 	int count;
 	putchar('|');
-	for (count = 0; count < BOARD_WIDTH; ++count)
-	{
+	for (count = 0; count < BOARD_WIDTH; ++count) {
 		/* for each cell, print the appropriate code for a blank, red or
 		 * white token
 		 */
-		switch (theboard[rownum][count])
-		{
+		switch (theboard[rownum][count]) {
 			case P_EMPTY:
 				normal_print(" %2c |", EMPTY_TOKEN);
 				break;
@@ -180,15 +170,295 @@ void board_print(board theboard, enum orientation orient)
 	print_heading();
 	print_top_row(orient);
 
-	for (row_count = 0; row_count < BOARD_HEIGHT; ++row_count)
-	{
+	for (row_count = 0; row_count < BOARD_HEIGHT; ++row_count) {
 		print_row(row_count, theboard);
 	}
 	print_bottom_row(orient);
 	printBoardFooterMessage();
 }
 
+enum input_result printPromptAndGetInput(char *s)
+{
+	char input[MAXPROMPTLEN];
+	char *result;
+	const char *triggerWord = "quit";
+	int i;
+
+	normal_print("%s", s);
+
+	/*
+	 * Need to account for the '\n' and '\0' that fgets adds.
+	 * If the char last isn't '\n' then we know we didn't receive all the input.
+	 * We need to remove the '\n' as well.
+	 *
+	 * Got this idea from Chapter 08 C How To Program 6e and Paul's week 4 sumup.c
+	 */
+	if (fgets(input, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
+		/*
+		 * We want to return true here on ^D (control + D)
+		 */
+		return IR_QUIT;
+	}
+
+	/*
+	 * Remember that strlen doesn't include the \0 in its count
+	 */
+	if (input[strlen(input) - 1] != '\n') {
+		error_print("Buffer overflow.\n");
+		clear_buffer();
+		return printPromptAndGetInput(s);
+	}
+
+	/*
+	 * Need minus 1 so we exclude reading the \n
+	 * Converting the input to lower case and searching for quit with strstr
+	 *
+	 * Got this idea from Chapter 08 C How To Program 6e
+	 */
+	for (i = 0; i < strlen(input) - 1; i++) {
+		input[i] = tolower(input[i]);
+	}
+
+	result = strstr(input, triggerWord);
+
+	if (DEBUGGING_IO) {
+		printf("[DEBUG] %s compared to %s is %s\n", triggerWord, input, result);
+	}
+
+	if (result != NULL) {
+		return IR_QUIT;
+	}
+
+	return IR_FAILURE;
+}
+
+void printBoardFooterMessage()
+{
+	/*
+	 * Store the pointer to the game object.
+	 */
+	struct game *theGame = getGame();
+	char *name = theGame->current_player->name;
+	int score = theGame->current_player->score;
+	char *colour;
+	char *direction;
+	/*char token;*/
+	char barCount[6]; /* including the '\0' */
+	char output[256];
+
+	if (theGame->current_player->orientation == OR_CLOCKWISE) {
+		colour = "WHITE";
+		direction = "CLOCKWISE";
+		/*token = 'X';*/
+	}
+	else {
+		colour = "RED";
+		direction = "ANTICLOCKWISE";
+		/*token = 'O';*/
+	}
+
+	/*
+	 * TODO - check what happens with a number
+	 */
+	if (theGame->current_player->bar_list.token_count == 0) {
+		strcpy(barCount, "EMPTY");
+	}
+	else {
+		normal_print(barCount, "%d",
+					 theGame->current_player->bar_list.token_count);
+	}
+
+	/*
+	 * Got the idea to use sprintf from chapter 08, C How To Program 6e
+	 */
+
+	if (theGame->current_player->orientation == OR_CLOCKWISE) {
+		/*sprintf(output,
+				"It is %s%s%s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
+				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
+				score, color_strings[COLOR_WHITE], colour,
+				color_strings[COLOR_RESET], color_strings[COLOR_WHITE], token,
+				color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
+				direction, color_strings[COLOR_RESET], barCount);*/
+		sprintf(output,
+				"It is %s%s's%s turn and their score is %d, their colour is %s%s%s, their direction is %s%s%s and their bar list is %s.\n",
+				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
+				score, color_strings[COLOR_WHITE], colour,
+				color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
+				direction, color_strings[COLOR_RESET], barCount);
+	}
+	else {
+		/*sprintf(output,
+				"It is your turn %s%s%s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
+				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
+				score, color_strings[COLOR_RED], colour,
+				color_strings[COLOR_RESET], color_strings[COLOR_RED], token,
+				color_strings[COLOR_RESET], color_strings[COLOR_RED],
+				direction, color_strings[COLOR_RESET], barCount);*/
+		sprintf(output,
+				"It is %s%s's%s turn and their score is %d, their colour is %s%s%s, their direction is %s%s%s and their bar list is %s.\n",
+				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
+				score, color_strings[COLOR_RED], colour,
+				color_strings[COLOR_RESET], color_strings[COLOR_RED],
+				direction, color_strings[COLOR_RESET], barCount);
+	}
+	normal_print(fold(output));
+
+
+	/*normal_print("It is your turn %s. Your score is %d, your colour is %s",
+				 name,
+				 score, colour);
+	normal_print(
+			", your token is %c, your direction is %s, and your bar list is %s.\n",
+			token, direction, barCount);*/
+}
+
+enum input_result getPlayerName(struct player *currentPlayer)
+{
+	char input[MAXPROMPTLEN];
+	char output[256];
+	struct game gamePointer = *getGame();
+
+	int i;
+
+	if (DEBUGGING_IO) {
+		normal_print("%s\n", "[DEBUG] player.c - Entering getName.");
+	}
+
+	if (strlen(gamePointer.players[0].name) == 0) {
+		normal_print("Player 1, enter your name (max 20 characters): ", input);
+	}
+	else if (strlen(gamePointer.players[1].name) == 0) {
+		normal_print("Player 2, enter your name (max 20 characters): ", input);
+	}
+
+	/*
+	 * Need to account for the '\n' and '\0' that fgets adds.
+	 * If the char last isn't '\n' then we know we didn't receive all the input.
+	 * We need to remove the '\n' as well.
+	 *
+	 * Got this idea from Chapter 08 C How To Program 6e and Paul's week 4 sumup.c
+	 */
+	if (fgets(input, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
+		return IR_FAILURE;
+	}
+
+	/*
+	 * Remember that strlen doesn't include the \0 in its count
+	 */
+	if (input[strlen(input) - 1] != '\n') {
+		error_print("Buffer overflow.\n");
+		clear_buffer();
+		return getPlayerName(currentPlayer);
+	}
+
+	if (strlen(input) > NAME_LEN + 1) {
+		error_print("Input too long, less than 20 only.\n");
+		return getPlayerName(currentPlayer);
+	}
+
+	if (strlen(input) < MIN_NAME_LEN) {
+		error_print("Input too short, greater than 1 only.\n");
+		return getPlayerName(currentPlayer);
+	}
+
+	/*
+	 * Need to do -1 so we ignore the \n that is still there
+	 */
+	for (i = 0; i < strlen(input) - 1; i++) {
+		if (!isalnum(input[i])) {
+			sprintf(output,
+					"Invalid character(s) found. Please use only letters and numbers.\n");
+			error_print(fold(output));
+			return getPlayerName(currentPlayer);
+		}
+	}
+
+	if (DEBUGGING_IO) {
+		normal_print(
+				"[DEBUG] player.c - strlen(s) before removing \\n is %ld\n",
+				strlen(input));
+		normal_print("[DEBUG] player.c - s is %s\n", input);
+	}
+
+	/*
+ * Replace \n with \0
+ */
+
+	input[strlen(input) - 1] = '\0';
+
+	if (DEBUGGING_IO) {
+		normal_print("[DEBUG] player.c - strlen(s) after removing \\n is %ld\n",
+					 strlen(input));
+		normal_print("[DEBUG] player.c - s is %s\n", input);
+
+		normal_print("%s\n", "[DEBUG] player.c - Printing s with for loop.");
+		for (i = 0; i < strlen(input); i++) {
+			normal_print("%c", input[i]);
+		}
+		normal_print("\n");
+	}
+
+	/*
+	 * Copy the input string into the player
+	 */
+	strcpy(currentPlayer->name, input);
+
+
+	if (DEBUGGING_IO) {
+		normal_print("[DEBUG] player.c - aplayer -> name is %s\n",
+					 currentPlayer->name);
+		normal_print("%s\n",
+					 "[DEBUG] player.c - Printing aplayer -> name with for loop.");
+		for (i = 0; i < strlen(input); i++) {
+			normal_print("%c", currentPlayer->name[i]);
+		}
+		normal_print("\n");
+	}
+
+	return IR_SUCCESS;
+}
+
+enum input_result getPlayerInput(struct player *currentPlayer)
+{
+	enum input_result done = IR_FAILURE;
+
+	char *msg = "Please enter moves in the format of 3:4;2:5 where 3 abd 2 are column numbers and 4 and 5 are the number of spaces to move a token at that location. If you want to take a token from your bar list, enter the starting column as B: ";
+	char input[MAXPROMPTLEN];
+	char output[256];
+
+
+	do {
+		normal_print(fold(msg));
+		/*
+ 		 * Quit the game if player presses control + d
+ 		 */
+		if (fgets(input, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
+			return IR_QUIT;
+		}
+
+		/*
+ 		 * Swap players if the input was nothing.
+ 		 */
+		if (strlen(input) == 1 && input[0] == '\n') {
+			return IR_SUCCESS;
+		}
+
+		/*
+ 		 * Remember that strlen doesn't include the \0 in its count
+		 */
+		if (input[strlen(input) - 1] != '\n') {
+			error_print("Buffer overflow.\n");
+			clear_buffer();
+			return getPlayerInput(currentPlayer);
+		}
+	} while (!done);
+
+	return IR_SUCCESS;
+}
+
 /*
+ * !!! THE CODE BELOW IS NOT USED, REPLACED WITH SOLUTION CODE. !!!
  * Replaced this with the sample solution as it would be a time sink to adjust
  * and make it the same as the spec. I had subtle printing differences.
  */
@@ -377,192 +647,6 @@ void printBoardHeaderMessage()
 	normal_print("\nCPT220 Backgammon - Current Board State\n");
 }
 
-void printBoardFooterMessage()
-{
-	/*
-	 * Store the pointer to the game object.
-	 */
-	struct game *theGame = getGame();
-	char *name = theGame->current_player->name;
-	int score = theGame->current_player->score;
-	char *colour;
-	char *direction;
-	char token;
-	char barCount[6]; /* including the '\0' */
-	char output[256];
-
-	if (theGame->current_player->orientation == OR_CLOCKWISE) {
-		colour = "WHITE";
-		direction = "CLOCKWISE";
-		token = 'X';
-	}
-	else {
-		colour = "RED";
-		direction = "ANTICLOCKWISE";
-		token = 'O';
-	}
-
-	/*
-	 * TODO - check what happens with a number
-	 */
-	if (theGame->current_player->bar_list.token_count == 0) {
-		strcpy(barCount, "EMPTY");
-	}
-	else {
-		normal_print(barCount, "%d",
-					 theGame->current_player->bar_list.token_count);
-	}
-
-	/*
-	 * Got the idea to use sprintf from chapter 08, C How To Program 6e
-	 */
-
-	if (theGame->current_player->orientation == OR_CLOCKWISE) {
-		/*sprintf(output,
-				"It is %s%s%s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
-				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
-				score, color_strings[COLOR_WHITE], colour,
-				color_strings[COLOR_RESET], color_strings[COLOR_WHITE], token,
-				color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
-				direction, color_strings[COLOR_RESET], barCount);*/
-		sprintf(output,
-				"It is %s%s's%s turn and their score is %d, their colour is %s%s%s, their direction is %s%s%s and their bar list is %s.\n",
-				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
-				score, color_strings[COLOR_WHITE], colour,
-				color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
-				direction, color_strings[COLOR_RESET], barCount);
-	}
-	else {
-		/*sprintf(output,
-				"It is your turn %s%s%s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
-				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
-				score, color_strings[COLOR_RED], colour,
-				color_strings[COLOR_RESET], color_strings[COLOR_RED], token,
-				color_strings[COLOR_RESET], color_strings[COLOR_RED],
-				direction, color_strings[COLOR_RESET], barCount);*/
-		sprintf(output,
-				"It is %s%s's%s turn and their score is %d, their colour is %s%s%s, their direction is %s%s%s and their bar list is %s.\n",
-				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
-				score, color_strings[COLOR_RED], colour,
-				color_strings[COLOR_RESET], color_strings[COLOR_RED],
-				direction, color_strings[COLOR_RESET], barCount);
-	}
-	normal_print(fold(output));
-
-
-	/*normal_print("It is your turn %s. Your score is %d, your colour is %s",
-				 name,
-				 score, colour);
-	normal_print(
-			", your token is %c, your direction is %s, and your bar list is %s.\n",
-			token, direction, barCount);*/
-}
-
-enum input_result getPlayerName(struct player *currentPlayer)
-{
-	char input[MAXPROMPTLEN];
-	char output[256];
-	struct game gamePointer = *getGame();
-
-	int i;
-
-	if (DEBUGGING_IO) {
-		normal_print("%s\n", "[DEBUG] player.c - Entering getName.");
-	}
-
-	if (strlen(gamePointer.players[0].name) == 0) {
-		normal_print("Player 1, enter your name (max 20 characters): ", input);
-	}
-	else if (strlen(gamePointer.players[1].name) == 0) {
-		normal_print("Player 2, enter your name (max 20 characters): ", input);
-	}
-
-	/*
-	 * Need to account for the '\n' and '\0' that fgets adds.
-	 * If the char last isn't '\n' then we know we didn't receive all the input.
-	 * We need to remove the '\n' as well.
-	 *
-	 * Got this idea from Chapter 08 C How To Program 6e and Paul's week 4 sumup.c
-	 */
-	if (fgets(input, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
-		return IR_FAILURE;
-	}
-
-	/*
-	 * Remember that strlen doesn't include the \0 in its count
-	 */
-	if (input[strlen(input) - 1] != '\n') {
-		error_print("Buffer overflow.\n");
-		clear_buffer();
-		return getPlayerName(currentPlayer);
-	}
-
-	if (strlen(input) > NAME_LEN + 1) {
-		error_print("Input too long, less than 20 only.\n");
-		return getPlayerName(currentPlayer);
-	}
-
-	if (strlen(input) < MIN_NAME_LEN) {
-		error_print("Input too short, greater than 1 only.\n");
-		return getPlayerName(currentPlayer);
-	}
-
-	/*
-	 * Need to do -1 so we ignore the \n that is still there
-	 */
-	for (i = 0; i < strlen(input) - 1; i++) {
-		if (!isalnum(input[i])) {
-			sprintf(output,
-					"Invalid character(s) found. Please use only letters and numbers.\n");
-			error_print(fold(output));
-			return getPlayerName(currentPlayer);
-		}
-	}
-
-	if (DEBUGGING_IO) {
-		normal_print(
-				"[DEBUG] player.c - strlen(s) before removing \\n is %ld\n",
-				strlen(input));
-		normal_print("[DEBUG] player.c - s is %s\n", input);
-	}
-
-	/*
- * Replace \n with \0
- */
-
-	input[strlen(input) - 1] = '\0';
-
-	if (DEBUGGING_IO) {
-		normal_print("[DEBUG] player.c - strlen(s) after removing \\n is %ld\n",
-					 strlen(input));
-		normal_print("[DEBUG] player.c - s is %s\n", input);
-
-		normal_print("%s\n", "[DEBUG] player.c - Printing s with for loop.");
-		for (i = 0; i < strlen(input); i++) {
-			normal_print("%c", input[i]);
-		}
-		normal_print("\n");
-	}
-
-	/*
-	 * Copy the input string into the player
-	 */
-	strcpy(currentPlayer->name, input);
-
-
-	if (DEBUGGING_IO) {
-		normal_print("[DEBUG] player.c - aplayer -> name is %s\n",
-					 currentPlayer->name);
-		normal_print("%s\n",
-					 "[DEBUG] player.c - Printing aplayer -> name with for loop.");
-		for (i = 0; i < strlen(input); i++) {
-			normal_print("%c", currentPlayer->name[i]);
-		}
-		normal_print("\n");
-	}
-
-	return IR_SUCCESS;
-}
 
 /*
  * The next 2 functions are used during debugging, so we can see which pointer
@@ -599,57 +683,3 @@ void printOtherPlayer(struct game *thegame)
 }
 
 
-enum input_result printPromptAndGetInput(char *s)
-{
-	char input[MAXPROMPTLEN];
-	char *result;
-	const char *triggerWord = "quit";
-	int i;
-
-	normal_print("%s", s);
-
-	/*
-	 * Need to account for the '\n' and '\0' that fgets adds.
-	 * If the char last isn't '\n' then we know we didn't receive all the input.
-	 * We need to remove the '\n' as well.
-	 *
-	 * Got this idea from Chapter 08 C How To Program 6e and Paul's week 4 sumup.c
-	 */
-	if (fgets(input, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
-		/*
-		 * We want to return true here on ^D (control + D)
-		 */
-		return IR_QUIT;
-	}
-
-	/*
-	 * Remember that strlen doesn't include the \0 in its count
-	 */
-	if (input[strlen(input) - 1] != '\n') {
-		error_print("Buffer overflow.\n");
-		clear_buffer();
-		return printPromptAndGetInput(s);
-	}
-
-	/*
-	 * Need minus 1 so we exclude reading the \n
-	 * Converting the input to lower case and searching for quit with strstr
-	 *
-	 * Got this idea from Chapter 08 C How To Program 6e
-	 */
-	for (i = 0; i < strlen(input) - 1; i++) {
-		input[i] = tolower(input[i]);
-	}
-
-	result = strstr(input, triggerWord);
-
-	if (DEBUGGING_IO) {
-		printf("[DEBUG] %s compared to %s is %s\n", triggerWord, input, result);
-	}
-
-	if (result != NULL) {
-		return IR_QUIT;
-	}
-
-	return IR_FAILURE;
-}
