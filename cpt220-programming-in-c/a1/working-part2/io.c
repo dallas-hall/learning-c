@@ -185,6 +185,7 @@ void board_print(board theboard, enum orientation orient)
 		print_row(row_count, theboard);
 	}
 	print_bottom_row(orient);
+	printBoardFooterMessage();
 }
 
 /*
@@ -417,20 +418,32 @@ void printBoardFooterMessage()
 	 */
 
 	if (theGame->current_player->orientation == OR_CLOCKWISE) {
-		sprintf(output,
-				"It is your turn %s%s%s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
+		/*sprintf(output,
+				"It is %s%s%s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
 				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
 				score, color_strings[COLOR_WHITE], colour,
 				color_strings[COLOR_RESET], color_strings[COLOR_WHITE], token,
 				color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
+				direction, color_strings[COLOR_RESET], barCount);*/
+		sprintf(output,
+				"It is %s%s's%s turn and their score is %d, their colour is %s%s%s, their direction is %s%s%s and their bar list is %s.\n",
+				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
+				score, color_strings[COLOR_WHITE], colour,
+				color_strings[COLOR_RESET], color_strings[COLOR_WHITE],
 				direction, color_strings[COLOR_RESET], barCount);
 	}
 	else {
-		sprintf(output,
+		/*sprintf(output,
 				"It is your turn %s%s%s. Your score is %d, your colour is %s%s%s, your token is %s%c%s, your direction is %s%s%s, and your bar list is %s.\n",
 				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
 				score, color_strings[COLOR_RED], colour,
 				color_strings[COLOR_RESET], color_strings[COLOR_RED], token,
+				color_strings[COLOR_RESET], color_strings[COLOR_RED],
+				direction, color_strings[COLOR_RESET], barCount);*/
+		sprintf(output,
+				"It is %s%s's%s turn and their score is %d, their colour is %s%s%s, their direction is %s%s%s and their bar list is %s.\n",
+				fontEffectStrings[FONT_BOLD], name, color_strings[COLOR_RESET],
+				score, color_strings[COLOR_RED], colour,
 				color_strings[COLOR_RESET], color_strings[COLOR_RED],
 				direction, color_strings[COLOR_RESET], barCount);
 	}
