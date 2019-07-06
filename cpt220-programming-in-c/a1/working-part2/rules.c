@@ -287,9 +287,9 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	/*
 	 * Get the starting move position. If a value returns -99 then that is
 	 * an invalid move because either:
-	 * a) > 7 pieces exist on that column
-	 * b) Trying to move an empty space
-	 * c) Trying to move the opponents piece
+	 * a) > 7 pieces exist on that column -99
+	 * b) Trying to move an empty space -98
+	 * c) Trying to move the opponents piece -99
 	 * there already.
 	 *
 	 * This logic applies to players of both directions.
@@ -309,10 +309,11 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
 
 			/*
-			 * If the first place checked is empty, its bad as there is valid
-			 * move for the player.
+			 * If the first place checked is empty, invalid move.
 			 */
 			if (i == 0 && currentBoardPiece == P_EMPTY) {
+				currentPieceX = -98;
+				currentPieceY = -98;
 				break;
 			}
 			else if (i != 0) {
@@ -347,10 +348,11 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
 
 			/*
-			 * If the first place checked is empty, its bad as there is valid
-			 * move for the player.
+			 * If the first place checked is empty, invalid move.
 			 */
 			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
+				currentPieceX = -98;
+				currentPieceY = -98;
 				break;
 			}
 			else if (i != BOARD_HEIGHT - 1) {
@@ -463,7 +465,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			}
 		}
 	}
-	else if (startPieceLocation.direction == DIR_UP) {
+	else if (endPieceLocation.direction == DIR_UP) {
 		/*
 		 * Check 8 places, 13 to 6
 		 */
