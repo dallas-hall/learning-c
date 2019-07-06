@@ -243,6 +243,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	int currentPieceX = -99;
 	int currentPieceY = -99;
 	struct move_pair currentMovePair;
+	int boardHalfToCheck;
 
 	/*
 	 * Remember this is [BOARD_HEIGHT 14][BOARD_WIDTH 12]
@@ -259,12 +260,13 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	 * The anticlockwise player as 13-24 on the top and 12-1 on bottom
 	 */
 	if (currentPlayer->orientation == OR_CLOCKWISE) {
-		if (y >= 13 && y <= 24) {
-			pieceLocation.direction = DIR_UP;
-		}
-		else if (y >= 1 && y <= 12) {
+		if (y >= 1 && y <= 12) {
 			pieceLocation.direction = DIR_DOWN;
 		}
+		else if (y >= 13 && y <= 24) {
+			pieceLocation.direction = DIR_UP;
+		}
+
 	}
 	else if (currentPlayer->orientation == OR_ANTICLOCKWISE) {
 		if (y >= 13 && y <= 24) {
@@ -281,19 +283,25 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	columnOffset = getColumnOffset(y);
 
 	/*
-	 * For starting moves, for the bottom half of the board, get the piece on
-	 * top. For the top half of the board, get the piece on bottom. This is
-	 * calculated via the piece direction.
+	 * This logic applies to players of both directions.
 	 *
-	 * Top half = DIR_DOWN
-	 * Bottom half = DIR_UP
+	 * For starting moves from the top, get the piece at the bottom if it
+	 * exists. Otherwise error.
+	 *
+	 * For starting moves from the bottom, get the piece at the top if it
+	 * exists. Otherwise error.
 	 */
 	if (pieceLocation.direction == DIR_DOWN) {
-		for (i = 0; i < BOARD_HEIGHT; i++) {
-
+		/*
+		 * Check 8 places, 0 to 7
+		 */
+		boardHalfToCheck = BOARD_HEIGHT / 2;
+		for (i = 0; i <= boardHalfToCheck; i++) {
 			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
+
 			/*
-			 * If the first place checked is empty, its bad.
+			 * If the first place checked is empty, its bad as there is valid
+			 * move for the player.
 			 */
 			if (i == 0 && currentBoardPiece == P_EMPTY) {
 				break;
@@ -304,6 +312,14 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 				if (currentBoardPiece == P_EMPTY &&
 					previousBoardPiece == currentPlayerPiece) {
 					/*
+					 * If i == boardHalfToCheck then we've checked 8 places
+					 * which is too many.
+					 */
+					if (i == boardHalfToCheck) {
+						break;
+					}
+
+					/*
 					 * Remember - 1 here since we are comparing previous values.
 					 */
 					currentPieceX = i - 1;
@@ -311,44 +327,47 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 					break;
 				}
 			}
-
-			if (DEBUGGING_RULES) {
-				printf("Current piece at [%d][%d] %d.\n", i, columnOffset,
-					   currentBoardPiece);
-			}
 		}
 		pieceLocation.x = currentPieceX;
 		pieceLocation.y = currentPieceY;
 		currentMovePair.start = pieceLocation;
 	}
 	else if (pieceLocation.direction == DIR_UP) {
-		for (i = BOARD_HEIGHT - 1; i >= 0; i--) {
-
+		/*
+		 * Check 8 places, 13 to 6
+		 */
+		boardHalfToCheck = (BOARD_HEIGHT / 2) - 1;
+		for (i = BOARD_HEIGHT - 1; i >= boardHalfToCheck; i--) {
 			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
+
 			/*
-			 * If the first place checked is empty, its bad.
+			 * If the first place checked is empty, its bad as there is valid
+			 * move for the player.
 			 */
 			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
 				break;
 			}
 			else if (i != BOARD_HEIGHT - 1) {
-				/*
-				 * Remember plus 1 here because we are going up the board and
-				 * the previous value is plus 1 away.
-				 */
 				previousBoardPiece = currentPlayer->curgame->game_board[i +
 																		1][columnOffset];
-				if (previousBoardPiece == currentPlayerPiece &&
-					currentBoardPiece == P_EMPTY) {
+				if (currentBoardPiece == P_EMPTY &&
+					previousBoardPiece == currentPlayerPiece) {
+					/*
+					 * If i == boardHalfToCheck then we've checked 8 places
+					 * which is too many.
+					 */
+					if (i == boardHalfToCheck) {
+						break;
+					}
+
+					/*
+					 * Remember + 1 here since we are comparing previous values
+					 * that are higher in the array.
+					 */
 					currentPieceX = i + 1;
 					currentPieceY = columnOffset;
 					break;
 				}
-			}
-
-			if (DEBUGGING_RULES) {
-				printf("Current piece at [%d][%d] %d.\n", i, columnOffset,
-					   currentBoardPiece);
 			}
 		}
 		pieceLocation.x = currentPieceX;
@@ -363,163 +382,6 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			   currentMovePair.start.direction);
 	}
 
-	/*
-	 * For finishing moves, get the final destination.
-	 * We will validate this move later.
-	 */
-	currentPieceX = -99;
-	currentPieceY = -99;
-	previousBoardPiece = P_INVALID;
-	currentBoardPiece = P_INVALID;
-
-
-	/*
-	 * All valid movements are reducing the column the intended amount of moves.
-	 * We check for negative numbers previously to ensure this is correct.
-	 */
-	columnOffset = getColumnOffset(y - moves);
-	if (pieceLocation.direction == DIR_DOWN) {
-		for (i = 0; i < BOARD_HEIGHT; i++) {
-			/*
-			 * Trying to move into the bar list.
-			 * Setting both to the -1 as we don't need to know what this value is.
-			 */
-			if (columnOffset < 0 && moves >= 1) {
-				currentPieceX = -1;
-				currentPieceY = -1;
-				break;
-			}
-
-			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
-			/*
-			 * If the first place checked is empty, its good.
-			 */
-			if (i == 0 && currentBoardPiece == P_EMPTY) {
-				currentPieceX = i;
-				currentPieceY = columnOffset;
-				break;
-			}
-			else if (i != 0) {
-				previousBoardPiece = currentPlayer->curgame->game_board[i -
-																		1][columnOffset];
-				if (previousBoardPiece == currentPlayerPiece &&
-					currentBoardPiece == P_EMPTY) {
-					if(currentPlayer->orientation == OR_CLOCKWISE) {
-						/*
-						 * Remember - 1 here since we are comparing previous
-						 * values.
-						 */
-						currentPieceX = i - 1;
-						currentPieceY = columnOffset;
-					}
-					else if(currentPlayer->orientation == OR_ANTICLOCKWISE) {
-						/*
-						 * Don't need - 1 here for anticlockwise
-						 */
-						currentPieceX = i;
-						currentPieceY = columnOffset;
-					}
-
-					break;
-				}
-			}
-			else if (currentBoardPiece ==
-					 currentPlayer->curgame->other_player->token &&
-					 previousBoardPiece == P_EMPTY) {
-				/*
-				 * No need to - 1 here since we have flipped the check above.
-				 * Because we are processing the array upside down.
-				 */
-				currentPieceX = i;
-				currentPieceY = columnOffset;
-				break;
-			}
-			/*
-			 * TODO APPLY WHAT HAPPENS WHEN YOU LAND ON AN OPPONENT
-			 */
-
-			if (DEBUGGING_RULES) {
-				printf("Current piece at [%d][%d] %d.\n", i, columnOffset,
-					   currentBoardPiece);
-			}
-		}
-	}
-	else if (pieceLocation.direction == DIR_UP) {
-		for (i = BOARD_HEIGHT - 1; i >= 0; i--) {
-
-			/*
-			 * Trying to move into the bar list.
-			 * Setting both to the -1 as we don't need to know what this value is.
-			 */
-			if (columnOffset < 0 && moves >= 1) {
-				currentPieceX = -1;
-				currentPieceY = -1;
-				break;
-			}
-
-			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
-			/*
-			 * If the first place checked is empty, its good.
-			 */
-			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
-				currentPieceX = i;
-				currentPieceY = columnOffset;
-				break;
-			}
-			else if (i != BOARD_HEIGHT - 1) {
-				/*
-				 * Remember plus 1 here because we are going up the board and
-				 * the previous value is plus 1 away.
-				 */
-				previousBoardPiece = currentPlayer->curgame->game_board[i +
-																		1][columnOffset];
-				if (previousBoardPiece == currentPlayerPiece &&
-					currentBoardPiece == P_EMPTY) {
-					/*
-					 * No need to plus 1 here since we want to place this token
-					 * on the empty spot.
-					 */
-					currentPieceX = i;
-					currentPieceY = columnOffset;
-					break;
-				}
-				/*
-				 * TODO APPLY WHAT HAPPENS WHEN YOU LAND ON AN OPPONENT
-				 */
-				else if (currentBoardPiece ==
-						 currentPlayer->curgame->other_player->token &&
-						 previousBoardPiece == P_EMPTY) {
-					/*
-					 * No need to - 1 here since we have flipped the check above.
-					 * Because we are processing the array upside down.
-					 */
-					currentPieceX = i;
-					currentPieceY = columnOffset;
-					break;
-				}
-			}
-
-			if (DEBUGGING_RULES) {
-				printf("Current piece at [%d][%d] %d.\n", i, columnOffset,
-					   currentBoardPiece);
-			}
-		}
-	}
-
-
-	/*
-	 * For ending moves, get the correct x and y for the empty spot
-	 */
-	pieceLocation.x = currentPieceX;
-	pieceLocation.y = currentPieceY;
-	currentMovePair.end = pieceLocation;
-
-	if (1) {
-		printf("currentMovePair.end.x is %d\n", currentMovePair.end.x);
-		printf("currentMovePair.end.y is %d\n", currentMovePair.end.y);
-		printf("currentMovePair.end.direction is %d\n",
-			   currentMovePair.end.direction);
-	}
 
 	return currentMovePair;
 }
