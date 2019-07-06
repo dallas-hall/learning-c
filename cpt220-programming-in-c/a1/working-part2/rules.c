@@ -331,12 +331,11 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	for (i = 0; i < BOARD_HEIGHT; i++) {
 		/*
 		 * Trying to move into the bar list.
-		 * Setting both to the columnOffSet as we don't need to know what
-		 * this value is.
+		 * Setting both to the -1 as we don't need to know what this value is.
 		 */
-		if (columnOffset < 0) {
-			currentPieceX = columnOffset;
-			currentPieceY = columnOffset;
+		if (columnOffset <= 0 && moves >= 1) {
+			currentPieceX = -1;
+			currentPieceY = -1;
 			break;
 		}
 

@@ -527,44 +527,58 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 				return getPlayerInput(currentPlayer, diceRolls);
 			}
 
+			currentNumber = strtol(tokenPointer, &strtolRemainderPointer, 0);
+
 			/*
-			 * Store the column index.
+			 * Invalid characters found.
+			 */
+			if (strlen(strtolRemainderPointer) > 0) {
+				error_print(
+						"Invalid input. Must be numbers : and ; only.\n");
+				/*
+				 * Sleeping so the error message is printed first.
+				 */
+				sleep(.5);
+				return getPlayerInput(currentPlayer, diceRolls);
+			}
+
+			/*
+			 * This ensures a valid move, as you can only move forward in
+			 * backgammon and between 1 and 24.
+			 */
+			if (currentNumber <= 0) {
+				error_print("Invalid input. Must be whole integers only.\n");
+				/*
+				  * Sleeping so the error message is printed first.
+				  */
+				sleep(.5);
+				return getPlayerInput(currentPlayer, diceRolls);
+			}
+			else if (currentNumber > 24) {
+				error_print("Invalid input. Integers higher than 24 are invalid.\n");
+				/*
+				  * Sleeping so the error message is printed first.
+				  */
+				sleep(.5);
+				return getPlayerInput(currentPlayer, diceRolls);
+			}
+
+
+			/*
+			 * Store the column index or move amount.
 			 */
 			if (isColumn == 1) {
-				currentNumber = strtol(tokenPointer, &strtolRemainderPointer,
-									   0);
-				if (strlen(strtolRemainderPointer) > 0) {
-					error_print(
-							"Invalid input. Must be numbers : and ; only.\n");
-					/*
-					 * Sleeping so the error message is printed first.
-					 */
-					sleep(.5);
-					return getPlayerInput(currentPlayer, diceRolls);
-				}
 				currentPlayerMoves[moveNumber].index = (int) currentNumber;
 				isColumn = 0;
 			}
-				/*
-				 * Store the move amounts.
-				 */
 			else {
-				currentNumber = strtol(tokenPointer, &strtolRemainderPointer,
-									   0);
-				if (strlen(strtolRemainderPointer) > 0) {
-					error_print(
-							"Invalid input. Must be numbers : and ; only.\n");
-					/*
- 					 * Sleeping so the error message is printed first.
- 					 */
-					sleep(.5);
-					return getPlayerInput(currentPlayer, diceRolls);
-				}
 				currentPlayerMoves[moveNumber].count = (int) currentNumber;
 				moveSum += (int) currentNumber;
 				++moveNumber;
 				isColumn = 1;
 			}
+
+
 			if (DEBUGGING_IO) {
 				normal_print("[DEBUG] currentNumber is %ld\n", currentNumber);
 				normal_print("[DEBUG] strtol remainder is %s\n",
@@ -615,10 +629,13 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 					   currentPlayerMoves[i].index);
 				printf("moves[%d].count is %d\n", i,
 					   currentPlayerMoves[i].count);
-				movePairs[i] = getMovePair(currentPlayerMoves[i].index, currentPlayerMoves[i].count, currentPlayer);
+				movePairs[i] = getMovePair(currentPlayerMoves[i].index,
+										   currentPlayerMoves[i].count,
+										   currentPlayer);
 			}
 
-			if(!validate_moves(currentPlayerMoves, moveNumber + 1, currentPlayer, diceRolls, movePairs)) {
+			if (!validate_moves(currentPlayerMoves, moveNumber + 1,
+								currentPlayer, diceRolls, movePairs)) {
 				return getPlayerInput(currentPlayer, diceRolls);
 			}
 		}
