@@ -382,8 +382,8 @@ enum input_result getPlayerName(struct player *currentPlayer)
 	}
 
 	/*
- * Replace \n with \0
- */
+ 	 * Replace \n with \0
+ 	 */
 
 	input[strlen(input) - 1] = '\0';
 
@@ -420,7 +420,7 @@ enum input_result getPlayerName(struct player *currentPlayer)
 }
 
 enum input_result
-getPlayerInput(struct player *currentPlayer, int die1, int die2)
+getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 {
 	/*
 	 * Loop control
@@ -448,7 +448,8 @@ getPlayerInput(struct player *currentPlayer, int die1, int die2)
 	int i;
 	BOOLEAN doubleRolled = FALSE;
 
-	if(die1 == die2) {
+
+	if (diceRolls[0] == diceRolls[1]) {
 		doubleRolled = TRUE;
 	}
 
@@ -492,14 +493,17 @@ getPlayerInput(struct player *currentPlayer, int die1, int die2)
 		if (input[strlen(input) - 1] != '\n') {
 			error_print("Buffer overflow.\n");
 			clear_buffer();
-			return getPlayerInput(currentPlayer, die1, die2);
+			return getPlayerInput(currentPlayer, diceRolls);
 		}
 
+		/*
+		 * Check each character of the input for a valid input sequence.
+		 */
 		if (!validInput(input)) {
 			error_print(
 					"Invalid input. Must be n:n and for multiple input n:n;m:m\n");
 			sleep(.5);
-			return getPlayerInput(currentPlayer, die1, die2);
+			return getPlayerInput(currentPlayer, diceRolls);
 		}
 
 		/*
@@ -520,7 +524,7 @@ getPlayerInput(struct player *currentPlayer, int die1, int die2)
 						"Too many moves, you can only have at most %d moves.\n",
 						MAX_MOVES);
 				sleep(.5);
-				return getPlayerInput(currentPlayer, die1, die2);
+				return getPlayerInput(currentPlayer, diceRolls);
 			}
 
 			/*
@@ -536,7 +540,7 @@ getPlayerInput(struct player *currentPlayer, int die1, int die2)
 					 * Sleeping so the error message is printed first.
 					 */
 					sleep(.5);
-					return getPlayerInput(currentPlayer, die1, die2);
+					return getPlayerInput(currentPlayer, diceRolls);
 				}
 				currentPlayerMoves[moveNumber].index = (int) currentNumber;
 				isColumn = 0;
@@ -554,7 +558,7 @@ getPlayerInput(struct player *currentPlayer, int die1, int die2)
  					 * Sleeping so the error message is printed first.
  					 */
 					sleep(.5);
-					return getPlayerInput(currentPlayer, die1, die2);
+					return getPlayerInput(currentPlayer, diceRolls);
 				}
 				currentPlayerMoves[moveNumber].count = (int) currentNumber;
 				moveSum += (int) currentNumber;
@@ -576,35 +580,47 @@ getPlayerInput(struct player *currentPlayer, int die1, int die2)
 		}
 
 		/*
-		 * Check that total moves don't exceed the die rolls
+		 * Check that total moves don't exceed the sum of die rolls.
+		 * For doubles, its sum of die rolls * 2
 		 */
-		if(moveSum > die1 + die2 && !doubleRolled) {
+		if (moveSum > diceRolls[0] + diceRolls[1] && !doubleRolled) {
 			error_print(
 					"Invalid input for normal roll. Your total amount of moves exceeds your die roll total.\n");
 			/*
 			  * Sleeping so the error message is printed first.
 			  */
 			sleep(.5);
-			return getPlayerInput(currentPlayer, die1, die2);
+			return getPlayerInput(currentPlayer, diceRolls);
 		}
-		else if (moveSum > (die1 + die2) * 2 && doubleRolled) {
+		else if (moveSum > (diceRolls[0] + diceRolls[1]) * 2 && doubleRolled) {
 			error_print(
 					"Invalid input for double roll. Your total amount of moves exceeds die roll total times 2.\n");
 			/*
 			  * Sleeping so the error message is printed first.
 			  */
 			sleep(.5);
-			return getPlayerInput(currentPlayer, die1, die2);
+			return getPlayerInput(currentPlayer, diceRolls);
 		}
 
+		/*
+		 * Go through all the stored moves.
+		 */
+
 		for (i = 0; i < MAX_MOVES; i++) {
+			struct move_pair currentMovePair;
+
 			if (currentPlayerMoves[i].index != -1 &&
 				currentPlayerMoves[i].count != -1) {
 				printf("moves[%d].index is %d\n", i,
 					   currentPlayerMoves[i].index);
 				printf("moves[%d].count is %d\n", i,
 					   currentPlayerMoves[i].count);
+				currentMovePair.end = getTopPiece(currentPlayerMoves[i].index,
+												  currentPlayer);
 			}
+			/*if(!validate_moves(currentPlayerMoves, moveNumber + 1, currentPlayer, diceRolls, )) {
+				return getPlayerInput(currentPlayer, diceRolls);
+			}*/
 		}
 
 		done = 1;

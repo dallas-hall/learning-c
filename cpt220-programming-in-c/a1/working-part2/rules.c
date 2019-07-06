@@ -12,6 +12,9 @@
 
 #define MAX_ROLLS 4
 
+const int DEBUGGING_RULES = 0;
+
+
 /**
  * this function determines the player order and player tokens, and direction
  * of play for the game.
@@ -183,4 +186,141 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 BOOLEAN has_won_game(const struct player *curplayer)
 {
 	return FALSE;
+}
+
+/*
+ * Gets the top piece from the column.
+ */
+struct piece_location getTopPiece(int y, struct player *currentPlayer)
+{
+	struct piece_location topPiece;
+	enum piece currentPlayerPiece = currentPlayer->token; /* P_WHITE or P_RED */
+	int currentPieceX = -1;
+	int currentPieceY = -1;
+
+	/*
+	 * Remember this is [HEIGHT][WIDTH]
+	 */
+	int i, columnOffset;
+
+	if(DEBUGGING_RULES) {
+		printBoard(currentPlayer->curgame->game_board);
+	}
+
+	/*
+	 * The clockwise player as 13-24 on the bottom and 12-1 on top
+	 */
+	if (currentPlayer->orientation == OR_CLOCKWISE) {
+		if (y >= 13 && y <= 24) {
+			topPiece.direction = DIR_UP;
+		}
+		else if (y >= 1 && y <= 12) {
+			topPiece.direction = DIR_DOWN;
+		}
+	}
+		/*
+		  * The anticlockwise player as 13-24 on the top and 12-1 on bottom
+		  */
+	else if (currentPlayer->orientation == OR_ANTICLOCKWISE) {
+		if (y >= 13 && y <= 24) {
+			topPiece.direction = DIR_DOWN;
+		}
+		else if (y >= 1 && y <= 12) {
+			topPiece.direction = DIR_UP;
+		}
+	}
+
+	columnOffset = getColumnOffset(y);
+	for (i = 0; i < BOARD_HEIGHT; i++) {
+		if (currentPlayer->curgame->game_board[i][columnOffset] ==
+			currentPlayerPiece) {
+			if (DEBUGGING_RULES &&
+				currentPlayer->curgame->game_board[i][columnOffset] ==
+				currentPlayerPiece) {
+				printf("FOUND a player's piece at [%d][%d] %d.\n", i,
+					   columnOffset,
+					   currentPlayer->curgame->game_board[i][columnOffset]);
+			}
+			else if (DEBUGGING_RULES &&
+					 currentPlayer->curgame->game_board[i][columnOffset] !=
+					 currentPlayerPiece) {
+				printf("Current piece at [%d][%d] %d.\n", i, columnOffset,
+					   currentPlayer->curgame->game_board[i][columnOffset]);
+			}
+			currentPieceX = i;
+			currentPieceY = columnOffset;
+		}
+
+
+	}
+	printf("\n");
+
+	/*
+	 * Caller to check if this is -1 and handle appropriately.
+	 */
+	topPiece.x = currentPieceX;
+	topPiece.x = currentPieceY;
+
+	return topPiece;
+}
+
+int getColumnOffset(int y)
+{
+	int columnOffset;
+
+	switch (y) {
+		case 1:
+		case 24:
+			columnOffset = 11;
+			break;
+		case 2:
+		case 23:
+			columnOffset = 10;
+			break;
+		case 3:
+		case 22:
+			columnOffset = 9;
+			break;
+		case 4:
+		case 21:
+			columnOffset = 8;
+			break;
+		case 5:
+		case 20:
+			columnOffset = 7;
+			break;
+		case 6:
+		case 19:
+			columnOffset = 6;
+			break;
+		case 7:
+		case 18:
+			columnOffset = 5;
+			break;
+		case 8:
+		case 17:
+			columnOffset = 4;
+			break;
+		case 9:
+		case 16:
+			columnOffset = 3;
+			break;
+		case 10:
+		case 15:
+			columnOffset = 2;
+			break;
+		case 11:
+		case 14:
+			columnOffset = 1;
+			break;
+		case 12:
+		case 13:
+			columnOffset = 0;
+			break;
+		default:
+			columnOffset = -1;
+			break;
+	}
+
+	return columnOffset;
 }
