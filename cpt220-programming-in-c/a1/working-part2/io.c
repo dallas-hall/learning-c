@@ -419,7 +419,8 @@ enum input_result getPlayerName(struct player *currentPlayer)
 	return IR_SUCCESS;
 }
 
-enum input_result getPlayerInput(struct player *currentPlayer, BOOLEAN doubleRolled)
+enum input_result
+getPlayerInput(struct player *currentPlayer, int die1, int die2)
 {
 	/*
 	 * Loop control
@@ -443,21 +444,25 @@ enum input_result getPlayerInput(struct player *currentPlayer, BOOLEAN doubleRol
 	int moveNumber;
 	long currentNumber;
 	struct move currentPlayerMoves[MAX_MOVES];
+	int moveSum;
 	int i;
-	/*
-	 * Corner case input validation
-	 */
+	BOOLEAN doubleRolled = FALSE;
+
+	if(die1 == die2) {
+		doubleRolled = TRUE;
+	}
 
 	do {
 		/*
 		 * Set up our validation checking values.
  		 */
-		for(i = 0; i < MAX_MOVES; i++) {
+		for (i = 0; i < MAX_MOVES; i++) {
 			currentPlayerMoves[i].index = -1;
 			currentPlayerMoves[i].count = -1;
 		}
 		moveNumber = 0;
 		isColumn = 1;
+		moveSum = 0;
 
 		normal_print(fold(msg));
 		/*
@@ -487,13 +492,14 @@ enum input_result getPlayerInput(struct player *currentPlayer, BOOLEAN doubleRol
 		if (input[strlen(input) - 1] != '\n') {
 			error_print("Buffer overflow.\n");
 			clear_buffer();
-			return getPlayerInput(currentPlayer, doubleRolled);
+			return getPlayerInput(currentPlayer, die1, die2);
 		}
 
-		if(!validInput(input)) {
-			error_print("Invalid input. Must be n:n and for multiple input n:n;m:m\n");
+		if (!validInput(input)) {
+			error_print(
+					"Invalid input. Must be n:n and for multiple input n:n;m:m\n");
 			sleep(.5);
-			return getPlayerInput(currentPlayer, doubleRolled);
+			return getPlayerInput(currentPlayer, die1, die2);
 		}
 
 		/*
@@ -509,37 +515,49 @@ enum input_result getPlayerInput(struct player *currentPlayer, BOOLEAN doubleRol
 			/*
 			 * Need +1 here since moveNumber corresponds to array indices.
 			 */
-			if(moveNumber + 1 > MAX_MOVES && doubleRolled) {
-				error_print("Too many moves, for doubles you can only have at most %d moves.\n", MAX_MOVES);
+			if (moveNumber + 1 > MAX_MOVES) {
+				error_print(
+						"Too many moves, you can only have at most %d moves.\n",
+						MAX_MOVES);
 				sleep(.5);
-				return getPlayerInput(currentPlayer, doubleRolled);
-			}
-			else if(moveNumber + 1 > MAX_MOVES - 2 && !doubleRolled) {
-				error_print("Too many moves, for normal rolls you can only have at most %d moves.\n", MAX_MOVES - 2);
-				sleep(.5);
-				return getPlayerInput(currentPlayer, doubleRolled);
+				return getPlayerInput(currentPlayer, die1, die2);
 			}
 
+			/*
+			 * Store the column index.
+			 */
 			if (isColumn == 1) {
-				currentNumber = strtol(tokenPointer, &strtolRemainderPointer, 0);
+				currentNumber = strtol(tokenPointer, &strtolRemainderPointer,
+									   0);
 				if (strlen(strtolRemainderPointer) > 0) {
 					error_print(
 							"Invalid input. Must be numbers : and ; only.\n");
+					/*
+					 * Sleeping so the error message is printed first.
+					 */
 					sleep(.5);
-					return getPlayerInput(currentPlayer, doubleRolled);
+					return getPlayerInput(currentPlayer, die1, die2);
 				}
 				currentPlayerMoves[moveNumber].index = (int) currentNumber;
 				isColumn = 0;
 			}
+				/*
+				 * Store the move amounts.
+				 */
 			else {
-				currentNumber = strtol(tokenPointer, &strtolRemainderPointer, 0);
+				currentNumber = strtol(tokenPointer, &strtolRemainderPointer,
+									   0);
 				if (strlen(strtolRemainderPointer) > 0) {
 					error_print(
 							"Invalid input. Must be numbers : and ; only.\n");
+					/*
+ 					 * Sleeping so the error message is printed first.
+ 					 */
 					sleep(.5);
-					return getPlayerInput(currentPlayer, doubleRolled);
+					return getPlayerInput(currentPlayer, die1, die2);
 				}
 				currentPlayerMoves[moveNumber].count = (int) currentNumber;
+				moveSum += (int) currentNumber;
 				++moveNumber;
 				isColumn = 1;
 			}
@@ -557,10 +575,35 @@ enum input_result getPlayerInput(struct player *currentPlayer, BOOLEAN doubleRol
 			tokenPointer = strtok(NULL, delimiters);
 		}
 
-		for(i = 0; i < MAX_MOVES; i++) {
-			if (currentPlayerMoves[i].index != -1 && currentPlayerMoves[i].count != -1) {
-				printf("moves[%d].index is %d\n", i, currentPlayerMoves[i].index);
-				printf("moves[%d].count is %d\n", i, currentPlayerMoves[i].count);
+		/*
+		 * Check that total moves don't exceed the die rolls
+		 */
+		if(moveSum > die1 + die2 && !doubleRolled) {
+			error_print(
+					"Invalid input for normal roll. Your total amount of moves exceeds your die roll total.\n");
+			/*
+			  * Sleeping so the error message is printed first.
+			  */
+			sleep(.5);
+			return getPlayerInput(currentPlayer, die1, die2);
+		}
+		else if (moveSum > (die1 + die2) * 2 && doubleRolled) {
+			error_print(
+					"Invalid input for double roll. Your total amount of moves exceeds die roll total times 2.\n");
+			/*
+			  * Sleeping so the error message is printed first.
+			  */
+			sleep(.5);
+			return getPlayerInput(currentPlayer, die1, die2);
+		}
+
+		for (i = 0; i < MAX_MOVES; i++) {
+			if (currentPlayerMoves[i].index != -1 &&
+				currentPlayerMoves[i].count != -1) {
+				printf("moves[%d].index is %d\n", i,
+					   currentPlayerMoves[i].index);
+				printf("moves[%d].count is %d\n", i,
+					   currentPlayerMoves[i].count);
 			}
 		}
 
@@ -580,19 +623,19 @@ BOOLEAN validInput(char input[])
 	/*
 	 * The boundary of numbers should only be these 3 characters.
 	 */
-	for(i = 0; i < strlen(input); i++) {
-		if(DEBUGGING_IO) {
+	for (i = 0; i < strlen(input); i++) {
+		if (DEBUGGING_IO) {
 			printf("current char is %c\n", input[i]);
 		}
-		if(input[i] == ':') {
+		if (input[i] == ':') {
 			++colonCount;
 			++numberCount;
 		}
-		else if(input[i] == ';') {
+		else if (input[i] == ';') {
 			++semiColonCount;
 			++numberCount;
 		}
-		else if(input[i] == '\n') {
+		else if (input[i] == '\n') {
 			++numberCount;
 		}
 	}
@@ -601,13 +644,13 @@ BOOLEAN validInput(char input[])
 	 * For valid input, the number of inputted numbers would twice the amount
 	 * of colons.
 	 */
-	if(colonCount != (numberCount / 2)) {
+	if (colonCount != (numberCount / 2)) {
 		return FALSE;
 	}
-	/*
-	 * For valid input, the number of semi-colons should either be none or colons - 1.
-	 */
-	else if(semiColonCount != 0 && semiColonCount != (colonCount - 1)) {
+		/*
+		 * For valid input, the number of semi-colons should either be none or colons - 1.
+		 */
+	else if (semiColonCount != 0 && semiColonCount != (colonCount - 1)) {
 		return FALSE;
 	}
 
