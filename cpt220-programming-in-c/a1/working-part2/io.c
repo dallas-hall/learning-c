@@ -447,7 +447,7 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 	int moveSum;
 	int i;
 	BOOLEAN doubleRolled = FALSE;
-
+	struct move_pair movePairs[MAX_MOVES];
 
 	if (diceRolls[0] == diceRolls[1]) {
 		doubleRolled = TRUE;
@@ -607,7 +607,7 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		 */
 
 		for (i = 0; i < MAX_MOVES; i++) {
-			struct move_pair currentMovePair;
+
 
 			if (currentPlayerMoves[i].index != -1 &&
 				currentPlayerMoves[i].count != -1) {
@@ -615,18 +615,18 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 					   currentPlayerMoves[i].index);
 				printf("moves[%d].count is %d\n", i,
 					   currentPlayerMoves[i].count);
-				currentMovePair.end = getTopPiece(currentPlayerMoves[i].index,
-												  currentPlayer);
+				movePairs[i] = getMovePair(currentPlayerMoves[i].index, currentPlayerMoves[i].count, currentPlayer);
 			}
-			/*if(!validate_moves(currentPlayerMoves, moveNumber + 1, currentPlayer, diceRolls, )) {
+
+			if(!validate_moves(currentPlayerMoves, moveNumber + 1, currentPlayer, diceRolls, movePairs)) {
 				return getPlayerInput(currentPlayer, diceRolls);
-			}*/
+			}
 		}
 
-		done = 1;
+		done = IR_SUCCESS;
 	} while (!done);
 
-	return IR_SUCCESS;
+	return done;
 }
 
 BOOLEAN validInput(char input[])

@@ -76,7 +76,7 @@ BOOLEAN has_won_game(const struct player *);
 /*
  * Return the piece's xy
  */
-struct piece_location getTopPiece(int y, struct player *currentPlayer);
+struct move_pair getMovePair(int y, int moves, struct player *currentPlayer);
 
 /*
  * Convert from printed y into the array y
