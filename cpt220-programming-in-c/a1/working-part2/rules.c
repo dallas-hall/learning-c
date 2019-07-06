@@ -169,11 +169,12 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 		normal_print("%s\n", "[DEBUG] rules.c - Entering validate_moves.");
 	}
 	/*
-	 * Direction movement is validated before this call. It is validated inside
-	 * of getMovePair when creating the end piece_location.
+	 * getMovePair validation checks.
+	 * a) direction movement checked for the end piece
+	 * b) cannot move an empty piece
+	 * c) cannot move an opponent's piece
+	 * d) cannot move to a place where an opponent has 2 or more pieces already
 	 *
-	 * The piece from the top of the pile is automatically selected inside of
-	 * getMovePair when creating the start piece_location.
 	 */
 
 
@@ -294,8 +295,8 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	 * an invalid move because either:
 	 * a) > 7 pieces exist on that column -99
 	 * b) Trying to move an empty space -98
-	 * c) Trying to move the opponents piece -99
-	 * d) Too many other player pieces -97
+	 * c) Trying to move the opponents piece -97
+	 * d) Too many other player pieces -96
 	 * there already.
 	 *
 	 * This logic applies to players of both directions.
@@ -316,10 +317,16 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 
 			/*
 			 * If the first place checked is empty, invalid move.
+			 * If the first place checked has an opponents token, invalid move.
 			 */
-			if (i == 0 && currentBoardPiece == P_EMPTY) {
+			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
 				currentPieceX = -98;
 				currentPieceY = -98;
+				break;
+			}
+			else if (i == BOARD_HEIGHT - 1 && currentBoardPiece == otherPlayerPiece) {
+				currentPieceX = -97;
+				currentPieceY = -97;
 				break;
 			}
 			else if (i != 0) {
@@ -355,10 +362,16 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 
 			/*
 			 * If the first place checked is empty, invalid move.
+			 * If the first place checked has an opponents token, invalid move.
 			 */
 			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
 				currentPieceX = -98;
 				currentPieceY = -98;
+				break;
+			}
+			else if (i == BOARD_HEIGHT - 1 && currentBoardPiece == otherPlayerPiece) {
+				currentPieceX = -97;
+				currentPieceY = -97;
 				break;
 			}
 			else if (i != BOARD_HEIGHT - 1) {
@@ -403,6 +416,8 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	 *
  	 * All valid movements are reducing the column the intended amount of moves.
  	 * We check for negative numbers previously to ensure this is correct.
+ 	 *
+ 	 * If columnOffset is negative, we are trying to move into the bar list.
 	 */
 	columnOffset = getColumnOffset(y - moves);
 	/*
@@ -439,6 +454,14 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 		 */
 		boardHalfToCheck = BOARD_HEIGHT / 2;
 		for (i = 0; i <= boardHalfToCheck; i++) {
+			/*
+			 * Trying to move into the bar list.
+			 */
+			if(columnOffset < 0) {
+				currentPieceX = -1;
+				currentPieceY = -1;
+				break;
+			}
 			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
 
 			/*
@@ -448,8 +471,8 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			if (currentBoardPiece == otherPlayerPiece) {
 				++otherPlayerPieceCount;
 				if (otherPlayerPieceCount >= 2) {
-					currentPieceX = -97;
-					currentPieceY = -97;
+					currentPieceX = -96;
+					currentPieceY = -96;
 					break;
 				}
 			}
@@ -493,6 +516,15 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 		 */
 		boardHalfToCheck = (BOARD_HEIGHT / 2) - 1;
 		for (i = BOARD_HEIGHT - 1; i >= boardHalfToCheck; i--) {
+			/*
+ 			 * Trying to move into the bar list.
+ 			 */
+			if(columnOffset < 0) {
+				currentPieceX = -1;
+				currentPieceY = -1;
+				break;
+			}
+
 			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
 
 			/*
@@ -502,8 +534,8 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			if (currentBoardPiece == otherPlayerPiece) {
 				++otherPlayerPieceCount;
 				if (otherPlayerPieceCount >= 2) {
-					currentPieceX = -97;
-					currentPieceY = -97;
+					currentPieceX = -96;
+					currentPieceY = -96;
 					break;
 				}
 			}
