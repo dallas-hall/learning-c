@@ -497,16 +497,10 @@ getPlayerInput(struct player *currentPlayer)
 			return getPlayerInput(currentPlayer);
 		}
 
-		if(!strchr(input, ':')) {
-			error_print("Invalid input. Must be n:n and for multiple input n:n;m:m\n");
-			sleep(.5);
-			return getPlayerInput(currentPlayer);
-		}
-
 		/*
 		 * Get the moves columnNumber:moveLength; .... ;columnNumber:moveLength\n
 		 */
-		tokenPointer = strtok(input, delimiters);
+		tokenPointer = strtok(input, ":");
 
 		while (tokenPointer != NULL) {
 			if (DEBUGGING_IO) {
@@ -553,7 +547,6 @@ getPlayerInput(struct player *currentPlayer)
  			 * The NULL argument tell strtok to keep going.
  			 * NULL is returned when there are no more tokens.
  			 */
-
 			tokenPointer = strtok(NULL, delimiters);
 		}
 
@@ -581,7 +574,9 @@ BOOLEAN validInput(char input[])
 	 * The boundary of numbers should only be these 3 characters.
 	 */
 	for(i = 0; i < strlen(input); i++) {
-		printf("current char is %c\n", input[i]);
+		if(DEBUGGING_IO) {
+			printf("current char is %c\n", input[i]);
+		}
 		if(input[i] == ':') {
 			++colonCount;
 			++numberCount;
