@@ -14,6 +14,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+/*
+ * Added so I could call the sleep function to ensure error messages printed
+ * before the following output.
+ */
+#include <unistd.h>
 
 #ifndef IO_H
 #define IO_H

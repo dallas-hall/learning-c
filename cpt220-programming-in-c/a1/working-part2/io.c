@@ -419,21 +419,48 @@ enum input_result getPlayerName(struct player *currentPlayer)
 	return IR_SUCCESS;
 }
 
-enum input_result getPlayerInput(struct player *currentPlayer)
+enum input_result
+getPlayerInput(struct player *currentPlayer)
 {
 	enum input_result done = IR_FAILURE;
-
 	char *msg = "Please enter moves in the format of 3:4;2:5 where 3 abd 2 are column numbers and 4 and 5 are the number of spaces to move a token at that location. If you want to take a token from your bar list, enter the starting column as B: ";
 	char input[MAXPROMPTLEN];
-	char output[256];
+	char *tokenPointer;
+	char *strtolRemainderPointer;
+	/*
+	 * Got this idea from https://stackoverflow.com/a/26598319
+	 */
+	char delimiters[3] = {':', ';', '\n'};
+	int isColumn;
+	int moveNumber;
+	long currentNumber;
+	struct move currentPlayerMoves[MAX_MOVES];
+	int i;
 
 
 	do {
+		/*
+		 * Set up our validation checking values.
+ 		 */
+		for(i = 0; i < MAX_MOVES; i++) {
+			currentPlayerMoves[i].index = -1;
+			currentPlayerMoves[i].count = -1;
+		}
+		moveNumber = 0;
+		isColumn = 1;
+
 		normal_print(fold(msg));
 		/*
- 		 * Quit the game if player presses control + d
- 		 */
+		 * Need to account for the '\n' and '\0' that fgets adds.
+		 * If the char last isn't '\n' then we know we didn't receive all the input.
+		 * We need to remove the '\n' as well.
+		 *
+		 * Got this idea from Chapter 08 C How To Program 6e and Paul's week 4 sumup.c
+		 */
 		if (fgets(input, MAXPROMPTLEN + FGETS_EXTRA_CHARS, stdin) == NULL) {
+			/*
+			 * We want to return true here on ^D (control + D)
+			 */
 			return IR_QUIT;
 		}
 
@@ -441,7 +468,7 @@ enum input_result getPlayerInput(struct player *currentPlayer)
  		 * Swap players if the input was nothing.
  		 */
 		if (strlen(input) == 1 && input[0] == '\n') {
-			return IR_SUCCESS;
+			return IR_SKIP_TURN;
 		}
 
 		/*
@@ -452,6 +479,75 @@ enum input_result getPlayerInput(struct player *currentPlayer)
 			clear_buffer();
 			return getPlayerInput(currentPlayer);
 		}
+
+		if(!strchr(input, ':')) {
+			error_print("Invalid input. Must be n:n and for multiple input n:n;m:m\n");
+			sleep(.5);
+			return getPlayerInput(currentPlayer);
+		}
+
+		/*
+		 * Get the moves columnNumber:moveLength; .... ;columnNumber:moveLength\n
+		 */
+		tokenPointer = strtok(input, delimiters);
+
+		while (tokenPointer != NULL) {
+			if (DEBUGGING_IO) {
+				normal_print("Current token is: %s\n", tokenPointer);
+			}
+
+			if(moveNumber > MAX_MOVES) {
+				error_print("Too many moves, you can only have at most %d moves.\n", MAX_MOVES);
+				sleep(.5);
+				return getPlayerInput(currentPlayer);
+			}
+
+			if (isColumn == 1) {
+				currentNumber = strtol(tokenPointer, &strtolRemainderPointer, 0);
+				if (strlen(strtolRemainderPointer) > 0) {
+					error_print(
+							"Invalid input. Must be numbers : and ; only.\n");
+					sleep(.5);
+					return getPlayerInput(currentPlayer);
+				}
+				currentPlayerMoves[moveNumber].index = (int) currentNumber;
+				isColumn = 0;
+			}
+			else {
+				currentNumber = strtol(tokenPointer, &strtolRemainderPointer, 0);
+				if (strlen(strtolRemainderPointer) > 0) {
+					error_print(
+							"Invalid input. Must be numbers : and ; only.\n");
+					sleep(.5);
+					return getPlayerInput(currentPlayer);
+				}
+				currentPlayerMoves[moveNumber].count = (int) currentNumber;
+				++moveNumber;
+				isColumn = 1;
+			}
+			if (DEBUGGING_IO) {
+				normal_print("[DEBUG] currentNumber is %ld\n", currentNumber);
+				normal_print("[DEBUG] strtol remainder is %s\n",
+							 strtolRemainderPointer);
+				normal_print("[DEBUG] isColumn is %d\n", isColumn);
+			}
+
+			/*
+ 			 * The NULL argument tell strtok to keep going.
+ 			 * NULL is returned when there are no more tokens.
+ 			 */
+
+			tokenPointer = strtok(NULL, delimiters);
+		}
+
+		for(i = 0; i < MAX_MOVES; i++) {
+			if (currentPlayerMoves[i].index != -1 && currentPlayerMoves[i].count != -1) {
+				printf("moves[%d].index is %d\n", i, currentPlayerMoves[i].index);
+				printf("moves[%d].count is %d\n", i, currentPlayerMoves[i].count);
+			}
+		}
+
+		done = 1;
 	} while (!done);
 
 	return IR_SUCCESS;

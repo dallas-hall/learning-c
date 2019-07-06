@@ -116,19 +116,12 @@ BOOLEAN player_init(struct player *aplayer, struct game *thegame)
 enum input_result player_take_turn(struct player *current_player)
 {
 	int diceRolls[2];
-	struct move {
-		int column;
-		int amount;
-	};
-	struct move moves[MAX_MOVES];
 
 	diceRolls[0] = rollDice();
 	diceRolls[1] = rollDice();
 
 	normal_print("You have rolled a %d and a %d.\n", diceRolls[0], diceRolls[1]);
-	getPlayerInput(current_player);
-
-	return IR_FAILURE;
+	return getPlayerInput(current_player);
 }
 
 
