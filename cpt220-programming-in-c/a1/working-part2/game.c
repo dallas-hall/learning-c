@@ -174,21 +174,12 @@ void play_game(struct falsible_long seed)
 			 * Check if someone has won on game quit.
 			 */
 			if (has_won_game(thegame.current_player)) {
-				/*
-				 * TODO PRINT WINNING MESSAGE
-				 */
 				printWinningMessage(thegame.current_player);
 			}
 			else if (has_won_game(thegame.other_player)) {
-				/*
-				 * TODO PRINT WINNING MESSAGE
-				 */
 				printWinningMessage(thegame.other_player);
 			}
 			else {
-				/*
-				 * TODO PRINT DRAW MESSAGE
-				 */
 				printDrawMessage();
 			}
 			quit = TRUE;
@@ -199,9 +190,6 @@ void play_game(struct falsible_long seed)
 			 * the next player's turn.
 			 */
 			if (has_won_game(thegame.current_player)) {
-				/*
-				 * TODO PRINT WINNING MESSAGE
-				 */
 				printWinningMessage(thegame.current_player);
 				quit = TRUE;
 			}
