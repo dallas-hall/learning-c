@@ -53,19 +53,9 @@ typedef enum piece board[BOARD_HEIGHT][BOARD_WIDTH];
 void board_init(board);
 
 /*
- * Uses nested if statements for starting positions.
- */
-
-enum piece getStartPiece(int row, int column);
-
-void setStartPiece(int x, int y, board the_board);
-
-/*
  * Uses a 2d array of starting pieces.
  * Replaces getStartPiece and setStartPiece.
  */
-enum piece getStartPieceArray(int row, int column);
-
 void setStartPieceArray(int row, int column, board the_board);
 
 /*
