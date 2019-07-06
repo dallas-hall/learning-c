@@ -126,7 +126,7 @@ enum input_result player_take_turn(struct player *current_player)
 	}
 
 	normal_print("You have rolled a %d and a %d.\n", diceRolls[0], diceRolls[1]);
-	return getPlayerInput(current_player, doubleRolled);
+	return getPlayerInput(current_player, diceRolls[0], diceRolls[1]);
 }
 
 
