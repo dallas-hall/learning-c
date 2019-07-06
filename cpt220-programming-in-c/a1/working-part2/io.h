@@ -172,4 +172,6 @@ enum input_result printPromptAndGetInput(char *s);
 
 enum input_result getPlayerInput();
 
+BOOLEAN validInput(char input[]);
+
 #endif
