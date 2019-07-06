@@ -188,6 +188,22 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
  **/
 BOOLEAN has_won_game(const struct player *curplayer)
 {
+	int currentScore = curplayer->score;
+	BOOLEAN emptyBarList = FALSE;
+	BOOLEAN noTokensLeft = FALSE;
+
+	if(curplayer->bar_list.token_count == 0) {
+		emptyBarList = TRUE;
+	}
+
+	/*
+	 * TODO check for no more tokens.
+	 */
+
+	if(currentScore == 15 && emptyBarList && noTokensLeft) {
+		return TRUE;
+	}
+
 	return FALSE;
 }
 
@@ -327,6 +343,10 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	currentPieceX = -99;
 	currentPieceY = -99;
 
+	/*
+	 * All valid movements are reducing the column the intended amount of moves.
+	 * We check for negative numbers previously to ensure this is correct.
+	 */
 	columnOffset = y - moves;
 	for (i = 0; i < BOARD_HEIGHT; i++) {
 		/*

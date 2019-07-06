@@ -915,4 +915,12 @@ void printOtherPlayer(struct game *thegame)
 				 thegame->current_player->bar_list.token_count);
 }
 
+void printWinningMessage(struct player *currentPlayer)
+{
+	normal_print("You have won the game, %s!\n", currentPlayer->name);
+}
 
+void printDrawMessage()
+{
+	normal_print("You both have drawn the game.\n");
+}
