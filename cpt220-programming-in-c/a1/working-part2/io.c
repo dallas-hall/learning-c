@@ -499,7 +499,7 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		/*
 		 * Check each character of the input for a valid input sequence.
 		 */
-		if (!validInput(input)) {
+		if (!validMoveInput(input)) {
 			error_print(
 					"Invalid input. Must be n:n and for multiple input n:n;m:m\n");
 			sleep(.5);
@@ -563,7 +563,6 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 				return getPlayerInput(currentPlayer, diceRolls);
 			}
 
-
 			/*
 			 * Store the column index or move amount.
 			 */
@@ -577,7 +576,6 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 				++moveNumber;
 				isColumn = 1;
 			}
-
 
 			if (DEBUGGING_IO) {
 				normal_print("[DEBUG] currentNumber is %ld\n", currentNumber);
@@ -619,7 +617,6 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		/*
 		 * Go through all the stored moves.
 		 */
-
 		for (i = 0; i < MAX_MOVES; i++) {
 
 
@@ -640,13 +637,23 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 			}
 		}
 
+		/*
+		 * Tried calling clear_buffer() here as I was having some intermittent
+		 * issues with needing to press enter twice after this process. That
+		 * didn't help.
+		 *
+		 * I tried removing the newline before entering strtok and that didn't
+		 * help either. Not sure what the problem is.
+		 */
+		/*clear_buffer();*/
+
 		done = IR_SUCCESS;
 	} while (!done);
 
 	return done;
 }
 
-BOOLEAN validInput(char input[])
+BOOLEAN validMoveInput(char input[])
 {
 	int i;
 	int numberCount = 0;
