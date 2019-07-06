@@ -231,7 +231,8 @@ BOOLEAN has_won_game(const struct player *curplayer)
  */
 struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 {
-	struct piece_location pieceLocation;
+	struct piece_location startPieceLocation;
+	struct piece_location endPieceLocation;
 	enum piece currentPlayerPiece = currentPlayer->token; /* P_WHITE or P_RED */
 	enum piece previousBoardPiece = P_INVALID;
 	enum piece currentBoardPiece = P_INVALID;
@@ -244,6 +245,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	int currentPieceY = -99;
 	struct move_pair currentMovePair;
 	int boardHalfToCheck;
+	BOOLEAN moveToOtherBoardHalf = FALSE;
 
 	/*
 	 * Remember this is [BOARD_HEIGHT 14][BOARD_WIDTH 12]
@@ -261,19 +263,19 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	 */
 	if (currentPlayer->orientation == OR_CLOCKWISE) {
 		if (y >= 1 && y <= 12) {
-			pieceLocation.direction = DIR_DOWN;
+			startPieceLocation.direction = DIR_DOWN;
 		}
 		else if (y >= 13 && y <= 24) {
-			pieceLocation.direction = DIR_UP;
+			startPieceLocation.direction = DIR_UP;
 		}
 
 	}
 	else if (currentPlayer->orientation == OR_ANTICLOCKWISE) {
 		if (y >= 13 && y <= 24) {
-			pieceLocation.direction = DIR_DOWN;
+			startPieceLocation.direction = DIR_DOWN;
 		}
 		else if (y >= 1 && y <= 12) {
-			pieceLocation.direction = DIR_UP;
+			startPieceLocation.direction = DIR_UP;
 		}
 	}
 
@@ -283,6 +285,13 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	columnOffset = getColumnOffset(y);
 
 	/*
+	 * Get the starting move position. If a value returns -99 then that is
+	 * an invalid move because either:
+	 * a) > 7 pieces exist on that column
+	 * b) Trying to move an empty space
+	 * c) Trying to move the opponents piece
+	 * there already.
+	 *
 	 * This logic applies to players of both directions.
 	 *
 	 * For starting moves from the top, get the piece at the bottom if it
@@ -291,7 +300,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	 * For starting moves from the bottom, get the piece at the top if it
 	 * exists. Otherwise error.
 	 */
-	if (pieceLocation.direction == DIR_DOWN) {
+	if (startPieceLocation.direction == DIR_DOWN) {
 		/*
 		 * Check 8 places, 0 to 7
 		 */
@@ -328,11 +337,8 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 				}
 			}
 		}
-		pieceLocation.x = currentPieceX;
-		pieceLocation.y = currentPieceY;
-		currentMovePair.start = pieceLocation;
 	}
-	else if (pieceLocation.direction == DIR_UP) {
+	else if (startPieceLocation.direction == DIR_UP) {
 		/*
 		 * Check 8 places, 13 to 6
 		 */
@@ -370,10 +376,10 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 				}
 			}
 		}
-		pieceLocation.x = currentPieceX;
-		pieceLocation.y = currentPieceY;
-		currentMovePair.start = pieceLocation;
 	}
+	startPieceLocation.x = currentPieceX;
+	startPieceLocation.y = currentPieceY;
+	currentMovePair.start = startPieceLocation;
 
 	if (1) {
 		printf("currentMovePair.start.x is %d\n", currentMovePair.start.x);
@@ -382,6 +388,131 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			   currentMovePair.start.direction);
 	}
 
+
+	/*
+	 * Get the second move. Resetting original check values.
+	 *
+ 	 * All valid movements are reducing the column the intended amount of moves.
+ 	 * We check for negative numbers previously to ensure this is correct.
+	 */
+	columnOffset = getColumnOffset(y - moves);
+	/*
+	 * The clockwise player as 13-24 on the bottom and 12-1 on top
+	 * The anticlockwise player as 13-24 on the top and 12-1 on bottom
+	 */
+	boardHalfToCheck = y - moves;
+	if (currentPlayer->orientation == OR_CLOCKWISE) {
+		if (boardHalfToCheck >= 1 && boardHalfToCheck <= 12) {
+			endPieceLocation.direction = DIR_DOWN;
+		}
+		else if (boardHalfToCheck >= 13 && boardHalfToCheck <= 24) {
+			endPieceLocation.direction = DIR_UP;
+		}
+
+	}
+	else if (currentPlayer->orientation == OR_ANTICLOCKWISE) {
+		if (boardHalfToCheck >= 13 && boardHalfToCheck <= 24) {
+			endPieceLocation.direction = DIR_DOWN;
+		}
+		else if (boardHalfToCheck >= 1 && boardHalfToCheck <= 12) {
+			endPieceLocation.direction = DIR_UP;
+		}
+	}
+	currentPieceX = -99;
+	currentPieceY = -99;
+	previousBoardPiece = P_INVALID;
+	currentBoardPiece = P_INVALID;
+
+	if (endPieceLocation.direction == DIR_DOWN) {
+		/*
+		 * Check 8 places, 0 to 7
+		 */
+		boardHalfToCheck = BOARD_HEIGHT / 2;
+		for (i = 0; i <= boardHalfToCheck; i++) {
+			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
+
+			/*
+			 * If the first place checked is empty, its good as this is valid
+			 * move for the player.
+			 */
+			if (i == 0 && currentBoardPiece == P_EMPTY) {
+				/*
+				 * Don't need - 1 here since we want the empty space.
+				 */
+				currentPieceX = i;
+				currentPieceY = columnOffset;
+				break;
+			}
+			else if (i != 0) {
+				previousBoardPiece = currentPlayer->curgame->game_board[i -
+																		1][columnOffset];
+				if (currentBoardPiece == P_EMPTY &&
+					previousBoardPiece == currentPlayerPiece) {
+					/*
+					 * If i == boardHalfToCheck then we've checked 8 places
+					 * which is too many.
+					 */
+					if (i == boardHalfToCheck) {
+						break;
+					}
+
+					currentPieceX = i;
+					currentPieceY = columnOffset;
+					break;
+				}
+			}
+		}
+	}
+	else if (startPieceLocation.direction == DIR_UP) {
+		/*
+		 * Check 8 places, 13 to 6
+		 */
+		boardHalfToCheck = (BOARD_HEIGHT / 2) - 1;
+		for (i = BOARD_HEIGHT - 1; i >= boardHalfToCheck; i--) {
+			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
+
+			/*
+			 * If the first place checked is empty, its good as this is valid
+			 * move for the player.
+			 */
+			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
+				/*
+ 				 * Don't need - 1 here since we want the empty space.
+ 				*/
+				currentPieceX = i;
+				currentPieceY = columnOffset;
+				break;
+			}
+			else if (i != BOARD_HEIGHT - 1) {
+				previousBoardPiece = currentPlayer->curgame->game_board[i +
+																		1][columnOffset];
+				if (currentBoardPiece == P_EMPTY &&
+					previousBoardPiece == currentPlayerPiece) {
+					/*
+					 * If i == boardHalfToCheck then we've checked 8 places
+					 * which is too many.
+					 */
+					if (i == boardHalfToCheck) {
+						break;
+					}
+
+					currentPieceX = i;
+					currentPieceY = columnOffset;
+					break;
+				}
+			}
+		}
+	}
+	endPieceLocation.x = currentPieceX;
+	endPieceLocation.y = currentPieceY;
+	currentMovePair.end = endPieceLocation;
+
+	if (1) {
+		printf("currentMovePair.end.x is %d\n", currentMovePair.end.x);
+		printf("currentMovePair.end.y is %d\n", currentMovePair.end.y);
+		printf("currentMovePair.end.direction is %d\n",
+			   currentMovePair.end.direction);
+	}
 
 	return currentMovePair;
 }
