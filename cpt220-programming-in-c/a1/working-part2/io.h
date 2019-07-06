@@ -127,6 +127,14 @@ enum font
 };
 
 /**
+ * the width of a cell when we are displaying the board
+ * Added so the sample code board printing will work.
+ **/
+
+#define CELL_WIDTH 4
+
+
+/**
  * student's data structure declarations end here.
  **/
 
