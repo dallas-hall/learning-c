@@ -174,4 +174,8 @@ enum input_result getPlayerInput();
 
 BOOLEAN validInput(char input[]);
 
+void printWinningMessage();
+
+void printDrawMessage();
+
 #endif
