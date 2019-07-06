@@ -422,9 +422,18 @@ enum input_result getPlayerName(struct player *currentPlayer)
 enum input_result
 getPlayerInput(struct player *currentPlayer)
 {
+	/*
+	 * Loop control
+	 */
 	enum input_result done = IR_FAILURE;
+	/*
+	 * Input prompt and store
+	 */
 	char *msg = "Please enter moves in the format of 3:4;2:5 where 3 abd 2 are column numbers and 4 and 5 are the number of spaces to move a token at that location. If you want to take a token from your bar list, enter the starting column as B: ";
-	char input[MAXPROMPTLEN];
+	char input[MAXPROMPTLEN + FGETS_EXTRA_CHARS];
+	/*
+	 * Input & move processing
+	 */
 	char *tokenPointer;
 	char *strtolRemainderPointer;
 	/*
@@ -436,7 +445,9 @@ getPlayerInput(struct player *currentPlayer)
 	long currentNumber;
 	struct move currentPlayerMoves[MAX_MOVES];
 	int i;
-
+	/*
+	 * Corner case input validation
+	 */
 
 	do {
 		/*
@@ -477,6 +488,12 @@ getPlayerInput(struct player *currentPlayer)
 		if (input[strlen(input) - 1] != '\n') {
 			error_print("Buffer overflow.\n");
 			clear_buffer();
+			return getPlayerInput(currentPlayer);
+		}
+
+		if(!validInput(input)) {
+			error_print("Invalid input. Must be n:n and for multiple input n:n;m:m\n");
+			sleep(.5);
 			return getPlayerInput(currentPlayer);
 		}
 
@@ -551,6 +568,48 @@ getPlayerInput(struct player *currentPlayer)
 	} while (!done);
 
 	return IR_SUCCESS;
+}
+
+BOOLEAN validInput(char input[])
+{
+	int i;
+	int numberCount = 0;
+	int colonCount = 0;
+	int semiColonCount = 0;
+
+	/*
+	 * The boundary of numbers should only be these 3 characters.
+	 */
+	for(i = 0; i < strlen(input); i++) {
+		printf("current char is %c\n", input[i]);
+		if(input[i] == ':') {
+			++colonCount;
+			++numberCount;
+		}
+		else if(input[i] == ';') {
+			++semiColonCount;
+			++numberCount;
+		}
+		else if(input[i] == '\n') {
+			++numberCount;
+		}
+	}
+
+	/*
+	 * For valid input, the number of inputted numbers would twice the amount
+	 * of colons.
+	 */
+	if(colonCount != (numberCount / 2)) {
+		return FALSE;
+	}
+	/*
+	 * For valid input, the number of semi-colons should either be none or colons - 1.
+	 */
+	else if(semiColonCount != 0 && semiColonCount != (colonCount - 1)) {
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 /*
