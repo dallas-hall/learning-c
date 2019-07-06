@@ -117,6 +117,7 @@ void play_game(struct falsible_long seed)
 	 **/
 	struct game thegame;
 	BOOLEAN quit = FALSE;
+	enum input_result gameStatus = IR_SUCCESS;
 	char *heading = NULL;
 
 
@@ -160,18 +161,22 @@ void play_game(struct falsible_long seed)
 		/*
 		 * Current play takes their turn.
 		 */
-		player_take_turn(thegame.current_player);
-
-		/*
-		 * Swap current player with other player
-		 * Need to use & here so we get the address.
-		 */
-		swap_players(&thegame.current_player, &thegame.other_player);
-		/*quit = (BOOLEAN) printPromptAndGetInput("Type quit or press ^D (control + D) to exit.\n");*/
+		gameStatus = player_take_turn(thegame.current_player);
+		if (gameStatus == IR_SKIP_TURN) {
+			/*
+ 			 * Swap current player with other player
+ 			 * Need to use & here so we get the address.
+ 			 */
+			swap_players(&thegame.current_player, &thegame.other_player);
+		}
+		else if (gameStatus == IR_QUIT) {
+			quit = TRUE;
+		}
 	}
 
 	/* print the exit message */
 	heading = "Thanks for playing Dallas` CPT220 Backgammon.";
+	normal_print("\n");
 	PUTLINE('-', strlen(heading));
 	normal_print("%s\n", heading);
 	PUTLINE('-', strlen(heading));
