@@ -454,6 +454,10 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		doubleRolled = TRUE;
 	}
 
+	/*
+	 * Probably should of done this inside of validate_moves but it made sense
+	 * to me to do this here.
+	 */
 	do {
 		/*
 		 * Set up our validation checking values.
@@ -633,6 +637,10 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		/*
 		 * Validate the moves, if invalid get input again.
 		 * If valid, apply the moves and adjust game state.
+		 *
+		 * The check for multiple moves will happen in apply moves. I don't
+		 * have enough time to refactor this to make it all work in the right
+		 * spots.
 		 */
 		if (!validate_moves(currentPlayerMoves, numberOfMoves, currentPlayer,
 							diceRolls, movePairs)) {

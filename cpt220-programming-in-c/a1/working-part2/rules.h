@@ -94,4 +94,19 @@ BOOLEAN allPiecesInHomeBoardAnticlockwise(const struct player *);
  */
 BOOLEAN noMoreTokensOnBoard(const struct player *currentPlayer);
 
+void getStartPieceLocation(board gameBoard,
+						   struct piece_location *startPieceLocation,
+						   enum piece currentPlayerPiece,
+						   enum piece otherPlayerPiece,
+						   struct move_pair *currentMovePair,
+						   int y);
+
+void getEndPieceLocation(board gameBoard,
+						 struct piece_location *endPieceLocation,
+						 enum piece currentPlayerPiece,
+						 enum piece otherPlayerPiece,
+						 struct move_pair *currentMovePair,
+						 int y, int moves, int boardHalfToCheck,
+						 struct player *currentPlayer);
+
 #endif
