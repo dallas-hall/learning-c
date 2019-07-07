@@ -448,6 +448,7 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 	int i;
 	BOOLEAN doubleRolled = FALSE;
 	struct move_pair movePairs[MAX_MOVES];
+	char possibleB;
 
 	if (diceRolls[0] == diceRolls[1]) {
 		doubleRolled = TRUE;
@@ -506,7 +507,7 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		 */
 		if (!validMoveInput(input)) {
 			error_print(
-					"Invalid input. Must be n:n and for multiple input n:n;m:m\n");
+					"Invalid input. Must be n:n and for multiple input n:n;m:m as well as B;n for getting out of the bar list\n");
 			sleep(.5);
 			return getPlayerInput(currentPlayer, diceRolls);
 		}
@@ -533,13 +534,20 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 			}
 
 			currentNumber = strtol(tokenPointer, &strtolRemainderPointer, 0);
+			if (DEBUGGING_IO) {
+				printf("strlen(strtolRemainderPointer) is %ld\n",
+					   strlen(strtolRemainderPointer));
+			}
+
+			possibleB = strtolRemainderPointer[0];
 
 			/*
 			 * Invalid characters found.
 			 */
-			if (strlen(strtolRemainderPointer) > 0) {
+			if (strlen(strtolRemainderPointer) > 1 &&
+				toupper(possibleB) != 'B') {
 				error_print(
-						"Invalid input. Must be numbers : and ; only.\n");
+						"Invalid input. Must be the letter B, numbers : and ; only.\n");
 				/*
 				 * Sleeping so the error message is printed first.
 				 */
@@ -547,33 +555,45 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 				return getPlayerInput(currentPlayer, diceRolls);
 			}
 
-			/*
-			 * This ensures a valid move, as you can only move forward in
-			 * backgammon and between 1 and 24.
-			 */
-			if (currentNumber <= 0) {
-				error_print("Invalid input. Must be whole integers only.\n");
+			if (strlen(strtolRemainderPointer) == 0) {
 				/*
-				  * Sleeping so the error message is printed first.
-				  */
-				sleep(.5);
-				return getPlayerInput(currentPlayer, diceRolls);
-			}
-			else if (currentNumber > 24) {
-				error_print(
-						"Invalid input. Integers higher than 24 are invalid.\n");
-				/*
-				  * Sleeping so the error message is printed first.
-				  */
-				sleep(.5);
-				return getPlayerInput(currentPlayer, diceRolls);
+				 * This ensures a valid move, as you can only move forward in
+				 * backgammon and between 1 and 24.
+				 */
+				if (currentNumber <= 0) {
+					error_print(
+							"Invalid input. Must be whole integers only.\n");
+					/*
+					  * Sleeping so the error message is printed first.
+					  */
+					sleep(.5);
+					return getPlayerInput(currentPlayer, diceRolls);
+				}
+				else if (currentNumber > 24) {
+					error_print(
+							"Invalid input. Integers higher than 24 are invalid.\n");
+					/*
+					  * Sleeping so the error message is printed first.
+					  */
+					sleep(.5);
+					return getPlayerInput(currentPlayer, diceRolls);
+				}
 			}
 
 			/*
 			 * Store the column index or move amount.
 			 */
 			if (isColumn == 1) {
-				currentPlayerMoves[moveNumber].index = (int) currentNumber;
+				if (toupper(possibleB) == 'B') {
+					/*
+					 * Store 98, ASCII for uppercase B
+					 */
+					currentPlayerMoves[moveNumber].index = (int) possibleB;
+				}
+				else {
+					currentPlayerMoves[moveNumber].index = (int) currentNumber;
+				}
+
 				isColumn = 0;
 			}
 			else {
@@ -626,8 +646,13 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		 * Go through all the stored moves.
 		 */
 		for (i = 0; i < numberOfMoves; i++) {
-			printf("moves[%d].index is %d\n", i, currentPlayerMoves[i].index);
-			printf("moves[%d].count is %d\n", i, currentPlayerMoves[i].count);
+			if (DEBUGGING_IO) {
+				printf("moves[%d].index is %d\n", i,
+					   currentPlayerMoves[i].index);
+				printf("moves[%d].count is %d\n", i,
+					   currentPlayerMoves[i].count);
+			}
+
 			movePairs[i] = getMovePair(currentPlayerMoves[i].index,
 									   currentPlayerMoves[i].count,
 									   currentPlayer);
@@ -667,41 +692,78 @@ BOOLEAN validMoveInput(char input[])
 {
 	int i;
 	int numberCount = 0;
+	int bCount = 0;
 	int colonCount = 0;
 	int semiColonCount = 0;
+	char previousChar;
 
 	/*
 	 * The boundary of numbers should only be these 3 characters.
+	 * B can only be found before a : and after a ;
+	 * Numbers can be found anywhere.
 	 */
 	for (i = 0; i < strlen(input); i++) {
 		if (DEBUGGING_IO) {
 			printf("current char is %c\n", input[i]);
 		}
-		if (input[i] == ':') {
-			++colonCount;
-			++numberCount;
-		}
-		else if (input[i] == ';') {
-			++semiColonCount;
-			++numberCount;
-		}
-		else if (input[i] == '\n') {
-			++numberCount;
+
+		if (i != 0) {
+			previousChar = input[i - 1];
+
+			if (input[i] == ':') {
+				++colonCount;
+
+				if (isdigit(previousChar)) {
+					++numberCount;
+				}
+				else if (toupper(previousChar) == 'B') {
+					++bCount;
+				}
+			}
+			else if (input[i] == ';') {
+				++colonCount;
+				++semiColonCount;
+
+				if (isdigit(previousChar)) {
+					++numberCount;
+				}
+				else if (toupper(previousChar) == 'B') {
+					++bCount;
+				}
+			}
+			else if (input[i] == '\n') {
+				++numberCount;
+			}
 		}
 	}
 
 	/*
-	 * For valid input, the number of inputted numbers would twice the amount
-	 * of colons.
+	 * For valid input
+	 *
+	 * Without any Bs
+	 * a) numbers should be double the amount of colons.
+	 * b) semi-colons should be 0 or 1 less that the amount of colons
+	 *
+	 * With Bs
+	 * a) number count + b count should be double the amount of colons
+	 * b) semi-colons should be 0 or 1 less that the amount of colons + Bs
 	 */
-	if (colonCount != (numberCount / 2)) {
-		return FALSE;
+	if (bCount == 0) {
+		if (colonCount != (numberCount / 2)) {
+			return FALSE;
+		}
+		else if (semiColonCount != 0 && semiColonCount != (colonCount - 1)) {
+			return FALSE;
+		}
 	}
-		/*
-		 * For valid input, the number of semi-colons should either be none or colons - 1.
-		 */
-	else if (semiColonCount != 0 && semiColonCount != (colonCount - 1)) {
-		return FALSE;
+	else {
+		if (colonCount != ((numberCount + bCount) / 2)) {
+			return FALSE;
+		}
+		else if (semiColonCount != 0 &&
+				 semiColonCount != (colonCount + bCount - 1)) {
+			return FALSE;
+		}
 	}
 
 	return TRUE;

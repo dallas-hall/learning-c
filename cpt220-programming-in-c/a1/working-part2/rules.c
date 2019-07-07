@@ -224,7 +224,16 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 	 *
 	 * Finally, adjusting the x,y of valid moves so they can be applied.
 	 */
+
 	for (i = 0; i < num_moves; i++) {
+		if (curplayer->bar_list.token_count > 0) {
+			if (changes[i].start.x != 98 && changes[i].start.y != 98) {
+				error_print(
+						"You have at least 1 token in your bar list. You must move from there first. Use B:n to move.\n");
+				return FALSE;
+			}
+		}
+
 		if (changes[i].end.x <= -1 && changes[i].end.y <= -1) {
 			previousErrorCode = changes[i].end.x;
 			switch (previousErrorCode) {
@@ -256,12 +265,6 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 									"You must move all of your pieces into the home board first. Try again.\n");
 							return FALSE;
 						}
-					}
-				case -2:
-					if (curplayer->bar_list.token_count > 0) {
-						error_print(
-								"You must move your pieces from the bar list first. Try again.\n");
-						return FALSE;
 					}
 				default:
 					/*
@@ -334,7 +337,24 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 		currentPlayerPiece = startPiece;
 		endPiece = workingBoardState[currentMovePair.end.x][currentMovePair.end.y];
 
-		if (endPiece == P_EMPTY) {
+		if (currentMovePair.start.x == 98 && currentMovePair.start.y == 98) {
+			/*
+ 			 * Move a piece out of the bar list and put it on the table
+ 			 *  			 *
+ 			 * Need to replace the currentPlayerPiece as all other movement
+ 			 * options take a piece from the board. We aren't doing that here.
+ 			 */
+			currentPlayerPiece = curplayer->token;
+			workingCurrentPlayer.bar_list.bar_array[
+					workingCurrentPlayer.bar_list.token_count - 1] = P_EMPTY;
+			--workingCurrentPlayer.bar_list.token_count;
+			workingBoardState[currentMovePair.end.x][currentMovePair.end.y] = currentPlayerPiece;
+
+			if (DEBUGGING_RULES) {
+				printBoard(workingBoardState);
+			}
+		}
+		else if (endPiece == P_EMPTY) {
 			/*
 			 * If end position is empty, move the current player piece there.
 			 */
@@ -347,6 +367,7 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
  			 * from the board and place it into the bar list, and then move the
  			 * current player piece there.
 			 */
+
 			workingBoardState[currentMovePair.start.x][currentMovePair.start.y] = P_EMPTY;
 			workingBoardState[currentMovePair.end.x][currentMovePair.end.y] = currentPlayerPiece;
 			workingOtherPlayer.bar_list.bar_array[workingOtherPlayer.bar_list.token_count] = otherPlayerPiece;
@@ -358,15 +379,6 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 			 */
 			workingBoardState[currentMovePair.start.x][currentMovePair.start.y] = P_EMPTY;
 			++workingCurrentPlayer.score;
-		}
-		else if (currentMovePair.end.x == -2 && currentMovePair.end.y == -2) {
-			/*
- 			 * Move a piece out of the bar list and put it on the table
- 			 */
-			workingCurrentPlayer.bar_list.bar_array[
-					workingCurrentPlayer.bar_list.token_count - 1] = P_EMPTY;
-			--workingCurrentPlayer.bar_list.token_count;
-			workingBoardState[currentMovePair.end.x][currentMovePair.end.y] = currentPlayerPiece;
 		}
 		else if (endPiece == currentPlayerPiece) {
 			/*
@@ -483,10 +495,26 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	 */
 	struct move_pair currentMovePair;
 	int boardHalfToCheck;
+	BOOLEAN bPassed = FALSE;
 
 	if (DEBUGGING_RULES) {
 		normal_print("\n%s\n", "[DEBUG] rules.c - Entering getMovePair.");
 		printBoard(currentPlayer->curgame->game_board);
+	}
+
+	/*
+	 * Check for the bar list move, 98 means we are moving from the bar list.
+	 *
+	 * Convert the B into the first column in the opposite player's home board.
+	 */
+	if (y == 98) {
+		bPassed = TRUE;
+		if (currentPlayer->orientation == OR_CLOCKWISE) {
+			y = 24;
+		}
+		else if (currentPlayer->orientation == OR_ANTICLOCKWISE) {
+			y = 1;
+		}
 	}
 
 	/*
@@ -514,9 +542,17 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	/*
 	 * Get starting piece location
 	 */
-	getStartPieceLocation(currentPlayer->curgame->game_board,
-						  &startPieceLocation, currentPlayerPiece,
-						  otherPlayerPiece, &currentMovePair, y);
+	if (!bPassed) {
+		getStartPieceLocation(currentPlayer->curgame->game_board,
+							  &startPieceLocation, currentPlayerPiece,
+							  otherPlayerPiece, &currentMovePair, y);
+	}
+	else {
+		startPieceLocation.x = 98;
+		startPieceLocation.y = 98;
+		currentMovePair.start = startPieceLocation;
+	}
+
 
 	if (DEBUGGING_RULES) {
 		printf("currentMovePair.start.x is %d\n", currentMovePair.start.x);
@@ -524,7 +560,6 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 		printf("currentMovePair.start.direction is %d\n",
 			   currentMovePair.start.direction);
 	}
-
 
 	/*
 	 * Get ending piece location
