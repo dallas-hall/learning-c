@@ -283,12 +283,6 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 			 * b) Trying to move multiple times onto your own location.
 			 */
 
-			currentBoardPiece = getPieceFromBoardState(changes[i].end.x,
-													   changes[i].end.y,
-													   curplayer->curgame->game_board);
-			if (currentBoardPiece == otherPlayerPiece) {
-
-			}
 
 			continue;
 		}
@@ -310,8 +304,15 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 					struct player *curplayer)
 {
+	enum piece originalBoardStateReplica[BOARD_HEIGHT][BOARD_WIDTH];
+	copyBoardState(curplayer->curgame->game_board, originalBoardStateReplica);
+
 	if (1) {
 		normal_print("%s\n", "[DEBUG] rules.c - Entering apply_moves.");
+		normal_print("%s\n", "[DEBUG] ## Original State");
+		printBoard(curplayer->curgame->game_board);
+		normal_print("%s\n", "[DEBUG] ## Copied State");
+		printBoard(originalBoardStateReplica);
 	}
 
 	/*
@@ -796,6 +797,9 @@ void getEndPieceLocation(board gameBoard,
   	 * We check for negative numbers previously to ensure this is correct.
   	 *
   	 * If columnOffset is negative, we are trying to move into the bar list.
+  	 *
+  	 * This also has the logic for checking for a move onto an opponent's piece,
+  	 * valid and invalid.
  	*/
 	/*
  	 * P_WHITE or P_RED

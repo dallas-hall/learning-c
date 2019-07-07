@@ -326,3 +326,14 @@ enum piece getPieceFromBoardState(int x, int y, board the_board)
 {
 	return the_board[x][y];
 }
+
+void copyBoardState(board originalBoard, board replicaBoard)
+{
+	int i, j;
+
+	for(i = 0; i < BOARD_HEIGHT; i++) {
+		for(j = 0; j < BOARD_WIDTH; j++) {
+			replicaBoard[i][j]= originalBoard[i][j];
+		}
+	}
+}
