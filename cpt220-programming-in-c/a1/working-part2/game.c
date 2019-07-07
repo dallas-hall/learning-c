@@ -193,6 +193,10 @@ void play_game(struct falsible_long seed)
 				printWinningMessage(thegame.current_player);
 				quit = TRUE;
 			}
+			else if (has_won_game(thegame.other_player)) {
+				printWinningMessage(thegame.other_player);
+				quit = TRUE;
+			}
 			else {
 				swap_players(&thegame.current_player, &thegame.other_player);
 			}
