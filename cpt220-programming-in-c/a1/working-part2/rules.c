@@ -314,7 +314,7 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 	currentPlayerPiece = curplayer->token;
 	otherPlayerPiece = curplayer->curgame->other_player->token;
 
-	if (1) {
+	if (DEBUGGING_RULES) {
 		normal_print("%s\n", "[DEBUG] rules.c - Entering apply_moves.");
 		normal_print("%s\n", "[DEBUG] ## Original State");
 		printBoard(curplayer->curgame->game_board);
@@ -518,7 +518,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 						  &startPieceLocation, currentPlayerPiece,
 						  otherPlayerPiece, &currentMovePair, y);
 
-	if (1) {
+	if (DEBUGGING_RULES) {
 		printf("currentMovePair.start.x is %d\n", currentMovePair.start.x);
 		printf("currentMovePair.start.y is %d\n", currentMovePair.start.y);
 		printf("currentMovePair.start.direction is %d\n",
@@ -555,7 +555,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 						otherPlayerPiece, &currentMovePair, y, moves,
 						boardHalfToCheck, currentPlayer);
 
-	if (1) {
+	if (DEBUGGING_RULES) {
 		printf("currentMovePair.end.x is %d\n", currentMovePair.end.x);
 		printf("currentMovePair.end.y is %d\n", currentMovePair.end.y);
 		printf("currentMovePair.end.direction is %d\n",
@@ -881,7 +881,7 @@ void getStartPieceLocation(board gameBoard,
 	startPieceLocation->y = currentPieceY;
 	currentMovePair->start = *startPieceLocation;
 
-	if (1) {
+	if (DEBUGGING_RULES) {
 		printf("currentMovePair->start.x is %d\n", currentMovePair->start.x);
 		printf("currentMovePair->start.y is %d\n", currentMovePair->start.y);
 		printf("currentMovePair->start.direction is %d\n",
@@ -1085,7 +1085,7 @@ void getEndPieceLocation(board gameBoard,
 	endPieceLocation->y = currentPieceY;
 	currentMovePair->end = *endPieceLocation;
 
-	if (1) {
+	if (DEBUGGING_RULES) {
 		printf("currentMovePair->end.x is %d\n", currentMovePair->end.x);
 		printf("currentMovePair->end.y is %d\n", currentMovePair->end.y);
 		printf("currentMovePair->end.direction is %d\n",
