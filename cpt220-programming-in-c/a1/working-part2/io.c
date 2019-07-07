@@ -646,9 +646,6 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 							diceRolls, movePairs)) {
 			return getPlayerInput(currentPlayer, diceRolls);
 		}
-		else {
-			printf("APPLY DEM MOVES\n");
-		}
 
 		/*
 		 * Tried calling clear_buffer() here as I was having some intermittent

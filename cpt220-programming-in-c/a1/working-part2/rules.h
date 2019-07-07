@@ -94,6 +94,11 @@ BOOLEAN allPiecesInHomeBoardAnticlockwise(const struct player *);
  */
 BOOLEAN noMoreTokensOnBoard(const struct player *currentPlayer);
 
+
+/*
+ * Get the piece location for the start and end piece.
+ * Used for move validation and applying.
+ */
 void getStartPieceLocation(board gameBoard,
 						   struct piece_location *startPieceLocation,
 						   enum piece currentPlayerPiece,

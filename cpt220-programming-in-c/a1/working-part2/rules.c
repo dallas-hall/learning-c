@@ -167,6 +167,11 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 {
 	int i;
 	int previousErrorCode;
+	enum piece previousBoardPiece = P_INVALID;
+	enum piece currentBoardPiece = P_INVALID;
+	enum piece currentPlayerPiece = curplayer->token;
+	enum piece otherPlayerPiece = curplayer->curgame->other_player->token;
+
 
 	if (DEBUGGING_RULES) {
 		normal_print("%s\n", "[DEBUG] rules.c - Entering validate_moves.");
@@ -219,7 +224,9 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 	 * Extra checks
 	 * a) Your bar list is empty when trying to move
 	 * b) All pieces are inside your home board when trying to score
+	 * c) Moving multiple pieces onto the same spot
 	 *
+	 * Finally, adjusting the x,y of valid moves so they can be applied.
 	 */
 	for (i = 0; i < num_moves; i++) {
 		if (changes[i].end.x <= -1 && changes[i].end.y <= -1) {
@@ -270,13 +277,28 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 		}
 		else {
 			/*
-			 * Multiple moves to the same location isn't checked properly here.
-			 * Will do this inside apply_moves, it will be an all or nothing
-			 * tranctions so any errors found are okay.
+			 * The checks here are
+			 *
+			 * a) Landing on a single opponent piece
+			 * b) Trying to move multiple times onto your own location.
 			 */
+
+			currentBoardPiece = getPieceFromBoardState(changes[i].end.x,
+													   changes[i].end.y,
+													   curplayer->curgame->game_board);
+			if (currentBoardPiece == otherPlayerPiece) {
+
+			}
+
 			continue;
 		}
 	}
+
+	/*
+	 * Validate all moves first as much as we can (i.e. need to address multiple
+	 * moves to the same spot in apply moves.
+	 */
+	apply_moves(changes, num_moves, curplayer->curgame->current_player);
 
 	return TRUE;
 }
@@ -288,7 +310,7 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 					struct player *curplayer)
 {
-	if (DEBUGGING_RULES) {
+	if (1) {
 		normal_print("%s\n", "[DEBUG] rules.c - Entering apply_moves.");
 	}
 
@@ -421,9 +443,9 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 		}
 	}
 	getEndPieceLocation(currentPlayer->curgame->game_board,
-						  &endPieceLocation, currentPlayerPiece,
-						  otherPlayerPiece, &currentMovePair, y, moves,
-						  boardHalfToCheck, currentPlayer);
+						&endPieceLocation, currentPlayerPiece,
+						otherPlayerPiece, &currentMovePair, y, moves,
+						boardHalfToCheck, currentPlayer);
 
 	if (1) {
 		printf("currentMovePair.end.x is %d\n", currentMovePair.end.x);
@@ -759,12 +781,12 @@ void getStartPieceLocation(board gameBoard,
 }
 
 void getEndPieceLocation(board gameBoard,
-						   struct piece_location *endPieceLocation,
-						   enum piece currentPlayerPiece,
-						   enum piece otherPlayerPiece,
-						   struct move_pair *currentMovePair,
-						   int y, int moves, int boardHalfToCheck,
-						   struct player *currentPlayer)
+						 struct piece_location *endPieceLocation,
+						 enum piece currentPlayerPiece,
+						 enum piece otherPlayerPiece,
+						 struct move_pair *currentMovePair,
+						 int y, int moves, int boardHalfToCheck,
+						 struct player *currentPlayer)
 {
 	/* # SECOND PIECE
 	 *
@@ -808,7 +830,7 @@ void getEndPieceLocation(board gameBoard,
 				currentPieceY = -1;
 				break;
 			}
-			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
+			currentBoardPiece = gameBoard[i][columnOffset];
 
 			/*
 			 * If the other player has 2 or more pieces on the intended spot
@@ -835,9 +857,22 @@ void getEndPieceLocation(board gameBoard,
 				currentPieceY = columnOffset;
 				break;
 			}
+				/*
+				 * If the second place checked is empty and the first place has
+				 * an opponent's piece, its good as this is a valid move.
+				 */
+			else if (i == 1 && currentBoardPiece == P_EMPTY &&
+					 previousBoardPiece == otherPlayerPiece) {
+
+				/*
+ 				 * Need - 1 here since we want to remove the player piece.
+ 				*/
+				currentPieceX = i - 1;
+				currentPieceY = columnOffset;
+				break;
+			}
 			else if (i != 0) {
-				previousBoardPiece = currentPlayer->curgame->game_board[i -
-																		1][columnOffset];
+				previousBoardPiece = gameBoard[i - 1][columnOffset];
 
 				if (currentBoardPiece == P_EMPTY &&
 					previousBoardPiece == currentPlayerPiece) {
@@ -871,7 +906,7 @@ void getEndPieceLocation(board gameBoard,
 				break;
 			}
 
-			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
+			currentBoardPiece = gameBoard[i][columnOffset];
 
 			/*
 			 * If the other player has 2 or more pieces on the intended spot
@@ -898,10 +933,22 @@ void getEndPieceLocation(board gameBoard,
 				currentPieceY = columnOffset;
 				break;
 			}
-			else if (i != BOARD_HEIGHT - 1) {
-				previousBoardPiece = currentPlayer->curgame->game_board[i +
-																		1][columnOffset];
+				/*
+				 * If the second place checked is empty and the first place has
+				 * an opponent's piece, its good as this is a valid move.
+				 */
+			else if (i == BOARD_HEIGHT - 2 && currentBoardPiece == P_EMPTY &&
+					 previousBoardPiece == otherPlayerPiece) {
 
+				/*
+ 				 * Need + 1 here since we want to remove the player piece.
+ 				*/
+				currentPieceX = i + 1;
+				currentPieceY = columnOffset;
+				break;
+			}
+			else if (i != BOARD_HEIGHT - 1) {
+				previousBoardPiece = gameBoard[i + 1][columnOffset];
 
 				if (currentBoardPiece == P_EMPTY &&
 					previousBoardPiece == currentPlayerPiece) {
@@ -912,7 +959,6 @@ void getEndPieceLocation(board gameBoard,
 					if (i == boardHalfToCheck) {
 						break;
 					}
-
 
 					currentPieceX = i;
 					currentPieceY = columnOffset;
