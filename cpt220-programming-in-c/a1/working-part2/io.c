@@ -247,13 +247,13 @@ void printBoardFooterMessage()
 	char output[256];
 
 	if (theGame->current_player->orientation == OR_CLOCKWISE) {
-		colour = "WHITE";
-		direction = "CLOCKWISE";
+		colour = "white";
+		direction = "clockwise";
 		/*token = 'X';*/
 	}
 	else {
-		colour = "RED";
-		direction = "ANTICLOCKWISE";
+		colour = "red";
+		direction = "anticlockwise";
 		/*token = 'O';*/
 	}
 
@@ -261,11 +261,10 @@ void printBoardFooterMessage()
 	 * TODO - check what happens with a number
 	 */
 	if (theGame->current_player->bar_list.token_count == 0) {
-		strcpy(barCount, "EMPTY");
+		strcpy(barCount, "empty");
 	}
 	else {
-		normal_print(barCount, "%d",
-					 theGame->current_player->bar_list.token_count);
+		sprintf(barCount, "%d", theGame->current_player->bar_list.token_count);
 	}
 
 	/*
@@ -935,11 +934,11 @@ void printOtherPlayer(struct game *thegame)
 
 void printWinningMessage(struct player *currentPlayer)
 {
-	normal_print("Congratulations! %s has won the game with a score of %d\n",
+	normal_print("\nCongratulations! %s has won the game with a score of %d\n",
 				 currentPlayer->name, currentPlayer->score);
 }
 
 void printDrawMessage()
 {
-	normal_print("The game was a draw!\n");
+	normal_print("\nThe game was a draw!\n");
 }

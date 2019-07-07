@@ -66,4 +66,10 @@ BOOLEAN player_init(struct player *, struct game *);
 
 enum input_result player_take_turn(struct player *);
 
+/*
+ * Used for working changes when applying moves. So we can roll back if need
+ * be.
+ */
+void copyPlayer(struct player *aPlayer, struct player *aPlayerCopy);
+
 #endif

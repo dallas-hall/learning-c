@@ -167,11 +167,6 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 {
 	int i;
 	int previousErrorCode;
-	enum piece previousBoardPiece = P_INVALID;
-	enum piece currentBoardPiece = P_INVALID;
-	enum piece currentPlayerPiece = curplayer->token;
-	enum piece otherPlayerPiece = curplayer->curgame->other_player->token;
-
 
 	if (DEBUGGING_RULES) {
 		normal_print("%s\n", "[DEBUG] rules.c - Entering validate_moves.");
@@ -218,11 +213,12 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 	 * b) cannot move an empty piece -98
 	 * c) cannot move an opponent's piece -97
 	 * d) cannot move to a place where an opponent has 2 or more pieces already -96
-	 * e) bar list move -1, this will check the players score to see if that
+	 * e) off the table move is -1
+	 * f) bar list move is -2, will check the players score to see if that
 	 * is a legal move.
 	 *
 	 * Extra checks
-	 * a) Your bar list is empty when trying to move
+	 * a) Your bar list isn't empty when trying to move
 	 * b) All pieces are inside your home board when trying to score
 	 * c) Moving multiple pieces onto the same spot
 	 *
@@ -247,26 +243,25 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 							"Too many opponent pieces at that location. Try again.\n");
 					return FALSE;
 				case -1:
+					if (curplayer->orientation == OR_CLOCKWISE) {
+						if (!allPiecesInHomeBoardClockwise(curplayer)) {
+							error_print(
+									"You must move all of your pieces into the home board first. Try again.\n");
+							return FALSE;
+						}
+					}
+					else if (curplayer->orientation == OR_ANTICLOCKWISE) {
+						if (!allPiecesInHomeBoardAnticlockwise(curplayer)) {
+							error_print(
+									"You must move all of your pieces into the home board first. Try again.\n");
+							return FALSE;
+						}
+					}
+				case -2:
 					if (curplayer->bar_list.token_count > 0) {
 						error_print(
 								"You must move your pieces from the bar list first. Try again.\n");
 						return FALSE;
-					}
-					else {
-						if (curplayer->orientation == OR_CLOCKWISE) {
-							if (!allPiecesInHomeBoardClockwise(curplayer)) {
-								error_print(
-										"You must move all of your pieces into the home board first. Try again.\n");
-								return FALSE;
-							}
-						}
-						else if (curplayer->orientation == OR_ANTICLOCKWISE) {
-							if (!allPiecesInHomeBoardAnticlockwise(curplayer)) {
-								error_print(
-										"You must move all of your pieces into the home board first. Try again.\n");
-								return FALSE;
-							}
-						}
 					}
 				default:
 					/*
@@ -275,28 +270,26 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 					break;
 			}
 		}
-		else {
-			/*
-			 * The checks here are
-			 *
-			 * a) Landing on a single opponent piece
-			 * b) Trying to move multiple times onto your own location.
-			 */
-
-
-			continue;
-		}
 	}
 
 	/*
-	 * Validate all moves first as much as we can (i.e. need to address multiple
-	 * moves to the same spot in apply moves.
-	 */
+ 	* Validate all moves first as much as we can (i.e. need to address multiple
+ 	* moves to the same spot in apply moves.
+ 	*/
 	apply_moves(changes, num_moves, curplayer->curgame->current_player);
 
 	return TRUE;
 }
 
+/*
+ * One validation that will happen here is moves into the same position.
+ * This will happen here so we apply the first move, and then check the
+ * subsequent moves to the same column. Only if all of those moves pass
+ * will they be applied.
+ *
+ * Thus this is an all or nothing transaction. This is why we copied the
+ * game state before, so we can roll it back if necessary.
+ */
 /**
  * apply the moves listed in themoves. These are offset pairs that were inserted
  * in the "changes" array in the validate_moves() function.
@@ -304,29 +297,143 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 					struct player *curplayer)
 {
-	enum piece originalBoardStateReplica[BOARD_HEIGHT][BOARD_WIDTH];
-	copyBoardState(curplayer->curgame->game_board, originalBoardStateReplica);
+	enum piece workingBoardState[BOARD_HEIGHT][BOARD_WIDTH];
+	struct player workingCurrentPlayer;
+	struct player workingOtherPlayer;
+	int i, j;
+	int columnCount;
+	struct move_pair currentMovePair;
+	enum piece startPiece;
+	enum piece endPiece;
+	enum piece currentPlayerPiece;
+	enum piece otherPlayerPiece;
+
+	copyBoardState(curplayer->curgame->game_board, workingBoardState);
+	copyPlayer(curplayer, &workingCurrentPlayer);
+	copyPlayer(curplayer->curgame->other_player, &workingOtherPlayer);
+	currentPlayerPiece = curplayer->token;
+	otherPlayerPiece = curplayer->curgame->other_player->token;
 
 	if (1) {
 		normal_print("%s\n", "[DEBUG] rules.c - Entering apply_moves.");
 		normal_print("%s\n", "[DEBUG] ## Original State");
 		printBoard(curplayer->curgame->game_board);
 		normal_print("%s\n", "[DEBUG] ## Copied State");
-		printBoard(originalBoardStateReplica);
+		printBoard(workingBoardState);
 	}
 
 	/*
-	 * One validation that will happen here is moves into the same position.
-	 * This will happen here so we apply the first move, and then check the
-	 * subsequent moves to the same column. Only if all of those moves pass
-	 * will they be applied.
-	 *
-	 * Thus this is an all or nothing transaction.
+	 * For each move, apply it to the replica game board and then check the
+	 * multiple moves. If valid, apply moves to the original game board and the
+	 * players, otherwise return an error.
 	 */
+	for (i = 0; i < num_moves; i++) {
+		currentMovePair = themoves[i];
+
+		startPiece = workingBoardState[currentMovePair.start.x][currentMovePair.start.y];
+		currentPlayerPiece = startPiece;
+		endPiece = workingBoardState[currentMovePair.end.x][currentMovePair.end.y];
+
+		if (endPiece == P_EMPTY) {
+			/*
+			 * If end position is empty, move the current player piece there.
+			 */
+			workingBoardState[currentMovePair.start.x][currentMovePair.start.y] = P_EMPTY;
+			workingBoardState[currentMovePair.end.x][currentMovePair.end.y] = currentPlayerPiece;
+		}
+		else if (endPiece == otherPlayerPiece) {
+			/*
+ 			 * If end position is filled by the opponent, remove their piece
+ 			 * from the board and place it into the bar list, and then move the
+ 			 * current player piece there.
+			 */
+			workingBoardState[currentMovePair.start.x][currentMovePair.start.y] = P_EMPTY;
+			workingBoardState[currentMovePair.end.x][currentMovePair.end.y] = currentPlayerPiece;
+			workingOtherPlayer.bar_list.bar_array[workingOtherPlayer.bar_list.token_count] = otherPlayerPiece;
+			++workingOtherPlayer.bar_list.token_count;
+		}
+		else if (currentMovePair.end.x == -1 && currentMovePair.end.y == -1) {
+			/*
+			 * Move a piece off the table move and count it
+			 */
+			workingBoardState[currentMovePair.start.x][currentMovePair.start.y] = P_EMPTY;
+			++workingCurrentPlayer.score;
+		}
+		else if (currentMovePair.end.x == -2 && currentMovePair.end.y == -2) {
+			/*
+ 			 * Move a piece out of the bar list and put it on the table
+ 			 */
+			workingCurrentPlayer.bar_list.bar_array[
+					workingCurrentPlayer.bar_list.token_count - 1] = P_EMPTY;
+			--workingCurrentPlayer.bar_list.token_count;
+			workingBoardState[currentMovePair.end.x][currentMovePair.end.y] = currentPlayerPiece;
+		}
+		else if (endPiece == currentPlayerPiece) {
+			/*
+ 			 * Checking for multiple moves. If found, place the token above or
+ 			 * below the current token. We will check everything later to see
+ 			 * if we have <=7 tokens in the column.
+ 			 */
+			if (currentMovePair.end.direction == DIR_UP) {
+				workingBoardState[currentMovePair.end.x][currentMovePair.end.y -
+														 1] = currentPlayerPiece;
+			}
+			else if (currentMovePair.end.direction == DIR_DOWN) {
+				workingBoardState[currentMovePair.end.x][currentMovePair.end.y +
+														 1] = currentPlayerPiece;
+			}
+		}
+
+		/*
+		 * Make sure we haven't added too many pieces to the same column.
+		 */
+		for (i = 0; i < BOARD_HEIGHT; i++) {
+			/*
+			 * Reset every column.
+			 */
+			columnCount = 0;
+			for (j = 0; j < BOARD_WIDTH; j++) {
+				if (workingBoardState[i][j] == currentPlayerPiece) {
+					++columnCount;
+				}
+			}
+			/*
+			 * Check after all column indices have been examined.
+			 */
+			if (columnCount > 7) {
+				error_print(
+						"Too many of your pieces at that location. Try again.\n");
+				return FALSE;
+			}
+		}
+	}
 
 
+	/*
+	 * If everything is okay, update the game and move on
+	 */
+	*curplayer = workingCurrentPlayer;
+	if (strcmp(curplayer->curgame->players[0].name, curplayer->name) == 0) {
+		curplayer->curgame->players[0] = workingCurrentPlayer;
+	}
+	else if (strcmp(curplayer->curgame->players[1].name, curplayer->name) ==
+			 0) {
+		curplayer->curgame->players[1] = workingCurrentPlayer;
+	}
 
-	return FALSE;
+	*curplayer->curgame->other_player = workingOtherPlayer;
+	if (strcmp(curplayer->curgame->players[0].name, workingOtherPlayer.name) ==
+		0) {
+		curplayer->curgame->players[0] = workingOtherPlayer;
+	}
+	else if (strcmp(curplayer->curgame->players[1].name,
+					workingOtherPlayer.name) == 0) {
+		curplayer->curgame->players[1] = workingOtherPlayer;
+	}
+
+	copyBoardState(workingBoardState, curplayer->curgame->game_board);
+
+	return TRUE;
 }
 
 /**
@@ -648,7 +755,8 @@ void getStartPieceLocation(board gameBoard,
 
 	/*
 	 * -99 catch all invalid
-	 * -1 is into into the bar list
+	 * -1 is of the board
+	 * -2 is out of bar list
 	 * else is x, y of the board
 	 */
 	int currentPieceX = -99;
@@ -861,23 +969,26 @@ void getEndPieceLocation(board gameBoard,
 				currentPieceY = columnOffset;
 				break;
 			}
-				/*
-				 * If the second place checked is empty and the first place has
-				 * an opponent's piece, its good as this is a valid move.
-				 */
-			else if (i == 1 && currentBoardPiece == P_EMPTY &&
-					 previousBoardPiece == otherPlayerPiece) {
-
-				/*
- 				 * Need - 1 here since we want to remove the player piece.
- 				*/
-				currentPieceX = i - 1;
-				currentPieceY = columnOffset;
-				break;
+			else if (i == BOARD_HEIGHT - 1 &&
+					 currentBoardPiece == otherPlayerPieceCount) {
+				previousBoardPiece = otherPlayerPieceCount;
 			}
 			else if (i != 0) {
 				previousBoardPiece = gameBoard[i - 1][columnOffset];
 
+				/*
+ 				 * If the second place checked is empty and the first place has
+				 * an opponent's piece, its good as this is a valid move.
+				 */
+				if (i == BOARD_HEIGHT - 2 && currentBoardPiece == P_EMPTY &&
+					previousBoardPiece == otherPlayerPiece) {
+					/*
+					  * Need - 1 here since we want to remove the player piece.
+					 */
+					currentPieceX = i - 1;
+					currentPieceY = columnOffset;
+					break;
+				}
 				if (currentBoardPiece == P_EMPTY &&
 					previousBoardPiece == currentPlayerPiece) {
 					/*
@@ -937,25 +1048,24 @@ void getEndPieceLocation(board gameBoard,
 				currentPieceY = columnOffset;
 				break;
 			}
-				/*
-				 * If the second place checked is empty and the first place has
-				 * an opponent's piece, its good as this is a valid move.
-				 */
-			else if (i == BOARD_HEIGHT - 2 && currentBoardPiece == P_EMPTY &&
-					 previousBoardPiece == otherPlayerPiece) {
-
-				/*
- 				 * Need + 1 here since we want to remove the player piece.
- 				*/
-				currentPieceX = i + 1;
-				currentPieceY = columnOffset;
-				break;
-			}
 			else if (i != BOARD_HEIGHT - 1) {
 				previousBoardPiece = gameBoard[i + 1][columnOffset];
 
-				if (currentBoardPiece == P_EMPTY &&
-					previousBoardPiece == currentPlayerPiece) {
+				/*
+ 				 * If the second place checked is empty and the first place has
+				 * an opponent's piece, its good as this is a valid move.
+				 */
+				if (i == BOARD_HEIGHT - 2 && currentBoardPiece == P_EMPTY &&
+					previousBoardPiece == otherPlayerPiece) {
+					/*
+					  * Need + 1 here since we want to remove the player piece.
+					 */
+					currentPieceX = i + 1;
+					currentPieceY = columnOffset;
+					break;
+				}
+				else if (currentBoardPiece == P_EMPTY &&
+						 previousBoardPiece == currentPlayerPiece) {
 					/*
 					 * If i == boardHalfToCheck then we've checked 8 places
 					 * which is too many.

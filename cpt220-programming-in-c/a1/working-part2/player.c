@@ -123,7 +123,27 @@ enum input_result player_take_turn(struct player *current_player)
 	return getPlayerInput(current_player, diceRolls);
 }
 
+char name[NAME_LEN + 1];
+int score;
+enum piece token;
+struct bar_list bar_list;
+struct game *curgame;
+enum orientation orientation;
 
+void copyPlayer(struct player *aPlayerOriginal, struct player *aPlayerCopy)
+{
+	aPlayerCopy->name[0] = '\0';
+	aPlayerCopy->score = 0;
+	aPlayerCopy->curgame = NULL;
+	aPlayerCopy->bar_list.token_count = 0;
+	aPlayerCopy->bar_list.bar_array[0] = P_EMPTY;
+	aPlayerCopy->orientation = 0;
 
-
+	strcpy(aPlayerCopy->name, aPlayerOriginal->name);
+	aPlayerCopy->score = aPlayerOriginal->score;
+	aPlayerCopy->token = aPlayerOriginal->token;
+	aPlayerCopy->bar_list = aPlayerOriginal->bar_list;
+	aPlayerCopy->curgame = aPlayerOriginal->curgame;
+	aPlayerCopy->orientation = aPlayerOriginal->orientation;
+}
 
