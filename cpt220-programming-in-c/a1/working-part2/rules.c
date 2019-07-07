@@ -340,9 +340,10 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 		if (currentMovePair.start.x == 98 && currentMovePair.start.y == 98) {
 			/*
  			 * Move a piece out of the bar list and put it on the table
- 			 *  			 *
+ 			 *
  			 * Need to replace the currentPlayerPiece as all other movement
  			 * options take a piece from the board. We aren't doing that here.
+ 			 *
  			 */
 			currentPlayerPiece = curplayer->token;
 			workingCurrentPlayer.bar_list.bar_array[
@@ -509,12 +510,11 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	 */
 	if (y == 98) {
 		bPassed = TRUE;
-		if (currentPlayer->orientation == OR_CLOCKWISE) {
-			y = 24;
-		}
-		else if (currentPlayer->orientation == OR_ANTICLOCKWISE) {
-			y = 1;
-		}
+		/*
+		 * This puts starting location into the opponent's home board.
+		 * It is the same for both directions.
+		 */
+		y = 24;
 	}
 
 	/*
@@ -588,7 +588,8 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	getEndPieceLocation(currentPlayer->curgame->game_board,
 						&endPieceLocation, currentPlayerPiece,
 						otherPlayerPiece, &currentMovePair, y, moves,
-						boardHalfToCheck, currentPlayer);
+						boardHalfToCheck, currentPlayer, bPassed);
+
 
 	if (DEBUGGING_RULES) {
 		printf("currentMovePair.end.x is %d\n", currentMovePair.end.x);
@@ -930,7 +931,7 @@ void getEndPieceLocation(board gameBoard,
 						 enum piece otherPlayerPiece,
 						 struct move_pair *currentMovePair,
 						 int y, int moves, int boardHalfToCheck,
-						 struct player *currentPlayer)
+						 struct player *currentPlayer, BOOLEAN bPassed)
 {
 	/* # SECOND PIECE
 	 *
@@ -961,7 +962,16 @@ void getEndPieceLocation(board gameBoard,
 	int i;
 	int otherPlayerPieceCount = 0;
 
-	columnOffset = getColumnOffset(y - moves);
+	/*
+	 * Trying to get out of the bar list. Add one from the moves amount
+	 * as we are moving from the bar list and not starting on the board.
+	 */
+	if (bPassed) {
+		columnOffset = getColumnOffset(y - moves + 1);
+	}
+	else {
+		columnOffset = getColumnOffset(y - moves);
+	}
 
 	if (endPieceLocation->direction == DIR_DOWN) {
 		/*
@@ -970,13 +980,14 @@ void getEndPieceLocation(board gameBoard,
 		boardHalfToCheck = BOARD_HEIGHT / 2;
 		for (i = 0; i <= boardHalfToCheck; i++) {
 			/*
-			 * Trying to move into the bar list.
+			 * Trying to move into the score board
 			 */
 			if (columnOffset < 0) {
 				currentPieceX = -1;
 				currentPieceY = -1;
 				break;
 			}
+
 			currentBoardPiece = gameBoard[i][columnOffset];
 
 			/*
@@ -1116,6 +1127,7 @@ void getEndPieceLocation(board gameBoard,
 			}
 		}
 	}
+
 	endPieceLocation->x = currentPieceX;
 	endPieceLocation->y = currentPieceY;
 	currentMovePair->end = *endPieceLocation;
