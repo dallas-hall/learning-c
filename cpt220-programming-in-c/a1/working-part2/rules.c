@@ -165,22 +165,65 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 					   const struct player *curplayer, const int dicerolls[],
 					   struct move_pair changes[])
 {
+	BOOLEAN allMovesValid = FALSE;
+	int i;
+
 	if (1) {
 		normal_print("%s\n", "[DEBUG] rules.c - Entering validate_moves.");
 	}
 	/*
 	 * getMovePair validation checks.
 	 * a) direction movement checked for the end piece
-	 * b) cannot move an empty piece
-	 * c) cannot move an opponent's piece
-	 * d) cannot move to a place where an opponent has 2 or more pieces already
+	 * b) cannot move an empty piece -98
+	 * c) cannot move an opponent's piece -97
+	 * d) cannot move to a place where an opponent has 2 or more pieces already -96
+	 * e) bar list move -1, this will check the players score to see if that
+	 * is a legal move.
 	 *
+	 * The following checks are done here:
+	 *
+	 * a) Landing on an opponent's single piece, replace opponent piece, and
+	 * send the opponent's piece to the bar list
+	 * b) If a player has any piece's in their bar list, they must move them
+	 * all onto the board first.
+	 * c) If all pieces are in the player's home board (1-6) then they can move
+	 * pieces off the table and adjust their score by 1 for each piece.
+	 * d) Can only move pieces from the board into the bar list if you have
+	 * enough move points to do so.
+	 *
+	 * Only return true if all moves are valid.
 	 */
 
+	/*
+	 * Check supplied validation codes
+	 */
+	if(1) {
+		for (i = 0; i < num_moves; i++) {
+			printf("## Selected Moves\n");
+			printf("selected_moves[%d].count is %d\n", i, selected_moves[i].count);
+			printf("selected_moves[%d].index is %d\n", i, selected_moves[i].index);
+		}
+
+		for (i = 0; i < num_moves; i++) {
+			printf("## Start Piece\n");
+			printf("changes[%d].start.x is %d\n", i, changes[i].start.x);
+			printf("changes[%d].start.y is %d\n", i, changes[i].start.y);
+			printf("changes[%d].start.direction is %d\n", i, changes[i].start.direction);
+			printf("## End Piece\n");
+			printf("changes[%d].end.x is %d\n", i, changes[i].end.x);
+			printf("changes[%d].end.y is %d\n", i, changes[i].end.y);
+			printf("changes[%d].end.direction is %d\n", i, changes[i].end.direction);
+		}
+
+		for (i = 0; i < 2; i++) {
+			printf("## Die Rolls\n");
+			printf("dicerolls[%d].count is %d\n", i, dicerolls[i]);
+		}
 
 
-
-	return FALSE;
+	}
+	
+	return allMovesValid;
 }
 
 /**
@@ -209,7 +252,7 @@ BOOLEAN has_won_game(const struct player *curplayer)
 	BOOLEAN noTokensLeft = FALSE;
 
 	if (1) {
-		normal_print("%s\n", "[DEBUG] rules.c - Entering has_won_game.");
+		normal_print("\n%s\n", "[DEBUG] rules.c - Entering has_won_game.");
 	}
 
 	if (curplayer->bar_list.token_count == 0) {
@@ -258,7 +301,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	int i, columnOffset;
 
 	if (DEBUGGING_RULES) {
-		normal_print("%s\n", "[DEBUG] rules.c - Entering has_won_game.");
+		normal_print("\n%s\n", "[DEBUG] rules.c - Entering getMovePair.");
 		printBoard(currentPlayer->curgame->game_board);
 	}
 

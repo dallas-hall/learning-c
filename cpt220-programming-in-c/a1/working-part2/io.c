@@ -444,7 +444,8 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 	int moveNumber;
 	long currentNumber;
 	struct move currentPlayerMoves[MAX_MOVES];
-	int moveSum;
+	int movesSum;
+	int numberOfMoves;
 	int i;
 	BOOLEAN doubleRolled = FALSE;
 	struct move_pair movePairs[MAX_MOVES];
@@ -458,12 +459,13 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		 * Set up our validation checking values.
  		 */
 		for (i = 0; i < MAX_MOVES; i++) {
-			currentPlayerMoves[i].index = -1;
-			currentPlayerMoves[i].count = -1;
+			currentPlayerMoves[i].index = -100;
+			currentPlayerMoves[i].count = -100;
 		}
 		moveNumber = 0;
 		isColumn = 1;
-		moveSum = 0;
+		movesSum = 0;
+		numberOfMoves = 0;
 
 		normal_print(fold(msg));
 		/*
@@ -555,7 +557,8 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 				return getPlayerInput(currentPlayer, diceRolls);
 			}
 			else if (currentNumber > 24) {
-				error_print("Invalid input. Integers higher than 24 are invalid.\n");
+				error_print(
+						"Invalid input. Integers higher than 24 are invalid.\n");
 				/*
 				  * Sleeping so the error message is printed first.
 				  */
@@ -572,8 +575,9 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 			}
 			else {
 				currentPlayerMoves[moveNumber].count = (int) currentNumber;
-				moveSum += (int) currentNumber;
+				movesSum += (int) currentNumber;
 				++moveNumber;
+				++numberOfMoves;
 				isColumn = 1;
 			}
 
@@ -595,7 +599,7 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		 * Check that total moves don't exceed the sum of die rolls.
 		 * For doubles, its sum of die rolls * 2
 		 */
-		if (moveSum > diceRolls[0] + diceRolls[1] && !doubleRolled) {
+		if ((movesSum > (diceRolls[0] + diceRolls[1])) && !doubleRolled) {
 			error_print(
 					"Invalid input for normal roll. Your total amount of moves exceeds your die roll total.\n");
 			/*
@@ -604,7 +608,8 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 			sleep(.5);
 			return getPlayerInput(currentPlayer, diceRolls);
 		}
-		else if (moveSum > (diceRolls[0] + diceRolls[1]) * 2 && doubleRolled) {
+		else if ((movesSum > ((diceRolls[0] + diceRolls[1]) * 2)) &&
+				 doubleRolled) {
 			error_print(
 					"Invalid input for double roll. Your total amount of moves exceeds die roll total times 2.\n");
 			/*
@@ -617,24 +622,24 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		/*
 		 * Go through all the stored moves.
 		 */
-		for (i = 0; i < MAX_MOVES; i++) {
+		for (i = 0; i < numberOfMoves; i++) {
+			printf("moves[%d].index is %d\n", i, currentPlayerMoves[i].index);
+			printf("moves[%d].count is %d\n", i, currentPlayerMoves[i].count);
+			movePairs[i] = getMovePair(currentPlayerMoves[i].index,
+									   currentPlayerMoves[i].count,
+									   currentPlayer);
+		}
 
-
-			if (currentPlayerMoves[i].index != -1 &&
-				currentPlayerMoves[i].count != -1) {
-				printf("moves[%d].index is %d\n", i,
-					   currentPlayerMoves[i].index);
-				printf("moves[%d].count is %d\n", i,
-					   currentPlayerMoves[i].count);
-				movePairs[i] = getMovePair(currentPlayerMoves[i].index,
-										   currentPlayerMoves[i].count,
-										   currentPlayer);
-			}
-
-			if (!validate_moves(currentPlayerMoves, moveNumber + 1,
-								currentPlayer, diceRolls, movePairs)) {
-				return getPlayerInput(currentPlayer, diceRolls);
-			}
+		/*
+		 * Validate the moves, if invalid get input again.
+		 * If valid, apply the moves and adjust game state.
+		 */
+		if (!validate_moves(currentPlayerMoves, movesSum, currentPlayer,
+							diceRolls, movePairs)) {
+			return getPlayerInput(currentPlayer, diceRolls);
+		}
+		else {
+			printf("APPLY DEM MOVES\n");
 		}
 
 		/*
@@ -643,7 +648,8 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		 * didn't help.
 		 *
 		 * I tried removing the newline before entering strtok and that didn't
-		 * help either. Not sure what the problem is.
+		 * help either. Not sure what the problem is, seems to only happen
+		 * inside of CLion and not on the command line.
 		 */
 		/*clear_buffer();*/
 
@@ -924,7 +930,8 @@ void printOtherPlayer(struct game *thegame)
 
 void printWinningMessage(struct player *currentPlayer)
 {
-	normal_print("Congratulations! %s has won the game with a score of %d\n", currentPlayer->name, currentPlayer->score);
+	normal_print("Congratulations! %s has won the game with a score of %d\n",
+				 currentPlayer->name, currentPlayer->score);
 }
 
 void printDrawMessage()
