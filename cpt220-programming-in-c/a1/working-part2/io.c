@@ -721,7 +721,6 @@ BOOLEAN validMoveInput(char input[])
 				}
 			}
 			else if (input[i] == ';') {
-				++colonCount;
 				++semiColonCount;
 
 				if (isdigit(previousChar)) {

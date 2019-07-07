@@ -303,7 +303,7 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 	enum piece workingBoardState[BOARD_HEIGHT][BOARD_WIDTH];
 	struct player workingCurrentPlayer;
 	struct player workingOtherPlayer;
-	int i, j;
+	int i, j, k;
 	int columnCount;
 	struct move_pair currentMovePair;
 	enum piece startPiece;
@@ -399,13 +399,13 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 		/*
 		 * Make sure we haven't added too many pieces to the same column.
 		 */
-		for (i = 0; i < BOARD_HEIGHT; i++) {
+		for (j = 0; j < BOARD_HEIGHT; j++) {
 			/*
 			 * Reset every column.
 			 */
 			columnCount = 0;
-			for (j = 0; j < BOARD_WIDTH; j++) {
-				if (workingBoardState[i][j] == currentPlayerPiece) {
+			for (k = 0; k < BOARD_WIDTH; k++) {
+				if (workingBoardState[j][k] == currentPlayerPiece) {
 					++columnCount;
 				}
 			}
