@@ -116,14 +116,8 @@ BOOLEAN player_init(struct player *aplayer, struct game *thegame)
 enum input_result player_take_turn(struct player *current_player)
 {
 	int diceRolls[2];
-	BOOLEAN doubleRolled = FALSE;
-
 	diceRolls[0] = rollDice();
 	diceRolls[1] = rollDice();
-
-	if(diceRolls[0] == diceRolls[1]) {
-		doubleRolled = TRUE;
-	}
 
 	normal_print("You have rolled a %d and a %d.\n", diceRolls[0], diceRolls[1]);
 	return getPlayerInput(current_player, diceRolls);
