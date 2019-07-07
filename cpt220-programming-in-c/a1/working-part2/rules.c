@@ -165,38 +165,17 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 					   const struct player *curplayer, const int dicerolls[],
 					   struct move_pair changes[])
 {
-	BOOLEAN allMovesValid = FALSE;
 	int i;
 	int previousErrorCode;
-	BOOLEAN allPiecesInsideHomeBoard = FALSE;
 
-	if (1) {
+	if (DEBUGGING_RULES) {
 		normal_print("%s\n", "[DEBUG] rules.c - Entering validate_moves.");
 	}
 	/*
-	 * getMovePair validation checks.
-	 * a) direction movement checked for the end piece
-	 * b) cannot move an empty piece -98
-	 * c) cannot move an opponent's piece -97
-	 * d) cannot move to a place where an opponent has 2 or more pieces already -96
-	 * e) bar list move -1, this will check the players score to see if that
-	 * is a legal move.
-	 *
-	 * The following checks are done here:
-	 *
-	 * a) Landing on an opponent's single piece, replace opponent piece, and
-	 * send the opponent's piece to the bar list
-	 * b) If a player has any piece's in their bar list, they must move them
-	 * all onto the board first.
-	 * c) If all pieces are in the player's home board (1-6) then they can move
-	 * pieces off the table and adjust their score by 1 for each piece.
-	 * d) Can only move pieces from the board into the bar list if you have
-	 * enough move points to do so.
-	 *
 	 * Only return true if all moves are valid.
 	 */
 
-	if (1) {
+	if (DEBUGGING_RULES) {
 
 		printf("num_moves is %d\n", num_moves);
 
@@ -228,12 +207,19 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 	}
 
 	/*
-	 * Check supplied validation codes
+	 * getMovePair validation checks.
 	 *
-	 * a) > 7 pieces exist on that column -99
-	 * b) Trying to move an empty space -98
-	 * c) Trying to move the opponents piece -97
-	 * d) Too many other player pieces there already. -96
+	 * a) direction movement checked for the end piece
+	 * b) cannot move an empty piece -98
+	 * c) cannot move an opponent's piece -97
+	 * d) cannot move to a place where an opponent has 2 or more pieces already -96
+	 * e) bar list move -1, this will check the players score to see if that
+	 * is a legal move.
+	 *
+	 * Extra checks
+	 * a) Your bar list is empty when trying to move
+	 * b) All pieces are inside your home board when trying to score
+	 *
 	 */
 	for (i = 0; i < num_moves; i++) {
 		if (changes[i].end.x <= -1 && changes[i].end.y <= -1) {
@@ -283,11 +269,16 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 			}
 		}
 		else {
+			/*
+			 * Multiple moves to the same location isn't checked properly here.
+			 * Will do this inside apply_moves, it will be an all or nothing
+			 * tranctions so any errors found are okay.
+			 */
 			continue;
 		}
 	}
 
-	return allMovesValid;
+	return TRUE;
 }
 
 /**
@@ -297,7 +288,7 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 					struct player *curplayer)
 {
-	if (1) {
+	if (DEBUGGING_RULES) {
 		normal_print("%s\n", "[DEBUG] rules.c - Entering apply_moves.");
 	}
 
@@ -315,7 +306,7 @@ BOOLEAN has_won_game(const struct player *curplayer)
 	BOOLEAN emptyBarList = FALSE;
 	BOOLEAN noTokensLeft = FALSE;
 
-	if (1) {
+	if (DEBUGGING_RULES) {
 		normal_print("\n%s\n", "[DEBUG] rules.c - Entering has_won_game.");
 	}
 
@@ -323,9 +314,7 @@ BOOLEAN has_won_game(const struct player *curplayer)
 		emptyBarList = TRUE;
 	}
 
-	/*
-	 * TODO check for no more tokens.
-	 */
+	noTokensLeft = noMoreTokensOnBoard(curplayer);
 
 	if (currentScore == 15 && emptyBarList && noTokensLeft) {
 		return TRUE;
@@ -509,7 +498,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	startPieceLocation.y = currentPieceY;
 	currentMovePair.start = startPieceLocation;
 
-	if (1) {
+	if (DEBUGGING_RULES) {
 		printf("currentMovePair.start.x is %d\n", currentMovePair.start.x);
 		printf("currentMovePair.start.y is %d\n", currentMovePair.start.y);
 		printf("currentMovePair.start.direction is %d\n",
@@ -686,7 +675,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	endPieceLocation.y = currentPieceY;
 	currentMovePair.end = endPieceLocation;
 
-	if (1) {
+	if (DEBUGGING_RULES) {
 		printf("currentMovePair.end.x is %d\n", currentMovePair.end.x);
 		printf("currentMovePair.end.y is %d\n", currentMovePair.end.y);
 		printf("currentMovePair.end.direction is %d\n",
@@ -770,9 +759,7 @@ BOOLEAN allPiecesInHomeBoardClockwise(const struct player *currentPlayer)
  	 * ANTICLOCKWISE (x,y) = 7,6 to 7,13 through to 7,11 to 7,13
  	 */
 	int i, j;
-	BOOLEAN allPiecesInHomeBoard = TRUE;
 	enum piece currentPlayerPiece = currentPlayer->token;
-	enum piece otherPlayerPiece = currentPlayer->curgame->other_player->token;
 	enum piece currentPiece;
 	struct game *theGame = getGame();
 
@@ -785,7 +772,7 @@ BOOLEAN allPiecesInHomeBoardClockwise(const struct player *currentPlayer)
 			if (currentPiece == currentPlayerPiece) {
 				return FALSE;
 			}
-			if (1) {
+			if (DEBUGGING_RULES) {
 				printf("currentPiece[%d][%d] is %d\n", i, j, currentPiece);
 			}
 		}
@@ -800,13 +787,13 @@ BOOLEAN allPiecesInHomeBoardClockwise(const struct player *currentPlayer)
 			if (currentPiece == currentPlayerPiece) {
 				return FALSE;
 			}
-			if (1) {
+			if (DEBUGGING_RULES) {
 				printf("currentPiece[%d][%d] is %d\n", i, j, currentPiece);
 			}
 		}
 	}
 
-	return allPiecesInHomeBoard;
+	return TRUE;
 }
 
 BOOLEAN allPiecesInHomeBoardAnticlockwise(const struct player *currentPlayer)
@@ -817,9 +804,7 @@ BOOLEAN allPiecesInHomeBoardAnticlockwise(const struct player *currentPlayer)
 	  * ANTICLOCKWISE (x,y) = 7,6 to 7,13 through to 7,11 to 7,13
 	  */
 	int i, j;
-	BOOLEAN allPiecesInHomeBoard = TRUE;
 	enum piece currentPlayerPiece = currentPlayer->token;
-	enum piece otherPlayerPiece = currentPlayer->curgame->other_player->token;
 	enum piece currentPiece;
 	struct game *theGame = getGame();
 
@@ -832,7 +817,7 @@ BOOLEAN allPiecesInHomeBoardAnticlockwise(const struct player *currentPlayer)
 			if (currentPiece == currentPlayerPiece) {
 				return FALSE;
 			}
-			if (1) {
+			if (DEBUGGING_RULES) {
 				printf("currentPiece[%d][%d] is %d\n", i, j, currentPiece);
 			}
 		}
@@ -847,11 +832,30 @@ BOOLEAN allPiecesInHomeBoardAnticlockwise(const struct player *currentPlayer)
 			if (currentPiece == currentPlayerPiece) {
 				return FALSE;
 			}
-			if (1) {
+			if (DEBUGGING_RULES) {
 				printf("currentPiece[%d][%d] is %d\n", i, j, currentPiece);
 			}
 		}
 	}
 
-	return allPiecesInHomeBoard;
+	return TRUE;
+}
+
+BOOLEAN noMoreTokensOnBoard(const struct player *currentPlayer)
+{
+	int i, j;
+	enum piece currentPlayerPiece = currentPlayer->token;
+	enum piece currentPiece;
+	struct game *theGame = getGame();
+
+	for(i = 0; i < BOARD_HEIGHT; i++) {
+		for(j = 0; j < BOARD_WIDTH; j++) {
+			currentPiece = theGame->game_board[i][j];
+			if(currentPiece == currentPlayerPiece) {
+				return FALSE;
+			}
+		}
+	}
+
+	return TRUE;
 }

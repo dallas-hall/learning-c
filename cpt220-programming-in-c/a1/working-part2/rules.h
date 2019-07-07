@@ -89,4 +89,9 @@ int getColumnOffset(int y);
 BOOLEAN allPiecesInHomeBoardClockwise(const struct player *);
 BOOLEAN allPiecesInHomeBoardAnticlockwise(const struct player *);
 
+/*
+ * Can we win the game?
+ */
+BOOLEAN noMoreTokensOnBoard(const struct player *currentPlayer);
+
 #endif
