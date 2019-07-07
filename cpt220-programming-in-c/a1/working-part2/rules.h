@@ -112,6 +112,6 @@ void getEndPieceLocation(board gameBoard,
 						 enum piece otherPlayerPiece,
 						 struct move_pair *currentMovePair,
 						 int y, int moves, int boardHalfToCheck,
-						 struct player *currentPlayer);
+						 struct player *currentPlayer, BOOLEAN bPassed);
 
 #endif
