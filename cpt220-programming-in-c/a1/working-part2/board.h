@@ -64,4 +64,10 @@ void setStartPieceArray(int row, int column, board the_board);
  */
 enum piece getPieceFromBoardState(int x, int y, board the_board);
 
+/*
+ * Used to copy the current game state, so we can try to apply moves on the
+ * temporary board without impacting the real board.
+ */
+void copyBoardState(board originalBoard, board replicaBoard);
+
 #endif
