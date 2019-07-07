@@ -292,6 +292,17 @@ BOOLEAN apply_moves(const struct move_pair themoves[], int num_moves,
 		normal_print("%s\n", "[DEBUG] rules.c - Entering apply_moves.");
 	}
 
+	/*
+	 * One validation that will happen here is moves into the same position.
+	 * This will happen here so we apply the first move, and then check the
+	 * subsequent moves to the same column. Only if all of those moves pass
+	 * will they be applied.
+	 *
+	 * Thus this is an all or nothing transaction.
+	 */
+
+
+
 	return FALSE;
 }
 
@@ -324,7 +335,7 @@ BOOLEAN has_won_game(const struct player *curplayer)
 }
 
 /*
- * Gets the piece's
+ * Gets the piece's x,y and direction of travel.
  */
 struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 {
@@ -335,23 +346,13 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	 */
 	enum piece currentPlayerPiece = currentPlayer->token;
 	enum piece otherPlayerPiece = currentPlayer->curgame->other_player->token;
-	enum piece previousBoardPiece = P_INVALID;
-	enum piece currentBoardPiece = P_INVALID;
 	/*
 	 * -99 catch all invalid
 	 * -1 is into into the bar list
 	 * else is x, y of the board
 	 */
-	int currentPieceX = -99;
-	int currentPieceY = -99;
 	struct move_pair currentMovePair;
 	int boardHalfToCheck;
-	int otherPlayerPieceCount;
-
-	/*
-	 * Remember this is [BOARD_HEIGHT 14][BOARD_WIDTH 12]
-	 */
-	int i, columnOffset;
 
 	if (DEBUGGING_RULES) {
 		normal_print("\n%s\n", "[DEBUG] rules.c - Entering getMovePair.");
@@ -381,124 +382,13 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	}
 
 	/*
-	 * Convert the initial y value into the correct array index.
+	 * Get starting piece location
 	 */
-	columnOffset = getColumnOffset(y);
+	getStartPieceLocation(currentPlayer->curgame->game_board,
+						  &startPieceLocation, currentPlayerPiece,
+						  otherPlayerPiece, &currentMovePair, y);
 
-	/* # FIRST PIECE
-	 *
-	 * Get the starting move position. Invalid moves checked here are:
-	 * a) > 7 pieces exist on that column -99
-	 * b) Trying to move an empty space -98
-	 * c) Trying to move the opponents piece -97
-	 * d) Too many other player pieces there already. -96
-	 *
-	 * This logic applies to players of both directions.
-	 *
-	 * For starting moves from the top, get the piece at the bottom if it
-	 * exists. Otherwise error.
-	 *
-	 * For starting moves from the bottom, get the piece at the top if it
-	 * exists. Otherwise error.
-	 */
-	if (startPieceLocation.direction == DIR_DOWN) {
-		/*
-		 * Check 8 places, 0 to 7
-		 */
-		boardHalfToCheck = BOARD_HEIGHT / 2;
-		for (i = 0; i <= boardHalfToCheck; i++) {
-			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
-
-			/*
-			 * If the first place checked is empty, invalid move.
-			 * If the first place checked has an opponents token, invalid move.
-			 */
-			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
-				currentPieceX = -98;
-				currentPieceY = -98;
-				break;
-			}
-			else if (i == BOARD_HEIGHT - 1 &&
-					 currentBoardPiece == otherPlayerPiece) {
-				currentPieceX = -97;
-				currentPieceY = -97;
-				break;
-			}
-			else if (i != 0) {
-				previousBoardPiece = currentPlayer->curgame->game_board[i -
-																		1][columnOffset];
-				if (currentBoardPiece == P_EMPTY &&
-					previousBoardPiece == currentPlayerPiece) {
-					/*
-					 * If i == boardHalfToCheck then we've checked 8 places
-					 * which is too many.
-					 */
-					if (i == boardHalfToCheck) {
-						break;
-					}
-
-					/*
-					 * Remember - 1 here since we are comparing previous values.
-					 */
-					currentPieceX = i - 1;
-					currentPieceY = columnOffset;
-					break;
-				}
-			}
-		}
-	}
-	else if (startPieceLocation.direction == DIR_UP) {
-		/*
-		 * Check 8 places, 13 to 6
-		 */
-		boardHalfToCheck = (BOARD_HEIGHT / 2) - 1;
-		for (i = BOARD_HEIGHT - 1; i >= boardHalfToCheck; i--) {
-			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
-
-			/*
-			 * If the first place checked is empty, invalid move.
-			 * If the first place checked has an opponents token, invalid move.
-			 */
-			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
-				currentPieceX = -98;
-				currentPieceY = -98;
-				break;
-			}
-			else if (i == BOARD_HEIGHT - 1 &&
-					 currentBoardPiece == otherPlayerPiece) {
-				currentPieceX = -97;
-				currentPieceY = -97;
-				break;
-			}
-			else if (i != BOARD_HEIGHT - 1) {
-				previousBoardPiece = currentPlayer->curgame->game_board[i +
-																		1][columnOffset];
-				if (currentBoardPiece == P_EMPTY &&
-					previousBoardPiece == currentPlayerPiece) {
-					/*
-					 * If i == boardHalfToCheck then we've checked 8 places
-					 * which is too many.
-					 */
-					if (i == boardHalfToCheck) {
-						break;
-					}
-
-					/*
-					 * Remember + 1 here since we are comparing previous values
-					 * that are higher in the array.
-					 */
-					currentPieceX = i + 1;
-					currentPieceY = columnOffset;
-					break;
-				}
-			}
-		}
-	}
-	startPieceLocation.x = currentPieceX;
-	startPieceLocation.y = currentPieceY;
-	currentMovePair.start = startPieceLocation;
-
-	if (DEBUGGING_RULES) {
+	if (1) {
 		printf("currentMovePair.start.x is %d\n", currentMovePair.start.x);
 		printf("currentMovePair.start.y is %d\n", currentMovePair.start.y);
 		printf("currentMovePair.start.direction is %d\n",
@@ -506,20 +396,12 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 	}
 
 
-	/* # SECOND PIECE
-	 *
-	 * Get the second move. Resetting original check values.
-	 *
- 	 * All valid movements are reducing the column the intended amount of moves.
- 	 * We check for negative numbers previously to ensure this is correct.
- 	 *
- 	 * If columnOffset is negative, we are trying to move into the bar list.
-	 */
-	columnOffset = getColumnOffset(y - moves);
 	/*
+	 * Get ending piece location
+	 *
 	 * The clockwise player as 13-24 on the bottom and 12-1 on top
-	 * The anticlockwise player as 13-24 on the top and 12-1 on bottom
-	 */
+ 	 * The anticlockwise player as 13-24 on the top and 12-1 on bottom
+ 	 */
 	boardHalfToCheck = y - moves;
 	if (currentPlayer->orientation == OR_CLOCKWISE) {
 		if (boardHalfToCheck >= 1 && boardHalfToCheck <= 12) {
@@ -538,144 +420,12 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			endPieceLocation.direction = DIR_UP;
 		}
 	}
-	currentPieceX = -99;
-	currentPieceY = -99;
-	previousBoardPiece = P_INVALID;
-	currentBoardPiece = P_INVALID;
-	otherPlayerPieceCount = 0;
+	getEndPieceLocation(currentPlayer->curgame->game_board,
+						  &endPieceLocation, currentPlayerPiece,
+						  otherPlayerPiece, &currentMovePair, y, moves,
+						  boardHalfToCheck, currentPlayer);
 
-	if (endPieceLocation.direction == DIR_DOWN) {
-		/*
-		 * Check 8 places, 0 to 7
-		 */
-		boardHalfToCheck = BOARD_HEIGHT / 2;
-		for (i = 0; i <= boardHalfToCheck; i++) {
-			/*
-			 * Trying to move into the bar list.
-			 */
-			if (columnOffset < 0) {
-				currentPieceX = -1;
-				currentPieceY = -1;
-				break;
-			}
-			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
-
-			/*
-			 * If the other player has 2 or more pieces on the intended spot
-			 * to move to then it is an invalid move.
-			 */
-			if (currentBoardPiece == otherPlayerPiece) {
-				++otherPlayerPieceCount;
-				if (otherPlayerPieceCount >= 2) {
-					currentPieceX = -96;
-					currentPieceY = -96;
-					break;
-				}
-			}
-
-			/*
-			 * If the first place checked is empty, its good as this is valid
-			 * move for the player.
-			 */
-			if (i == 0 && currentBoardPiece == P_EMPTY) {
-				/*
-				 * Don't need - 1 here since we want the empty space.
-				 */
-				currentPieceX = i;
-				currentPieceY = columnOffset;
-				break;
-			}
-			else if (i != 0) {
-				previousBoardPiece = currentPlayer->curgame->game_board[i -
-																		1][columnOffset];
-
-				if (currentBoardPiece == P_EMPTY &&
-					previousBoardPiece == currentPlayerPiece) {
-					/*
-					 * If i == boardHalfToCheck then we've checked 8 places
-					 * which is too many.
-					 */
-					if (i == boardHalfToCheck) {
-						break;
-					}
-
-					currentPieceX = i;
-					currentPieceY = columnOffset;
-					break;
-				}
-			}
-		}
-	}
-	else if (endPieceLocation.direction == DIR_UP) {
-		/*
-		 * Check 8 places, 13 to 6
-		 */
-		boardHalfToCheck = (BOARD_HEIGHT / 2) - 1;
-		for (i = BOARD_HEIGHT - 1; i >= boardHalfToCheck; i--) {
-			/*
- 			 * Trying to move into the bar list.
- 			 */
-			if (columnOffset < 0) {
-				currentPieceX = -1;
-				currentPieceY = -1;
-				break;
-			}
-
-			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
-
-			/*
-			 * If the other player has 2 or more pieces on the intended spot
-			 * to move to then it is an invalid move.
-			 */
-			if (currentBoardPiece == otherPlayerPiece) {
-				++otherPlayerPieceCount;
-				if (otherPlayerPieceCount >= 2) {
-					currentPieceX = -96;
-					currentPieceY = -96;
-					break;
-				}
-			}
-
-			/*
-			 * If the first place checked is empty, its good as this is valid
-			 * move for the player.
-			 */
-			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
-				/*
- 				 * Don't need - 1 here since we want the empty space.
- 				*/
-				currentPieceX = i;
-				currentPieceY = columnOffset;
-				break;
-			}
-			else if (i != BOARD_HEIGHT - 1) {
-				previousBoardPiece = currentPlayer->curgame->game_board[i +
-																		1][columnOffset];
-
-
-				if (currentBoardPiece == P_EMPTY &&
-					previousBoardPiece == currentPlayerPiece) {
-					/*
-					 * If i == boardHalfToCheck then we've checked 8 places
-					 * which is too many.
-					 */
-					if (i == boardHalfToCheck) {
-						break;
-					}
-
-
-					currentPieceX = i;
-					currentPieceY = columnOffset;
-					break;
-				}
-			}
-		}
-	}
-	endPieceLocation.x = currentPieceX;
-	endPieceLocation.y = currentPieceY;
-	currentMovePair.end = endPieceLocation;
-
-	if (DEBUGGING_RULES) {
+	if (1) {
 		printf("currentMovePair.end.x is %d\n", currentMovePair.end.x);
 		printf("currentMovePair.end.y is %d\n", currentMovePair.end.y);
 		printf("currentMovePair.end.direction is %d\n",
@@ -848,14 +598,337 @@ BOOLEAN noMoreTokensOnBoard(const struct player *currentPlayer)
 	enum piece currentPiece;
 	struct game *theGame = getGame();
 
-	for(i = 0; i < BOARD_HEIGHT; i++) {
-		for(j = 0; j < BOARD_WIDTH; j++) {
+	for (i = 0; i < BOARD_HEIGHT; i++) {
+		for (j = 0; j < BOARD_WIDTH; j++) {
 			currentPiece = theGame->game_board[i][j];
-			if(currentPiece == currentPlayerPiece) {
+			if (currentPiece == currentPlayerPiece) {
 				return FALSE;
 			}
 		}
 	}
 
 	return TRUE;
+}
+
+void getStartPieceLocation(board gameBoard,
+						   struct piece_location *startPieceLocation,
+						   enum piece currentPlayerPiece,
+						   enum piece otherPlayerPiece,
+						   struct move_pair *currentMovePair,
+						   int y)
+{
+	/*
+	 * P_WHITE or P_RED
+	 */
+	enum piece previousBoardPiece = P_INVALID;
+	enum piece currentBoardPiece = P_INVALID;
+
+	/*
+	 * -99 catch all invalid
+	 * -1 is into into the bar list
+	 * else is x, y of the board
+	 */
+	int currentPieceX = -99;
+	int currentPieceY = -99;
+	int boardHalfToCheck;
+	int columnOffset;
+	int i;
+
+	/*
+	 * Convert the initial y value into the correct array index.
+	 */
+	columnOffset = getColumnOffset(y);
+
+	/* # FIRST PIECE
+	 *
+	 * Get the starting move position. Invalid moves checked here are:
+	 * a) > 7 pieces exist on that column -99
+	 * b) Trying to move an empty space -98
+	 * c) Trying to move the opponents piece -97
+	 * d) Too many other player pieces there already. -96
+	 *
+	 * This logic applies to players of both directions.
+	 *
+	 * For starting moves from the top, get the piece at the bottom if it
+	 * exists. Otherwise error.
+	 *
+	 * For starting moves from the bottom, get the piece at the top if it
+	 * exists. Otherwise error.
+	 */
+	if (startPieceLocation->direction == DIR_DOWN) {
+		/*
+		 * Check 8 places, 0 to 7
+		 */
+		boardHalfToCheck = BOARD_HEIGHT / 2;
+		for (i = 0; i <= boardHalfToCheck; i++) {
+			currentBoardPiece = gameBoard[i][columnOffset];
+
+			/*
+			 * If the first place checked is empty, invalid move.
+			 * If the first place checked has an opponents token, invalid move.
+			 */
+			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
+				currentPieceX = -98;
+				currentPieceY = -98;
+				break;
+			}
+			else if (i == BOARD_HEIGHT - 1 &&
+					 currentBoardPiece == otherPlayerPiece) {
+				currentPieceX = -97;
+				currentPieceY = -97;
+				break;
+			}
+			else if (i != 0) {
+				previousBoardPiece = gameBoard[i - 1][columnOffset];
+				if (currentBoardPiece == P_EMPTY &&
+					previousBoardPiece == currentPlayerPiece) {
+					/*
+					 * If i == boardHalfToCheck then we've checked 8 places
+					 * which is too many.
+					 */
+					if (i == boardHalfToCheck) {
+						break;
+					}
+
+					/*
+					 * Remember - 1 here since we are comparing previous values.
+					 */
+					currentPieceX = i - 1;
+					currentPieceY = columnOffset;
+					break;
+				}
+			}
+		}
+	}
+	else if (startPieceLocation->direction == DIR_UP) {
+		/*
+		 * Check 8 places, 13 to 6
+		 */
+		boardHalfToCheck = (BOARD_HEIGHT / 2) - 1;
+		for (i = BOARD_HEIGHT - 1; i >= boardHalfToCheck; i--) {
+			currentBoardPiece = gameBoard[i][columnOffset];
+
+			/*
+			 * If the first place checked is empty, invalid move.
+			 * If the first place checked has an opponents token, invalid move.
+			 */
+			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
+				currentPieceX = -98;
+				currentPieceY = -98;
+				break;
+			}
+			else if (i == BOARD_HEIGHT - 1 &&
+					 currentBoardPiece == otherPlayerPiece) {
+				currentPieceX = -97;
+				currentPieceY = -97;
+				break;
+			}
+			else if (i != BOARD_HEIGHT - 1) {
+				previousBoardPiece = gameBoard[i + 1][columnOffset];
+				if (currentBoardPiece == P_EMPTY &&
+					previousBoardPiece == currentPlayerPiece) {
+					/*
+					 * If i == boardHalfToCheck then we've checked 8 places
+					 * which is too many.
+					 */
+					if (i == boardHalfToCheck) {
+						break;
+					}
+
+					/*
+					 * Remember + 1 here since we are comparing previous values
+					 * that are higher in the array.
+					 */
+					currentPieceX = i + 1;
+					currentPieceY = columnOffset;
+					break;
+				}
+			}
+		}
+	}
+	startPieceLocation->x = currentPieceX;
+	startPieceLocation->y = currentPieceY;
+	currentMovePair->start = *startPieceLocation;
+
+	if (1) {
+		printf("currentMovePair->start.x is %d\n", currentMovePair->start.x);
+		printf("currentMovePair->start.y is %d\n", currentMovePair->start.y);
+		printf("currentMovePair->start.direction is %d\n",
+			   currentMovePair->start.direction);
+	}
+}
+
+void getEndPieceLocation(board gameBoard,
+						   struct piece_location *endPieceLocation,
+						   enum piece currentPlayerPiece,
+						   enum piece otherPlayerPiece,
+						   struct move_pair *currentMovePair,
+						   int y, int moves, int boardHalfToCheck,
+						   struct player *currentPlayer)
+{
+	/* # SECOND PIECE
+	 *
+ 	 * Get the second move. Resetting original check values.
+ 	 *
+  	 * All valid movements are reducing the column the intended amount of moves.
+  	 * We check for negative numbers previously to ensure this is correct.
+  	 *
+  	 * If columnOffset is negative, we are trying to move into the bar list.
+ 	*/
+	/*
+ 	 * P_WHITE or P_RED
+ 	 */
+	enum piece previousBoardPiece = P_INVALID;
+	enum piece currentBoardPiece = P_INVALID;
+
+	/*
+	 * -99 catch all invalid
+	 * -1 is into into the bar list
+	 * else is x, y of the board
+	 */
+	int currentPieceX = -99;
+	int currentPieceY = -99;
+	int columnOffset;
+	int i;
+	int otherPlayerPieceCount = 0;
+
+	columnOffset = getColumnOffset(y - moves);
+
+	if (endPieceLocation->direction == DIR_DOWN) {
+		/*
+		 * Check 8 places, 0 to 7
+		 */
+		boardHalfToCheck = BOARD_HEIGHT / 2;
+		for (i = 0; i <= boardHalfToCheck; i++) {
+			/*
+			 * Trying to move into the bar list.
+			 */
+			if (columnOffset < 0) {
+				currentPieceX = -1;
+				currentPieceY = -1;
+				break;
+			}
+			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
+
+			/*
+			 * If the other player has 2 or more pieces on the intended spot
+			 * to move to then it is an invalid move.
+			 */
+			if (currentBoardPiece == otherPlayerPiece) {
+				++otherPlayerPieceCount;
+				if (otherPlayerPieceCount >= 2) {
+					currentPieceX = -96;
+					currentPieceY = -96;
+					break;
+				}
+			}
+
+			/*
+			 * If the first place checked is empty, its good as this is valid
+			 * move for the player.
+			 */
+			if (i == 0 && currentBoardPiece == P_EMPTY) {
+				/*
+				 * Don't need - 1 here since we want the empty space.
+				 */
+				currentPieceX = i;
+				currentPieceY = columnOffset;
+				break;
+			}
+			else if (i != 0) {
+				previousBoardPiece = currentPlayer->curgame->game_board[i -
+																		1][columnOffset];
+
+				if (currentBoardPiece == P_EMPTY &&
+					previousBoardPiece == currentPlayerPiece) {
+					/*
+					 * If i == boardHalfToCheck then we've checked 8 places
+					 * which is too many.
+					 */
+					if (i == boardHalfToCheck) {
+						break;
+					}
+
+					currentPieceX = i;
+					currentPieceY = columnOffset;
+					break;
+				}
+			}
+		}
+	}
+	else if (endPieceLocation->direction == DIR_UP) {
+		/*
+		 * Check 8 places, 13 to 6
+		 */
+		boardHalfToCheck = (BOARD_HEIGHT / 2) - 1;
+		for (i = BOARD_HEIGHT - 1; i >= boardHalfToCheck; i--) {
+			/*
+ 			 * Trying to move into the bar list.
+ 			 */
+			if (columnOffset < 0) {
+				currentPieceX = -1;
+				currentPieceY = -1;
+				break;
+			}
+
+			currentBoardPiece = currentPlayer->curgame->game_board[i][columnOffset];
+
+			/*
+			 * If the other player has 2 or more pieces on the intended spot
+			 * to move to then it is an invalid move.
+			 */
+			if (currentBoardPiece == otherPlayerPiece) {
+				++otherPlayerPieceCount;
+				if (otherPlayerPieceCount >= 2) {
+					currentPieceX = -96;
+					currentPieceY = -96;
+					break;
+				}
+			}
+
+			/*
+			 * If the first place checked is empty, its good as this is valid
+			 * move for the player.
+			 */
+			if (i == BOARD_HEIGHT - 1 && currentBoardPiece == P_EMPTY) {
+				/*
+ 				 * Don't need - 1 here since we want the empty space.
+ 				*/
+				currentPieceX = i;
+				currentPieceY = columnOffset;
+				break;
+			}
+			else if (i != BOARD_HEIGHT - 1) {
+				previousBoardPiece = currentPlayer->curgame->game_board[i +
+																		1][columnOffset];
+
+
+				if (currentBoardPiece == P_EMPTY &&
+					previousBoardPiece == currentPlayerPiece) {
+					/*
+					 * If i == boardHalfToCheck then we've checked 8 places
+					 * which is too many.
+					 */
+					if (i == boardHalfToCheck) {
+						break;
+					}
+
+
+					currentPieceX = i;
+					currentPieceY = columnOffset;
+					break;
+				}
+			}
+		}
+	}
+	endPieceLocation->x = currentPieceX;
+	endPieceLocation->y = currentPieceY;
+	currentMovePair->end = *endPieceLocation;
+
+	if (1) {
+		printf("currentMovePair->end.x is %d\n", currentMovePair->end.x);
+		printf("currentMovePair->end.y is %d\n", currentMovePair->end.y);
+		printf("currentMovePair->end.direction is %d\n",
+			   currentMovePair->end.direction);
+	}
 }
