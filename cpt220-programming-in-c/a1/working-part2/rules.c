@@ -167,6 +167,7 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 {
 	BOOLEAN allMovesValid = FALSE;
 	int i;
+	int previousErrorCode;
 
 	if (1) {
 		normal_print("%s\n", "[DEBUG] rules.c - Entering validate_moves.");
@@ -194,10 +195,10 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 	 * Only return true if all moves are valid.
 	 */
 
-	/*
-	 * Check supplied validation codes
-	 */
 	if(1) {
+
+		printf("num_moves is %d\n", num_moves);
+
 		for (i = 0; i < num_moves; i++) {
 			printf("## Selected Moves\n");
 			printf("selected_moves[%d].count is %d\n", i, selected_moves[i].count);
@@ -219,10 +220,42 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 			printf("## Die Rolls\n");
 			printf("dicerolls[%d].count is %d\n", i, dicerolls[i]);
 		}
-
-
 	}
-	
+
+	/*
+	 * Check supplied validation codes
+	 *
+	 * a) > 7 pieces exist on that column -99
+	 * b) Trying to move an empty space -98
+	 * c) Trying to move the opponents piece -97
+	 * d) Too many other player pieces there already. -96
+	 */
+	for (i = 0; i < num_moves; i++) {
+		if(changes[i].end.x < -1 && changes[i].end.y < -1) {
+			previousErrorCode = changes[i].end.x;
+			switch(previousErrorCode) {
+				case -99:
+					error_print("Too many of your pieces at that location. Try again.\n");
+					return FALSE;
+				case -98:
+					error_print("You don't have a piece there. Try again.\n");
+					return FALSE;
+				case -97:
+					error_print("Cannot move opponent's piece. Try again.\n");
+					return FALSE;
+				case -96:
+					error_print("Too many opponent pieces at that location. Try again.\n");
+					return FALSE;
+				default:
+					break;
+			}
+		}
+		else {
+			continue;
+		}
+	}
+
+
 	return allMovesValid;
 }
 
@@ -334,13 +367,11 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 
 	/* # FIRST PIECE
 	 *
-	 * Get the starting move position. If a value returns -99 then that is
-	 * an invalid move because either:
+	 * Get the starting move position. Invalid moves checked here are:
 	 * a) > 7 pieces exist on that column -99
 	 * b) Trying to move an empty space -98
 	 * c) Trying to move the opponents piece -97
-	 * d) Too many other player pieces -96
-	 * there already.
+	 * d) Too many other player pieces there already. -96
 	 *
 	 * This logic applies to players of both directions.
 	 *

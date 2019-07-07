@@ -634,7 +634,7 @@ getPlayerInput(struct player *currentPlayer, int diceRolls[2])
 		 * Validate the moves, if invalid get input again.
 		 * If valid, apply the moves and adjust game state.
 		 */
-		if (!validate_moves(currentPlayerMoves, movesSum, currentPlayer,
+		if (!validate_moves(currentPlayerMoves, numberOfMoves, currentPlayer,
 							diceRolls, movePairs)) {
 			return getPlayerInput(currentPlayer, diceRolls);
 		}
