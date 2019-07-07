@@ -83,4 +83,10 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer);
  */
 int getColumnOffset(int y);
 
+/*
+ * Can we remove pieces off the board?
+ */
+BOOLEAN allPiecesInHomeBoardClockwise(const struct player *);
+BOOLEAN allPiecesInHomeBoardAnticlockwise(const struct player *);
+
 #endif

@@ -168,6 +168,7 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 	BOOLEAN allMovesValid = FALSE;
 	int i;
 	int previousErrorCode;
+	BOOLEAN allPiecesInsideHomeBoard = FALSE;
 
 	if (1) {
 		normal_print("%s\n", "[DEBUG] rules.c - Entering validate_moves.");
@@ -195,25 +196,29 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 	 * Only return true if all moves are valid.
 	 */
 
-	if(1) {
+	if (1) {
 
 		printf("num_moves is %d\n", num_moves);
 
 		for (i = 0; i < num_moves; i++) {
 			printf("## Selected Moves\n");
-			printf("selected_moves[%d].count is %d\n", i, selected_moves[i].count);
-			printf("selected_moves[%d].index is %d\n", i, selected_moves[i].index);
+			printf("selected_moves[%d].count is %d\n", i,
+				   selected_moves[i].count);
+			printf("selected_moves[%d].index is %d\n", i,
+				   selected_moves[i].index);
 		}
 
 		for (i = 0; i < num_moves; i++) {
 			printf("## Start Piece\n");
 			printf("changes[%d].start.x is %d\n", i, changes[i].start.x);
 			printf("changes[%d].start.y is %d\n", i, changes[i].start.y);
-			printf("changes[%d].start.direction is %d\n", i, changes[i].start.direction);
+			printf("changes[%d].start.direction is %d\n", i,
+				   changes[i].start.direction);
 			printf("## End Piece\n");
 			printf("changes[%d].end.x is %d\n", i, changes[i].end.x);
 			printf("changes[%d].end.y is %d\n", i, changes[i].end.y);
-			printf("changes[%d].end.direction is %d\n", i, changes[i].end.direction);
+			printf("changes[%d].end.direction is %d\n", i,
+				   changes[i].end.direction);
 		}
 
 		for (i = 0; i < 2; i++) {
@@ -231,11 +236,12 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 	 * d) Too many other player pieces there already. -96
 	 */
 	for (i = 0; i < num_moves; i++) {
-		if(changes[i].end.x < -1 && changes[i].end.y < -1) {
+		if (changes[i].end.x <= -1 && changes[i].end.y <= -1) {
 			previousErrorCode = changes[i].end.x;
-			switch(previousErrorCode) {
+			switch (previousErrorCode) {
 				case -99:
-					error_print("Too many of your pieces at that location. Try again.\n");
+					error_print(
+							"Too many of your pieces at that location. Try again.\n");
 					return FALSE;
 				case -98:
 					error_print("You don't have a piece there. Try again.\n");
@@ -244,9 +250,35 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 					error_print("Cannot move opponent's piece. Try again.\n");
 					return FALSE;
 				case -96:
-					error_print("Too many opponent pieces at that location. Try again.\n");
+					error_print(
+							"Too many opponent pieces at that location. Try again.\n");
 					return FALSE;
+				case -1:
+					if (curplayer->bar_list.token_count > 0) {
+						error_print(
+								"You must move your pieces from the bar list first. Try again.\n");
+						return FALSE;
+					}
+					else {
+						if (curplayer->orientation == OR_CLOCKWISE) {
+							if (!allPiecesInHomeBoardClockwise(curplayer)) {
+								error_print(
+										"You must move all of your pieces into the home board first. Try again.\n");
+								return FALSE;
+							}
+						}
+						else if (curplayer->orientation == OR_ANTICLOCKWISE) {
+							if (!allPiecesInHomeBoardAnticlockwise(curplayer)) {
+								error_print(
+										"You must move all of your pieces into the home board first. Try again.\n");
+								return FALSE;
+							}
+						}
+					}
 				default:
+					/*
+					 * Anything else is okay.
+					 */
 					break;
 			}
 		}
@@ -254,7 +286,6 @@ BOOLEAN validate_moves(const struct move selected_moves[], int num_moves,
 			continue;
 		}
 	}
-
 
 	return allMovesValid;
 }
@@ -398,7 +429,8 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 				currentPieceY = -98;
 				break;
 			}
-			else if (i == BOARD_HEIGHT - 1 && currentBoardPiece == otherPlayerPiece) {
+			else if (i == BOARD_HEIGHT - 1 &&
+					 currentBoardPiece == otherPlayerPiece) {
 				currentPieceX = -97;
 				currentPieceY = -97;
 				break;
@@ -443,7 +475,8 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 				currentPieceY = -98;
 				break;
 			}
-			else if (i == BOARD_HEIGHT - 1 && currentBoardPiece == otherPlayerPiece) {
+			else if (i == BOARD_HEIGHT - 1 &&
+					 currentBoardPiece == otherPlayerPiece) {
 				currentPieceX = -97;
 				currentPieceY = -97;
 				break;
@@ -531,7 +564,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			/*
 			 * Trying to move into the bar list.
 			 */
-			if(columnOffset < 0) {
+			if (columnOffset < 0) {
 				currentPieceX = -1;
 				currentPieceY = -1;
 				break;
@@ -568,7 +601,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 																		1][columnOffset];
 
 				if (currentBoardPiece == P_EMPTY &&
-						 previousBoardPiece == currentPlayerPiece) {
+					previousBoardPiece == currentPlayerPiece) {
 					/*
 					 * If i == boardHalfToCheck then we've checked 8 places
 					 * which is too many.
@@ -593,7 +626,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 			/*
  			 * Trying to move into the bar list.
  			 */
-			if(columnOffset < 0) {
+			if (columnOffset < 0) {
 				currentPieceX = -1;
 				currentPieceY = -1;
 				break;
@@ -632,7 +665,7 @@ struct move_pair getMovePair(int y, int moves, struct player *currentPlayer)
 
 
 				if (currentBoardPiece == P_EMPTY &&
-						 previousBoardPiece == currentPlayerPiece) {
+					previousBoardPiece == currentPlayerPiece) {
 					/*
 					 * If i == boardHalfToCheck then we've checked 8 places
 					 * which is too many.
@@ -727,4 +760,98 @@ int getColumnOffset(int y)
 	}
 
 	return columnOffset;
+}
+
+BOOLEAN allPiecesInHomeBoardClockwise(const struct player *currentPlayer)
+{
+	/*
+ 	 * Check if all player pieces are inside their home board location.
+ 	 * CLOCKWISE (x,y) =  0,6 to 6,6 through to 0,11 to 6,11
+ 	 * ANTICLOCKWISE (x,y) = 7,6 to 7,13 through to 7,11 to 7,13
+ 	 */
+	int i, j;
+	BOOLEAN allPiecesInHomeBoard = TRUE;
+	enum piece currentPlayerPiece = currentPlayer->token;
+	enum piece otherPlayerPiece = currentPlayer->curgame->other_player->token;
+	enum piece currentPiece;
+	struct game *theGame = getGame();
+
+	/*
+	 * Check left side, excluding both home board sections.
+	 */
+	for (i = 0; i < BOARD_HEIGHT; i++) {
+		for (j = 0; j < BOARD_WIDTH / 2; j++) {
+			currentPiece = theGame->game_board[i][j];
+			if (currentPiece == currentPlayerPiece) {
+				return FALSE;
+			}
+			if (1) {
+				printf("currentPiece[%d][%d] is %d\n", i, j, currentPiece);
+			}
+		}
+	}
+
+	/*
+	 * Check other players home board area.
+	 */
+	for (i = BOARD_HEIGHT / 2; i < BOARD_HEIGHT; i++) {
+		for (j = 0; j < BOARD_WIDTH / 2; j++) {
+			currentPiece = theGame->game_board[i][j];
+			if (currentPiece == currentPlayerPiece) {
+				return FALSE;
+			}
+			if (1) {
+				printf("currentPiece[%d][%d] is %d\n", i, j, currentPiece);
+			}
+		}
+	}
+
+	return allPiecesInHomeBoard;
+}
+
+BOOLEAN allPiecesInHomeBoardAnticlockwise(const struct player *currentPlayer)
+{
+	/*
+	  * Check if all player pieces are inside their home board location.
+	  * CLOCKWISE (x,y) =  0,6 to 6,6 through to 0,11 to 6,11
+	  * ANTICLOCKWISE (x,y) = 7,6 to 7,13 through to 7,11 to 7,13
+	  */
+	int i, j;
+	BOOLEAN allPiecesInHomeBoard = TRUE;
+	enum piece currentPlayerPiece = currentPlayer->token;
+	enum piece otherPlayerPiece = currentPlayer->curgame->other_player->token;
+	enum piece currentPiece;
+	struct game *theGame = getGame();
+
+	/*
+	 * Check left side, excluding both home board sections.
+	 */
+	for (i = 0; i < BOARD_HEIGHT; i++) {
+		for (j = 0; j < BOARD_WIDTH / 2; j++) {
+			currentPiece = theGame->game_board[i][j];
+			if (currentPiece == currentPlayerPiece) {
+				return FALSE;
+			}
+			if (1) {
+				printf("currentPiece[%d][%d] is %d\n", i, j, currentPiece);
+			}
+		}
+	}
+
+	/*
+	 * Check other players home board area.
+	 */
+	for (i = 0; i < BOARD_HEIGHT / 2; i++) {
+		for (j = 0; j < BOARD_WIDTH / 2; j++) {
+			currentPiece = theGame->game_board[i][j];
+			if (currentPiece == currentPlayerPiece) {
+				return FALSE;
+			}
+			if (1) {
+				printf("currentPiece[%d][%d] is %d\n", i, j, currentPiece);
+			}
+		}
+	}
+
+	return allPiecesInHomeBoard;
 }
