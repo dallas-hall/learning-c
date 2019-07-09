@@ -191,6 +191,7 @@ char delete(LinkedListNodePtr *startPtr, char c)
 
 		/*
 		 * Loop through the list to find the correct location.
+		 * The correct location is the first linked list node that matches the inputted char.
 		 * If the list is empty we skip this.
 		 */ 
 		while (currentPtr != NULL && c != currentPtr->data) {
@@ -199,11 +200,15 @@ char delete(LinkedListNodePtr *startPtr, char c)
 		}
 
 		/*
-		 * The list was empty, make the new node the start
+		 * If the list wasn't empty or we found the what we were looking for.
+		 * 1) Assign the pointer of interest to a temporary variable
+		 * 2) Update the previous linked list node's link to point to the current linked list node's link. This deletes it from the list.
+	 	 * 3) Free up the memory of the first pointer so it can be used elsewhere.
 		 */ 
 		if(currentPtr != NULL) {
 			tempPtr = currentPtr;
 			previousPtr->nextNodePtr = currentPtr->nextNodePtr;
+			free(tempPtr);
 			return c;
 		}
 	}
