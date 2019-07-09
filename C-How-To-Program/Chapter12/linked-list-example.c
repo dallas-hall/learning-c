@@ -94,7 +94,7 @@ void insert(LinkedListNodePtr *startPtr, char c)
 	/*
 	 * mallac tries to allocate memory with the specified bytes.
 	 * sizeof will return the size of the data structure, platform dependent.
-	 * malloc returns a void * if successful, otherwise NULL
+	 * If successful, malloc returns a void * to the allocated memory, otherwise returns NULL
 	 */
 	newPtr = malloc(sizeof(LinkedListNode));
 
@@ -113,9 +113,10 @@ void insert(LinkedListNodePtr *startPtr, char c)
 		currentPtr = *startPtr;
 
 		/*
-		 * Loop through the list to find the correct location.
+		 * Loop through the list from the start to find the correct location.
 		 * We are making this a sorted listed.
-		 * If the list is empty we skip this.
+		 * If the list is empty we skip this. currentPtr will be NULL if the list is empty.
+		 * If the list isn't empty, loop through until we find the correct spot (ie the input data is lower than the current linked list node data.
 		 */ 
 		while (currentPtr != NULL && c > currentPtr->data) {
 			
@@ -127,15 +128,26 @@ void insert(LinkedListNodePtr *startPtr, char c)
 		 * The list was empty, make the new node the start
 		 */ 
 		if(previousPtr == NULL) {
-
+			/*
+			 * The new linked list node's link points to the former first node, which was NULL. Terminating the linked list.
+			 */ 
 			newPtr->nextNodePtr = *startPtr;
+			/*
+			 * Start pointer is now the new linked list node, replacing NULL.
+			 */ 
 			*startPtr = newPtr;
 		}
 		/*
 		 * Insert in the correct spot.
 		 */ 
 		else {
+			/*
+			 * The new linked list node is placed infront of the previous pointer
+			 */
 			previousPtr->nextNodePtr = newPtr;
+			/*
+			 * The new linked list node's link points to the next pointer, which is either NULL to terminate or another linked list node.
+			 */ 
 			newPtr->nextNodePtr = currentPtr;
 		}
 	}
@@ -155,19 +167,30 @@ char delete(LinkedListNodePtr *startPtr, char c)
 	LinkedListNodePtr currentPtr;
 	LinkedListNodePtr tempPtr;
 
+	/*
+	 * If the char to be deleted matches the first linked list node data:
+	 * 1) Move the pointer to a temporary variable.
+	 * 2) Update the start pointer to point to the next linked list node. This deletes it from the linked list
+	 * 3) Free up the memory of the first pointer so it can be used elsewhere.
+	 */ 
 	if(c == (*startPtr)->data) {
 		tempPtr = *startPtr;
 		*startPtr = (*startPtr)->nextNodePtr;
 		free(tempPtr);
 		return c;
 	}
+	/*
+	 * If the first char doesn't match what we want to delete or the list is empty.
+	 */
 	else {
+		/*
+		 * Go to the next pointer
+		 */ 
 		previousPtr = *startPtr;
 		currentPtr = (*startPtr)->nextNodePtr;
 
 		/*
 		 * Loop through the list to find the correct location.
-		 * We are making this a sorted listed.
 		 * If the list is empty we skip this.
 		 */ 
 		while (currentPtr != NULL && c != currentPtr->data) {
