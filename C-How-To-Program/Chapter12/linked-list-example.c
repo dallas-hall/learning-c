@@ -246,7 +246,7 @@ void printLinkedList(LinkedListNodePtr currentPtr)
 				printf("\n");
 			}
 		}
-		printf("NULL\n");
+		printf("NULL - the end of the linked list.\n");
 	}
 }
 
