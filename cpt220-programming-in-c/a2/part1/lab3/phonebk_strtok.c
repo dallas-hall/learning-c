@@ -16,8 +16,11 @@ int main(int argc, char** argv)
     /* zero out the array so it is fully initialised */
     memset(list, sizeof(struct phone_entry) * DIRECTORYSIZE,0);
 
-    /* check for the correct number of command line arguments */
-    if(argc != NUMARGS)
+    /* check for the correct number of command line arguments
+	 *
+	 * Changed from argc to argc - 1, so we ignore the implicit passing of the program name.
+	 */
+    if(argc - 1 != NUMARGS)
     {
         fprintf(stderr, "Error: invalid arguments.\n\n");
         return EXIT_FAILURE;
