@@ -7,7 +7,7 @@
 #define NAMELEN 30
 #define PHONELEN 8
 #define DIRECTORYSIZE 10
-#define delim "|"
+#define DELIM ","
 struct phone_entry
 {
     char fname[NAMELEN+1];

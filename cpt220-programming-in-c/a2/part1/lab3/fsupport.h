@@ -8,8 +8,11 @@
 void print_usage(void);
 FILE* gropen(char * infile);
 FILE* gwopen(char * outfile);
-/* the length of a line in the file */
-#define MAXWIDTH 1
+/* the length of a line in the file
+ *
+ * Change from 1 to 99
+ */
+#define MAXWIDTH NAMELEN + 1 + NAMELEN + 1 + PHONELEN + 1
 /* final two characters written by fgets to a char array */
 #define EXTRASPACES 2
 /* the number of command line arguments
