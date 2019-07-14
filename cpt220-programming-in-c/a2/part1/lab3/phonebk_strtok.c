@@ -14,10 +14,16 @@ int main(int argc, char** argv)
 {
     FILE *fpRead;
     struct phone_entry list[DIRECTORYSIZE];
-    int result;
+	/*
+	 * Explicitly defined to silence valgrind error.
+	 */ 
+    int result = -1;
 
-    /* zero out the array so it is fully initialised */
-    memset(list, sizeof(struct phone_entry) * DIRECTORYSIZE,0);
+    /* zero out the array so it is fully initialised
+	 *
+	 * Changed this from memset(list, sizeof(struct phone_entry) * DIRECTORYSIZE,0);
+	 */
+    memset(list, 0, sizeof(struct phone_entry) * DIRECTORYSIZE);
 
     /* check for the correct number of command line arguments
 	 *
@@ -133,7 +139,10 @@ void print_book(struct phone_entry* entries, int num_entries)
     /* print out each entry */
     for(count = 0; count < (unsigned)num_entries; ++count)
     {
-        printf("%s\t%s\t%s", entries[count].fname, entries[count].lname,
+		/*
+		 * Added a \n for the new line
+		 */ 
+        printf("%s\t%s\t%s\n", entries[count].fname, entries[count].lname,
             entries[count].number);
     }
 }
