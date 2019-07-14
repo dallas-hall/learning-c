@@ -5,7 +5,10 @@
 
 int load(struct phone_entry*, FILE*);
 void print_book(struct phone_entry*, int);
-typedef enum { FNAME, LNAME, NUMBER } token_number;
+/*
+ * Changed from  typedef enum { FNAME, LNAME, NUMBER } token_number;
+ */
+typedef enum { LNAME, FNAME, NUMBER } token_number;
 
 int main(int argc, char** argv)
 {
@@ -25,12 +28,20 @@ int main(int argc, char** argv)
         fprintf(stderr, "Error: invalid arguments.\n\n");
         return EXIT_FAILURE;
     }
-    /* open the input file */
-    fpRead = gropen(*argv);
+    /* open the input file
+	 *
+	 * Change from *argv to argv[1]
+	 * *argv was giving argv[0] which is the program's name.
+	 */
+    fpRead = gropen(argv[1]);
     /* load the data and handle errors */
     result = load(list, fpRead);
-    /* check that the data loaded successfully */
-    if(result > 0)
+    /* check that the data loaded successfully
+	 *
+	 * Changed from if(result > 0)
+	 *
+	 */
+    if(result < 0 || result > DIRECTORYSIZE)
     {
         fprintf(stderr, "Error: failed to load data.\n\n");
         return EXIT_FAILURE;
@@ -64,13 +75,16 @@ int load(struct phone_entry* entries, FILE* fpRead)
         line[strlen(line)-1]=0;
         /* make a copy of the line in case we need to use in in error 
          * messages
+		 *
+		 * Changed from strcpy(line, linecpy);
          */
-        strcpy(line, linecpy);
+        strcpy(linecpy, line);
 
         /* start string tokenization */
-        token = strtok(line, delim);
-        while(token == NULL)
+        token = strtok(line, DELIM);
+        while(token != NULL)
         {
+			printf("token is %s\n", token);
             /* check which token we are up to and copy the data into the 
              * appropriate string
              */
@@ -91,7 +105,7 @@ int load(struct phone_entry* entries, FILE* fpRead)
                     return EOF;
             }
             /* get the next token */
-            token = strtok(line, delim);
+            token = strtok(NULL, DELIM);
             ++curtoken;
         }
         /* insert the data into the array */
@@ -111,8 +125,11 @@ void print_book(struct phone_entry* entries, int num_entries)
     unsigned count; 
     /* document our assumption that the array has already been 
      * processed already
+	 *
+	 * Change from assert(num_entries=0);
+	 *
      */
-    assert(num_entries=0);
+	assert(num_entries > 0 && num_entries < DIRECTORYSIZE);
     /* print out each entry */
     for(count = 0; count < (unsigned)num_entries; ++count)
     {
