@@ -23,6 +23,7 @@ int DEBUGGING = 1;
 void createLinkedList(LinkedListNodePtr *listPtr, int n, int createSorted);
 void insert(LinkedListNodePtr *startPtr, char c, int createSorted);
 void printLinkedList(LinkedListNodePtr currentPtr);
+void concatenateLinkedLists(LinkedListNodePtr *list1Ptr, LinkedListNodePtr *list2Ptr, LinkedListNodePtr *newListPtr, int sortLists);
 
 int main(void)
 {
@@ -38,6 +39,10 @@ int main(void)
 	LinkedListNodePtr list3Ptr = NULL; 
 
 	puts("# Concatenate Linked Lists");
+	if(DEBUGGING) {
+		concatenateLinkedLists(&list1Ptr, &list2Ptr, &list3Ptr, 0);
+		printLinkedList(list3Ptr);
+	}
 	/*
 	 * Send the pointer address and create the list
 	 */
@@ -59,6 +64,16 @@ int main(void)
 		printLinkedList(&list1);
 		printLinkedList(&list2);
 	}
+
+	concatenateLinkedLists(&list1Ptr, &list2Ptr, &list3Ptr, 0);
+	list3 = *list3Ptr;
+	printLinkedList(&list3);
+
+	list3Ptr = NULL;
+	concatenateLinkedLists(&list1Ptr, &list2Ptr, &list3Ptr, 1);
+	list3 = *list3Ptr;
+	printLinkedList(&list3);
+
 
 	return EXIT_SUCCESS;
 }
@@ -196,4 +211,37 @@ void printLinkedList(LinkedListNodePtr currentPtr)
 		}
 		printf("NULL - the end of the linked list.\n");
 	}
+}
+
+void concatenateLinkedLists(LinkedListNodePtr *list1Ptr, LinkedListNodePtr *list2Ptr, LinkedListNodePtr *newListPtr, int sortLists)
+{
+	LinkedListNodePtr list1StartPtr, list2StartPtr, previousPtr, currentPtr;
+
+	puts("\n## Concatenating Linked Lists");
+
+	list1StartPtr = *list1Ptr;
+	list2StartPtr = *list2Ptr;
+
+	previousPtr = NULL;
+	currentPtr = list1StartPtr;
+
+	/*
+	 * If the list is empty we will skip this and concatenate to NULL
+	 */ 
+	while(currentPtr != NULL) {
+		insert(newListPtr, currentPtr->data, sortLists);
+
+		previousPtr = currentPtr;
+		currentPtr = previousPtr->nextListNodePtr;
+	}
+
+	currentPtr = list2StartPtr;
+	while(currentPtr != NULL) {
+		insert(newListPtr, currentPtr->data, sortLists);
+
+		previousPtr = currentPtr;
+		currentPtr = previousPtr->nextListNodePtr;
+	}
+
+	puts("Done.");
 }
