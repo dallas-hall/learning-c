@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 /*
  * A self referential structure, which is what linked lists are
@@ -18,40 +19,39 @@ struct linkedListNode {
 typedef struct linkedListNode LinkedListNode;
 typedef LinkedListNode *LinkedListNodePtr;
 
-void createLinkedList(LinkedListNodePtr *listPtr, int nodeAmount);
-void insertNode(LinkedListNodePtr *startPtr, int n);
+void createLinkedList(LinkedListNodePtr *listPtr, int nodeAmount, int createSorted);
+void insertNode(LinkedListNodePtr *startPtr, int n, int sortList);
 void printLinkedList(LinkedListNodePtr startPtr);
+void sumLinkedList(LinkedListNodePtr *startPtr);
 
 int main(void)
 {
-	LinkedListNode list1, list2, list3;
-	LinkedListNodePtr list1Ptr, list2Ptr, list3Ptr;
+	LinkedListNodePtr list1Ptr;
 
 	list1Ptr = NULL;
-	list2Ptr = NULL;
-	list3Ptr = NULL;
 
-	puts("# Merge Sort Linked Lists");
-	createLinkedList(&list1Ptr, 5);
+	puts("# Sum Linked Lists");
+	createLinkedList(&list1Ptr, 25, 0);
 	printLinkedList(list1Ptr);
+	sumLinkedList(&list1Ptr);
 
 	return EXIT_SUCCESS;
 }
 
-void createLinkedList(LinkedListNodePtr *listPtr, int nodeAmount)
+void createLinkedList(LinkedListNodePtr *listPtr, int nodeAmount, int createSorted)
 {
 	int i;
 
-	puts("## Creating Linked List");
+	puts("\n## Creating Linked List");
 	srand(time(NULL));
 	for(i = 0; i < nodeAmount; i++) {
-		insertNode(listPtr, rand() % 100);
+		insertNode(listPtr, rand() % 100, createSorted);
 	}
 
 	puts("Done.");
 }
 
-void insertNode(LinkedListNodePtr *startPtr, int n)
+void insertNode(LinkedListNodePtr *startPtr, int n, int sortList)
 {
 	/*
 	 * Previous linked list node
@@ -61,6 +61,13 @@ void insertNode(LinkedListNodePtr *startPtr, int n)
 	LinkedListNodePtr previousPtr;
 	LinkedListNodePtr currentPtr;
 	LinkedListNodePtr newPtr;
+
+	if(sortList < 0) {
+		sortList = -1;
+	}
+	else if (sortList > 0) {
+		sortList = 1;
+	}
 
 	/*
 	 * mallac tries to allocate memory with the specified bytes.
@@ -89,10 +96,29 @@ void insertNode(LinkedListNodePtr *startPtr, int n)
 		 * If the list is empty we skip this. currentPtr will be NULL if the list is empty.
 		 * If the list isn't empty, loop through until we find the correct spot (ie the input data is lower than the current linked list node data.
 		 */ 
-		while (currentPtr != NULL) {
+
+		switch (sortList) {
+			case 0:
+				while (currentPtr != NULL) {
 			
-			previousPtr = currentPtr;
-			currentPtr = currentPtr->nextNodePtr;
+				previousPtr = currentPtr;
+				currentPtr = currentPtr->nextNodePtr;
+				}
+				break;
+			case 1:
+				while (currentPtr != NULL && n > currentPtr->data) {
+			
+				previousPtr = currentPtr;
+				currentPtr = currentPtr->nextNodePtr;
+				}
+				break;
+			case -1:
+				while (currentPtr != NULL && n < currentPtr->data) {
+			
+				previousPtr = currentPtr;
+				currentPtr = currentPtr->nextNodePtr;
+				}
+				break;
 		}
 
 		/*
@@ -131,7 +157,7 @@ void printLinkedList(LinkedListNodePtr startPtr)
 {
 	LinkedListNodePtr previousPtr, currentPtr;
 
-	puts("## Printing Linked List");
+	puts("\n## Printing Linked List");
 	
 	if(startPtr == NULL) {
 		printf("The list is empty.");
@@ -148,4 +174,19 @@ void printLinkedList(LinkedListNodePtr startPtr)
 		}
 		printf("NULL, the end of the linked list.\n");
 	}
+}
+
+void sumLinkedList(LinkedListNodePtr *startPtr)
+{
+	double total = 0;
+	LinkedListNodePtr currentPtr;
+
+	puts("\n## Caculating Sum");
+	currentPtr = *startPtr;
+	while(currentPtr != NULL) {
+		total += currentPtr->data;
+		currentPtr = currentPtr->nextNodePtr;
+	}
+
+	printf("The sum total of the linked list was %.2f\n", total);
 }
