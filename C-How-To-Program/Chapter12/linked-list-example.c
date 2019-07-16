@@ -22,7 +22,6 @@ char delete(LinkedListNodePtr *startPtr, char c);
 int isEmpty(LinkedListNodePtr startPtr);
 void printLinkedList(LinkedListNodePtr currentPtr);
 void printMenu(void);
-void sumLinkedList(LinkedListNodePtr *startPtr);
 
 int main(void)
 {
@@ -68,9 +67,6 @@ int main(void)
 				}
 				break;
 			case '3':
-				
-				break;
-			case '4':
 				done = 1;
 				break;
 			default:
@@ -260,23 +256,6 @@ void printMenu(void)
 	puts("Choose from the following options:");
 	puts("1) to insert an element into the linked list.");
 	puts("2) to delete an element from the linked list.");
-	puts("3) to sum all elements in the linked list.");
-	puts("4) to quit.");
+	puts("3) to quit.");
 	printf("Enter the number for yor choice: ");
-}
-
-void sumLinkedList(LinkedListNodePtr *startPtr)
-{
-	double total = 0;
-
-	LinkedListNodePtr currentPtr;
-	currentPtr = *startPtr;
-
-	puts("## Summing Linked List");
-	while(currentPtr != NULL) {
-		total += currentPtr->data;
-		currentPtr = currentPtr->nextNodePtr;
-	}
-
-	printf("The sum of the linked list data elements is %f\n", total);
 }
