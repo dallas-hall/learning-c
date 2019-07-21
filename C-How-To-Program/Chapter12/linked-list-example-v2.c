@@ -13,12 +13,6 @@ enum BOOLEAN
 	TRUE
 };
 
-enum SORT_BY
-{
-	CHAR,
-	INT
-};
-
 struct node
 {
 	char c;
@@ -59,16 +53,15 @@ int main(void)
 	int sortList = 1;
 
 	puts("# Linked List Example - Separate List & Data structs");
-	puts("## Creating & Initialising Linked List");
 
 	theListPtr = NULL;
 	theListPtr = createList(theListPtr);
 	if (theListPtr == NULL) {
 		return EXIT_FAILURE;
 	}
-	puts("Done.");
+	puts("Linked list created and initialised.");
 
-	printf("## Inserting %d Items Into Linked List\n", LIST_SIZE);
+	printf("\n## Populating %d Items Into Linked List", LIST_SIZE);
 	if (DEBUGGING) {
 		printf("sortList is %d\n", sortList);
 		puts("0 is not sorted. < 0 is descending sort. > 0 is ascending sort.");
@@ -84,31 +77,36 @@ int main(void)
 		if (!insert(theListPtr, c, sortList)) {
 			return EXIT_FAILURE;
 		}
+		else {
+			printf("%c inserted.\n", c);
+		}
 	}
-	/*updateTail(theListPtr);*/
-	puts("Done.");
+	puts("Linked list populated.");
 
 	printLinkedList(theListPtr);
 	
-	puts("## Deleting From List");
 	c = theListPtr->head->c;
-	printf("Trying to delete %c\n", c);
-	delete(theListPtr, c);
+	if(delete(theListPtr, c)) {
+		printf("%c deleted.\n", c);
+	}
 	printLinkedList(theListPtr);
 
 	c = theListPtr->tail->c;
-	printf("Trying to delete %c\n", c);
-	delete(theListPtr, c);
+	if(delete(theListPtr, c)) {
+		printf("%c deleted.\n", c);
+	}
 	printLinkedList(theListPtr);
 
 	c = theListPtr->head->next->next->next->c; 
-	printf("Trying to delete %c\n", c);
-	delete(theListPtr, c);
+	if(delete(theListPtr, c)) {
+		printf("%c deleted.\n", c);
+	}
 	printLinkedList(theListPtr);
 
 	c = '!'; 
-	printf("Trying to delete %c\n", c);
-	delete(theListPtr, c);
+	if(delete(theListPtr, c)) {
+		printf("%c deleted.\n", c);
+	}
 	printLinkedList(theListPtr);
 
 	return EXIT_SUCCESS;
@@ -116,6 +114,7 @@ int main(void)
 
 struct list* createList(struct list* theListPtr)
 {
+	puts("\n## Creating & Initialising Linked List");
 	theListPtr = malloc(sizeof(struct list));
 
 	if (theListPtr != NULL) {
@@ -151,6 +150,9 @@ enum BOOLEAN insert(struct list* theListPtr, char c, int sortList)
 	struct node* newNodePtr;
 	struct node* previousNodePtr;
 	struct node* currentNodePtr;
+
+	puts("\n### Inserting Into Linked List.");
+	printf("Trying to insert %c\n", c);
 
 	/*
 	 * mallac tries to allocate memory with the specified bytes.
@@ -232,7 +234,7 @@ enum BOOLEAN insert(struct list* theListPtr, char c, int sortList)
 	else {
 		previousNodePtr->next = newNodePtr;
 		newNodePtr->next = currentNodePtr;
-
+		++theListPtr->size;
 		updateTail(theListPtr);
 	}
 	return TRUE;
@@ -242,7 +244,7 @@ void printLinkedList(const struct list* theListPtr)
 {
 	struct node* currentNodePtr = NULL;
 
-	puts("## Printing Linked List Node(s)");
+	puts("\n## Printing Linked List Node(s)");
 
 	if (theListPtr == NULL) {
 		puts("The list is empty.");
@@ -288,6 +290,9 @@ enum BOOLEAN delete(struct list* theList, char c)
 {
 	struct node* previousNodePtr;
 	struct node* currentNodePtr;
+
+	puts("\n## Deleting From List");
+	printf("Trying to delete %c\n", c);
 
 	previousNodePtr = NULL;
 	currentNodePtr = theList->head;
