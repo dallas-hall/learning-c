@@ -4,6 +4,9 @@
 int main(void)
 {
 	int n, m;
+	/*
+	 * The * here means to define a pointer.
+	 */
 	int *nPointer;
 	int *mPointer;
 
@@ -31,12 +34,9 @@ int main(void)
 	printf("The value of n is %d\nThe value of nPointer is %d\n", m, *mPointer);
 	printf("The value of m is %d\nThe value of mPointer is %d\n", m, *mPointer);
 
-	/*printf("\nThis shows that * and & are complements of each other.\n"
-			"&*nPointer = %p\n"
-			"*&nPointer = %p\n"
-			"&*mPointer = %p\n" 
-			"*&mPointer = %p\n"
-			&*nPointer, *&nPointer, &*mPointer, *&mPointer);*/
+	printf("\nThis shows that * and & are complements of each other.\n");
+	printf("&*nPointer = %p\n*&nPointer = %p\n&*mPointer = %p\n*&mPointer = %p\n",
+			(void *) &*nPointer, (void *) *&nPointer, (void *) &*nPointer, (void *) *&nPointer);
 
 	return EXIT_SUCCESS;
 }
