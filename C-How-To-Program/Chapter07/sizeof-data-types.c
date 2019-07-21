@@ -10,6 +10,7 @@ int main(void)
 	short s;
 	int i;
 	long l;
+	size_t st;
 	/*
 	 * Floating point numbers
 	 */ 
@@ -30,6 +31,7 @@ int main(void)
 	printf("sizeof(aFloat) is %ld bytes.\t\tsizeof(float) is %ld bytes.\n", sizeof(f), sizeof(float));
 	printf("sizeof(aDouble) is %ld bytes.\t\tsizeof(double) is %ld bytes.\n", sizeof(d), sizeof(double));
 	printf("sizeof(aLongDouble) is %ld bytes.\tsizeof(long double) is %ld bytes.\n", sizeof(ld), sizeof(long double));
+	printf("sizeof(aSizeT) is %ld bytes.\t\tsizeof(size_t) is %ld bytes.\n", sizeof(st), sizeof(size_t));
 	printf("sizeof(anIntArray) with 10 elements is %ld bytes.\n", sizeof(array));
 	printf("sizeof(anIntArrayPointer) is %ld bytes.\n", sizeof(intArrayPointer));
 
