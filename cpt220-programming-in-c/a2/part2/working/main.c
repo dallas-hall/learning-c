@@ -8,82 +8,94 @@
  *****************************************************************************/
 #include "main.h"
 
+const int DEBUGGING_MAIN = 1;
+
 /**
  * function converts string data to a long and sets its BOOLEAN member to FALSE
  * if anything goes wrong.
  **/
 struct falsible_long longfromstr(const char* str)
 {
-        /**
-         * pointer to the next character after what we successfully parses with
-         * strtol().
-         **/
-        char* end;
-        /**
-         * the result that we will return
-         **/
-        struct falsible_long result;
-        /**
-         * parse the string
-         **/
-        result.thelong = strtol(str, &end, DECIMAL);
-        /**
-         * ignore spaces at the end of the string
-         **/
-        while (isspace(*end))
-        {
-                ++end;
-        }
-        /**
-         * if an invalid argument was passed into strtol or the number converted
-         * is outside the range of a long, this operation failed so display
-         * an error and exit.
-         **/
-        if (errno == EINVAL || errno == ERANGE)
-        {
-                result.success = FALSE;
-                error_print("%s\n", strerror(errno));
-                return result;
-        }
-        /**
-         * if there was trailing data that was not numeric, display an error
-         * message and return FALSE
-         **/
-        if (*end)
-        {
-                result.success = FALSE;
-                error_print("the provided value is not numeric. \n");
-                return result;
-        }
-        result.success = TRUE;
-        return result;
+	/**
+	 * pointer to the next character after what we successfully parses with
+	 * strtol().
+	 **/
+	char* end;
+	/**
+	 * the result that we will return
+	 **/
+	struct falsible_long result;
+	/**
+	 * parse the string
+	 **/
+	result.thelong = strtol(str, &end, DECIMAL);
+	/**
+	 * ignore spaces at the end of the string
+	 **/
+	while (isspace(*end)) {
+		++end;
+	}
+	/**
+	 * if an invalid argument was passed into strtol or the number converted
+	 * is outside the range of a long, this operation failed so display
+	 * an error and exit.
+	 **/
+	if (errno == EINVAL || errno == ERANGE) {
+		result.success = FALSE;
+		error_print("%s\n", strerror(errno));
+		return result;
+	}
+	/**
+	 * if there was trailing data that was not numeric, display an error
+	 * message and return FALSE
+	 **/
+	if (*end) {
+		result.success = FALSE;
+		error_print("the provided value is not numeric. \n");
+		return result;
+	}
+	result.success = TRUE;
+	return result;
 }
+
 /**
  * main function that kickstatts the program
  **/
 int main(int argc, char* argv[])
 {
-        struct falsible_long seed = { 0 };
-        /* was no seed passed in? */
-        if (argc == MAXARGS)
-        {
-                /* retrieve the seed from argv 1 */
-                seed = longfromstr(argv[SEED_ARG]);
-                /* if we did not succeed in retrieving the seed,
-                 * exit the program
-                 */
-                if (!seed.success)
-                {
-                        return EXIT_FAILURE;
-                }
-                /* start the game, passing in the seed */
-        }
-        play_game(seed);
+	struct falsible_long seed = {0};
 
-        /**
-         * dead code bug required in order to avoid compiler warnings
-         **/
-        return EXIT_SUCCESS;
+	/*
+	 * We need +1 here because of the program name being passed in automatically
+	 * as the first argument.
+	 */
+	if (argc == MINARGS + 1) {
+		if(DEBUGGING_MAIN) {
+			debug_print("The file path passed in was %s\n", argv[FILE_PATH_ARG]);
+		}
+	}
+	if (argc == MAXARGS + 1) {
+		if(DEBUGGING_MAIN) {
+			debug_print("The file path passed in was %s\n", argv[FILE_PATH_ARG]);
+			debug_print("The seed passed in was %s\n", argv[SEED_ARG]);
+		}
+
+		/* retrieve the seed from argv 1 */
+		seed = longfromstr(argv[SEED_ARG]);
+		/* if we did not succeed in retrieving the seed,
+		 * exit the program
+		 */
+		if (!seed.success) {
+			return EXIT_FAILURE;
+		}
+	}
+	/* start the game, passing in the seed */
+	play_game(seed);
+
+	/**
+	 * dead code bug required in order to avoid compiler warnings
+	 **/
+	return EXIT_SUCCESS;
 }
 
 /**
@@ -108,9 +120,9 @@ void abort_program(struct game_system* thesystem)
  **/
 BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 {
-        /* remove this return statement and replace it with the code to
-         * initialise the system. Also, remove this comment */
-        return FALSE;
+	/* remove this return statement and replace it with the code to
+	 * initialise the system. Also, remove this comment */
+	return FALSE;
 }
 
 /**

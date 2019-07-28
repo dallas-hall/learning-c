@@ -23,7 +23,11 @@ enum
         MAXARGS
 };
 
-#define SEED_ARG 1
+/*
+ * Updated for the input file path.
+ */
+#define FILE_PATH_ARG 1
+#define SEED_ARG 2
 
 /**
  * assignment 2 data structures
