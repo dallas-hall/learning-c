@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 			debug_print("The file path passed in was %s\n", argv[FILE_PATH_ARG]);
 		}
 	}
-	if (argc == MAXARGS + 1) {
+	else if (argc == MAXARGS + 1) {
 		if(DEBUGGING_MAIN) {
 			debug_print("The file path passed in was %s\n", argv[FILE_PATH_ARG]);
 			debug_print("The seed passed in was %s\n", argv[SEED_ARG]);
@@ -88,6 +88,10 @@ int main(int argc, char* argv[])
 		if (!seed.success) {
 			return EXIT_FAILURE;
 		}
+	}
+	else {
+		error_print("Invalid arguments. Arguments must be either 1 file path, or 1 file path and 1 seed number.\n");
+		return  EXIT_FAILURE;
 	}
 	/* start the game, passing in the seed */
 	play_game(seed);
