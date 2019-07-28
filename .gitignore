@@ -132,3 +132,4 @@ dkms.conf
 
 # Catch all for anything missed.
 **/.idea/
+**/CMakeLists.txt
