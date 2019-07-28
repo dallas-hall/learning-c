@@ -53,6 +53,7 @@ dkms.conf
 
 # IntelliJ CLion
 */.idea/*
+*/cmake-build-debug/*
 
 # vim files
 *.swp
