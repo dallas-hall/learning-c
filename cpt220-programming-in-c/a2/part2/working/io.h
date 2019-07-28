@@ -32,14 +32,14 @@
  **/
 enum input_result
 {
-        /* the operation failed */
-        IR_FAILURE,
-        /* the operation succeeded */
-        IR_SUCCESS,
-        /* the user has chosen to skip their turn */
-        IR_SKIP_TURN,
-        /* the user has chosen to quit the game */
-        IR_QUIT
+	/* the operation failed */
+			IR_FAILURE,
+	/* the operation succeeded */
+			IR_SUCCESS,
+	/* the user has chosen to skip their turn */
+			IR_SKIP_TURN,
+	/* the user has chosen to quit the game */
+			IR_QUIT
 };
 
 /**
@@ -66,9 +66,9 @@ extern const char* color_strings[];
  **/
 enum color
 {
-        COLOR_RED,
-        COLOR_WHITE,
-        COLOR_RESET
+	COLOR_RED,
+	COLOR_WHITE,
+	COLOR_RESET
 };
 
 /**
@@ -76,10 +76,10 @@ enum color
  **/
 enum token
 {
-        RED_TOKEN = 'O',
-        WHITE_TOKEN = 'X',
-        EMPTY_TOKEN = ' ',
-        INVALID_TOKEN = EOF
+	RED_TOKEN = 'O',
+	WHITE_TOKEN = 'X',
+	EMPTY_TOKEN = ' ',
+	INVALID_TOKEN = EOF
 };
 
 /**
@@ -117,6 +117,7 @@ enum token
  **/
 
 enum input_result read_string(const char[], char[], int);
+
 enum input_result read_int(const char[], int*);
 /**
  * end o part 2 data structures and functions
