@@ -60,3 +60,7 @@ dkms.conf
 
 # Asciidoc files
 *.asciidoc
+
+# Misc data files
+*.csv
+*.dat
