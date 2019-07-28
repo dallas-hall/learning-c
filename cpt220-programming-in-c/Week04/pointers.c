@@ -13,7 +13,7 @@ int main(void)
   printf("value of variable 'a' in main(): %d\n", a);
   printf("address of variable 'b' in main(): %p\n", (void*)&b);
   printf("value of variable 'b' in main(): %d\n", b);
-  printf ("In main, calling swap()\n");
+  printf ("In main, calling swap() with addresses\n");
   swap(&a, &b);
   printf("\n## back in main() after returning from swap()\n");
   printf("address of variable 'a' in main(): %p\n", (void*)&a);
