@@ -149,6 +149,11 @@ int normal_print(const char format[], ...);
 
 int error_print(const char format[], ...);
 
+/*
+ * Added for debug messages.
+ */
+int debug_print(const char format[], ...);
+
 void board_print(board, enum orientation);
 
 #endif

@@ -321,3 +321,18 @@ enum input_result read_moves(struct move themoves[], int* num_moves,
         *num_moves = num_tokens;
         return IR_SUCCESS;
 }
+
+
+/*
+ * Copied the normal_print function for my debug messages.
+ */
+int debug_print(const char format[], ...)
+{
+	int char_count = 0;
+	va_list vlist;
+	char_count += fprintf(stdout, "[DEBUG] ");
+	va_start(vlist, format);
+	char_count += vfprintf(stdout, format, vlist);
+
+	return char_count;
+}
