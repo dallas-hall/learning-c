@@ -6,8 +6,9 @@
 
 int main(void)
 {
-	char s[] = "This sentence has 5 tokens";
+	char s[] = "This sentence\thas 5\ttokens";
 	char *tokenPtr;
+	char delimiters[2] = {' ', '\t'};
 
 	puts("# String Token Extraction\n## strtok(string, delimiter)");
 	printf("### Splitting up the string \"%s\"\nUsing the delimiter '%s'\n", s, DELIMITER);
@@ -15,7 +16,7 @@ int main(void)
 	/*
 	 * Create first token
 	 */
-	tokenPtr = strtok(s, DELIMITER);
+	tokenPtr = strtok(s, delimiters);
 
 	/*
 	 * Need multiple calls to get all the tokens.
@@ -26,7 +27,7 @@ int main(void)
 		 * The NULL argument tell strtok to keep going.
 		 * NULL is returned when there are no more tokens.
 		 */ 
-		tokenPtr = strtok(NULL, DELIMITER);
+		tokenPtr = strtok(NULL, delimiters);
 	}
 
 	return EXIT_SUCCESS;
