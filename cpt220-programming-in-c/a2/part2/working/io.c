@@ -326,7 +326,7 @@ enum input_result read_moves(struct move themoves[], int* num_moves,
 /*
  * Copied the normal_print function for my debug messages.
  */
-int debug_print(const char format[], ...)
+int printDebug(const char format[], ...)
 {
 	int char_count = 0;
 	va_list vlist;
