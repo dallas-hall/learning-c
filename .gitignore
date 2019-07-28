@@ -52,8 +52,8 @@ Mkfile.old
 dkms.conf
 
 # IntelliJ CLion
-**/.idea
-**/cmake-build-debug
+**/.idea/
+**/cmake-build-debug/
 
 # vim files
 *.swp
