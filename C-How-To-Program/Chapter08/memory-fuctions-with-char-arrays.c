@@ -55,9 +55,9 @@ int main(void)
 	printf("s1 is \"%s\"\n", s1);
 	printf("s2 is \"%s\"\n", s2);
 	printf("s3 is \"%s\"\n", s3);
-	memset(s1, '*', 5);
-	puts("### After memset(s1, '*', 5);");
-	printf("s1 is \"%s\"\n", s1);
+	memset(s2, '*', 5);
+	puts("### After memset(s2, '*', 5);");
+	printf("s2 is \"%s\"\n", s2);
 
 	puts("\nAll of these functions use void * (pointers), so any object pointer can be used. Just using char * for simplicity.");
 	

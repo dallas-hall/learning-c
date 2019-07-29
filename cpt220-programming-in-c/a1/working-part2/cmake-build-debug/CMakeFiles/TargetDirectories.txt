@@ -1,3 +1,0 @@
-/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/working.dir
-/home/blindcant/Development/c/cpt220-programming-in-c/a1/working/cmake-build-debug/CMakeFiles/edit_cache.dir

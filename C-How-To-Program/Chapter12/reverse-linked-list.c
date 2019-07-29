@@ -21,13 +21,13 @@ void reverseList(LinkedListNodePtr *originalListPtr, LinkedListNodePtr *newListP
 ;
 
 int main(void) {
-
+	int sortList = 1;
     LinkedListNodePtr list1Ptr, list2Ptr;
     list1Ptr = NULL;
     list2Ptr = NULL;
 
     puts("# Reversing A Linked List");
-    createLinkedList(&list1Ptr, 10, 0);
+    createLinkedList(&list1Ptr, 10, sortList);
     printLinkedList(list1Ptr);
 
     reverseList(&list1Ptr, &list2Ptr);

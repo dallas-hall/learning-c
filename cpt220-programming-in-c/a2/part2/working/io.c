@@ -1,7 +1,7 @@
 /******************************************************************************
- * Student Name    :
- * RMIT Student ID :
- * COURSE CODE     :
+ * Student Name    :  Dallas Hall
+ * RMIT Student ID :  s3461243
+ * COURSE CODE     :  CPT220 / OLA00
  *
  * Startup code provided by Paul Miller for use in "Programming in C",
  * study period 2, 2019.
@@ -320,4 +320,19 @@ enum input_result read_moves(struct move themoves[], int* num_moves,
         /* store the number of successful moves performed */
         *num_moves = num_tokens;
         return IR_SUCCESS;
+}
+
+
+/*
+ * Copied the normal_print function for my debug messages.
+ */
+int debug_print(const char format[], ...)
+{
+	int char_count = 0;
+	va_list vlist;
+	char_count += fprintf(stdout, "[DEBUG] ");
+	va_start(vlist, format);
+	char_count += vfprintf(stdout, format, vlist);
+
+	return char_count;
 }
