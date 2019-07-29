@@ -14,7 +14,7 @@
  **/
 void barlist_init(struct bar_list* alist)
 {
-        alist->token_count = 0;
+	alist->token_count = 0;
 }
 
 /**
@@ -22,12 +22,11 @@ void barlist_init(struct bar_list* alist)
  **/
 BOOLEAN barlist_push(struct bar_list* alist, enum piece thepiece)
 {
-        if (alist->token_count == MAX_BAR)
-        {
-                return FALSE;
-        }
-        alist->bar_array[alist->token_count++] = thepiece;
-        return TRUE;
+	if (alist->token_count == MAX_BAR) {
+		return FALSE;
+	}
+	alist->bar_array[alist->token_count++] = thepiece;
+	return TRUE;
 }
 
 /**
@@ -35,11 +34,10 @@ BOOLEAN barlist_push(struct bar_list* alist, enum piece thepiece)
  **/
 enum piece barlist_pop(struct bar_list* thelist)
 {
-        if (thelist->token_count == 0)
-        {
-                return P_INVALID;
-        }
-        return thelist->bar_array[--thelist->token_count];
+	if (thelist->token_count == 0) {
+		return P_INVALID;
+	}
+	return thelist->bar_array[--thelist->token_count];
 }
 
 /**
@@ -47,5 +45,5 @@ enum piece barlist_pop(struct bar_list* thelist)
  **/
 void barlist_delete(struct bar_list* thelist)
 {
-        thelist->token_count = 0;
+	thelist->token_count = 0;
 }

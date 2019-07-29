@@ -31,7 +31,7 @@ void scores_menu(struct game_system* thesystem)
  **/
 BOOLEAN print_scores(struct game_system* thesystem)
 {
-        return FALSE;
+	return FALSE;
 }
 
 /**
@@ -41,7 +41,7 @@ BOOLEAN print_scores(struct game_system* thesystem)
  **/
 BOOLEAN add_score(struct game_system* thesystem)
 {
-        return FALSE;
+	return FALSE;
 }
 
 /**
@@ -51,7 +51,7 @@ BOOLEAN add_score(struct game_system* thesystem)
  **/
 BOOLEAN delete_score(struct game_system* thesystem)
 {
-        return FALSE;
+	return FALSE;
 }
 
 /**
@@ -59,7 +59,7 @@ BOOLEAN delete_score(struct game_system* thesystem)
  **/
 BOOLEAN remove_all_scores(struct game_system* thesystem)
 {
-        return FALSE;
+	return FALSE;
 }
 
 /**
@@ -67,7 +67,7 @@ BOOLEAN remove_all_scores(struct game_system* thesystem)
  **/
 BOOLEAN resave_scores(struct game_system* thesystem)
 {
-        return FALSE;
+	return FALSE;
 }
 
 /**
@@ -77,5 +77,5 @@ BOOLEAN resave_scores(struct game_system* thesystem)
  **/
 BOOLEAN save_scores(struct game_system* thesystem)
 {
-        return FALSE;
+	return FALSE;
 }

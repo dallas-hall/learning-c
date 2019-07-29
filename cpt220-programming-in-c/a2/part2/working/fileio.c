@@ -21,8 +21,6 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 	 * I based this code off of C How To Program 6e Chapter 10
 	 */
 	FILE* filePointer;
-	char absolutePath[PATH_MAX];
-	char* absolutePathPtr;
 	char buffer[BUFFER_SIZE + FGETS_EXTRA_CHAR];
 
 	/*
@@ -45,6 +43,13 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				printf("%s", buffer);
 			}
 		}
+		/*
+		 * TODO
+		 *
+		 * tokenise each line in the file
+		 * validate each line in the file
+		 * store validate lines in linked list
+		 */
 	}
 	return TRUE;
 }
@@ -55,5 +60,24 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
  **/
 BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 {
+	/*
+	 * TODO
+	 *
+	 * Save the linked list to a file, descending order.
+	 */
 	return FALSE;
+}
+
+/*
+ * Parsing a CSV - winner's name, loser's name, points won by
+ * Some validation done here.
+ */
+BOOLEAN parseFileData(char[])
+{
+	/*
+	 * TODO
+	 *
+	 * score must be > 1 and <= 15
+	 * name can't have any punctuation or tabs and <=20 characters
+	 */
 }

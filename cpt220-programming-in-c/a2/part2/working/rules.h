@@ -9,6 +9,7 @@
 #include "board.h"
 #include "io.h"
 #include "shared.h"
+
 #ifndef RULES_H
 #define RULES_H
 /**
@@ -25,8 +26,8 @@ struct player;
  **/
 enum direction
 {
-        DIR_UP,
-        DIR_DOWN
+	DIR_UP,
+	DIR_DOWN
 };
 
 /**
@@ -38,8 +39,8 @@ enum direction
  **/
 struct piece_location
 {
-        int x, y;
-        enum direction direction;
+	int x, y;
+	enum direction direction;
 };
 
 /**
@@ -48,8 +49,8 @@ struct piece_location
  **/
 struct move_pair
 {
-        struct piece_location start;
-        struct piece_location end;
+	struct piece_location start;
+	struct piece_location end;
 };
 
 /**
@@ -70,8 +71,8 @@ struct move_pair
  * so that we can rearrange values but still know their original index */
 struct int_pair
 {
-        int index;
-        int value;
+	int index;
+	int value;
 };
 
 /**
@@ -80,8 +81,8 @@ struct int_pair
  **/
 struct pair_tuple
 {
-        struct int_pair tuple_vals[MAX_TUPLE_SIZE];
-        int tuple_count;
+	struct int_pair tuple_vals[MAX_TUPLE_SIZE];
+	int tuple_count;
 };
 
 /**
@@ -90,8 +91,8 @@ struct pair_tuple
  **/
 struct falsible_pair_tuple
 {
-        BOOLEAN success;
-        struct pair_tuple thepairs;
+	BOOLEAN success;
+	struct pair_tuple thepairs;
 };
 /**
  * end of part 3 headers
@@ -108,11 +109,14 @@ struct falsible_pair_tuple
 /**
  * functions that you will need to implement in rules.c
  **/
-void determine_player_order(struct game *);
-BOOLEAN validate_moves(const struct move[], int, const struct player *,
-                       const int[], struct move_pair[]);
-BOOLEAN apply_moves(const struct move_pair[], int, struct player *);
-BOOLEAN has_won_game(const struct player *);
+void determine_player_order(struct game*);
+
+BOOLEAN validate_moves(const struct move[], int, const struct player*,
+					   const int[], struct move_pair[]);
+
+BOOLEAN apply_moves(const struct move_pair[], int, struct player*);
+
+BOOLEAN has_won_game(const struct player*);
 
 /**
  *You may add your own function prototypes here

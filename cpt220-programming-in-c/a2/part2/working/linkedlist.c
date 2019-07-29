@@ -32,7 +32,7 @@ struct linkedlist* createLinkedList(struct linkedlist* theLinkedListPtr)
 	/*
 	 * Same as theLinkedListPtr == NULL
 	 */
-	if(!theLinkedListPtr) {
+	if (!theLinkedListPtr) {
 		return NULL;
 	}
 	else {
@@ -45,22 +45,51 @@ struct linkedlist* createLinkedList(struct linkedlist* theLinkedListPtr)
 
 BOOLEAN insertNode(struct linkedlist* theLinkedListPtr, struct node* theNodePtr)
 {
+	/*
+	 * TODO
+	 *
+	 * Insert in descending order
+	 * Update links and counter
+	 */
 	return FALSE;
 }
 
 BOOLEAN deleteNode(struct linkedlist* theLinkedListPtr, struct node* theNodePtr)
 {
+	/*
+	 * TODO
+	 *
+	 * Delete a node
+	 */
 	return FALSE;
 }
 
-void printLinkedList(struct linkedlist* theLinkedListPtr)
+BOOLEAN findNode(struct linkedlist* theLinkedListPtr, struct node* theNodePtr)
 {
-
+	/*
+	 * TODO
+	 *
+	 * find a node
+	 */
+	return FALSE;
 }
 
-BOOLEAN saveLinkedList(struct linkedlist*  theLinkedList, FILE* outputFilePtr)
+void prettyPrintLinkedList(struct linkedlist* theLinkedListPtr)
 {
-	return FALSE;
+	/*
+	 * TODO
+	 *
+	 * print the linked list in order
+	 */
+}
+
+void csvPrintLinkedList(struct linkedlist* theLinkedListPtr, char delimiter)
+{
+	/*
+	 * TODO
+	 *
+	 * print the linked list in order in CSV format
+	 */
 }
 
 BOOLEAN deleteLinkedList(struct linkedlist* theLinkedListPtr)

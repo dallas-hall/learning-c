@@ -36,12 +36,12 @@ struct game;
  **/
 struct player
 {
-        char name[NAME_LEN + 1];
-        int score;
-        enum piece token;
-        struct bar_list bar_list;
-        struct game* curgame;
-        enum orientation orientation;
+	char name[NAME_LEN + 1];
+	int score;
+	enum piece token;
+	struct bar_list bar_list;
+	struct game* curgame;
+	enum orientation orientation;
 };
 
 /**
@@ -58,6 +58,8 @@ struct player
  **/
 BOOLEAN
 player_init(struct player*, struct game*);
+
 enum input_result
 player_take_turn(struct player*);
+
 #endif

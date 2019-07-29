@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
 	/*
 	 * Same as theLinkedListPtr == NULL
 	 */
-	if(!theLinkedListPtr) {
+	if (!theLinkedListPtr) {
 		error_print("Couldn't create the linked list with malloc.\n");
 		return EXIT_FAILURE;
 	}
@@ -152,6 +152,11 @@ int main(int argc, char* argv[])
 
 	}
 
+	/*
+	 * TODO
+	 *
+	 * print the linked list csv style
+	 */
 
 	/* start the game, passing in the seed */
 	play_game(seed);
@@ -193,7 +198,7 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 	 *
 	 * Blank input already covered by arg check.
 	 */
-	if(strlen(fname) > PATH_MAX) {
+	if (strlen(fname) > PATH_MAX) {
 		error_print("Input file path is too long, must be <= 4096 characters.");
 		return FALSE;
 	}
@@ -206,6 +211,11 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 		return FALSE;
 	}
 
+	/*
+	 * TODO
+	 *
+	 * malloc this, it must not be a string on the stack
+	 */
 	thesystem->datafile = fname;
 	return TRUE;
 }
@@ -226,7 +236,7 @@ void init_main_menu(struct main_menu_entry mainmenu[])
 struct game_system* createGameSystemPtr(struct game_system* theGameSystemPtr)
 {
 	/*
-	 * mallac tries to allocate memory with the specified bytes.
+	 * malloc tries to allocate memory with the specified bytes.
 	 * sizeof will return the size of the data structure, platform dependent.
 	 * If successful, malloc returns a void * to the allocated memory, otherwise
 	 * returns NULL

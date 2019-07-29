@@ -9,6 +9,7 @@
 #include "shared.h"
 #include <errno.h>
 #include <string.h>
+
 #ifndef HELPERS_H
 #define HELPERS_H
 
@@ -25,8 +26,13 @@
  * own
  **/
 char* strdup(const char*);
+
 char* fold(const char[]);
-BOOLEAN get_move_strings(char * [], int*, const char[]);
+
+BOOLEAN get_move_strings(char* [], int*, const char[]);
+
 struct move strtomove(const char[]);
+
 BOOLEAN strtoint(int*, const char[]);
+
 #endif
