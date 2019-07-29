@@ -1,1 +1,0 @@
-/usr/bin/clang -g   CMakeFiles/working.dir/bar_list.c.o CMakeFiles/working.dir/board.c.o CMakeFiles/working.dir/game.c.o CMakeFiles/working.dir/helpers.c.o CMakeFiles/working.dir/io.c.o CMakeFiles/working.dir/main.c.o CMakeFiles/working.dir/player.c.o CMakeFiles/working.dir/rules.c.o  -o working 
