@@ -35,5 +35,11 @@ struct linkedlist
 /**
  * provide the declarations of linked list interface functions
  **/
+struct linkedlist* createLinkedList(struct linkedlist*);
+BOOLEAN insertNode(struct linkedlist*, struct node*);
+BOOLEAN deleteNode(struct linkedlist*, struct node*);
+void printLinkedList(struct linkedlist*);
+BOOLEAN saveLinkedList(struct linkedlist*, FILE*);
+BOOLEAN deleteLinkedList(struct linkedlist*);
 
 #endif
