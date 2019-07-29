@@ -27,11 +27,11 @@
  **/
 struct game
 {
-        struct player players[NUM_PLAYERS];
-        board game_board;
-        struct player* current_player;
-        struct player* other_player;
-        long seed;
+	struct player players[NUM_PLAYERS];
+	board game_board;
+	struct player* current_player;
+	struct player* other_player;
+	long seed;
 };
 
 /**
@@ -43,8 +43,8 @@ struct game
  **/
 enum
 {
-        FIRST,
-        SECOND
+	FIRST,
+	SECOND
 };
 
 /**
@@ -70,6 +70,9 @@ struct game_system;
  * may feel the need to add more functions and you should feel free to do so.
  **/
 BOOLEAN game_init(struct game* thegame);
+
 void play_game(struct falsible_long);
+
 void swap_players(struct player**, struct player**);
+
 #endif

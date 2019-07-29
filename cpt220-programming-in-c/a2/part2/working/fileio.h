@@ -31,9 +31,13 @@
  */
 #define FGETS_EXTRA_CHAR 1
 
-
 #ifndef FILEIO_H
 #define FILEIO_H
+
 BOOLEAN load_data(const char[], struct linkedlist*);
+
 BOOLEAN save_data(const char[], const struct linkedlist*);
+
+BOOLEAN parseFileData(char[]);
+
 #endif
