@@ -21,6 +21,17 @@
 /* the maximum length of a file path you are expected to handle */
 #define PATH_MAX 4096
 
+/*
+ * Input buffer size
+ */
+#define BUFFER_SIZE 1024
+
+/*
+ * fgets adds a \0 to the end of the input.
+ */
+#define FGETS_EXTRA_CHAR 1
+
+
 #ifndef FILEIO_H
 #define FILEIO_H
 BOOLEAN load_data(const char[], struct linkedlist*);
