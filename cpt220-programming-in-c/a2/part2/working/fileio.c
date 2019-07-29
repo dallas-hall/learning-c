@@ -34,7 +34,7 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 		 * strerror returns the string of the O/S error number.
 		 * errno returns an error number for the current error
 		 */
-		fprintf(stderr, "[ERROR] %s\n", strerror(errno));
+		fprintf(stderr, "[ERROR] %s called %s\n", strerror(errno), fname);
 		return FALSE;
 	}
 	else {
@@ -72,7 +72,7 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
  * Parsing a CSV - winner's name, loser's name, points won by
  * Some validation done here.
  */
-BOOLEAN parseFileData(char[])
+BOOLEAN parseFileData(char filename[])
 {
 	/*
 	 * TODO
@@ -80,4 +80,5 @@ BOOLEAN parseFileData(char[])
 	 * score must be > 1 and <= 15
 	 * name can't have any punctuation or tabs and <=20 characters
 	 */
+	return FALSE;
 }
