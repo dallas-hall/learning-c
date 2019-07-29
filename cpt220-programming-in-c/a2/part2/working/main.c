@@ -65,18 +65,43 @@ int main(int argc, char* argv[])
 {
 	struct falsible_long seed = {0};
 	struct game_system* theGameSystemPtr = NULL;
+	struct linkedlist* theLinkedListPtr = NULL;
 
 	/*
 	 * Create and initialise the game system.
 	 */
-	theGameSystemPtr = createAndInitialiseGameSystemPtr(theGameSystemPtr);
+	theGameSystemPtr = createGameSystemPtr(theGameSystemPtr);
 	if (!theGameSystemPtr) {
 		error_print("Couldn't create the game system with malloc.\n");
 		return EXIT_FAILURE;
 	}
 	if (DEBUGGING_MAIN) {
+		/*
+		 * Everything should either be 0, NULL or '\0'
+		 */
 		printDebugGameSystem(theGameSystemPtr);
 	}
+
+	/*
+	 * Create and initialise the linked list
+	 */
+	theLinkedListPtr = createLinkedList(theLinkedListPtr);
+
+	/*
+	 * Same as theLinkedListPtr == NULL
+	 */
+	if(!theLinkedListPtr) {
+		error_print("Couldn't create the linked list with malloc.\n");
+		return EXIT_FAILURE;
+	}
+	/*
+	 * Assign the value of the linked list pointer through dereferencing to the
+	 * game system and update the linked list pointer to the address of the
+	 * game system linked list. May not need this, not sure yet.
+	 */
+	theGameSystemPtr->scoreboard = *theLinkedListPtr;
+	theLinkedListPtr = &theGameSystemPtr->scoreboard;
+
 
 	/*
 	 * We need +1 here because of the program name being passed in automatically
@@ -111,7 +136,7 @@ int main(int argc, char* argv[])
 	}
 
 	/*
-	 * Initialise the game system.
+	 * Initialise the game system. i.e. load some data boys!
 	 */
 	if (!init_system(theGameSystemPtr, argv[FILE_PATH_ARG])) {
 		error_print("Couldn't initialise the game system.\n");
@@ -126,6 +151,7 @@ int main(int argc, char* argv[])
 		}
 
 	}
+
 
 	/* start the game, passing in the seed */
 	play_game(seed);
@@ -165,9 +191,23 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 	 * if valid load_data and assign filename to thesystem->datafile
 	 * else exit with error
 	 *
-	 *
+	 * Blank input already covered by arg check.
 	 */
-	return FALSE;
+	if(strlen(fname) > PATH_MAX) {
+		error_print("Input file path is too long, must be <= 4096 characters.");
+		return FALSE;
+	}
+
+	/*
+	 * We need the memory address of the linked list with &, so we can directly
+	 * update that memory within the init_system function.
+	 */
+	if (!load_data(fname, &thesystem->scoreboard)) {
+		return FALSE;
+	}
+
+	thesystem->datafile = fname;
+	return TRUE;
 }
 
 /**
@@ -183,8 +223,7 @@ void init_main_menu(struct main_menu_entry mainmenu[])
  * Return this new zeroed out game system back to main.
  * We then pass this to init_system.
  */
-struct game_system*
-createAndInitialiseGameSystemPtr(struct game_system* theGameSystemPtr)
+struct game_system* createGameSystemPtr(struct game_system* theGameSystemPtr)
 {
 	/*
 	 * mallac tries to allocate memory with the specified bytes.
@@ -223,6 +262,10 @@ createAndInitialiseGameSystemPtr(struct game_system* theGameSystemPtr)
 	}
 }
 
+/*
+ * I tried putting this in io.h / io.c but I was getting an error that I didn't
+ * know how to resolve.
+ */
 void printDebugGameSystem(struct game_system* theGameSystemPtr)
 {
 	int i;
