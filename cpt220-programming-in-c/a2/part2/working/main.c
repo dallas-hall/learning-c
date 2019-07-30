@@ -8,7 +8,10 @@
  *****************************************************************************/
 #include "main.h"
 
-const int DEBUGGING_MAIN = 1;
+/*
+ * Using this variable in every .c file to control debug print messages
+ */
+const int DEBUGGING_MAIN = 0;
 
 /**
  * function converts string data to a long and sets its BOOLEAN member to FALSE
@@ -107,32 +110,27 @@ int main(int argc, char* argv[])
 	 * We need +1 here because of the program name being passed in automatically
 	 * as the first argument.
 	 */
-	if (argc == MINARGS + 1) {
-		if (DEBUGGING_MAIN) {
-			printDebug("The file path passed in was %s\n",
-					   argv[FILE_PATH_ARG]);
-		}
-	}
-	else if (argc == MAXARGS + 1) {
-		if (DEBUGGING_MAIN) {
-			printDebug("The file path passed in was %s\n",
-					   argv[FILE_PATH_ARG]);
-			printDebug("The seed passed in was %s\n", argv[SEED_ARG]);
-		}
-
-		/* retrieve the seed from argv 1 */
-		seed = longfromstr(argv[SEED_ARG]);
-		/* if we did not succeed in retrieving the seed,
-		 * exit the program
-		 */
-		if (!seed.success) {
-			return EXIT_FAILURE;
-		}
-	}
-	else {
+	if (argc != MINARGS + 1 && argc != MAXARGS + 1) {
 		error_print(
 				"Invalid arguments. Arguments must be either 1 file path, or 1 file path and 1 seed number.\n");
 		return EXIT_FAILURE;
+	}
+	else {
+		if (argc == MAXARGS + 1) {
+			/* retrieve the seed from argv 1 */
+			seed = longfromstr(argv[SEED_ARG]);
+			/* if we did not succeed in retrieving the seed,
+			 * exit the program
+			 */
+			if (!seed.success) {
+				return EXIT_FAILURE;
+			}
+		}
+
+		if (DEBUGGING_MAIN) {
+			printDebug("The file path passed in was %s\n", argv[FILE_PATH_ARG]);
+			printDebug("The seed passed in was %s\n", argv[SEED_ARG]);
+		}
 	}
 
 	/*
@@ -191,8 +189,6 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 {
 
 	/*
-	 * TODO check filename here
-	 *
 	 * if valid load_data and assign filename to thesystem->datafile
 	 * else exit with error
 	 *
