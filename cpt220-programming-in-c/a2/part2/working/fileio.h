@@ -12,6 +12,11 @@
 #include "linkedlist.h"
 #include "scoreboard.h"
 
+/*
+ * Added player.h so I could get NAME_LEN
+ */
+#include "player.h"
+
 /**
  * The maximum length a result string can be - that is the game results stored
  * in the data file that is read in.
@@ -28,8 +33,19 @@
 
 /*
  * fgets adds a \0 to the end of the input.
+ * Also used for the null terminator in other cases.
  */
 #define FGETS_EXTRA_CHAR 1
+
+/*
+ * CSV delimiter
+ */
+#define DELIMITER ","
+
+/*
+ * strtol conversion number system
+ */
+#define BASE_10 10
 
 #ifndef FILEIO_H
 #define FILEIO_H
@@ -38,6 +54,10 @@ BOOLEAN load_data(const char[], struct linkedlist*);
 
 BOOLEAN save_data(const char[], const struct linkedlist*);
 
-BOOLEAN parseFileData(char[]);
+BOOLEAN parseLineData(char* line);
+
+BOOLEAN validInputName(const char*);
+
+int validWinningMargin(char* winningMargin);
 
 #endif
