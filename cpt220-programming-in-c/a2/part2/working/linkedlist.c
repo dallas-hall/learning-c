@@ -57,7 +57,19 @@ BOOLEAN insertNode(struct linkedlist* theLinkedListPtr,
 	 * Insert in descending order
 	 * Update links and counter
 	 */
-	
+
+	/*
+	 * List is empty. sp insert into the beginning.
+	 */
+	if(theLinkedListPtr->size == 0 && theLinkedListPtr->head == NULL) {
+		theLinkedListPtr->head = theGameResultNodePrt;
+		theGameResultNodePrt->next = NULL;
+		++theLinkedListPtr->size;
+		return TRUE;
+	}
+	else {
+		printf("[DEBUG] add more crap here.\n");
+	}
 
 	return FALSE;
 }
