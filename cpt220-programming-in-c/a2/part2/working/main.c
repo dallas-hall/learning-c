@@ -9,7 +9,8 @@
 #include "main.h"
 
 /*
- * Using this variable in every .c file to control debug print messages
+ * Using this variable in every .c file to control debug print messages.
+ * I did this in the first assignment and it worked pretty well.
  */
 const int DEBUGGING_MAIN = 0;
 
@@ -71,7 +72,8 @@ int main(int argc, char* argv[])
 	struct linkedlist* theLinkedListPtr = NULL;
 
 	/*
-	 * Create and initialise the game system.
+	 * Create and initialise the game system. Doing this here so it is alive
+	 * for the duration of the running program.
 	 */
 	theGameSystemPtr = createGameSystemPtr(theGameSystemPtr);
 	if (!theGameSystemPtr) {
@@ -80,7 +82,8 @@ int main(int argc, char* argv[])
 	}
 	if (DEBUGGING_MAIN) {
 		/*
-		 * Everything should either be 0, NULL or '\0'
+		 * From my understanding, everything should either be 0, NULL or '\0'
+		 * at this point.
 		 */
 		printDebugGameSystem(theGameSystemPtr);
 	}
@@ -91,7 +94,7 @@ int main(int argc, char* argv[])
 	theLinkedListPtr = createLinkedList(theLinkedListPtr);
 
 	/*
-	 * Same as theLinkedListPtr == NULL
+	 * Same as theLinkedListPtr == NULL, I tend to switch between both.
 	 */
 	if (!theLinkedListPtr) {
 		error_print("Couldn't create the linked list with malloc.\n");
@@ -101,6 +104,9 @@ int main(int argc, char* argv[])
 	 * Assign the value of the linked list pointer through dereferencing to the
 	 * game system and update the linked list pointer to the address of the
 	 * game system linked list. May not need this, not sure yet.
+	 *
+	 * I think Paul mentioned not needing to do this in my previous assignment
+	 * but I can't remember explicitly.
 	 */
 	theGameSystemPtr->scoreboard = *theLinkedListPtr;
 	theLinkedListPtr = &theGameSystemPtr->scoreboard;
@@ -108,7 +114,8 @@ int main(int argc, char* argv[])
 
 	/*
 	 * We need +1 here because of the program name being passed in automatically
-	 * as the first argument.
+	 * as the first argument. Remembering that the first element is actually 0
+	 * and not 1.
 	 */
 	if (argc != MINARGS + 1 && argc != MAXARGS + 1) {
 		error_print(
@@ -192,7 +199,9 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 	 * if valid load_data and assign filename to thesystem->datafile
 	 * else exit with error
 	 *
-	 * Blank input already covered by arg check.
+	 * Blank input already covered by arg check, because there is a mandatory
+	 * argument required which is the filename. If it is blank, it will fail
+	 * that mandatory argument check.
 	 */
 	if (strlen(fname) > PATH_MAX) {
 		error_print("Input file path is too long, must be <= 4096 characters.");
@@ -202,6 +211,8 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 	/*
 	 * We need the memory address of the linked list with &, so we can directly
 	 * update that memory within the init_system function.
+	 *
+	 * This is simulated pass by reference.
 	 */
 	if (!load_data(fname, &thesystem->scoreboard)) {
 		return FALSE;
@@ -228,6 +239,8 @@ void init_main_menu(struct main_menu_entry mainmenu[])
  * Create and initialise our game system pointer.
  * Return this new zeroed out game system back to main.
  * We then pass this to init_system.
+ *
+ * Paul tends to cast the void* returned by malloc.
  */
 struct game_system* createGameSystemPtr(struct game_system* theGameSystemPtr)
 {
@@ -239,11 +252,13 @@ struct game_system* createGameSystemPtr(struct game_system* theGameSystemPtr)
 	 *
 	 * We are using struct game_system because that is the object that will be
 	 * stored in the pointer.
+	 *
+	 * Paul tends to cast the void* returned by malloc.
 	 */
 	theGameSystemPtr = malloc(sizeof(struct game_system));
 
 	/*
-	 * The same as thesystem == NULL
+	 * The same as theGameSystemPtr == NULL. I tend to switch between the two.
 	 */
 	if (!theGameSystemPtr) {
 		return NULL;
@@ -262,6 +277,9 @@ struct game_system* createGameSystemPtr(struct game_system* theGameSystemPtr)
 		 * int = 0
 		 * ptr = NULL
 		 * char = '\0'
+		 *
+		 * Not sure if this is even necessary at this point? Every time I
+		 * inspected these variables there were already zeroed.
 		 */
 		memset(theGameSystemPtr, '\0', sizeof(struct game_system));
 		return theGameSystemPtr;
@@ -271,6 +289,9 @@ struct game_system* createGameSystemPtr(struct game_system* theGameSystemPtr)
 /*
  * I tried putting this in io.h / io.c but I was getting an error that I didn't
  * know how to resolve.
+ *
+ * I think this relates to the forward declaration mentioned in main.h for
+ * the struct game_system but I am not entirely sure.
  */
 void printDebugGameSystem(struct game_system* theGameSystemPtr)
 {
