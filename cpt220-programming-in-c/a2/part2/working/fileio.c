@@ -25,6 +25,7 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 	FILE* filePointer;
 	char buffer[MAXRESULTSTRING + FGETS_EXTRA_CHAR];
 	char c;
+	struct node* linkedListNodePtr;
 	struct game_result* gameResultPtr;
 	int i;
 
@@ -40,6 +41,20 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 	 * Paul tends to cast the void* returned by malloc.
 	 */
 	gameResultPtr = malloc(sizeof(struct game_result));
+	linkedListNodePtr = malloc(sizeof(struct node));
+
+	/*
+	 * The same as gameResultPtr == NULL. I tend to switch between the two.
+	 */
+	if (!gameResultPtr) {
+		error_print("Couldn't create the game result with malloc.\n");
+		return FALSE;
+	}
+
+	if(linkedListNodePtr == NULL) {
+		error_print("Couldn't create the linked list node with malloc.\n");
+		return FALSE;
+	}
 
 	/*
 	 * Need the double () because of precedence.
@@ -108,15 +123,25 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				/*
 				 * Parse the buffer, which means tokenise and validate the line
 				 * data. Store it into the game_result if valid.
+				 *
+				 * By passing in the pointer to game_result we can manipulate it
+				 * inside of parseLineData and update it if valid data is found.
 				 */
 				if (!parseLineData(buffer, gameResultPtr)) {
 					return FALSE;
 				}
 
 				/*
+				 * Update the linked list node payload and link members.
+				 */
+				linkedListNodePtr->data = gameResultPtr;
+				linkedListNodePtr->next = NULL;
+
+				/*
 				 * TODO
 				 * Insert into linked list.
 				 */
+				insertNode(scorelist, linkedListNodePtr);
 
 				/*
 				 * Reset the buffer. This is needed so the buffer is completely
@@ -229,7 +254,7 @@ BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
 	if (DEBUGGING_FILEIO) {
 		printf("winnersName is %s\n", winnersName);
 		printf("losersName is %s\n", losersName);
-		printf("winningMargin is %ld\n", winningMargin);
+		printf("winningMargin is %d\n", winningMargin);
 		printf("gameResultPtr->winner is %s\n", gameResultPtr->winner);
 		printf("gameResultPtr->loser is %s\n", gameResultPtr->loser);
 		printf("gameResultPtr->won_by is %d\n", gameResultPtr->won_by);
@@ -298,14 +323,25 @@ int validWinningMargin(char* winningMarginPtr)
 		return -1;
 	}
 
-
+	/*
+	 * Extract out the number using strtol.
+	 * strtol will
+	 *
+	 * 1) Try to extract numbers used the supplied number system, in this case
+	 * decimal.
+	 * 2) Store any non-digits in strtolRemainderPointer, specifically the
+	 * pointer to the first non-digit character.
+	 *
+	 * If there was no numbers at all, strtolRemainderPointer has the original
+	 * string and 0 is returned.
+	 */
 	winningMargin = strtol(winningMarginPtr, &strtolRemainderPointer, BASE_10);
 
 	/*
 	 * Invalid characters found in the score.
 	 *
-	 * This means that an integer wasn't passed in. Could be decimal or other
-	 * junk.
+	 * This means that an integer wasn't passed in. Could be decimal point or
+	 * other non-integer junk.
 	 */
 	if (strlen(strtolRemainderPointer) > 0) {
 		error_print(
