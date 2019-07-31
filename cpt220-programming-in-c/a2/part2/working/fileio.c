@@ -30,33 +30,6 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 	int i;
 
 	/*
-	 * malloc tries to allocate memory with the specified bytes.
-	 * sizeof will return the size of the data structure, platform dependent.
-	 * If successful, malloc returns a void * to the allocated memory, otherwise
-	 * returns NULL
-	 *
-	 * We are using struct game_result because that is the object that will be
-	 * stored in the pointer.
-	 *
-	 * Paul tends to cast the void* returned by malloc.
-	 */
-	gameResultPtr = malloc(sizeof(struct game_result));
-	linkedListNodePtr = malloc(sizeof(struct node));
-
-	/*
-	 * The same as gameResultPtr == NULL. I tend to switch between the two.
-	 */
-	if (!gameResultPtr) {
-		error_print("Couldn't create the game result with malloc.\n");
-		return FALSE;
-	}
-
-	if(linkedListNodePtr == NULL) {
-		error_print("Couldn't create the linked list node with malloc.\n");
-		return FALSE;
-	}
-
-	/*
 	 * Need the double () because of precedence.
 	 * Assignment is lower than equality check.
 	 *
@@ -121,6 +94,37 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				}
 
 				/*
+				 * malloc tries to allocate memory with the specified bytes.
+				 * sizeof will return the size of the data structure, platform
+				 * dependent. If successful, malloc returns a void * to the
+				 * allocated memory, otherwise returns NULL
+				 *
+				 * We are using struct game_result because that is the object
+				 * that will be stored in the pointer.
+				 *
+				 * Paul tends to cast the void* returned by malloc.
+				 */
+				gameResultPtr = malloc(sizeof(struct game_result));
+				linkedListNodePtr = malloc(sizeof(struct node));
+
+				/*
+				 * The same as gameResultPtr == NULL. I tend to switch between the two.
+				 */
+				if (!gameResultPtr) {
+					error_print("Couldn't create the game result with malloc.\n");
+					return FALSE;
+				}
+
+				if(linkedListNodePtr == NULL) {
+					error_print("Couldn't create the linked list node with malloc.\n");
+					return FALSE;
+				}
+
+				/*
+				 * TODO there is a bug here with linked list not updating properly.
+				 */
+
+				/*
 				 * Parse the buffer, which means tokenise and validate the line
 				 * data. Store it into the game_result if valid.
 				 *
@@ -141,7 +145,14 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				 * TODO
 				 * Insert into linked list.
 				 */
-				insertNode(scorelist, linkedListNodePtr);
+				/*
+				 * TODO I THINK THIS NEEDS TO BE MOVED INSIDE INSERT
+				 *
+				 */
+				/*if(!insertNode(scorelist, linkedListNodePtr)) {
+					error_print("Couldn't insert into the linked list.\n");
+					return FALSE;
+				}*/
 
 				/*
 				 * Reset the buffer. This is needed so the buffer is completely
@@ -149,9 +160,11 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				 * be crap left over from the previous run.
 				 */
 				memset(buffer, 0, sizeof(buffer));
+
+				gameResultPtr = NULL;
+				linkedListNodePtr = NULL;
 			}
 		}
-
 	}
 	return TRUE;
 }

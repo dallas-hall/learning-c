@@ -51,6 +51,9 @@ struct linkedlist* createLinkedList(struct linkedlist* theLinkedListPtr)
 BOOLEAN insertNode(struct linkedlist* theLinkedListPtr,
 				   struct node* theGameResultNodePrt)
 {
+	struct node* previousNode;
+	struct node* currentNode;
+
 	/*
 	 * TODO
 	 *
@@ -58,17 +61,36 @@ BOOLEAN insertNode(struct linkedlist* theLinkedListPtr,
 	 * Update links and counter
 	 */
 
+	previousNode = NULL;
+	currentNode = theLinkedListPtr->head;
 	/*
-	 * List is empty. sp insert into the beginning.
+	 * Loop through the list, we will stop when the current node is no
+	 * longer larger than the new node. Or we reach the end of the list.
 	 */
-	if(theLinkedListPtr->size == 0 && theLinkedListPtr->head == NULL) {
+	while (currentNode != NULL &&
+		   currentNode->data->won_by > theGameResultNodePrt->data->won_by) {
+		previousNode = currentNode;
+		currentNode = previousNode->next;
+	}
+
+	/*
+	 * List is empty. so insert into the beginning.
+	 */
+	if(previousNode == NULL) {
 		theLinkedListPtr->head = theGameResultNodePrt;
 		theGameResultNodePrt->next = NULL;
 		++theLinkedListPtr->size;
 		return TRUE;
 	}
 	else {
-		printf("[DEBUG] add more crap here.\n");
+		/*
+		 * Insert the node into the correct place.
+		 * We already set the new node's link to NULL, so if it is the last
+		 * node it is set correctly, otherwise we update it.
+		 */
+		previousNode->next = theGameResultNodePrt;
+		theGameResultNodePrt->next = currentNode;
+		++theLinkedListPtr->size;
 	}
 
 	return FALSE;
@@ -106,6 +128,28 @@ void prettyPrintLinkedList(struct linkedlist* theLinkedListPtr)
 	 *
 	 * print the linked list in order
 	 */
+
+	struct node* previousNode;
+	struct node* currentNode;
+
+	previousNode = NULL;
+	currentNode = theLinkedListPtr->head;
+	if(currentNode == NULL) {
+		printf("The list is empty.\n");
+	}
+	else {
+		while(currentNode != NULL) {
+			printf("%s,%s,%d-links-with->\n", currentNode->data->winner,
+				   currentNode->data->loser,
+				   currentNode->data->won_by);
+			previousNode = currentNode;
+			currentNode = previousNode->next;
+		}
+		printf("NULL, the end of the list.\n");
+	}
+
+
+
 }
 
 /*

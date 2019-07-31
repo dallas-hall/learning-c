@@ -158,10 +158,17 @@ int main(int argc, char* argv[])
 	}
 
 	/*
+	 * We need to take the address of the list
+	 */
+	prettyPrintLinkedList(&theGameSystemPtr->scoreboard);
+
+	/*
 	 * TODO
 	 *
 	 * print the linked list csv style
 	 */
+
+
 
 	/* start the game, passing in the seed */
 	play_game(seed);
