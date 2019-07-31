@@ -15,6 +15,9 @@
 /*
  * My linked list code comes from week 8 and 9 tutorial code as well
  * as C How To Program 6e chapter 12.
+ *
+ * I did the tutorials in the textbook for linked list, doubly linked list,
+ * stacks, queues, and binary search trees. They were all conceptually similar.
  */
 struct linkedlist* createLinkedList(struct linkedlist* theLinkedListPtr)
 {
@@ -26,11 +29,13 @@ struct linkedlist* createLinkedList(struct linkedlist* theLinkedListPtr)
 	 *
 	 * We are using struct linkedlist because that is the object that will be
 	 * stored in the pointer.
+	 *
+	 * Paul tends to cast the void* returned by malloc.
 	 */
 	theLinkedListPtr = malloc(sizeof(struct linkedlist));
 
 	/*
-	 * Same as theLinkedListPtr == NULL
+	 * Same as theLinkedListPtr == NULL. I tend to use both.
 	 */
 	if (!theLinkedListPtr) {
 		return NULL;
@@ -43,7 +48,8 @@ struct linkedlist* createLinkedList(struct linkedlist* theLinkedListPtr)
 	return theLinkedListPtr;
 }
 
-BOOLEAN insertNode(struct linkedlist* theLinkedListPtr, struct node* theNodePtr)
+BOOLEAN insertNode(struct linkedlist* theLinkedListPtr,
+				   struct node* theGameResultNodePrt)
 {
 	/*
 	 * TODO
@@ -51,10 +57,13 @@ BOOLEAN insertNode(struct linkedlist* theLinkedListPtr, struct node* theNodePtr)
 	 * Insert in descending order
 	 * Update links and counter
 	 */
+	
+
 	return FALSE;
 }
 
-BOOLEAN deleteNode(struct linkedlist* theLinkedListPtr, struct node* theNodePtr)
+BOOLEAN deleteNode(struct linkedlist* theLinkedListPtr,
+				   struct node* theGameResultNodePrt)
 {
 	/*
 	 * TODO
@@ -74,6 +83,10 @@ BOOLEAN findNode(struct linkedlist* theLinkedListPtr, struct node* theNodePtr)
 	return FALSE;
 }
 
+/*
+ * This is basically a debug print.
+ * It prints from the head to the tail, one node per line.
+ */
 void prettyPrintLinkedList(struct linkedlist* theLinkedListPtr)
 {
 	/*
@@ -83,6 +96,9 @@ void prettyPrintLinkedList(struct linkedlist* theLinkedListPtr)
 	 */
 }
 
+/*
+ * This will be the function to write the linked out to disk in a csv format.
+ */
 void csvPrintLinkedList(struct linkedlist* theLinkedListPtr, char delimiter)
 {
 	/*
