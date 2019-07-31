@@ -5,8 +5,84 @@ Program Code    :   Bachelor of Information Technology (OLA00 / BP162OUP15)
 
 How to compile and execute the program
 ---------------------------------------
+gcc -ansi -Wall -pedantic bar_list.c board.c game.c helpers.c io.c main.c player.c rules.c scoreboard.c linkedlist.c fileio.c -o backgammon.out
+
+I created a file called compile-flags with the above inside of it, made it
+executable and just ran ./compile-flags to generate the binary.out file.
 
 Approaches taken to solving the set problems
 ---------------------------------------------
+1) File Mappings
+I did the same thing as in assignment one part 2 and 3. I went through all the
+header and source files and mapped them out. This was so I could get an under-
+standing of how everything linked together. I put this mapping into a basic
+flow diagram.
 
-TODO DIS GUY
+2) Development Process
+I followed the same develop process as last time, which is a) code in CLion
+b) run and debug in CLion c) compile with gcc on my local Fedora machine d) push
+to RMIT and compile with gcc there. This time my repositories are private so
+no one can steal my code again.
+
+3) Research Steps
+When trying to solve problems, I used the same steps as the last assignment,
+which was:
+a) Read through the course's code examples.
+b) Read through the code examples from the C How To Program 6e text book.
+c) I did some online research.
+d) Asked my friend who is a very experienced C programmer.
+
+4) Top Down Design
+I also used top down design approach again, as described in the text book
+C How To Program 6e. I used this when thinking through seemingly complex
+problems, such as the linked list operations and the reading in and tokenising
+of the lines in the file.
+
+5) Searching The Filesystem
+I used grep -inr 'search-term' * inside of my working directory when looking
+for stuff. I also used the same functionality inside of CLion when working with
+that.
+
+6) Bug Hunting
+Most of my bug hunting and fixing was done with the CLion debugger as well as
+a heap of print statements. I did run valgrind and libasan at the end as well.
+
+Comments
+--------
+I am still bitterly disappointed about someone taking my code and passing it off
+as their own. But I accept full responsibility for leaving my repos on public
+and thus allowing them the opportunity to do so.
+
+The following is what I said to Paul in a Canvas message at 31 July 2019 at
+16:02
+
+"Sorry to bother you again. I just realised that my assignment 2 part 1 code is
+potentially compromised and my code up until today for part 2 is also
+potentially compromised. Hopefully the other student has a different number to
+me so had to do a different lab for part 1. But my part 2 code is close to
+fully functional.
+
+Basically this is what I have implemented so far:
+
+* Requirement 1 - all
+* Requirement 2 - all
+* Requirement 3
+    - Create and initialise the list, no other functionality yet
+* Requirement 4
+    - Loading in the file
+    - Validating the file / line
+    - Tokenising each line
+    - Validating each token
+    - Error messages for validations
+
+Mainly all I have left to do is the linked list functions, saving to a file, and
+printing the list.
+
+Do I need to do anything about this potentially compromised code? Should I
+submit what I have right now so you have it on record?"
+
+Because my repos were still on public until July 31st, the student(s) who were
+stealing my code could have been doing it up until that time. I have purposely
+gone through and changed all the comments in the *.c files so they are different
+to what I had committed to the open repo. I did this because I noticed the
+student who stole my code last time didn't even bother to change my comments.
