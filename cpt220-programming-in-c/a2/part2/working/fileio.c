@@ -18,7 +18,9 @@ int DEBUGGING_FILEIO = 1;
 BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 {
 	/*
-	 * I based this code off of C How To Program 6e Chapter 10
+	 * I based this code off of C How To Program 6e Chapter 10.
+	 *
+	 * I really enjoyed that book and read all the chapters on C.
 	 */
 	FILE* filePointer;
 	char buffer[MAXRESULTSTRING + FGETS_EXTRA_CHAR];
@@ -34,6 +36,8 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 	 *
 	 * We are using struct game_result because that is the object that will be
 	 * stored in the pointer.
+	 *
+	 * Paul tends to cast the void* returned by malloc.
 	 */
 	gameResultPtr = malloc(sizeof(struct game_result));
 
@@ -42,11 +46,15 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 	 * Assignment is lower than equality check.
 	 *
 	 * Using r to open in read only mode.
+	 *
+	 * We do need to save the file later, might need to update this.
 	 */
 	if ((filePointer = fopen(fname, "r")) == NULL) {
 		/*
 		 * strerror returns the string of the O/S error number.
 		 * errno returns an error number for the current error
+		 *
+		 * Combining these prints out the O/S specific error message.
 		 */
 		fprintf(stderr, "[ERROR] %s called %s\n", strerror(errno), fname);
 		return FALSE;
@@ -65,6 +73,12 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 		 * Initially was going to use fgets but I couldn't think of a way to use
 		 * it without having to go through all the chars in the fgets result
 		 * anyway. So I figured just a straight call to fgetc was easier.
+		 *
+		 * If I did use fgets the logic would be really similar, except that
+		 * I would wrap the below code in another while loop that would run
+		 * while !feof and use fgets and store that into a buffer and process
+		 * the buffer with the below while loop. That approach seemed much
+		 * more complex when I was thinking about it.
 		 */
 		while ((c = fgetc(filePointer)) != EOF) {
 			/*
@@ -81,7 +95,8 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 			}
 			else {
 				/*
-				 * Terminate the string
+				 * Terminate the string. Because everyone knows if you don't
+				 * terminate a string C just keeps on going!
 				 */
 				buffer[i] = '\0';
 				i = 0;
@@ -91,7 +106,8 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				}
 
 				/*
-				 * Parse the buffer
+				 * Parse the buffer, which means tokenise and validate the line
+				 * data. Store it into the game_result if valid.
 				 */
 				if (!parseLineData(buffer, gameResultPtr)) {
 					return FALSE;
@@ -103,7 +119,9 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				 */
 
 				/*
-				 * Reset the buffer.
+				 * Reset the buffer. This is needed so the buffer is completely
+				 * zeroed before the next run. Otherwise there will potentially
+				 * be crap left over from the previous run.
 				 */
 				memset(buffer, 0, sizeof(buffer));
 			}
@@ -132,6 +150,9 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
  * Some validation done here. Length is validated before passing it here.
  *
  * I based this off of C How To Program 6e Chapter 8 and the course materials.
+ *
+ * The FGETS_EXTRA_CHAR covers the necessarily null control character terminator
+ * for the end of the string.
  */
 BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
 {
@@ -149,7 +170,7 @@ BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
 	 */
 
 	/*
-	 * Get the first token
+	 * Get the first token and validate it. Store it if it is valid.
 	 */
 	tokenPtr = strtok(line, DELIMITER);
 	++tokenCount;
@@ -163,15 +184,23 @@ BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
 
 	/*
 	 * Need multiple calls to get all the tokens.
+	 *
+	 * The while loop is how we do this.
 	 */
 	while (tokenPtr != NULL) {
 		++tokenCount;
 		/*
 		 * The NULL argument tell strtok to keep going.
 		 * NULL is returned when there are no more tokens.
+		 *
+		 * But even when NULL is returned, it will loop over one more time.
+		 * That is why there is an if statement in the default block.
 		 */
 		tokenPtr = strtok(NULL, DELIMITER);
 
+		/*
+		 * Get the next 2 tokens and validate them. Store them if they're valid.
+		 */
 		switch (tokenCount) {
 			case 2:
 				if (!validInputName(tokenPtr)) {
@@ -232,6 +261,13 @@ BOOLEAN validInputName(const char* name)
 
 	/*
 	 * Must not have any punctuation in it.
+	 *
+	 * Paul did mention on the forum that - is probably acceptable as people
+	 * can have them in their names. But I am taking the hard line approach of
+	 * [^[:punct:]]
+	 *
+	 * The spec also talked about no tabs, but I am taking the hard line
+	 * approach of [^[:space:]]
 	 */
 	for (i = 0; i < nameLength; i++) {
 		if (ispunct(name[i])) {
@@ -267,6 +303,9 @@ int validWinningMargin(char* winningMarginPtr)
 
 	/*
 	 * Invalid characters found in the score.
+	 *
+	 * This means that an integer wasn't passed in. Could be decimal or other
+	 * junk.
 	 */
 	if (strlen(strtolRemainderPointer) > 0) {
 		error_print(
@@ -274,6 +313,10 @@ int validWinningMargin(char* winningMarginPtr)
 		return -1;
 	}
 
+	/*
+	 * The won by margin must be greater than 0, otherwise it would be a tie.
+	 * There are only 15 tokens on the board, so that is the max won by margin.
+	 */
 	if (winningMargin <= 0 || winningMargin > 15) {
 		error_print(
 				"Invalid input in the third token, should be between 1 and 15 but was %ld.\n",

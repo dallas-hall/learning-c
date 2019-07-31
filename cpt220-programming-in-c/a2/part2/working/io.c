@@ -304,6 +304,8 @@ enum input_result read_moves(struct move themoves[], int* num_moves,
 
 /*
  * Copied the normal_print function for my debug messages.
+ *
+ * I used this instead of typing the same thing over and over again.
  */
 int printDebug(const char format[], ...)
 {
