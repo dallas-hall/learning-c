@@ -54,7 +54,7 @@ BOOLEAN load_data(const char[], struct linkedlist*);
 
 BOOLEAN save_data(const char[], const struct linkedlist*);
 
-BOOLEAN parseLineData(char* line);
+BOOLEAN parseLineData(char* line, struct game_result*);
 
 BOOLEAN validInputName(const char*);
 

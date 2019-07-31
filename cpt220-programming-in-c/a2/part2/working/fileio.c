@@ -23,7 +23,19 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 	FILE* filePointer;
 	char buffer[MAXRESULTSTRING + FGETS_EXTRA_CHAR];
 	char c;
+	struct game_result* gameResultPtr;
 	int i;
+
+	/*
+	 * malloc tries to allocate memory with the specified bytes.
+	 * sizeof will return the size of the data structure, platform dependent.
+	 * If successful, malloc returns a void * to the allocated memory, otherwise
+	 * returns NULL
+	 *
+	 * We are using struct game_result because that is the object that will be
+	 * stored in the pointer.
+	 */
+	gameResultPtr = malloc(sizeof(struct game_result));
 
 	/*
 	 * Need the double () because of precedence.
@@ -55,6 +67,9 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 		 * anyway. So I figured just a straight call to fgetc was easier.
 		 */
 		while ((c = fgetc(filePointer)) != EOF) {
+			/*
+			 * Assuming no /r/n
+			 */
 			if (c != '\n') {
 				if (i > MAXRESULTSTRING) {
 					error_print("Input line was too long. Can only be <= %d.\n",
@@ -78,10 +93,14 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				/*
 				 * Parse the buffer
 				 */
-				if(!parseLineData(buffer)) {
+				if (!parseLineData(buffer, gameResultPtr)) {
 					return FALSE;
 				}
 
+				/*
+				 * TODO
+				 * Insert into linked list.
+				 */
 
 				/*
 				 * Reset the buffer.
@@ -114,7 +133,7 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
  *
  * I based this off of C How To Program 6e Chapter 8 and the course materials.
  */
-BOOLEAN parseLineData(char* line)
+BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
 {
 	char* tokenPtr;
 	char winnersName[NAME_LEN + FGETS_EXTRA_CHAR];
@@ -140,6 +159,7 @@ BOOLEAN parseLineData(char* line)
 	}
 
 	strcpy(winnersName, tokenPtr);
+	gameResultPtr->winner = winnersName;
 
 	/*
 	 * Need multiple calls to get all the tokens.
@@ -159,15 +179,17 @@ BOOLEAN parseLineData(char* line)
 				}
 
 				strcpy(losersName, tokenPtr);
+				gameResultPtr->loser = losersName;
 				break;
 			case 3:
 				winningMargin = validWinningMargin(tokenPtr);
+				gameResultPtr->won_by = winningMargin;
 				if (winningMargin == -1) {
 					return FALSE;
 				}
 				break;
 			default:
-				if(tokenPtr != NULL) {
+				if (tokenPtr != NULL) {
 					error_print(
 							"Invalid amount of tokens, 3 required, found %d.\n");
 					return FALSE;
@@ -178,7 +200,10 @@ BOOLEAN parseLineData(char* line)
 	if (DEBUGGING_FILEIO) {
 		printf("winnersName is %s\n", winnersName);
 		printf("losersName is %s\n", losersName);
-		printf("winningMargin is %ld", winningMargin);
+		printf("winningMargin is %ld\n", winningMargin);
+		printf("gameResultPtr->winner is %s\n", gameResultPtr->winner);
+		printf("gameResultPtr->loser is %s\n", gameResultPtr->loser);
+		printf("gameResultPtr->won_by is %d\n", gameResultPtr->won_by);
 	}
 
 	return TRUE;
@@ -189,7 +214,7 @@ BOOLEAN validInputName(const char* name)
 	int nameLength;
 	int i;
 
-	if(name == NULL) {
+	if (name == NULL) {
 		error_print("Name token is missing.\n");
 		return FALSE;
 	}
@@ -231,7 +256,7 @@ int validWinningMargin(char* winningMarginPtr)
 	char* strtolRemainderPointer;
 	long winningMargin;
 
-	if(winningMarginPtr == NULL) {
+	if (winningMarginPtr == NULL) {
 		error_print(
 				"Invalid input in the third token, token is missing.\n");
 		return -1;
@@ -251,7 +276,8 @@ int validWinningMargin(char* winningMarginPtr)
 
 	if (winningMargin <= 0 || winningMargin > 15) {
 		error_print(
-				"Invalid input in the third token, should be between 1 and 15 but was %ld.\n", winningMargin);
+				"Invalid input in the third token, should be between 1 and 15 but was %ld.\n",
+				winningMargin);
 		return -1;
 	}
 
