@@ -10,6 +10,7 @@
 #include "shared.h"
 #include <stdio.h>
 #include <string.h>
+
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
@@ -19,8 +20,8 @@
  **/
 struct node
 {
-        struct node* next;
-        struct game_result* data;
+	struct node* next;
+	struct game_result* data;
 };
 
 /**
@@ -28,12 +29,25 @@ struct node
  **/
 struct linkedlist
 {
-        struct node* head;
-        int size;
+	struct node* head;
+	int size;
 };
 
 /**
  * provide the declarations of linked list interface functions
  **/
+struct linkedlist* createLinkedList(struct linkedlist*);
+
+BOOLEAN insertNode(struct linkedlist*, struct node*);
+
+BOOLEAN deleteNode(struct linkedlist*, struct node*);
+
+BOOLEAN findNode(struct linkedlist*, struct node*);
+
+void prettyPrintLinkedList(struct linkedlist*);
+
+void csvPrintLinkedList(struct linkedlist*, char);
+
+BOOLEAN deleteLinkedList(struct linkedlist*);
 
 #endif

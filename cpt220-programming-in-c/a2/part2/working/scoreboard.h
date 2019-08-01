@@ -9,6 +9,7 @@
 
 #include "linkedlist.h"
 #include "helpers.h"
+
 #ifndef SCOREBOARD_H
 #define SCOREBOARD_H
 /* forwards declaration of the game_system so we can have pointers
@@ -24,15 +25,25 @@ struct game_system;
  **/
 struct scores_menu_entry
 {
-        char text[LINE_LEN + 1];
-        BOOLEAN (*function)(struct game_system*);
+	char text[LINE_LEN + 1];
+
+	BOOLEAN (* function)(struct game_system*);
 };
+
 void scores_menu(struct game_system*);
+
 void init_scores_menu(struct scores_menu_entry[]);
+
 BOOLEAN print_scores(struct game_system*);
+
 BOOLEAN add_score(struct game_system*);
+
 BOOLEAN delete_score(struct game_system*);
+
 BOOLEAN remove_all_scores(struct game_system*);
+
 BOOLEAN resave_scores(struct game_system*);
+
 BOOLEAN save_scores(struct game_system*);
+
 #endif

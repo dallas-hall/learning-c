@@ -19,8 +19,8 @@
  **/
 enum
 {
-        MINARGS = 1,
-        MAXARGS
+	MINARGS = 1,
+	MAXARGS
 };
 
 /*
@@ -41,11 +41,11 @@ enum
  **/
 enum main_menu_choice
 {
-        MMC_PLAY,
-        MMC_SCORES,
-        MMC_ABORT,
-        MMC_QUIT,
-        MMC_INVALID
+	MMC_PLAY,
+	MMC_SCORES,
+	MMC_ABORT,
+	MMC_QUIT,
+	MMC_INVALID
 };
 
 /* forwards declaration of the game_system so we can declare pointers to one
@@ -58,8 +58,9 @@ struct game_system;
  **/
 struct main_menu_entry
 {
-        char text[LINE_LEN + 1];
-        void (*function)(struct game_system*);
+	char text[LINE_LEN + 1];
+
+	void (* function)(struct game_system*);
 };
 
 /**
@@ -68,8 +69,8 @@ struct main_menu_entry
  **/
 struct menu_system
 {
-        struct main_menu_entry main_menu[NUM_MAIN_MENU_ITEMS];
-        struct scores_menu_entry scores_menu[NUM_SCORES_MENU_ITEMS];
+	struct main_menu_entry main_menu[NUM_MAIN_MENU_ITEMS];
+	struct scores_menu_entry scores_menu[NUM_SCORES_MENU_ITEMS];
 };
 
 /**
@@ -79,30 +80,35 @@ struct menu_system
  **/
 struct game_system
 {
-        /* the menus for our system */
-        struct menu_system the_menus;
-        /* the result of the last game played */
-        struct game_result theresult;
-        /* the scoreboard for the game */
-        struct linkedlist scoreboard;
-        /* the file name for the datafile containing the scores we
-         * are manipulating
-         */
-        const char* datafile;
-        /**
-         * the seed for the games we create if requested from the
-         * command line
-         **/
-        struct falsible_long gameseed;
+	/* the menus for our system */
+	struct menu_system the_menus;
+	/* the result of the last game played */
+	struct game_result theresult;
+	/* the scoreboard for the game */
+	struct linkedlist scoreboard;
+	/* the file name for the datafile containing the scores we
+	 * are manipulating
+	 */
+	const char* datafile;
+	/**
+	 * the seed for the games we create if requested from the
+	 * command line
+	 **/
+	struct falsible_long gameseed;
 };
 
 /**
  * the new functions required as part of the main module for assignment 2
  **/
 BOOLEAN init_system(struct game_system*, const char[]);
+
 void init_main_menu(struct main_menu_entry[]);
+
 void quit_program(struct game_system*);
+
 void abort_program(struct game_system*);
+
+struct game_system* createGameSystemPtr(struct game_system*);
 /**
  * end of assignment 2 data structures
  **/
@@ -111,3 +117,8 @@ void abort_program(struct game_system*);
  * You may add your own datastructures or function declarations here if you
  * need to.
  **/
+
+/*
+ * Used to print the game system state for debugging.
+ */
+void printDebugGameSystem(struct game_system* theGameSystemPtr);
