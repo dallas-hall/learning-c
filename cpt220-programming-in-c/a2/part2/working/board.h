@@ -23,10 +23,10 @@
  **/
 enum piece
 {
-        P_EMPTY,
-        P_RED,
-        P_WHITE,
-        P_INVALID = -1
+	P_EMPTY,
+	P_RED,
+	P_WHITE,
+	P_INVALID = -1
 };
 
 /**
@@ -48,4 +48,5 @@ typedef enum piece board[BOARD_HEIGHT][BOARD_WIDTH];
  * free to add more of your own.
  **/
 void board_init(board);
+
 #endif

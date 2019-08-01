@@ -9,6 +9,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #ifndef SHARED_H
 #define SHARED_H
 /**
@@ -16,8 +17,8 @@
  **/
 typedef enum
 {
-        FALSE,
-        TRUE
+	FALSE,
+	TRUE
 } BOOLEAN;
 
 /**
@@ -26,8 +27,8 @@ typedef enum
  **/
 struct falsible_long
 {
-        long thelong;
-        BOOLEAN success;
+	long thelong;
+	BOOLEAN success;
 };
 
 /**
@@ -36,8 +37,8 @@ struct falsible_long
  **/
 enum orientation
 {
-        OR_CLOCKWISE,
-        OR_ANTICLOCKWISE
+	OR_CLOCKWISE,
+	OR_ANTICLOCKWISE
 };
 
 /**
@@ -46,7 +47,7 @@ enum orientation
  **/
 struct move
 {
-        int index, count;
+	int index, count;
 };
 
 /**
@@ -91,9 +92,9 @@ struct player;
  **/
 struct game_result
 {
-        char* winner;
-        char* loser;
-        int won_by;
+	char* winner;
+	char* loser;
+	int won_by;
 };
 
 /**
