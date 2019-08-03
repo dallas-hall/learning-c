@@ -201,6 +201,10 @@ void prettyPrintLinkedList(struct linkedlist* linkedListPtr)
 {
 	struct node* currentNode;
 
+	if(linkedListPtr == NULL) {
+		printf("The list is empty.\n");
+	}
+
 	currentNode = linkedListPtr->head;
 	if (currentNode == NULL) {
 		printf("The list is empty.\n");
@@ -222,6 +226,10 @@ void prettyPrintLinkedList(struct linkedlist* linkedListPtr)
 void printCsvLinkedList(struct linkedlist* linkedListPtr, char* delimiter)
 {
 	struct node* currentNode;
+
+	if(linkedListPtr == NULL) {
+		printf("The list is empty.\n");
+	}
 
 	currentNode = linkedListPtr->head;
 	if (currentNode == NULL) {
