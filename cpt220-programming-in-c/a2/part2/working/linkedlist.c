@@ -261,6 +261,8 @@ BOOLEAN deleteLinkedList(struct linkedlist* linkedListPtr)
 		/*
 		 * Delete our memory previously allocated with malloc.
 		 */
+		free(currentNode->data->winner);
+		free(currentNode->data->loser);
 		free(currentNode);
 		currentNode = nextNode;
 	}
