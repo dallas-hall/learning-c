@@ -94,44 +94,25 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				}
 
 				/*
-				 * malloc tries to allocate memory with the specified bytes.
-				 * sizeof will return the size of the data structure, platform
-				 * dependent. If successful, malloc returns a void * to the
-				 * allocated memory, otherwise returns NULL
-				 *
-				 * We are using struct game_result because that is the object
-				 * that will be stored in the pointer.
-				 *
-				 * Paul tends to cast the void* returned by malloc.
-				 */
-				gameResultPtr = malloc(sizeof(struct game_result));
-				linkedListNodePtr = malloc(sizeof(struct node));
-
-				/*
-				 * The same as gameResultPtr == NULL. I tend to switch between the two.
-				 */
-				if (!gameResultPtr) {
-					error_print("Couldn't create the game result with malloc.\n");
-					return FALSE;
-				}
-
-				if(linkedListNodePtr == NULL) {
-					error_print("Couldn't create the linked list node with malloc.\n");
-					return FALSE;
-				}
-
-				/*
-				 * TODO there is a bug here with linked list not updating properly.
-				 */
-
-				/*
 				 * Parse the buffer, which means tokenise and validate the line
 				 * data. Store it into the game_result if valid.
 				 *
 				 * By passing in the pointer to game_result we can manipulate it
 				 * inside of parseLineData and update it if valid data is found.
 				 */
-				if (!parseLineData(buffer, gameResultPtr)) {
+				gameResultPtr = parseLineData(buffer);
+
+				/*
+				 * The same as gameResultPtr == NULL. I tend to switch between the two.
+				 */
+				if (!gameResultPtr) {
+					perror("malloc");
+					return FALSE;
+				}
+
+				linkedListNodePtr = createLinkedListNode();
+				if (linkedListNodePtr == NULL) {
+					perror("malloc");
 					return FALSE;
 				}
 
@@ -149,20 +130,10 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				 * TODO I THINK THIS NEEDS TO BE MOVED INSIDE INSERT
 				 *
 				 */
-				/*if(!insertNode(scorelist, linkedListNodePtr)) {
+				if (!insertNode(scorelist, linkedListNodePtr)) {
 					error_print("Couldn't insert into the linked list.\n");
 					return FALSE;
-				}*/
-
-				/*
-				 * Reset the buffer. This is needed so the buffer is completely
-				 * zeroed before the next run. Otherwise there will potentially
-				 * be crap left over from the previous run.
-				 */
-				memset(buffer, 0, sizeof(buffer));
-
-				gameResultPtr = NULL;
-				linkedListNodePtr = NULL;
+				}
 			}
 		}
 	}
@@ -191,14 +162,41 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
  *
  * The FGETS_EXTRA_CHAR covers the necessarily null control character terminator
  * for the end of the string.
+ *
+ * This will create a gameResult after validating the line and return it.
  */
-BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
+struct game_result* parseLineData(char* line)
 {
 	char* tokenPtr;
-	char winnersName[NAME_LEN + FGETS_EXTRA_CHAR];
-	char losersName[NAME_LEN + FGETS_EXTRA_CHAR];
-	int winningMargin;
+	char* winnersName;
+	char* losersName;
+	int winningMargin = 0;
 	int tokenCount = 0;
+	struct game_result* gameResultPtr;
+
+	/*
+	 * I wasn't using malloc here and this was a bug for me that took hours
+	 * to figure out. I really only figured it out after reading a heap online,
+	 * particularly https://stackoverflow.com/questions/37549594/crash-or-segmentation-fault-when-data-is-copied-scanned-read-to-an-uninitializ
+	 * and https://stackoverflow.com/questions/41830461/allocating-string-with-malloc
+	 * Once I read those and processed the information, I used malloc
+	 * here and my bug went away.
+	 *
+	 * I refactored my code many different times and basically had the same bug
+	 * until I used malloc here.
+	 */
+	winnersName = malloc(sizeof(char*) * NAME_LEN + FGETS_EXTRA_CHAR);
+	losersName = malloc(sizeof(char*) * NAME_LEN + FGETS_EXTRA_CHAR);
+
+	if (!winnersName) {
+		perror("malloc");
+		return NULL;
+	}
+
+	if (!losersName) {
+		perror("malloc");
+		return NULL;
+	}
 
 	/*
 	 * TODO
@@ -214,11 +212,10 @@ BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
 	++tokenCount;
 
 	if (!validInputName(tokenPtr)) {
-		return FALSE;
+		return NULL;
 	}
 
 	strcpy(winnersName, tokenPtr);
-	gameResultPtr->winner = winnersName;
 
 	/*
 	 * Need multiple calls to get all the tokens.
@@ -242,27 +239,29 @@ BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
 		switch (tokenCount) {
 			case 2:
 				if (!validInputName(tokenPtr)) {
-					return FALSE;
+					return NULL;
 				}
 
 				strcpy(losersName, tokenPtr);
-				gameResultPtr->loser = losersName;
 				break;
 			case 3:
 				winningMargin = validWinningMargin(tokenPtr);
-				gameResultPtr->won_by = winningMargin;
+
 				if (winningMargin == -1) {
-					return FALSE;
+					return NULL;
 				}
+
 				break;
 			default:
 				if (tokenPtr != NULL) {
 					error_print(
 							"Invalid amount of tokens, 3 required, found %d.\n");
-					return FALSE;
+					return NULL;
 				}
 		}
 	}
+
+	gameResultPtr = createGameResult(winnersName, losersName, winningMargin);
 
 	if (DEBUGGING_FILEIO) {
 		printf("winnersName is %s\n", winnersName);
@@ -273,7 +272,55 @@ BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
 		printf("gameResultPtr->won_by is %d\n", gameResultPtr->won_by);
 	}
 
-	return TRUE;
+	return gameResultPtr;
+}
+
+struct game_result*
+createGameResult(char* winner, char* loser, int winningMargin)
+{
+	struct game_result* gameResultPtr;
+
+	/*
+	 * malloc tries to allocate memory with the specified bytes.
+	 * sizeof will return the size of the data structure, platform
+	 * dependent. If successful, malloc returns a void * to the
+	 * allocated memory, otherwise returns NULL
+	 * We are using struct game_result because that is the object
+	 * hat will be stored in the pointer.
+	 *
+	 * Paul tends to cast the void* returned by malloc.
+	 */
+	gameResultPtr = malloc(sizeof(struct game_result));
+
+	if (!gameResultPtr) {
+		perror("malloc");
+		return NULL;
+	}
+
+	/*
+	 * memset copies a byte value for n bytes into a specified object
+	 * arg 1) the object to copy into
+	 * arg 2) the byte to copy
+	 * arg 3) how many bytes in the object to copy into
+	 *
+	 * We are using struct game_result because that is the object that will
+	 * be stored in the pointer.
+	 *
+	 * This is called zeroing out the memory. I believe this means:
+	 * int = 0
+	 * ptr = NULL
+	 * char = '\0'
+	 *
+	 * Not sure if this is even necessary at this point? Every time I
+	 * inspected these variables there were already zeroed.
+	 */
+	memset(gameResultPtr, 0, sizeof(struct game_result));
+
+	gameResultPtr->winner = winner;
+	gameResultPtr->loser = loser;
+	gameResultPtr->won_by = winningMargin;
+
+	return gameResultPtr;
 }
 
 BOOLEAN validInputName(const char* name)

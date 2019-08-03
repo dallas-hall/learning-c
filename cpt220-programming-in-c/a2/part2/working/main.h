@@ -108,7 +108,7 @@ void quit_program(struct game_system*);
 
 void abort_program(struct game_system*);
 
-struct game_system* createGameSystemPtr(struct game_system*);
+struct game_system* createGameSystemPtr(void);
 /**
  * end of assignment 2 data structures
  **/
