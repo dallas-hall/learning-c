@@ -11,6 +11,8 @@
 #include "io.h"
 #include "main.h"
 
+const int DEBUGGING_SCOREBOARD = 1;
+
 /**
  * initialise the scores menu with the text and functions that perform the
  * required functionality.
@@ -76,6 +78,59 @@ BOOLEAN resave_scores(struct game_system* thesystem)
  * similar to "save as" functionality in a word processor.
  **/
 BOOLEAN save_scores(struct game_system* thesystem)
+{
+	return FALSE;
+}
+
+struct game_result*
+createGameResult(char* winner, char* loser, int winningMargin)
+{
+	struct game_result* gameResultPtr;
+
+	/*
+	 * malloc tries to allocate memory with the specified bytes.
+	 * sizeof will return the size of the data structure, platform
+	 * dependent. If successful, malloc returns a void * to the
+	 * allocated memory, otherwise returns NULL
+	 * We are using struct game_result because that is the object
+	 * hat will be stored in the pointer.
+	 *
+	 * Paul tends to cast the void* returned by malloc.
+	 */
+	gameResultPtr = malloc(sizeof(struct game_result));
+
+	if (!gameResultPtr) {
+		perror("malloc");
+		return NULL;
+	}
+
+	/*
+	 * memset copies a byte value for n bytes into a specified object
+	 * arg 1) the object to copy into
+	 * arg 2) the byte to copy
+	 * arg 3) how many bytes in the object to copy into
+	 *
+	 * We are using struct game_result because that is the object that will
+	 * be stored in the pointer.
+	 *
+	 * This is called zeroing out the memory. I believe this means:
+	 * int = 0
+	 * ptr = NULL
+	 * char = '\0'
+	 *
+	 * Not sure if this is even necessary at this point? Every time I
+	 * inspected these variables there were already zeroed.
+	 */
+	memset(gameResultPtr, 0, sizeof(struct game_result));
+
+	gameResultPtr->winner = winner;
+	gameResultPtr->loser = loser;
+	gameResultPtr->won_by = winningMargin;
+
+	return gameResultPtr;
+}
+
+BOOLEAN updateScoreboard()
 {
 	return FALSE;
 }

@@ -204,7 +204,8 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 	 * that mandatory argument check.
 	 */
 	if (strlen(fname) > PATH_MAX) {
-		error_print("Input file path is too long, must be <= 4096 characters.\n");
+		error_print(
+				"Input file path is too long, must be <= 4096 characters.\n");
 		return FALSE;
 	}
 
