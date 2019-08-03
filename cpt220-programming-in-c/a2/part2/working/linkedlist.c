@@ -245,7 +245,7 @@ BOOLEAN deleteLinkedList(struct linkedlist* linkedListPtr)
 	currentNode = linkedListPtr->head;
 
 	if (currentNode == NULL) {
-		fprintf(stderr, "[ERROR] Cannot delete the list as it is empty.");
+		fprintf(stderr, "[ERROR] Cannot delete the list as it is empty.\n");
 		return FALSE;
 	}
 
@@ -271,7 +271,7 @@ BOOLEAN deleteLinkedList(struct linkedlist* linkedListPtr)
 	/*
 	 * Delete the list.
 	 */
-	free(linkedListPtr);
+	/*free(linkedListPtr);*/
 
 	return TRUE;
 }
