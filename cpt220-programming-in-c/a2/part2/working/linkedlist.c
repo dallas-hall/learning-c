@@ -23,7 +23,7 @@ const int DEBUGGING_LINKEDLIST = 1;
  */
 struct linkedlist* createLinkedList()
 {
-	struct linkedlist* theLinkedListPtr;
+	struct linkedlist* linkedListPtr;
 
 	/*
 	 * mallac tries to allocate memory with the specified bytes.
@@ -36,12 +36,12 @@ struct linkedlist* createLinkedList()
 	 *
 	 * Paul tends to cast the void* returned by malloc.
 	 */
-	theLinkedListPtr = (struct linkedlist*) malloc(sizeof(struct linkedlist));
+	linkedListPtr = (struct linkedlist*) malloc(sizeof(struct linkedlist));
 
 	/*
-	 * Same as theLinkedListPtr == NULL. I tend to use both.
+	 * Same as linkedListPtr == NULL. I tend to use both.
 	 */
-	if (!theLinkedListPtr) {
+	if (!linkedListPtr) {
 		perror("malloc");
 		return NULL;
 	}
@@ -63,12 +63,12 @@ struct linkedlist* createLinkedList()
 		 * Not sure if this is even necessary at this point? Every time I
 		 * inspected these variables there were already zeroed.
 		 */
-		memset(theLinkedListPtr, 0, sizeof(struct linkedlist));
-		/*theLinkedListPtr->head = NULL;
-		theLinkedListPtr->size = 0;*/
+		memset(linkedListPtr, 0, sizeof(struct linkedlist));
+		/*linkedListPtr->head = NULL;
+		linkedListPtr->size = 0;*/
 	}
 
-	return theLinkedListPtr;
+	return linkedListPtr;
 }
 
 struct node* createLinkedListNode(void)
@@ -172,7 +172,7 @@ BOOLEAN insertNode(struct linkedlist* linkedListPtr, struct node* newNodePtr)
 	return TRUE;
 }
 
-BOOLEAN deleteNode(struct linkedlist* theLinkedListPtr,
+BOOLEAN deleteNode(struct linkedlist* linkedListPtr,
 				   struct node* theGameResultNodePtr)
 {
 	/*
@@ -183,7 +183,7 @@ BOOLEAN deleteNode(struct linkedlist* theLinkedListPtr,
 	return FALSE;
 }
 
-BOOLEAN findNode(struct linkedlist* theLinkedListPtr, struct node* theNodePtr)
+BOOLEAN findNode(struct linkedlist* linkedListPtr, struct node* nodePtr)
 {
 	/*
 	 * TODO
@@ -197,11 +197,11 @@ BOOLEAN findNode(struct linkedlist* theLinkedListPtr, struct node* theNodePtr)
  * This is basically a debug print.
  * It prints from the head to the tail, one node per line.
  */
-void prettyPrintLinkedList(struct linkedlist* theLinkedListPtr)
+void prettyPrintLinkedList(struct linkedlist* linkedListPtr)
 {
 	struct node* currentNode;
 
-	currentNode = theLinkedListPtr->head;
+	currentNode = linkedListPtr->head;
 	if (currentNode == NULL) {
 		printf("The list is empty.\n");
 	}
@@ -219,11 +219,11 @@ void prettyPrintLinkedList(struct linkedlist* theLinkedListPtr)
 /*
  * This will be the function to write the linked out to disk in a csv format.
  */
-void printCsvLinkedList(struct linkedlist* theLinkedListPtr, char* delimiter)
+void printCsvLinkedList(struct linkedlist* linkedListPtr, char* delimiter)
 {
 	struct node* currentNode;
 
-	currentNode = theLinkedListPtr->head;
+	currentNode = linkedListPtr->head;
 	if (currentNode == NULL) {
 		printf("The list is empty.\n");
 	}
@@ -250,16 +250,23 @@ BOOLEAN deleteLinkedList(struct linkedlist* linkedListPtr)
 	}
 
 	/*
-	 * Loop through the list if it isn't empty.
+	 * Loop through the list if it isn't empty and free the memory for
+	 * each element.
 	 */
 	while (currentNode != NULL) {
+		/*
+		 * Update the next node pointer so we don't lose the entire list.
+		 */
 		nextNode = currentNode->next;
+		/*
+		 * Delete our memory previously allocated with malloc.
+		 */
 		free(currentNode);
 		currentNode = nextNode;
 	}
 
 	/*
-	 * Update the list.
+	 * Update the list head and size.
 	 */
 	linkedListPtr->head = NULL;
 	linkedListPtr->size = 0;

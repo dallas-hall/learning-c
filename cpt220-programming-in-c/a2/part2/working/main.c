@@ -14,6 +14,13 @@
  */
 const int DEBUGGING_MAIN = 0;
 
+/*
+ * Using this so I can pass the game_result into scoreboard so I can update
+ * the scoreboard. Couldn't think of anything other way to do it with my
+ * current design
+ */
+struct game_system* gameSystemPtr;
+
 /**
  * function converts string data to a long and sets its BOOLEAN member to FALSE
  * if anything goes wrong.
@@ -68,14 +75,17 @@ struct falsible_long longfromstr(const char* str)
 int main(int argc, char* argv[])
 {
 	struct falsible_long seed = {0};
-	struct game_system* gameSystemPtr = NULL;
+	/*
+	 * Moved out so I can pass it into scoreboard
+	 */
+	/*struct game_system* gameSystemPtr = NULL;*/
 	struct linkedlist* linkedListPtr = NULL;
 
 	/*
 	 * Create and initialise the game system. Doing this here so it is alive
 	 * for the duration of the running program.
 	 */
-	gameSystemPtr = createGameSystemPtr();
+	gameSystemPtr = createGameSystem();
 	if (!gameSystemPtr) {
 		error_print("Couldn't create the game system with malloc.\n");
 		return EXIT_FAILURE;
@@ -260,7 +270,7 @@ void init_main_menu(struct main_menu_entry mainmenu[])
  *
  * Paul tends to cast the void* returned by malloc.
  */
-struct game_system* createGameSystemPtr()
+struct game_system* createGameSystem()
 {
 	struct game_system* gameSystemPtr;
 
@@ -348,4 +358,12 @@ void printDebugGameSystem(struct game_system* gameSystemPtr)
 			   gameSystemPtr->gameseed.thelong);
 	printDebug("gameSystemPtr->scoreboard.success is '%s'\n",
 			   gameSystemPtr->gameseed.success);
+}
+
+/*
+ * Returns the game_system pointer. Currently being used inside of scoreboard.c
+ */
+struct game_system* getGameSystem()
+{
+	return gameSystemPtr;
 }
