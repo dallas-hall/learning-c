@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
 	/*
 	 * Testing delete list on an empty list
 	 */
-	deleteLinkedList(linkedListPtr);
+	deleteLinkedListNodes(linkedListPtr);
 
 	/*
 	 * Initialise the game system. i.e. load some data boys!
@@ -182,12 +182,14 @@ int main(int argc, char* argv[])
 	/*
 	 * Testing delete list on a populated list
 	 */
-	deleteLinkedList(&gameSystemPtr->scoreboard);
+	deleteLinkedListNodes(&gameSystemPtr->scoreboard);
 
 	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
 	/* start the game, passing in the seed */
 	play_game(seed);
+
+	/*deleteLinkedList(linkedListPtr);*/
 
 	free(gameSystemPtr);
 

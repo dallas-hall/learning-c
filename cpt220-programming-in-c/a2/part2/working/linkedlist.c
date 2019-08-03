@@ -25,44 +25,13 @@ struct linkedlist* createLinkedList()
 {
 	struct linkedlist* linkedListPtr;
 
-	/*
-	 * mallac tries to allocate memory with the specified bytes.
-	 * sizeof will return the size of the data structure, platform dependent.
-	 * If successful, malloc returns a void * to the allocated memory, otherwise
-	 * returns NULL
-	 *
-	 * We are using struct linkedlist because that is the object that will be
-	 * stored in the pointer.
-	 *
-	 * Paul tends to cast the void* returned by malloc.
-	 */
 	linkedListPtr = (struct linkedlist*) malloc(sizeof(struct linkedlist));
 
-	/*
-	 * Same as linkedListPtr == NULL. I tend to use both.
-	 */
 	if (!linkedListPtr) {
 		perror("malloc");
 		return NULL;
 	}
 	else {
-		/*
-		 * memset copies a byte value for n bytes into a specified object
-		 * arg 1) the object to copy into
-		 * arg 2) the byte to copy
-		 * arg 3) how many bytes in the object to copy into
-		 *
-		 * We are using struct linkedlist because that is the object that will
-		 * be stored in the pointer.
-		 *
-		 * This is called zeroing out the memory. I believe this means:
-		 * int = 0
-		 * ptr = NULL
-		 * char = '\0'
-		 *
-		 * Not sure if this is even necessary at this point? Every time I
-		 * inspected these variables there were already zeroed.
-		 */
 		memset(linkedListPtr, 0, sizeof(struct linkedlist));
 		/*linkedListPtr->head = NULL;
 		linkedListPtr->size = 0;*/
@@ -75,39 +44,12 @@ struct node* createLinkedListNode(void)
 {
 	struct node* linkedListNodePtr;
 
-	/*
-	 * malloc tries to allocate memory with the specified bytes.
-	 * sizeof will return the size of the data structure, platform
-	 * dependent. If successful, malloc returns a void * to the
-	 * allocated memory, otherwise returns NULL
-	 * We are using struct game_result because that is the object
-	 * hat will be stored in the pointer.
-	 *
-	 * Paul tends to cast the void* returned by malloc.
-	 */
 	linkedListNodePtr = malloc(sizeof(struct node));
 
 	if (linkedListNodePtr == NULL) {
 		return NULL;
 	}
 
-	/*
-	 * memset copies a byte value for n bytes into a specified object
-	 * arg 1) the object to copy into
-	 * arg 2) the byte to copy
-	 * arg 3) how many bytes in the object to copy into
-	 *
-	 * We are using struct node because that is the object that will
-	 * be stored in the pointer.
-	 *
-	 * This is called zeroing out the memory. I believe this means:
-	 * int = 0
-	 * ptr = NULL
-	 * char = '\0'
-	 *
-	 * Not sure if this is even necessary at this point? Every time I
-	 * inspected these variables there were already zeroed.
-	 */
 	memset(linkedListNodePtr, 0, sizeof(struct node));
 
 	return linkedListNodePtr;
@@ -201,7 +143,7 @@ void prettyPrintLinkedList(struct linkedlist* linkedListPtr)
 {
 	struct node* currentNode;
 
-	if(linkedListPtr == NULL) {
+	if (linkedListPtr == NULL) {
 		printf("The list is empty.\n");
 	}
 
@@ -227,7 +169,7 @@ void printCsvLinkedList(struct linkedlist* linkedListPtr, char* delimiter)
 {
 	struct node* currentNode;
 
-	if(linkedListPtr == NULL) {
+	if (linkedListPtr == NULL) {
 		printf("The list is empty.\n");
 	}
 
@@ -245,7 +187,7 @@ void printCsvLinkedList(struct linkedlist* linkedListPtr, char* delimiter)
 	}
 }
 
-BOOLEAN deleteLinkedList(struct linkedlist* linkedListPtr)
+BOOLEAN deleteLinkedListNodes(struct linkedlist* linkedListPtr)
 {
 	struct node* currentNode;
 	struct node* nextNode;
@@ -253,7 +195,8 @@ BOOLEAN deleteLinkedList(struct linkedlist* linkedListPtr)
 	currentNode = linkedListPtr->head;
 
 	if (currentNode == NULL) {
-		fprintf(stderr, "[ERROR] Cannot delete the list as it is empty.\n");
+		fprintf(stderr,
+				"[ERROR] Cannot delete linked list nodes as the list as it is empty.\n");
 		return FALSE;
 	}
 
@@ -276,10 +219,18 @@ BOOLEAN deleteLinkedList(struct linkedlist* linkedListPtr)
 		currentNode = nextNode;
 	}
 
-	/*
-	 * Delete the list.
-	 */
-	/*free(linkedListPtr);*/
+	linkedListPtr->head = NULL;
+	linkedListPtr->size = 0;
 
+	return TRUE;
+}
+
+BOOLEAN deleteLinkedList(struct linkedlist* linkedListPtr)
+{
+	if (linkedListPtr->size > 0) {
+		deleteLinkedListNodes(linkedListPtr);
+	}
+
+	free(linkedListPtr);
 	return TRUE;
 }
