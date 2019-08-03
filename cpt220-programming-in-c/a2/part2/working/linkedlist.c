@@ -263,15 +263,15 @@ BOOLEAN deleteLinkedList(struct linkedlist* linkedListPtr)
 		 */
 		free(currentNode->data->winner);
 		free(currentNode->data->loser);
+		free(currentNode->data);
 		free(currentNode);
 		currentNode = nextNode;
 	}
 
 	/*
-	 * Update the list head and size.
+	 * Delete the list.
 	 */
-	linkedListPtr->head = NULL;
-	linkedListPtr->size = 0;
+	free(linkedListPtr);
 
 	return TRUE;
 }
