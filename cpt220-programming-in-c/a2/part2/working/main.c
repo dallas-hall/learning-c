@@ -189,6 +189,8 @@ int main(int argc, char* argv[])
 	/* start the game, passing in the seed */
 	play_game(seed);
 
+	free(gameSystemPtr);
+
 	/**
 	 * dead code bug required in order to avoid compiler warnings
 	 **/
