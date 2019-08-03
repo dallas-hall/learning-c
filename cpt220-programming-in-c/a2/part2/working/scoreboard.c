@@ -99,6 +99,9 @@ createGameResult(char* winner, char* loser, int winningMargin)
 	 */
 	gameResultPtr = malloc(sizeof(struct game_result));
 
+	/*
+	 * Same as linkedListPtr == NULL. I tend to use both.
+	 */
 	if (!gameResultPtr) {
 		perror("malloc");
 		return NULL;

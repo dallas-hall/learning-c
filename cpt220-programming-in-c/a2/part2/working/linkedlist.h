@@ -50,6 +50,8 @@ void prettyPrintLinkedList(struct linkedlist*);
 
 void printCsvLinkedList(struct linkedlist*, char*);
 
+BOOLEAN deleteLinkedListNodes(struct linkedlist*);
+
 BOOLEAN deleteLinkedList(struct linkedlist*);
 
 #endif
