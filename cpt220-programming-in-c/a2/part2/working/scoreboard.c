@@ -130,7 +130,44 @@ createGameResult(char* winner, char* loser, int winningMargin)
 	return gameResultPtr;
 }
 
-BOOLEAN updateScoreboard()
+BOOLEAN updateScoreboard(char* winnerName, char* loserName, int winningMargin)
 {
-	return FALSE;
+	struct game_result* gameResultPtr;
+	struct node* linkedListNodePtr;
+	struct linkedlist* linkedListPtr;
+
+	gameResultPtr = createGameResult(winnerName, loserName, winningMargin);
+
+	if (!gameResultPtr) {
+		fprintf(stderr, "[ERROR] Couldn't create the game result.");
+		return FALSE;
+	}
+
+	linkedListNodePtr = createLinkedListNode();
+
+	if (!linkedListNodePtr) {
+		fprintf(stderr, "[ERROR] Couldn't create the linked list node.");
+		return FALSE;
+	}
+
+	/*
+	 * Update the linked list node payload and link members.
+	 */
+	linkedListNodePtr->data = gameResultPtr;
+	linkedListNodePtr->next = NULL;
+
+	/*
+	 * Grab the address of the scoreboard from the game_system pointer.
+	 */
+	linkedListPtr = &getGameSystem()->scoreboard;
+
+	/*
+	 * Try to update the scoreboard
+	 */
+	if (!insertNode(linkedListPtr, linkedListNodePtr)) {
+		error_print("Couldn't insert into the linked list.\n");
+		return FALSE;
+	}
+
+	return TRUE;
 }

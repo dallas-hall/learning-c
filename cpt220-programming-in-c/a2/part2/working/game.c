@@ -103,11 +103,9 @@ void play_game(struct falsible_long seed)
 			 * TODO update scoreboard
 			 */
 
-			/*updateScoreboard()
-			gameResultPtr = (thegame.current_player->name,
-											 thegame.other_player->name,
-											 thegame.current_player->score);
-			*/
+			updateScoreboard(thegame.current_player->name,
+							 thegame.other_player->name,
+							 thegame.current_player->score);
 			return;
 		}
 		/* otherwise, check if the game has actually been won and if so
@@ -120,11 +118,9 @@ void play_game(struct falsible_long seed)
 			/*
 			 * TODO update scoreboard
 			 */
-			/*
-			gameResultPtr = createGameResult(thegame.current_player->name,
-											 thegame.other_player->name,
-											 thegame.current_player->score);
-			*/
+			updateScoreboard(thegame.current_player->name,
+							 thegame.other_player->name,
+							 thegame.current_player->score);
 			return;
 		}
 		/**
