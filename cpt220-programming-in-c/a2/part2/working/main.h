@@ -112,12 +112,21 @@ struct game_system* createGameSystem(void);
 
 struct linkedlist* getLinkedList(void);
 
+/*
+ * All function parameters with game_system are now using the global variable.
+ * I couldn't figure out a way around this.
+ */
 struct game_system* getGameSystem(void);
+
+/*
+ * Free up the game system memory.
+ */
+void deleteGameSystem();
 
 /*
  * Used to print the game system state for debugging.
  */
-void printDebugGameSystem(struct game_system* theGameSystemPtr);
+void printDebugGameSystem();
 
 /**
  * end of assignment 2 data structures
