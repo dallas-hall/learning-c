@@ -36,7 +36,7 @@ struct linkedlist
 /**
  * provide the declarations of linked list interface functions
  **/
-struct linkedlist* createLinkedList();
+struct linkedlist* createLinkedList(struct linkedlist*);
 
 struct node* createLinkedListNode(void);
 

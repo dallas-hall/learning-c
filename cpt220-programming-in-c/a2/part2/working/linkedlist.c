@@ -21,10 +21,8 @@ const int DEBUGGING_LINKEDLIST = 1;
  * I did the tutorials in the textbook for linked list, doubly linked list,
  * stacks, queues, and binary search trees. They were all conceptually similar.
  */
-struct linkedlist* createLinkedList()
+struct linkedlist* createLinkedList(struct linkedlist* linkedListPtr)
 {
-	struct linkedlist* linkedListPtr;
-
 	linkedListPtr = (struct linkedlist*) malloc(sizeof(struct linkedlist));
 
 	if (!linkedListPtr) {
@@ -231,6 +229,6 @@ BOOLEAN deleteLinkedList(struct linkedlist* linkedListPtr)
 		deleteLinkedListNodes(linkedListPtr);
 	}
 
-	free(linkedListPtr);
+	free((struct linkedlist*) linkedListPtr);
 	return TRUE;
 }

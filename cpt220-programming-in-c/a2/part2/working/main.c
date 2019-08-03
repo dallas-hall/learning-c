@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
 	/*
 	 * Create and initialise the linked list
 	 */
-	linkedListPtr = createLinkedList();
+	linkedListPtr = createLinkedList(&gameSystemPtr->scoreboard);
 
 	/*
 	 * Same as linkedListPtr == NULL, I tend to switch between both.
@@ -110,16 +110,6 @@ int main(int argc, char* argv[])
 		error_print("Couldn't create the linked list.\n");
 		return EXIT_FAILURE;
 	}
-	/*
-	 * Assign the value of the linked list pointer through dereferencing to the
-	 * game system and update the linked list pointer to the address of the
-	 * game system linked list. May not need this, not sure yet.
-	 *
-	 * I think Paul mentioned not needing to do this in my previous assignment
-	 * but I didn't really understand why.
-	 */
-	gameSystemPtr->scoreboard = *linkedListPtr;
-	linkedListPtr = &gameSystemPtr->scoreboard;
 
 	/*
 	 * We need +1 here because of the program name being passed in automatically
@@ -183,15 +173,13 @@ int main(int argc, char* argv[])
 	 * Testing delete list on a populated list
 	 */
 	deleteLinkedListNodes(&gameSystemPtr->scoreboard);
-
 	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
-
+	
 	/* start the game, passing in the seed */
 	play_game(seed);
 
-	/*deleteLinkedList(linkedListPtr);*/
-
-	free(gameSystemPtr);
+	deleteGameSystem(gameSystemPtr);
+	deleteLinkedList(linkedListPtr);
 
 	/**
 	 * dead code bug required in order to avoid compiler warnings
@@ -276,7 +264,10 @@ void init_main_menu(struct main_menu_entry mainmenu[])
  */
 struct game_system* createGameSystem()
 {
-	struct game_system* gameSystemPtr;
+	/*
+	 * Using the global variable instead.
+	 */
+	/*struct game_system* gameSystemPtr;*/
 
 	/*
 	 * malloc tries to allocate memory with the specified bytes.
@@ -327,7 +318,7 @@ struct game_system* createGameSystem()
  * I think this relates to the forward declaration mentioned in main.h for
  * the struct game_system but I am not entirely sure.
  */
-void printDebugGameSystem(struct game_system* gameSystemPtr)
+void printDebugGameSystem()
 {
 	int i;
 
@@ -370,4 +361,17 @@ void printDebugGameSystem(struct game_system* gameSystemPtr)
 struct game_system* getGameSystem()
 {
 	return gameSystemPtr;
+}
+
+/*
+ * Clean up when ending the game.
+ */
+void deleteGameSystem()
+{
+	/*
+	 * Need to cast to non-const pointer to silence the compiler warning -
+	 * https://stackoverflow.com/a/2819594
+	 */
+	free((char*) gameSystemPtr->datafile);
+	free(gameSystemPtr);
 }
