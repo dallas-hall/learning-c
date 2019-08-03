@@ -184,6 +184,9 @@ struct game_result* parseLineData(char* line)
 	 *
 	 * I refactored my code many different times and basically had the same bug
 	 * until I used malloc here.
+	 *
+	 * I now see this is why you included stdup in helper.*, so I could just
+	 * call that instead of doing this myself.
 	 */
 	winnersName = malloc(sizeof(char*) * NAME_LEN + FGETS_EXTRA_CHAR);
 	losersName = malloc(sizeof(char*) * NAME_LEN + FGETS_EXTRA_CHAR);

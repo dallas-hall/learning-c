@@ -204,16 +204,9 @@ BOOLEAN findNode(struct linkedlist* theLinkedListPtr, struct node* theNodePtr)
  */
 void prettyPrintLinkedList(struct linkedlist* theLinkedListPtr)
 {
-	/*
-	 * TODO
-	 *
-	 * print the linked list in order
-	 */
-
 	struct node* previousNode;
 	struct node* currentNode;
 
-	previousNode = NULL;
 	currentNode = theLinkedListPtr->head;
 	if(currentNode == NULL) {
 		printf("The list is empty.\n");
@@ -223,26 +216,31 @@ void prettyPrintLinkedList(struct linkedlist* theLinkedListPtr)
 			printf("%s,%s,%d-links-with->\n", currentNode->data->winner,
 				   currentNode->data->loser,
 				   currentNode->data->won_by);
-			previousNode = currentNode;
-			currentNode = previousNode->next;
+			currentNode = currentNode->next;
 		}
 		printf("NULL, the end of the list.\n");
 	}
-
-
-
 }
 
 /*
  * This will be the function to write the linked out to disk in a csv format.
  */
-void csvPrintLinkedList(struct linkedlist* theLinkedListPtr, char delimiter)
+void printCsvLinkedList(struct linkedlist* theLinkedListPtr, char* delimiter)
 {
-	/*
-	 * TODO
-	 *
-	 * print the linked list in order in CSV format
-	 */
+	struct node* currentNode;
+
+	currentNode = theLinkedListPtr->head;
+	if(currentNode == NULL) {
+		printf("The list is empty.\n");
+	}
+	else {
+		while(currentNode != NULL) {
+			printf("%s\t%s\t%d\n", currentNode->data->winner,
+				   currentNode->data->loser,
+				   currentNode->data->won_by);
+			currentNode = currentNode->next;
+		}
+	}
 }
 
 BOOLEAN deleteLinkedList(struct linkedlist* theLinkedListPtr)

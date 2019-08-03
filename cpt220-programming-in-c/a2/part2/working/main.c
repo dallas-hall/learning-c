@@ -68,15 +68,15 @@ struct falsible_long longfromstr(const char* str)
 int main(int argc, char* argv[])
 {
 	struct falsible_long seed = {0};
-	struct game_system* theGameSystemPtr = NULL;
-	struct linkedlist* theLinkedListPtr = NULL;
+	struct game_system* gameSystemPtr = NULL;
+	struct linkedlist* linkedListPtr = NULL;
 
 	/*
 	 * Create and initialise the game system. Doing this here so it is alive
 	 * for the duration of the running program.
 	 */
-	theGameSystemPtr = createGameSystemPtr();
-	if (!theGameSystemPtr) {
+	gameSystemPtr = createGameSystemPtr();
+	if (!gameSystemPtr) {
 		error_print("Couldn't create the game system with malloc.\n");
 		return EXIT_FAILURE;
 	}
@@ -85,18 +85,18 @@ int main(int argc, char* argv[])
 		 * From my understanding, everything should either be 0, NULL or '\0'
 		 * at this point.
 		 */
-		printDebugGameSystem(theGameSystemPtr);
+		printDebugGameSystem(gameSystemPtr);
 	}
 
 	/*
 	 * Create and initialise the linked list
 	 */
-	theLinkedListPtr = createLinkedList();
+	linkedListPtr = createLinkedList();
 
 	/*
-	 * Same as theLinkedListPtr == NULL, I tend to switch between both.
+	 * Same as linkedListPtr == NULL, I tend to switch between both.
 	 */
-	if (!theLinkedListPtr) {
+	if (!linkedListPtr) {
 		error_print("Couldn't create the linked list.\n");
 		return EXIT_FAILURE;
 	}
@@ -108,8 +108,8 @@ int main(int argc, char* argv[])
 	 * I think Paul mentioned not needing to do this in my previous assignment
 	 * but I didn't really understand why.
 	 */
-	theGameSystemPtr->scoreboard = *theLinkedListPtr;
-	theLinkedListPtr = &theGameSystemPtr->scoreboard;
+	gameSystemPtr->scoreboard = *linkedListPtr;
+	linkedListPtr = &gameSystemPtr->scoreboard;
 
 	/*
 	 * We need +1 here because of the program name being passed in automatically
@@ -143,16 +143,16 @@ int main(int argc, char* argv[])
 	/*
 	 * Initialise the game system. i.e. load some data boys!
 	 */
-	if (!init_system(theGameSystemPtr, argv[FILE_PATH_ARG])) {
+	if (!init_system(gameSystemPtr, argv[FILE_PATH_ARG])) {
 		error_print("Couldn't initialise the game system.\n");
 		return EXIT_FAILURE;
 	}
 	else {
-		theGameSystemPtr->gameseed.success = seed.success;
-		theGameSystemPtr->gameseed.thelong = seed.thelong;
+		gameSystemPtr->gameseed.success = seed.success;
+		gameSystemPtr->gameseed.thelong = seed.thelong;
 
 		if (DEBUGGING_MAIN) {
-			printDebugGameSystem(theGameSystemPtr);
+			printDebugGameSystem(gameSystemPtr);
 		}
 
 	}
@@ -160,13 +160,8 @@ int main(int argc, char* argv[])
 	/*
 	 * We need to take the address of the list
 	 */
-	prettyPrintLinkedList(&theGameSystemPtr->scoreboard);
-
-	/*
-	 * TODO
-	 *
-	 * print the linked list csv style
-	 */
+	prettyPrintLinkedList(&gameSystemPtr->scoreboard);
+	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
 	/* start the game, passing in the seed */
 	play_game(seed);
@@ -225,11 +220,14 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 	}
 
 	/*
-	 * TODO
-	 *
-	 * malloc this, it must not be a string on the stack
+	 * I learnt the value of using strdup here. Otherwise my strcpy approach
+	 * would return:
+	 * main.c: In function ‘init_system’:
+	 * main.c:233:18: warning: passing argument 1 of ‘strcpy’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+	 * 233 |  strcpy(thesystem->datafile, fname);
 	 */
-	thesystem->datafile = fname;
+	thesystem->datafile = strdup(fname);
+
 	return TRUE;
 }
 
@@ -250,7 +248,7 @@ void init_main_menu(struct main_menu_entry mainmenu[])
  */
 struct game_system* createGameSystemPtr()
 {
-	struct game_system* theGameSystemPtr;
+	struct game_system* gameSystemPtr;
 
 	/*
 	 * malloc tries to allocate memory with the specified bytes.
@@ -263,12 +261,12 @@ struct game_system* createGameSystemPtr()
 	 *
 	 * Paul tends to cast the void* returned by malloc.
 	 */
-	theGameSystemPtr = malloc(sizeof(struct game_system));
+	gameSystemPtr = malloc(sizeof(struct game_system));
 
 	/*
-	 * The same as theGameSystemPtr == NULL. I tend to switch between the two.
+	 * The same as gameSystemPtr == NULL. I tend to switch between the two.
 	 */
-	if (!theGameSystemPtr) {
+	if (!gameSystemPtr) {
 		return NULL;
 	}
 	else {
@@ -289,8 +287,8 @@ struct game_system* createGameSystemPtr()
 		 * Not sure if this is even necessary at this point? Every time I
 		 * inspected these variables there were already zeroed.
 		 */
-		memset(theGameSystemPtr, '\0', sizeof(struct game_system));
-		return theGameSystemPtr;
+		memset(gameSystemPtr, '\0', sizeof(struct game_system));
+		return gameSystemPtr;
 	}
 }
 
@@ -301,39 +299,39 @@ struct game_system* createGameSystemPtr()
  * I think this relates to the forward declaration mentioned in main.h for
  * the struct game_system but I am not entirely sure.
  */
-void printDebugGameSystem(struct game_system* theGameSystemPtr)
+void printDebugGameSystem(struct game_system* gameSystemPtr)
 {
 	int i;
 
 	for (i = 0; i < 4; i++) {
-		printDebug("theGameSystemPtr->the_menus.main_menu[%d].text is '%s'\n",
+		printDebug("gameSystemPtr->the_menus.main_menu[%d].text is '%s'\n",
 				   i,
-				   theGameSystemPtr->the_menus.main_menu[i].text);
-		printDebug("theGameSystemPtr->the_menus.main_menu[%d].function is %d\n",
+				   gameSystemPtr->the_menus.main_menu[i].text);
+		printDebug("gameSystemPtr->the_menus.main_menu[%d].function is %d\n",
 				   i,
-				   theGameSystemPtr->the_menus.main_menu[i].function);
+				   gameSystemPtr->the_menus.main_menu[i].function);
 	}
 
 	for (i = 0; i < 6; i++) {
-		printDebug("theGameSystemPtr->the_menus.scores_menu[%d].text is '%s'\n",
+		printDebug("gameSystemPtr->the_menus.scores_menu[%d].text is '%s'\n",
 				   i,
-				   theGameSystemPtr->the_menus.scores_menu[i].text);
+				   gameSystemPtr->the_menus.scores_menu[i].text);
 		printDebug(
-				"theGameSystemPtr->the_menus.scores_menu[%d].function is %d\n",
+				"gameSystemPtr->the_menus.scores_menu[%d].function is %d\n",
 				i,
-				theGameSystemPtr->the_menus.scores_menu[i].function);
+				gameSystemPtr->the_menus.scores_menu[i].function);
 	}
 
-	printDebug("theGameSystemPtr->scoreboard.head is '%s'\n",
-			   theGameSystemPtr->scoreboard.head);
-	printDebug("theGameSystemPtr->scoreboard.size is %d\n",
-			   theGameSystemPtr->scoreboard.size);
+	printDebug("gameSystemPtr->scoreboard.head is '%s'\n",
+			   gameSystemPtr->scoreboard.head);
+	printDebug("gameSystemPtr->scoreboard.size is %d\n",
+			   gameSystemPtr->scoreboard.size);
 
-	printDebug("theGameSystemPtr->datafile is '%s'\n",
-			   theGameSystemPtr->datafile);
+	printDebug("gameSystemPtr->datafile is '%s'\n",
+			   gameSystemPtr->datafile);
 
-	printDebug("theGameSystemPtr->scoreboard.thelong is %ld\n",
-			   theGameSystemPtr->gameseed.thelong);
-	printDebug("theGameSystemPtr->scoreboard.success is '%s'\n",
-			   theGameSystemPtr->gameseed.success);
+	printDebug("gameSystemPtr->scoreboard.thelong is %ld\n",
+			   gameSystemPtr->gameseed.thelong);
+	printDebug("gameSystemPtr->scoreboard.success is '%s'\n",
+			   gameSystemPtr->gameseed.success);
 }
