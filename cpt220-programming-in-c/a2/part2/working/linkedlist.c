@@ -19,8 +19,10 @@
  * I did the tutorials in the textbook for linked list, doubly linked list,
  * stacks, queues, and binary search trees. They were all conceptually similar.
  */
-struct linkedlist* createLinkedList(struct linkedlist* theLinkedListPtr)
+struct linkedlist* createLinkedList()
 {
+	struct linkedlist* theLinkedListPtr;
+
 	/*
 	 * mallac tries to allocate memory with the specified bytes.
 	 * sizeof will return the size of the data structure, platform dependent.
@@ -32,24 +34,84 @@ struct linkedlist* createLinkedList(struct linkedlist* theLinkedListPtr)
 	 *
 	 * Paul tends to cast the void* returned by malloc.
 	 */
-	theLinkedListPtr = malloc(sizeof(struct linkedlist));
+	theLinkedListPtr = (struct linkedlist*) malloc(sizeof(struct linkedlist));
 
 	/*
 	 * Same as theLinkedListPtr == NULL. I tend to use both.
 	 */
 	if (!theLinkedListPtr) {
+		perror("malloc");
 		return NULL;
 	}
 	else {
-		theLinkedListPtr->head = NULL;
-		theLinkedListPtr->size = 0;
+		/*
+		 * memset copies a byte value for n bytes into a specified object
+		 * arg 1) the object to copy into
+		 * arg 2) the byte to copy
+		 * arg 3) how many bytes in the object to copy into
+		 *
+		 * We are using struct linkedlist because that is the object that will
+		 * be stored in the pointer.
+		 *
+		 * This is called zeroing out the memory. I believe this means:
+		 * int = 0
+		 * ptr = NULL
+		 * char = '\0'
+		 *
+		 * Not sure if this is even necessary at this point? Every time I
+		 * inspected these variables there were already zeroed.
+		 */
+		memset(theLinkedListPtr, 0, sizeof(struct linkedlist));
+		/*theLinkedListPtr->head = NULL;
+		theLinkedListPtr->size = 0;*/
 	}
 
 	return theLinkedListPtr;
 }
 
-BOOLEAN insertNode(struct linkedlist* theLinkedListPtr,
-				   struct node* theGameResultNodePrt)
+struct node* createLinkedListNode(void)
+{
+	struct node* linkedListNodePtr;
+
+	/*
+	 * malloc tries to allocate memory with the specified bytes.
+	 * sizeof will return the size of the data structure, platform
+	 * dependent. If successful, malloc returns a void * to the
+	 * allocated memory, otherwise returns NULL
+	 * We are using struct game_result because that is the object
+	 * hat will be stored in the pointer.
+	 *
+	 * Paul tends to cast the void* returned by malloc.
+	 */
+	linkedListNodePtr = malloc(sizeof(struct node));
+
+	if(linkedListNodePtr == NULL) {
+		return NULL;
+	}
+
+	/*
+	 * memset copies a byte value for n bytes into a specified object
+	 * arg 1) the object to copy into
+	 * arg 2) the byte to copy
+	 * arg 3) how many bytes in the object to copy into
+	 *
+	 * We are using struct node because that is the object that will
+	 * be stored in the pointer.
+	 *
+	 * This is called zeroing out the memory. I believe this means:
+	 * int = 0
+	 * ptr = NULL
+	 * char = '\0'
+	 *
+	 * Not sure if this is even necessary at this point? Every time I
+	 * inspected these variables there were already zeroed.
+	 */
+	memset(linkedListNodePtr, 0, sizeof(struct node));
+
+	return linkedListNodePtr;
+}
+
+BOOLEAN insertNode(struct linkedlist* linkedListPtr, struct node* newNodePtr)
 {
 	struct node* previousNode;
 	struct node* currentNode;
@@ -61,26 +123,45 @@ BOOLEAN insertNode(struct linkedlist* theLinkedListPtr,
 	 * Update links and counter
 	 */
 
-	previousNode = NULL;
-	currentNode = theLinkedListPtr->head;
 	/*
-	 * Loop through the list, we will stop when the current node is no
-	 * longer larger than the new node. Or we reach the end of the list.
+	 * We set the previous node to NULL so we can check it later. If it is
+	 * NULL after the while loop then the list was empty.
+	 *
+	 * We set current node to the head of the list, if this is NULL then
+	 * the list was empty.
+	 */
+	previousNode = NULL;
+	currentNode = linkedListPtr->head;
+	/*
+	 * Loop through the list, we will stop when:
+	 * 1) The list is empty
+	 * 2) The current node is no longer larger than the new node
+	 * 3) We reach the end of the list.
 	 */
 	while (currentNode != NULL &&
-		   currentNode->data->won_by > theGameResultNodePrt->data->won_by) {
+			currentNode->data->won_by > newNodePtr->data->won_by) {
 		previousNode = currentNode;
-		currentNode = previousNode->next;
+		currentNode = currentNode->next;
 	}
 
 	/*
-	 * List is empty. so insert into the beginning.
+	 * List is empty or the new node has a higher value than the head of the
+	 * list.
 	 */
-	if(previousNode == NULL) {
-		theLinkedListPtr->head = theGameResultNodePrt;
-		theGameResultNodePrt->next = NULL;
-		++theLinkedListPtr->size;
-		return TRUE;
+	if(previousNode == NULL ) {
+		/*
+		 * 1) We update theGameResultNodePtr link to point to the head of the
+		 * list, if the list is empty this will be NULL so the list is
+		 * terminated. If the list isn't empty then this will point to the rest
+		 * of the list.
+		 * 2) Update the head of the list to point to the theGameResultNodePtr,
+		 * because of step 1 this correctly covers the list being empty or
+		 * populated.
+		 * 3) Update the list size to reflect the insertion.
+		 */
+		newNodePtr->next = linkedListPtr->head;
+		linkedListPtr->head = newNodePtr;
+		++linkedListPtr->size;
 	}
 	else {
 		/*
@@ -88,16 +169,16 @@ BOOLEAN insertNode(struct linkedlist* theLinkedListPtr,
 		 * We already set the new node's link to NULL, so if it is the last
 		 * node it is set correctly, otherwise we update it.
 		 */
-		previousNode->next = theGameResultNodePrt;
-		theGameResultNodePrt->next = currentNode;
-		++theLinkedListPtr->size;
+		previousNode->next = newNodePtr;
+		newNodePtr->next = currentNode;
+		++linkedListPtr->size;
 	}
 
-	return FALSE;
+	return TRUE;
 }
 
 BOOLEAN deleteNode(struct linkedlist* theLinkedListPtr,
-				   struct node* theGameResultNodePrt)
+				   struct node* theGameResultNodePtr)
 {
 	/*
 	 * TODO

@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 	 * Create and initialise the game system. Doing this here so it is alive
 	 * for the duration of the running program.
 	 */
-	theGameSystemPtr = createGameSystemPtr(theGameSystemPtr);
+	theGameSystemPtr = createGameSystemPtr();
 	if (!theGameSystemPtr) {
 		error_print("Couldn't create the game system with malloc.\n");
 		return EXIT_FAILURE;
@@ -91,13 +91,13 @@ int main(int argc, char* argv[])
 	/*
 	 * Create and initialise the linked list
 	 */
-	theLinkedListPtr = createLinkedList(theLinkedListPtr);
+	theLinkedListPtr = createLinkedList();
 
 	/*
 	 * Same as theLinkedListPtr == NULL, I tend to switch between both.
 	 */
 	if (!theLinkedListPtr) {
-		error_print("Couldn't create the linked list with malloc.\n");
+		error_print("Couldn't create the linked list.\n");
 		return EXIT_FAILURE;
 	}
 	/*
@@ -106,11 +106,10 @@ int main(int argc, char* argv[])
 	 * game system linked list. May not need this, not sure yet.
 	 *
 	 * I think Paul mentioned not needing to do this in my previous assignment
-	 * but I can't remember explicitly.
+	 * but I didn't really understand why.
 	 */
 	theGameSystemPtr->scoreboard = *theLinkedListPtr;
 	theLinkedListPtr = &theGameSystemPtr->scoreboard;
-
 
 	/*
 	 * We need +1 here because of the program name being passed in automatically
@@ -130,6 +129,7 @@ int main(int argc, char* argv[])
 			 * exit the program
 			 */
 			if (!seed.success) {
+				error_print("Couldn't get the game seed.\n");
 				return EXIT_FAILURE;
 			}
 		}
@@ -167,8 +167,6 @@ int main(int argc, char* argv[])
 	 *
 	 * print the linked list csv style
 	 */
-
-
 
 	/* start the game, passing in the seed */
 	play_game(seed);
@@ -250,8 +248,10 @@ void init_main_menu(struct main_menu_entry mainmenu[])
  *
  * Paul tends to cast the void* returned by malloc.
  */
-struct game_system* createGameSystemPtr(struct game_system* theGameSystemPtr)
+struct game_system* createGameSystemPtr()
 {
+	struct game_system* theGameSystemPtr;
+
 	/*
 	 * malloc tries to allocate memory with the specified bytes.
 	 * sizeof will return the size of the data structure, platform dependent.
