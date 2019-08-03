@@ -87,7 +87,7 @@ struct node* createLinkedListNode(void)
 	 */
 	linkedListNodePtr = malloc(sizeof(struct node));
 
-	if(linkedListNodePtr == NULL) {
+	if (linkedListNodePtr == NULL) {
 		return NULL;
 	}
 
@@ -134,7 +134,7 @@ BOOLEAN insertNode(struct linkedlist* linkedListPtr, struct node* newNodePtr)
 	 * 3) We reach the end of the list.
 	 */
 	while (currentNode != NULL &&
-			currentNode->data->won_by > newNodePtr->data->won_by) {
+		   currentNode->data->won_by > newNodePtr->data->won_by) {
 		previousNode = currentNode;
 		currentNode = currentNode->next;
 	}
@@ -143,7 +143,7 @@ BOOLEAN insertNode(struct linkedlist* linkedListPtr, struct node* newNodePtr)
 	 * List is empty or the new node has a higher value than the head of the
 	 * list.
 	 */
-	if(previousNode == NULL ) {
+	if (previousNode == NULL) {
 		/*
 		 * 1) We update theGameResultNodePtr link to point to the head of the
 		 * list, if the list is empty this will be NULL so the list is
@@ -202,12 +202,12 @@ void prettyPrintLinkedList(struct linkedlist* theLinkedListPtr)
 	struct node* currentNode;
 
 	currentNode = theLinkedListPtr->head;
-	if(currentNode == NULL) {
+	if (currentNode == NULL) {
 		printf("The list is empty.\n");
 	}
 	else {
-		while(currentNode != NULL) {
-			printf("%s,%s,%d-links-with->\n", currentNode->data->winner,
+		while (currentNode != NULL) {
+			printf("%s,%s,%d -links-with->\n", currentNode->data->winner,
 				   currentNode->data->loser,
 				   currentNode->data->won_by);
 			currentNode = currentNode->next;
@@ -224,11 +224,11 @@ void printCsvLinkedList(struct linkedlist* theLinkedListPtr, char* delimiter)
 	struct node* currentNode;
 
 	currentNode = theLinkedListPtr->head;
-	if(currentNode == NULL) {
+	if (currentNode == NULL) {
 		printf("The list is empty.\n");
 	}
 	else {
-		while(currentNode != NULL) {
+		while (currentNode != NULL) {
 			printf("%s\t%s\t%d\n", currentNode->data->winner,
 				   currentNode->data->loser,
 				   currentNode->data->won_by);
@@ -237,7 +237,32 @@ void printCsvLinkedList(struct linkedlist* theLinkedListPtr, char* delimiter)
 	}
 }
 
-BOOLEAN deleteLinkedList(struct linkedlist* theLinkedListPtr)
+BOOLEAN deleteLinkedList(struct linkedlist* linkedListPtr)
 {
-	return FALSE;
+	struct node* currentNode;
+	struct node* nextNode;
+
+	currentNode = linkedListPtr->head;
+
+	if (currentNode == NULL) {
+		fprintf(stderr, "[ERROR] Cannot delete the list as it is empty.");
+		return FALSE;
+	}
+
+	/*
+	 * Loop through the list if it isn't empty.
+	 */
+	while (currentNode != NULL) {
+		nextNode = currentNode->next;
+		free(currentNode);
+		currentNode = nextNode;
+	}
+
+	/*
+	 * Update the list.
+	 */
+	linkedListPtr->head = NULL;
+	linkedListPtr->size = 0;
+
+	return TRUE;
 }
