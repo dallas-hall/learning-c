@@ -47,6 +47,16 @@ that.
 Most of my bug hunting and fixing was done with the CLion debugger as well as
 a heap of print statements. I did run valgrind and libasan at the end as well.
 
+7) Smashing The Stack
+There was a bug in my code that again took me hours to figure out. It was
+happening when I was creating the game_result pointer and node pointer. I
+wasn't using malloc or strdup to allocate memory on the heap for the name
+pointers. I think what was happening was that I was creating a string on the
+stack and when I was doing operations on other stack items I was smashing the
+stack. After a lot of reading of the course code, text book code, and online
+forums I realised what the problem was. After using malloc or strdup I had no
+issue.
+
 Comments
 --------
 I am still bitterly disappointed about someone taking my code and passing it off
@@ -88,3 +98,6 @@ to what I had committed to the open repo. I did this because I noticed the
 student who stole my code last time didn't even bother to change my comments.
 
 I messaged Paul about this comment changing on Canvas at 31 July 2019 at 17:21
+
+I have also refactored my code extensively when I was trying to hunt down the
+stack smash bug.
