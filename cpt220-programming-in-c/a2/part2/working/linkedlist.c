@@ -9,6 +9,8 @@
 
 #include "linkedlist.h"
 
+const int DEBUGGING_LINKEDLIST = 1;
+
 /**
  * implement the functions for managing the linked list here
  **/
@@ -117,13 +119,6 @@ BOOLEAN insertNode(struct linkedlist* linkedListPtr, struct node* newNodePtr)
 	struct node* currentNode;
 
 	/*
-	 * TODO
-	 *
-	 * Insert in descending order
-	 * Update links and counter
-	 */
-
-	/*
 	 * We set the previous node to NULL so we can check it later. If it is
 	 * NULL after the while loop then the list was empty.
 	 *
@@ -204,7 +199,6 @@ BOOLEAN findNode(struct linkedlist* theLinkedListPtr, struct node* theNodePtr)
  */
 void prettyPrintLinkedList(struct linkedlist* theLinkedListPtr)
 {
-	struct node* previousNode;
 	struct node* currentNode;
 
 	currentNode = theLinkedListPtr->head;

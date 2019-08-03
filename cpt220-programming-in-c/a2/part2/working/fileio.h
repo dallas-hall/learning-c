@@ -56,8 +56,6 @@ BOOLEAN save_data(const char[], const struct linkedlist*);
 
 struct game_result* parseLineData(char*);
 
-struct game_result* createGameResult(char*, char*, int);
-
 BOOLEAN validInputName(const char*);
 
 int validWinningMargin(char* winningMargin);

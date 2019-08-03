@@ -8,7 +8,7 @@
  *****************************************************************************/
 #include "fileio.h"
 
-int DEBUGGING_FILEIO = 1;
+const int DEBUGGING_FILEIO = 1;
 
 /**
  * loads the data from the filename specified into the linked list.
@@ -48,14 +48,6 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 		return FALSE;
 	}
 	else {
-		/*
-		 * TODO
-		 *
-		 * tokenise each line in the file
-		 * validate each line in the file
-		 * store validate lines in linked list
-		 */
-
 		i = 0;
 		/*
 		 * Initially was going to use fgets but I couldn't think of a way to use
@@ -122,20 +114,17 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				linkedListNodePtr->data = gameResultPtr;
 				linkedListNodePtr->next = NULL;
 
-				/*
-				 * TODO
-				 * Insert into linked list.
-				 */
-				/*
-				 * TODO I THINK THIS NEEDS TO BE MOVED INSIDE INSERT
-				 *
-				 */
 				if (!insertNode(scorelist, linkedListNodePtr)) {
 					error_print("Couldn't insert into the linked list.\n");
 					return FALSE;
 				}
 			}
 		}
+
+		/*
+		 * Close our FILE resource since we no longer need it.
+		 */
+		fclose(filePointer);
 	}
 	return TRUE;
 }
@@ -147,11 +136,73 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 {
 	/*
-	 * TODO
-	 *
-	 * Save the linked list to a file, descending order.
+	 * TODO Save the linked list to a file.
 	 */
-	return FALSE;
+	/*
+	 * I based this code off of C How To Program 6e Chapter 10.
+	 *
+	 * I really enjoyed that book and read all the chapters on C.
+	 */
+	FILE* filePointer;
+	char* outputFile;
+	struct node* currentNodePtr;
+
+	/*
+	 * Using strdup to duplicate the string.
+	 * Using strcat to make the output file different from the input file. Used
+	 * for testing and comparing purposes.
+	 */
+	outputFile = strdup(fname);
+	strcat(outputFile, "-output");
+
+	/*
+	 * Need the double () because of precedence.
+	 * Assignment is lower than equality check.
+	 *
+	 * Using w to open in write mode. Create a new file if it doesn't exist or
+	 * overwrite the existing file.
+	 *
+	 * We do need to save the file later, might need to update this.
+	 */
+	if ((filePointer = fopen(fname, "w")) == NULL) {
+		/*
+		 * strerror returns the string of the O/S error number.
+		 * errno returns an error number for the current error
+		 *
+		 * Combining these prints out the O/S specific error message.
+		 */
+		fprintf(stderr, "[ERROR] %s called %s\n", strerror(errno), fname);
+		return FALSE;
+	}
+
+	currentNodePtr = thelist->head;
+
+	/*
+	 * Loop through the list and write it out using our predetermined
+	 * delimiter. The list is already sorted so this will be saved in
+	 * sorted order.
+	 *
+	 */
+	while (currentNodePtr != NULL) {
+		fprintf(filePointer, "%s%s%s%s%d",
+				currentNodePtr->data->winner, DELIMITER,
+				currentNodePtr->data->loser, DELIMITER,
+				currentNodePtr->data->won_by);
+		currentNodePtr = currentNodePtr->next;
+
+		/*
+		 * Only print the newline if there is another line to print.
+		 */
+		if (currentNodePtr != NULL) {
+			fprintf(filePointer, "\n");
+		}
+	}
+	/*
+	 * Close our FILE resource since we no longer need it.
+	 */
+	fclose(filePointer);
+
+	return TRUE;
 }
 
 /*
@@ -200,13 +251,6 @@ struct game_result* parseLineData(char* line)
 		perror("malloc");
 		return NULL;
 	}
-
-	/*
-	 * TODO
-	 *
-	 * score must be > 1 and <= 15
-	 * name can't have any punctuation or tabs and <=20 characters
-	 */
 
 	/*
 	 * Get the first token and validate it. Store it if it is valid.
@@ -278,54 +322,6 @@ struct game_result* parseLineData(char* line)
 	return gameResultPtr;
 }
 
-struct game_result*
-createGameResult(char* winner, char* loser, int winningMargin)
-{
-	struct game_result* gameResultPtr;
-
-	/*
-	 * malloc tries to allocate memory with the specified bytes.
-	 * sizeof will return the size of the data structure, platform
-	 * dependent. If successful, malloc returns a void * to the
-	 * allocated memory, otherwise returns NULL
-	 * We are using struct game_result because that is the object
-	 * hat will be stored in the pointer.
-	 *
-	 * Paul tends to cast the void* returned by malloc.
-	 */
-	gameResultPtr = malloc(sizeof(struct game_result));
-
-	if (!gameResultPtr) {
-		perror("malloc");
-		return NULL;
-	}
-
-	/*
-	 * memset copies a byte value for n bytes into a specified object
-	 * arg 1) the object to copy into
-	 * arg 2) the byte to copy
-	 * arg 3) how many bytes in the object to copy into
-	 *
-	 * We are using struct game_result because that is the object that will
-	 * be stored in the pointer.
-	 *
-	 * This is called zeroing out the memory. I believe this means:
-	 * int = 0
-	 * ptr = NULL
-	 * char = '\0'
-	 *
-	 * Not sure if this is even necessary at this point? Every time I
-	 * inspected these variables there were already zeroed.
-	 */
-	memset(gameResultPtr, 0, sizeof(struct game_result));
-
-	gameResultPtr->winner = winner;
-	gameResultPtr->loser = loser;
-	gameResultPtr->won_by = winningMargin;
-
-	return gameResultPtr;
-}
-
 BOOLEAN validInputName(const char* name)
 {
 	int nameLength;
@@ -335,7 +331,6 @@ BOOLEAN validInputName(const char* name)
 		error_print("Name token is missing.\n");
 		return FALSE;
 	}
-
 
 	/*
 	 * Must be <= 20
