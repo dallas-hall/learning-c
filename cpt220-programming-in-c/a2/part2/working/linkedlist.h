@@ -48,7 +48,7 @@ BOOLEAN findNode(struct linkedlist*, struct node*);
 
 void prettyPrintLinkedList(struct linkedlist*);
 
-void csvPrintLinkedList(struct linkedlist*, char);
+void printCsvLinkedList(struct linkedlist*, char*);
 
 BOOLEAN deleteLinkedList(struct linkedlist*);
 
