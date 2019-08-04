@@ -25,6 +25,11 @@ int main(void)
 	puts("The * is an overloaded operator, it has 3 meanings in different contexts");
 	puts("1) multiplication 2) pointer declaration 3) pointer dereferencing");
 
+	/*
+	 * & is the address operator.
+	 * This operator will return the address of its operand.
+	 * In this case it will return the address of the integer variable i.
+	 */ 
 	iPtr = &i;
 	iPtr2 = &i;
 	iPtr3 = &i;
