@@ -19,13 +19,27 @@ int main(void)
 	 */ 
 	printf("Value of iPtr is %d and the address of iPtr is %d\n", iPtr, &iPtr); 
 
-	puts("## Using %p");
+	puts("## Using %p and &");
 	/*
 	 * Need to cast to a void pointer to silence compiler warning
 	 * The value of iPtr will match the address of i.
 	 */ 
 	printf("Value of i is %d and the address of i is %p\n", i, (void *) &i); 
 	printf("Value of iPtr is %p and the address of iPtr is %p\n", iPtr, (void *) &iPtr); 
+
+	puts("## Using %x and &");
+	/*
+	 * The value of iPtr will match the address of i.
+	 */ 
+	printf("Value of i is %d and the address of i is %x\n", i, &i); 
+	printf("Value of iPtr is %x and the address of iPtr is %x\n", iPtr, &iPtr); 
+
+	puts("## Using %o and &");
+	/*
+	 * The value of iPtr will match the address of i.
+	 */ 
+	printf("Value of i is %d and the address of i is %o\n", i, &i); 
+	printf("Value of iPtr is %o and the address of iPtr is %o\n", iPtr, &iPtr); 
 
 
 	return EXIT_SUCCESS;
