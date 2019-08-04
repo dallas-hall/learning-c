@@ -29,9 +29,10 @@ struct linkedlist* createLinkedList()
 		return NULL;
 	}
 	else {
+		linkedListPtr->head = NULL;
+		linkedListPtr->size = 0;
+
 		memset(linkedListPtr, 0, sizeof(struct linkedlist));
-		/*linkedListPtr->head = NULL;
-		linkedListPtr->size = 0;*/
 	}
 
 	return linkedListPtr;

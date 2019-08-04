@@ -113,8 +113,18 @@ int main(int argc, char* argv[])
 	 * Dereference the created linked list and store it int the game_system.
 	 * Grab the address of that and store it in a pointer.
 	 */
-	gameSystemPtr->scoreboard = *createLinkedList();
+	linkedListPtr = createLinkedList();
+	gameSystemPtr->scoreboard = *linkedListPtr;
+	/*
+	 * Delete the list because we have dereferenced it, without deleting it here
+	 * we will have a memory leak.
+	 */
+	deleteLinkedList(linkedListPtr);
+	/*
+	 * Reassign the data inside game_system->scoreboard to the pointer.
+	 */
 	linkedListPtr = &gameSystemPtr->scoreboard;
+
 
 	if (DEBUGGING_MAIN) {
 		printf("The address of gameSystemPtr->scoreboard is %p\n",
@@ -246,7 +256,11 @@ int main(int argc, char* argv[])
 void quit_program(struct game_system* thesystem)
 {
 	save_data(thesystem->datafile, &thesystem->scoreboard);
-	deleteLinkedList((struct linkedlist*) &thesystem->scoreboard);
+	/*
+	 * We don't need to delete the list as it will be deleted by
+	 * deleteGameSystem. But we need to delete the nodes before calling that.
+	 */
+	deleteLinkedListNodes((struct linkedlist*) &thesystem->scoreboard);
 	deleteGameSystem(thesystem);
 }
 
@@ -256,7 +270,7 @@ void quit_program(struct game_system* thesystem)
  **/
 void abort_program(struct game_system* thesystem)
 {
-	deleteLinkedList((struct linkedlist*) &thesystem->scoreboard);
+	deleteLinkedListNodes((struct linkedlist*) &thesystem->scoreboard);
 	deleteGameSystem(thesystem);
 }
 
