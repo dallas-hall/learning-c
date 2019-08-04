@@ -140,6 +140,8 @@ updateScoreboardManually(char* winnerName, char* loserName, char* winningMargin,
 	struct game_result* gameResultPtr;
 	struct node* linkedListNodePtr;
 	struct linkedlist* linkedListPtr;
+	char* validatedWinnersName;
+	char* validatedLosersName;
 	int validatedWinningMargin = 0;
 
 	linkedListNodePtr = createLinkedListNode();
@@ -165,7 +167,13 @@ updateScoreboardManually(char* winnerName, char* loserName, char* winningMargin,
 		return FALSE;
 	}
 
-	gameResultPtr = createGameResult(winnerName, loserName,
+	/*
+	 * We need to free this later as strdup has its own malloc call.
+	 */
+	validatedWinnersName = strdup(winnerName);
+	validatedLosersName = strdup(winnerName);
+
+	gameResultPtr = createGameResult(validatedWinnersName, validatedLosersName,
 									 validatedWinningMargin);
 
 	if (!gameResultPtr) {
