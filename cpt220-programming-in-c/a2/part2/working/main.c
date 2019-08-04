@@ -241,7 +241,7 @@ int main(int argc, char* argv[])
 	/*
 	 * Cleanup after the game has finished.
 	 */
-	quit_program(gameSystemPtr);
+	/*quit_program(gameSystemPtr);*/
 
 	/**
 	 * dead code bug required in order to avoid compiler warnings
