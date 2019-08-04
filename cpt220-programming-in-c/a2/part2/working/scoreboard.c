@@ -171,7 +171,7 @@ updateScoreboardManually(char* winnerName, char* loserName, char* winningMargin,
 	 * We need to free this later as strdup has its own malloc call.
 	 */
 	validatedWinnersName = strdup(winnerName);
-	validatedLosersName = strdup(winnerName);
+	validatedLosersName = strdup(loserName);
 
 	gameResultPtr = createGameResult(validatedWinnersName, validatedLosersName,
 									 validatedWinningMargin);
