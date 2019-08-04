@@ -144,7 +144,7 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 	 * I really enjoyed that book and read all the chapters on C.
 	 */
 	FILE* filePointer;
-	char* outputFile;
+	char outputFile[PATH_MAX + FGETS_EXTRA_CHAR];
 	struct node* currentNodePtr;
 
 	/*
