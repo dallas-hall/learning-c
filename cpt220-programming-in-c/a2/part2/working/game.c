@@ -9,6 +9,8 @@
 #include "game.h"
 #include "main.h"
 
+const int DEBUGGING_GAME = 1;
+
 /**
  * initialise the game structure passed in. For full details of the requirements
  * for this function, please see the assignment requirements.
@@ -97,7 +99,15 @@ void play_game(struct falsible_long seed)
 			normal_print(
 					"\nThe winner was %s who won by %d points.\n",
 					winner->name, winner->score - loser->score);
-
+			/*
+			 * TODO update scoreboard
+			 *
+			 * Not sure how to pass the game_system here without violating the
+			 * spec rules and changing the structure of game
+			 */
+			/*updateScoreboard(thegame.current_player->name,
+							 thegame.other_player->name,
+							 thegame.current_player->score);*/
 			return;
 		}
 		/* otherwise, check if the game has actually been won and if so
@@ -107,6 +117,12 @@ void play_game(struct falsible_long seed)
 						 "with a score of %d\n",
 						 thegame.current_player->name,
 						 thegame.current_player->score);
+			/*
+			 * TODO update scoreboard
+			 */
+			/*updateScoreboard(thegame.current_player->name,
+							 thegame.other_player->name,
+							 thegame.current_player->score);*/
 			return;
 		}
 		/**

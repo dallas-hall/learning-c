@@ -8,7 +8,7 @@
  *****************************************************************************/
 #include "fileio.h"
 
-int DEBUGGING_FILEIO = 1;
+const int DEBUGGING_FILEIO = 0;
 
 /**
  * loads the data from the filename specified into the linked list.
@@ -48,14 +48,6 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 		return FALSE;
 	}
 	else {
-		/*
-		 * TODO
-		 *
-		 * tokenise each line in the file
-		 * validate each line in the file
-		 * store validate lines in linked list
-		 */
-
 		i = 0;
 		/*
 		 * Initially was going to use fgets but I couldn't think of a way to use
@@ -94,44 +86,25 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				}
 
 				/*
-				 * malloc tries to allocate memory with the specified bytes.
-				 * sizeof will return the size of the data structure, platform
-				 * dependent. If successful, malloc returns a void * to the
-				 * allocated memory, otherwise returns NULL
-				 *
-				 * We are using struct game_result because that is the object
-				 * that will be stored in the pointer.
-				 *
-				 * Paul tends to cast the void* returned by malloc.
-				 */
-				gameResultPtr = malloc(sizeof(struct game_result));
-				linkedListNodePtr = malloc(sizeof(struct node));
-
-				/*
-				 * The same as gameResultPtr == NULL. I tend to switch between the two.
-				 */
-				if (!gameResultPtr) {
-					error_print("Couldn't create the game result with malloc.\n");
-					return FALSE;
-				}
-
-				if(linkedListNodePtr == NULL) {
-					error_print("Couldn't create the linked list node with malloc.\n");
-					return FALSE;
-				}
-
-				/*
-				 * TODO there is a bug here with linked list not updating properly.
-				 */
-
-				/*
 				 * Parse the buffer, which means tokenise and validate the line
 				 * data. Store it into the game_result if valid.
 				 *
 				 * By passing in the pointer to game_result we can manipulate it
 				 * inside of parseLineData and update it if valid data is found.
 				 */
-				if (!parseLineData(buffer, gameResultPtr)) {
+				gameResultPtr = parseLineData(buffer);
+
+				/*
+				 * The same as gameResultPtr == NULL. I tend to switch between the two.
+				 */
+				if (!gameResultPtr) {
+					perror("malloc");
+					return FALSE;
+				}
+
+				linkedListNodePtr = createLinkedListNode();
+				if (linkedListNodePtr == NULL) {
+					perror("malloc");
 					return FALSE;
 				}
 
@@ -141,30 +114,17 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
 				linkedListNodePtr->data = gameResultPtr;
 				linkedListNodePtr->next = NULL;
 
-				/*
-				 * TODO
-				 * Insert into linked list.
-				 */
-				/*
-				 * TODO I THINK THIS NEEDS TO BE MOVED INSIDE INSERT
-				 *
-				 */
-				/*if(!insertNode(scorelist, linkedListNodePtr)) {
+				if (!insertNode(scorelist, linkedListNodePtr)) {
 					error_print("Couldn't insert into the linked list.\n");
 					return FALSE;
-				}*/
-
-				/*
-				 * Reset the buffer. This is needed so the buffer is completely
-				 * zeroed before the next run. Otherwise there will potentially
-				 * be crap left over from the previous run.
-				 */
-				memset(buffer, 0, sizeof(buffer));
-
-				gameResultPtr = NULL;
-				linkedListNodePtr = NULL;
+				}
 			}
 		}
+
+		/*
+		 * Close our FILE resource since we no longer need it.
+		 */
+		fclose(filePointer);
 	}
 	return TRUE;
 }
@@ -175,12 +135,62 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
  **/
 BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 {
+	FILE* filePointer;
+	char outputFile[PATH_MAX + FGETS_EXTRA_CHAR];
+	char* strdupPtr;
+	struct node* currentNodePtr;
+
 	/*
-	 * TODO
-	 *
-	 * Save the linked list to a file, descending order.
+	 * Using strdup to duplicate the string.
+	 * Use strcpy to copy the pointer into an array.
+	 * Using strcat to make the output file different from the input file. Used
+	 * for testing and comparing purposes.
 	 */
-	return FALSE;
+	strdupPtr = strdup(fname);
+	strcpy(outputFile, strdupPtr);
+	/*
+	 * Need to free because strdup calls malloc for us.
+	 */
+	free(strdupPtr);
+	strcat(outputFile, "-output");
+
+	/*
+	 * Using w to open in write mode. Create a new file if it doesn't exist or
+	 * overwrite the existing file.
+	 */
+	if ((filePointer = fopen(outputFile, "w")) == NULL) {
+		fprintf(stderr, "[ERROR] %s called %s\n", strerror(errno), fname);
+		return FALSE;
+	}
+
+	currentNodePtr = thelist->head;
+
+	/*
+	 * Loop through the list and write it out using our predetermined
+	 * delimiter. The list is already sorted so this will be saved in
+	 * sorted order.
+	 *
+	 */
+	while (currentNodePtr != NULL) {
+		fprintf(filePointer, "%s%s%s%s%d",
+				currentNodePtr->data->winner, DELIMITER,
+				currentNodePtr->data->loser, DELIMITER,
+				currentNodePtr->data->won_by);
+		currentNodePtr = currentNodePtr->next;
+
+		/*
+		 * Only print the newline if there is another line to print.
+		 */
+		if (currentNodePtr != NULL) {
+			fprintf(filePointer, "\n");
+		}
+	}
+	/*
+	 * Close our FILE resource since we no longer need it.
+	 */
+	fclose(filePointer);
+
+	return TRUE;
 }
 
 /*
@@ -191,21 +201,44 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
  *
  * The FGETS_EXTRA_CHAR covers the necessarily null control character terminator
  * for the end of the string.
+ *
+ * This will create a gameResult after validating the line and return it.
  */
-BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
+struct game_result* parseLineData(char* line)
 {
 	char* tokenPtr;
-	char winnersName[NAME_LEN + FGETS_EXTRA_CHAR];
-	char losersName[NAME_LEN + FGETS_EXTRA_CHAR];
-	int winningMargin;
+	char* winnersName;
+	char* losersName;
+	int winningMargin = 0;
 	int tokenCount = 0;
+	struct game_result* gameResultPtr;
 
 	/*
-	 * TODO
+	 * I wasn't using malloc here and this was a bug for me that took hours
+	 * to figure out. I really only figured it out after reading a heap online,
+	 * particularly https://stackoverflow.com/questions/37549594/crash-or-segmentation-fault-when-data-is-copied-scanned-read-to-an-uninitializ
+	 * and https://stackoverflow.com/questions/41830461/allocating-string-with-malloc
+	 * Once I read those and processed the information, I used malloc
+	 * here and my bug went away.
 	 *
-	 * score must be > 1 and <= 15
-	 * name can't have any punctuation or tabs and <=20 characters
+	 * I refactored my code many different times and basically had the same bug
+	 * until I used malloc here.
+	 *
+	 * I now see this is why you included stdup in helper.*, so I could just
+	 * call that instead of doing this myself.
 	 */
+	winnersName = malloc(sizeof(char*) * NAME_LEN + FGETS_EXTRA_CHAR);
+	losersName = malloc(sizeof(char*) * NAME_LEN + FGETS_EXTRA_CHAR);
+
+	if (!winnersName) {
+		perror("malloc");
+		return NULL;
+	}
+
+	if (!losersName) {
+		perror("malloc");
+		return NULL;
+	}
 
 	/*
 	 * Get the first token and validate it. Store it if it is valid.
@@ -214,11 +247,10 @@ BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
 	++tokenCount;
 
 	if (!validInputName(tokenPtr)) {
-		return FALSE;
+		return NULL;
 	}
 
 	strcpy(winnersName, tokenPtr);
-	gameResultPtr->winner = winnersName;
 
 	/*
 	 * Need multiple calls to get all the tokens.
@@ -242,27 +274,29 @@ BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
 		switch (tokenCount) {
 			case 2:
 				if (!validInputName(tokenPtr)) {
-					return FALSE;
+					return NULL;
 				}
 
 				strcpy(losersName, tokenPtr);
-				gameResultPtr->loser = losersName;
 				break;
 			case 3:
 				winningMargin = validWinningMargin(tokenPtr);
-				gameResultPtr->won_by = winningMargin;
+
 				if (winningMargin == -1) {
-					return FALSE;
+					return NULL;
 				}
+
 				break;
 			default:
 				if (tokenPtr != NULL) {
 					error_print(
 							"Invalid amount of tokens, 3 required, found %d.\n");
-					return FALSE;
+					return NULL;
 				}
 		}
 	}
+
+	gameResultPtr = createGameResult(winnersName, losersName, winningMargin);
 
 	if (DEBUGGING_FILEIO) {
 		printf("winnersName is %s\n", winnersName);
@@ -273,7 +307,7 @@ BOOLEAN parseLineData(char* line, struct game_result* gameResultPtr)
 		printf("gameResultPtr->won_by is %d\n", gameResultPtr->won_by);
 	}
 
-	return TRUE;
+	return gameResultPtr;
 }
 
 BOOLEAN validInputName(const char* name)
@@ -285,7 +319,6 @@ BOOLEAN validInputName(const char* name)
 		error_print("Name token is missing.\n");
 		return FALSE;
 	}
-
 
 	/*
 	 * Must be <= 20

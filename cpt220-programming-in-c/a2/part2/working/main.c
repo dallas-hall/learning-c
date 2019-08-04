@@ -14,6 +14,13 @@
  */
 const int DEBUGGING_MAIN = 0;
 
+/*
+ * Using this so I can pass the game_result into scoreboard so I can update
+ * the scoreboard. Couldn't think of anything other way to do it with my
+ * current design
+ */
+/*struct game_system* gameSystemPtr;*/
+
 /**
  * function converts string data to a long and sets its BOOLEAN member to FALSE
  * if anything goes wrong.
@@ -68,49 +75,8 @@ struct falsible_long longfromstr(const char* str)
 int main(int argc, char* argv[])
 {
 	struct falsible_long seed = {0};
-	struct game_system* theGameSystemPtr = NULL;
-	struct linkedlist* theLinkedListPtr = NULL;
-
-	/*
-	 * Create and initialise the game system. Doing this here so it is alive
-	 * for the duration of the running program.
-	 */
-	theGameSystemPtr = createGameSystemPtr(theGameSystemPtr);
-	if (!theGameSystemPtr) {
-		error_print("Couldn't create the game system with malloc.\n");
-		return EXIT_FAILURE;
-	}
-	if (DEBUGGING_MAIN) {
-		/*
-		 * From my understanding, everything should either be 0, NULL or '\0'
-		 * at this point.
-		 */
-		printDebugGameSystem(theGameSystemPtr);
-	}
-
-	/*
-	 * Create and initialise the linked list
-	 */
-	theLinkedListPtr = createLinkedList(theLinkedListPtr);
-
-	/*
-	 * Same as theLinkedListPtr == NULL, I tend to switch between both.
-	 */
-	if (!theLinkedListPtr) {
-		error_print("Couldn't create the linked list with malloc.\n");
-		return EXIT_FAILURE;
-	}
-	/*
-	 * Assign the value of the linked list pointer through dereferencing to the
-	 * game system and update the linked list pointer to the address of the
-	 * game system linked list. May not need this, not sure yet.
-	 *
-	 * I think Paul mentioned not needing to do this in my previous assignment
-	 * but I can't remember explicitly.
-	 */
-	theGameSystemPtr->scoreboard = *theLinkedListPtr;
-	theLinkedListPtr = &theGameSystemPtr->scoreboard;
-
+	struct game_system* gameSystemPtr = NULL;
+	struct linkedlist* linkedListPtr = NULL;
 
 	/*
 	 * We need +1 here because of the program name being passed in automatically
@@ -130,6 +96,7 @@ int main(int argc, char* argv[])
 			 * exit the program
 			 */
 			if (!seed.success) {
+				error_print("Couldn't get the game seed.\n");
 				return EXIT_FAILURE;
 			}
 		}
@@ -141,37 +108,155 @@ int main(int argc, char* argv[])
 	}
 
 	/*
+	 * Create and initialise the game system. Doing this here so it is alive
+	 * for the duration of the running program.
+	 */
+	gameSystemPtr = createGameSystem();
+	if (!gameSystemPtr) {
+		error_print("Couldn't create the game system with malloc.\n");
+		return EXIT_FAILURE;
+	}
+	if (DEBUGGING_MAIN) {
+		/*
+		 * From my understanding, everything should either be 0, NULL or '\0'
+		 * at this point.
+		 */
+		printDebugGameSystem(gameSystemPtr);
+	}
+
+	/*
+	 * Testing delete list nodes and list on an empty list
+	 */
+	if (DEBUGGING_MAIN) {
+		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
+	}
+
+	/*
+	 * Create and initialise the linked list.
+	 *
+	 * Dereference the created linked list and store it int the game_system.
+	 * Grab the address of that and store it in a pointer.
+	 */
+	linkedListPtr = createLinkedList();
+
+	/*
+	 * Same as linkedListPtr == NULL, I tend to switch between both.
+	 */
+	if (!linkedListPtr) {
+		error_print("Couldn't create the linked list.\n");
+		return EXIT_FAILURE;
+	}
+
+	gameSystemPtr->scoreboard = *linkedListPtr;
+	/*
+	 * Delete the list because we have dereferenced it, without deleting it here
+	 * we will have a memory leak.
+	 *
+	 * Future calls to deleteLinkedList won't actually work because the list
+	 * inside gameSystemPtr->scoreboard  wasn't created with malloc, it was
+	 * dereferenced into it. We still need to free the nodes of the list and
+	 * other parts of gameSystemPtr. Which are handled elsewhere.
+	 */
+	deleteLinkedList(linkedListPtr);
+	/*
+	 * Reassign the data inside game_system->scoreboard to the pointer.
+	 */
+	linkedListPtr = &gameSystemPtr->scoreboard;
+
+	if (DEBUGGING_MAIN) {
+		/*
+		 * These should be the same.
+		 */
+		printf("The address of gameSystemPtr->scoreboard is %p\n",
+			   (void*) &gameSystemPtr->scoreboard);
+		printf("The address of linkedListPtr is %p\n", (void*) linkedListPtr);
+	}
+
+	/*
+	 * Testing delete list nodes on an empty list
+	 */
+	if (DEBUGGING_MAIN) {
+		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
+	}
+
+
+	/*
 	 * Initialise the game system. i.e. load some data boys!
 	 */
-	if (!init_system(theGameSystemPtr, argv[FILE_PATH_ARG])) {
+	if (!init_system(gameSystemPtr, argv[FILE_PATH_ARG])) {
 		error_print("Couldn't initialise the game system.\n");
 		return EXIT_FAILURE;
 	}
 	else {
-		theGameSystemPtr->gameseed.success = seed.success;
-		theGameSystemPtr->gameseed.thelong = seed.thelong;
+		gameSystemPtr->gameseed.success = seed.success;
+		gameSystemPtr->gameseed.thelong = seed.thelong;
 
 		if (DEBUGGING_MAIN) {
-			printDebugGameSystem(theGameSystemPtr);
+			printDebugGameSystem(gameSystemPtr);
 		}
 
 	}
 
 	/*
-	 * We need to take the address of the list
+	 * We need to take the address of the list as the function expects a
+	 * pointer.
 	 */
-	prettyPrintLinkedList(&theGameSystemPtr->scoreboard);
+	prettyPrintLinkedList(&gameSystemPtr->scoreboard);
+	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
 	/*
-	 * TODO
-	 *
-	 * print the linked list csv style
+	 * Testing find a node.
 	 */
+	if (DEBUGGING_MAIN) {
+		findNode(&gameSystemPtr->scoreboard, NULL);
+		findNode(NULL, gameSystemPtr->scoreboard.head->next);
+		if (findNode(&gameSystemPtr->scoreboard,
+					 gameSystemPtr->scoreboard.head->next)) {
+			printf("Node found.\n");
+		}
+		else {
+			printf("Node not found.\n");
+		}
+	}
 
+	/*
+	 * Testing delete list on a populated list
+	 */
+	if (DEBUGGING_MAIN) {
+		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
+		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+	}
 
+	if (DEBUGGING_MAIN) {
+		/*
+		 * These should be the same.
+		 */
+		printf("The address of gameSystemPtr->scoreboard is %p\n",
+			   (void*) &gameSystemPtr->scoreboard);
+		printf("The address of linkedListPtr is %p\n", (void*) linkedListPtr);
+	}
+
+	/*
+	 * TODO Add a new score to the list.
+	 *
+	 * Test more thoroughly, there is a bug here.
+	 */
+	updateScoreboardManually("Roger", "Jamie", "15", gameSystemPtr);
+	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+
+	updateScoreboardManually("Roger", "Jamie", "7", gameSystemPtr);
+	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+
+	updateScoreboardManually("Jamie", "Roger", "1", gameSystemPtr);
+	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
 	/* start the game, passing in the seed */
 	play_game(seed);
+
+	/*
+	 * Cleanup after the game has finished.
+	 */
+	quit_program(gameSystemPtr);
 
 	/**
 	 * dead code bug required in order to avoid compiler warnings
@@ -185,6 +270,13 @@ int main(int argc, char* argv[])
  **/
 void quit_program(struct game_system* thesystem)
 {
+	save_data(thesystem->datafile, &thesystem->scoreboard);
+	/*
+	 * We don't need to delete the list as it will be deleted by
+	 * deleteGameSystem. But we need to delete the nodes before calling that.
+	 */
+	deleteLinkedListNodes((struct linkedlist*) &thesystem->scoreboard);
+	deleteGameSystem(thesystem);
 }
 
 /**
@@ -193,6 +285,8 @@ void quit_program(struct game_system* thesystem)
  **/
 void abort_program(struct game_system* thesystem)
 {
+	deleteLinkedListNodes((struct linkedlist*) &thesystem->scoreboard);
+	deleteGameSystem(thesystem);
 }
 
 /**
@@ -211,15 +305,19 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 	 * that mandatory argument check.
 	 */
 	if (strlen(fname) > PATH_MAX) {
-		error_print("Input file path is too long, must be <= 4096 characters.\n");
+		error_print(
+				"Input file path is too long, must be <= 4096 characters.\n");
 		return FALSE;
 	}
 
 	/*
-	 * We need the memory address of the linked list with &, so we can directly
+	 * I thought we were using simulated pass by reference here. Which is
+	 * using the memory address of the linked list with &, so we can directly
 	 * update that memory within the init_system function.
 	 *
-	 * This is simulated pass by reference.
+	 * But I think a copy of game_system is being passed here. Every time I
+	 * think I understand pointers I realise I don't. Not sure how I fix this.
+	 * Or maybe I am wrong???
 	 */
 	if (!load_data(fname, &thesystem->scoreboard)) {
 		error_print("Couldn't load the data because of the above error.\n");
@@ -227,11 +325,14 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 	}
 
 	/*
-	 * TODO
-	 *
-	 * malloc this, it must not be a string on the stack
+	 * I learnt the value of using strdup here. Otherwise my strcpy approach
+	 * would return:
+	 * main.c: In function ‘init_system’:
+	 * main.c:233:18: warning: passing argument 1 of ‘strcpy’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+	 * 233 |  strcpy(thesystem->datafile, fname);
 	 */
-	thesystem->datafile = fname;
+	thesystem->datafile = strdup(fname);
+
 	return TRUE;
 }
 
@@ -250,8 +351,13 @@ void init_main_menu(struct main_menu_entry mainmenu[])
  *
  * Paul tends to cast the void* returned by malloc.
  */
-struct game_system* createGameSystemPtr(struct game_system* theGameSystemPtr)
+struct game_system* createGameSystem()
 {
+	/*
+	 * Using the global variable instead.
+	 */
+	struct game_system* gameSystemPtr;
+
 	/*
 	 * malloc tries to allocate memory with the specified bytes.
 	 * sizeof will return the size of the data structure, platform dependent.
@@ -263,12 +369,12 @@ struct game_system* createGameSystemPtr(struct game_system* theGameSystemPtr)
 	 *
 	 * Paul tends to cast the void* returned by malloc.
 	 */
-	theGameSystemPtr = malloc(sizeof(struct game_system));
+	gameSystemPtr = malloc(sizeof(struct game_system));
 
 	/*
-	 * The same as theGameSystemPtr == NULL. I tend to switch between the two.
+	 * The same as gameSystemPtr == NULL. I tend to switch between the two.
 	 */
-	if (!theGameSystemPtr) {
+	if (!gameSystemPtr) {
 		return NULL;
 	}
 	else {
@@ -289,8 +395,8 @@ struct game_system* createGameSystemPtr(struct game_system* theGameSystemPtr)
 		 * Not sure if this is even necessary at this point? Every time I
 		 * inspected these variables there were already zeroed.
 		 */
-		memset(theGameSystemPtr, '\0', sizeof(struct game_system));
-		return theGameSystemPtr;
+		memset(gameSystemPtr, '\0', sizeof(struct game_system));
+		return gameSystemPtr;
 	}
 }
 
@@ -301,39 +407,57 @@ struct game_system* createGameSystemPtr(struct game_system* theGameSystemPtr)
  * I think this relates to the forward declaration mentioned in main.h for
  * the struct game_system but I am not entirely sure.
  */
-void printDebugGameSystem(struct game_system* theGameSystemPtr)
+void printDebugGameSystem(struct game_system* gameSystemPtr)
 {
 	int i;
 
 	for (i = 0; i < 4; i++) {
-		printDebug("theGameSystemPtr->the_menus.main_menu[%d].text is '%s'\n",
+		printDebug("gameSystemPtr->the_menus.main_menu[%d].text is '%s'\n",
 				   i,
-				   theGameSystemPtr->the_menus.main_menu[i].text);
-		printDebug("theGameSystemPtr->the_menus.main_menu[%d].function is %d\n",
+				   gameSystemPtr->the_menus.main_menu[i].text);
+		printDebug("gameSystemPtr->the_menus.main_menu[%d].function is %d\n",
 				   i,
-				   theGameSystemPtr->the_menus.main_menu[i].function);
+				   gameSystemPtr->the_menus.main_menu[i].function);
 	}
 
 	for (i = 0; i < 6; i++) {
-		printDebug("theGameSystemPtr->the_menus.scores_menu[%d].text is '%s'\n",
+		printDebug("gameSystemPtr->the_menus.scores_menu[%d].text is '%s'\n",
 				   i,
-				   theGameSystemPtr->the_menus.scores_menu[i].text);
+				   gameSystemPtr->the_menus.scores_menu[i].text);
 		printDebug(
-				"theGameSystemPtr->the_menus.scores_menu[%d].function is %d\n",
+				"gameSystemPtr->the_menus.scores_menu[%d].function is %d\n",
 				i,
-				theGameSystemPtr->the_menus.scores_menu[i].function);
+				gameSystemPtr->the_menus.scores_menu[i].function);
 	}
 
-	printDebug("theGameSystemPtr->scoreboard.head is '%s'\n",
-			   theGameSystemPtr->scoreboard.head);
-	printDebug("theGameSystemPtr->scoreboard.size is %d\n",
-			   theGameSystemPtr->scoreboard.size);
+	printDebug("gameSystemPtr->scoreboard.head is '%s'\n",
+			   gameSystemPtr->scoreboard.head);
+	printDebug("gameSystemPtr->scoreboard.size is %d\n",
+			   gameSystemPtr->scoreboard.size);
 
-	printDebug("theGameSystemPtr->datafile is '%s'\n",
-			   theGameSystemPtr->datafile);
+	printDebug("gameSystemPtr->datafile is '%s'\n",
+			   gameSystemPtr->datafile);
 
-	printDebug("theGameSystemPtr->scoreboard.thelong is %ld\n",
-			   theGameSystemPtr->gameseed.thelong);
-	printDebug("theGameSystemPtr->scoreboard.success is '%s'\n",
-			   theGameSystemPtr->gameseed.success);
+	printDebug("gameSystemPtr->scoreboard.thelong is %ld\n",
+			   gameSystemPtr->gameseed.thelong);
+	printDebug("gameSystemPtr->scoreboard.success is '%s'\n",
+			   gameSystemPtr->gameseed.success);
+}
+
+/*
+ * Clean up when ending the game.
+ *
+ * Took me a while to figure this out but eventually https://stackoverflow.com/a/17267808
+ * lead me to the correct implementation.
+ *
+ *
+ */
+void deleteGameSystem(struct game_system* gameSystemPtr)
+{
+	/*
+	 * Need to cast to non-const pointer to silence the compiler warning -
+	 * https://stackoverflow.com/a/2819594
+	 */
+	free((char*) gameSystemPtr->datafile);
+	free(gameSystemPtr);
 }
