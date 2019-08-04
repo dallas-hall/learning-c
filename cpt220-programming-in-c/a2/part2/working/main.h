@@ -108,7 +108,20 @@ void quit_program(struct game_system*);
 
 void abort_program(struct game_system*);
 
-struct game_system* createGameSystemPtr(struct game_system*);
+struct game_system* createGameSystem(void);
+
+struct linkedlist* getLinkedList(void);
+
+/*
+ * Free up the game system memory.
+ */
+void deleteGameSystem(struct game_system*);
+
+/*
+ * Used to print the game system state for debugging.
+ */
+void printDebugGameSystem(struct game_system*);
+
 /**
  * end of assignment 2 data structures
  **/
@@ -117,8 +130,3 @@ struct game_system* createGameSystemPtr(struct game_system*);
  * You may add your own datastructures or function declarations here if you
  * need to.
  **/
-
-/*
- * Used to print the game system state for debugging.
- */
-void printDebugGameSystem(struct game_system* theGameSystemPtr);

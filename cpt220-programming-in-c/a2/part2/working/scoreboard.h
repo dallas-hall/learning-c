@@ -46,4 +46,14 @@ BOOLEAN resave_scores(struct game_system*);
 
 BOOLEAN save_scores(struct game_system*);
 
+/*
+ * Used to create a game_result from a file or after a game.
+ */
+struct game_result* createGameResult(char*, char*, int);
+
+/*
+ * Used to automatically update the scoreboard.
+ */
+BOOLEAN updateScoreboardManually(char*, char*, char*, struct game_system*);
+
 #endif

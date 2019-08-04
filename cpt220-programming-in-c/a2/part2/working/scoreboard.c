@@ -11,6 +11,8 @@
 #include "io.h"
 #include "main.h"
 
+const int DEBUGGING_SCOREBOARD = 1;
+
 /**
  * initialise the scores menu with the text and functions that perform the
  * required functionality.
@@ -78,4 +80,127 @@ BOOLEAN resave_scores(struct game_system* thesystem)
 BOOLEAN save_scores(struct game_system* thesystem)
 {
 	return FALSE;
+}
+
+struct game_result*
+createGameResult(char* winner, char* loser, int winningMargin)
+{
+	struct game_result* gameResultPtr;
+
+	/*
+	 * malloc tries to allocate memory with the specified bytes.
+	 * sizeof will return the size of the data structure, platform
+	 * dependent. If successful, malloc returns a void * to the
+	 * allocated memory, otherwise returns NULL
+	 * We are using struct game_result because that is the object
+	 * hat will be stored in the pointer.
+	 *
+	 * Paul tends to cast the void* returned by malloc.
+	 */
+	gameResultPtr = malloc(sizeof(struct game_result));
+
+	/*
+	 * Same as linkedListPtr == NULL. I tend to use both.
+	 */
+	if (!gameResultPtr) {
+		perror("malloc");
+		return NULL;
+	}
+
+	/*
+	 * memset copies a byte value for n bytes into a specified object
+	 * arg 1) the object to copy into
+	 * arg 2) the byte to copy
+	 * arg 3) how many bytes in the object to copy into
+	 *
+	 * We are using struct game_result because that is the object that will
+	 * be stored in the pointer.
+	 *
+	 * This is called zeroing out the memory. I believe this means:
+	 * int = 0
+	 * ptr = NULL
+	 * char = '\0'
+	 *
+	 * Not sure if this is even necessary at this point? Every time I
+	 * inspected these variables there were already zeroed.
+	 */
+	memset(gameResultPtr, 0, sizeof(struct game_result));
+
+	gameResultPtr->winner = winner;
+	gameResultPtr->loser = loser;
+	gameResultPtr->won_by = winningMargin;
+
+	return gameResultPtr;
+}
+
+BOOLEAN
+updateScoreboardManually(char* winnerName, char* loserName, char* winningMargin,
+						 struct game_system* gameSystem)
+{
+	struct game_result* gameResultPtr;
+	struct node* linkedListNodePtr;
+	struct linkedlist* linkedListPtr;
+	char* validatedWinnersName;
+	char* validatedLosersName;
+	int validatedWinningMargin = 0;
+
+	linkedListNodePtr = createLinkedListNode();
+
+	if (!linkedListNodePtr) {
+		fprintf(stderr, "[ERROR] Couldn't create the linked list node.\n");
+		return FALSE;
+	}
+
+	if (!validInputName(winnerName)) {
+		fprintf(stderr, "[ERROR] Winner's name is invalid.\n");
+		return FALSE;
+	}
+
+	if (!validInputName(loserName)) {
+		fprintf(stderr, "[ERROR] Losers's name is invalid.\n");
+		return FALSE;
+	}
+
+	validatedWinningMargin = validWinningMargin(winningMargin);
+	if (validatedWinningMargin == -1) {
+		fprintf(stderr, "[ERROR] Winning margin is invalid.\n");
+		return FALSE;
+	}
+
+	/*
+	 * We need to free this later as strdup has its own malloc call.
+	 */
+	validatedWinnersName = strdup(winnerName);
+	validatedLosersName = strdup(loserName);
+
+	gameResultPtr = createGameResult(validatedWinnersName, validatedLosersName,
+									 validatedWinningMargin);
+
+	if (!gameResultPtr) {
+		fprintf(stderr, "[ERROR] Couldn't create the game result.\n");
+		return FALSE;
+	}
+
+	/*
+	 * Update the linked list node payload and link members.
+	 */
+	linkedListNodePtr->data = gameResultPtr;
+	linkedListNodePtr->next = NULL;
+
+	/*
+	 * Grab the address of the scoreboard from the game_system pointer.
+	 * This is the bit that I needed to use the global variable for
+	 * game_system.
+	 */
+	linkedListPtr = &gameSystem->scoreboard;
+
+	/*
+	 * Try to update the scoreboard
+	 */
+	if (!insertNode(linkedListPtr, linkedListNodePtr)) {
+		error_print("Couldn't insert into the linked list.\n");
+		return FALSE;
+	}
+
+	return TRUE;
 }
