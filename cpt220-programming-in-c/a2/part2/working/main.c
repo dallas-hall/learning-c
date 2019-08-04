@@ -116,10 +116,10 @@ int main(int argc, char* argv[])
 	gameSystemPtr->scoreboard = *createLinkedList();
 	linkedListPtr = &gameSystemPtr->scoreboard;
 
-	if (DEBUGGING_MAIN){
+	if (DEBUGGING_MAIN) {
 		printf("The address of gameSystemPtr->scoreboard is %p\n",
-			   &gameSystemPtr->scoreboard);
-		printf("The address of linkedListPtr is %p\n", linkedListPtr);
+			   (void*) &gameSystemPtr->scoreboard);
+		printf("The address of linkedListPtr is %p\n", (void*) linkedListPtr);
 	}
 
 	/*
@@ -219,8 +219,8 @@ int main(int argc, char* argv[])
 
 	if (DEBUGGING_MAIN) {
 		printf("The address of gameSystemPtr->scoreboard is %p\n",
-			   &gameSystemPtr->scoreboard);
-		printf("The address of linkedListPtr is %p\n", linkedListPtr);
+			   (void*) &gameSystemPtr->scoreboard);
+		printf("The address of linkedListPtr is %p\n", (void*) linkedListPtr);
 	}
 
 	quit_program(gameSystemPtr);
