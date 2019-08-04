@@ -18,8 +18,11 @@ int main(void)
 	 */ 
 	int* iPtr;
 	int * iPtr2;
-	int *iPtr3;
-	int*iPtr4;
+	/*
+	 * You can use the address operator during declaration and assignment as well.
+	 */ 
+	int *iPtr3 = &i;
+	int*iPtr4 = &i;
 
 	puts("# Pointer Declaration");
 	puts("The * is an overloaded operator, it has 3 meanings in different contexts");
@@ -32,8 +35,6 @@ int main(void)
 	 */ 
 	iPtr = &i;
 	iPtr2 = &i;
-	iPtr3 = &i;
-	iPtr4 = &i;
 
 	printf("i is %d\n", i);
 	/*
