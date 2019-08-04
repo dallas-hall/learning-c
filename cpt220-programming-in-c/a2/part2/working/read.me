@@ -57,6 +57,18 @@ stack. After a lot of reading of the course code, text book code, and online
 forums I realised what the problem was. After using malloc or strdup I had no
 issue.
 
+8) createLinkedList Drama
+So something that got me caught up for a while was when I was calling
+createLinkedList with the memory address of the game_system->scoreboard. I
+just didn't think it through that I was using malloc to create a linked list
+and returning it. So I was surprised that my addresses were different. I played
+around with different combinations of calling the function and questioned
+my sanity / understanding of pointers until I finally realised that there was
+a call to malloc in there. So I decided to just assign the pointer from malloc
+to a list pointer and then dereference that into game_system->scoreboard. I
+then had to free the old pointer otherwise I would have a memory leak when
+running valgrind / libasan.
+
 Comments
 --------
 I am still bitterly disappointed about someone taking my code and passing it off
