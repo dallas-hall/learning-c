@@ -135,14 +135,6 @@ BOOLEAN load_data(const char fname[], struct linkedlist* scorelist)
  **/
 BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 {
-	/*
-	 * TODO Save the linked list to a file.
-	 */
-	/*
-	 * I based this code off of C How To Program 6e Chapter 10.
-	 *
-	 * I really enjoyed that book and read all the chapters on C.
-	 */
 	FILE* filePointer;
 	char outputFile[PATH_MAX + FGETS_EXTRA_CHAR];
 	char* strdupPtr;
@@ -163,21 +155,10 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 	strcat(outputFile, "-output");
 
 	/*
-	 * Need the double () because of precedence.
-	 * Assignment is lower than equality check.
-	 *
 	 * Using w to open in write mode. Create a new file if it doesn't exist or
 	 * overwrite the existing file.
-	 *
-	 * We do need to save the file later, might need to update this.
 	 */
 	if ((filePointer = fopen(outputFile, "w")) == NULL) {
-		/*
-		 * strerror returns the string of the O/S error number.
-		 * errno returns an error number for the current error
-		 *
-		 * Combining these prints out the O/S specific error message.
-		 */
 		fprintf(stderr, "[ERROR] %s called %s\n", strerror(errno), fname);
 		return FALSE;
 	}
