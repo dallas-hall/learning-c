@@ -145,14 +145,21 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 	 */
 	FILE* filePointer;
 	char outputFile[PATH_MAX + FGETS_EXTRA_CHAR];
+	char* strdupPtr;
 	struct node* currentNodePtr;
 
 	/*
 	 * Using strdup to duplicate the string.
+	 * Use strcpy to copy the pointer into an array.
 	 * Using strcat to make the output file different from the input file. Used
 	 * for testing and comparing purposes.
 	 */
-	strcpy(outputFile, strdup(fname));
+	strdupPtr = strdup(fname);
+	strcpy(outputFile, strdupPtr);
+	/*
+	 * Need to free because strdup calls malloc for us.
+	 */
+	free(strdupPtr);
 	strcat(outputFile, "-output");
 
 	/*
