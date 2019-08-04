@@ -152,7 +152,7 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 	 * Using strcat to make the output file different from the input file. Used
 	 * for testing and comparing purposes.
 	 */
-	outputFile = strdup(fname);
+	strcpy(outputFile, strdup(fname));
 	strcat(outputFile, "-output");
 
 	/*
