@@ -36,7 +36,7 @@ struct linkedlist
 /**
  * provide the declarations of linked list interface functions
  **/
-struct linkedlist* createLinkedList(struct linkedlist*);
+struct linkedlist* createLinkedList(void);
 
 struct node* createLinkedListNode(void);
 
@@ -50,8 +50,8 @@ void prettyPrintLinkedList(struct linkedlist*);
 
 void printCsvLinkedList(struct linkedlist*, char*);
 
-BOOLEAN deleteLinkedListNodes(struct linkedlist*);
+void deleteLinkedListNodes(struct linkedlist*);
 
-BOOLEAN deleteLinkedList(struct linkedlist*);
+void deleteLinkedList(struct linkedlist*);
 
 #endif

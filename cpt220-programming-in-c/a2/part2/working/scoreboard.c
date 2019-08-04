@@ -133,7 +133,9 @@ createGameResult(char* winner, char* loser, int winningMargin)
 	return gameResultPtr;
 }
 
-BOOLEAN updateScoreboard(char* winnerName, char* loserName, int winningMargin)
+BOOLEAN
+updateScoreboardManually(char* winnerName, char* loserName, int winningMargin,
+						 struct game_system* gameSystem)
 {
 	struct game_result* gameResultPtr;
 	struct node* linkedListNodePtr;
@@ -161,8 +163,10 @@ BOOLEAN updateScoreboard(char* winnerName, char* loserName, int winningMargin)
 
 	/*
 	 * Grab the address of the scoreboard from the game_system pointer.
+	 * This is the bit that I needed to use the global variable for
+	 * game_system.
 	 */
-	linkedListPtr = &getGameSystem()->scoreboard;
+	linkedListPtr = &gameSystem->scoreboard;
 
 	/*
 	 * Try to update the scoreboard

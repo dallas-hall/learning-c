@@ -8,7 +8,7 @@
  *****************************************************************************/
 #include "fileio.h"
 
-const int DEBUGGING_FILEIO = 1;
+const int DEBUGGING_FILEIO = 0;
 
 /**
  * loads the data from the filename specified into the linked list.
@@ -164,7 +164,7 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 	 *
 	 * We do need to save the file later, might need to update this.
 	 */
-	if ((filePointer = fopen(fname, "w")) == NULL) {
+	if ((filePointer = fopen(outputFile, "w")) == NULL) {
 		/*
 		 * strerror returns the string of the O/S error number.
 		 * errno returns an error number for the current error
