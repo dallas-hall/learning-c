@@ -9,6 +9,12 @@ int main(void)
 	 *
 	 * All of these mean the same thing, declaring a pointer.
 	 * The whitespace is irrelevant, and is personal preference.
+	 *
+	 * The trick to reading pointer declarations is reading them backwards.
+	 *
+	 * 1) iPtr is a variable.
+	 * 2) iPtr is a pointer variable.
+	 * 3) iPtr is a pointer variable to an integer.
 	 */ 
 	int* iPtr;
 	int * iPtr2;
