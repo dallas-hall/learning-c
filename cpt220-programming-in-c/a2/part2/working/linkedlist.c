@@ -327,8 +327,8 @@ void deleteLinkedListNodes(struct linkedlist* linkedListPtr)
 		/*
 		 * Delete our memory previously allocated with malloc.
 		 */
-		free(currentNodePtr->data->winner);
-		free(currentNodePtr->data->loser);
+		/*free(currentNodePtr->data->winner);
+		free(currentNodePtr->data->loser);*/
 		free(currentNodePtr->data);
 		free(currentNodePtr);
 		currentNodePtr = nextNodePtr;

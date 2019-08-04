@@ -54,6 +54,6 @@ struct game_result* createGameResult(char*, char*, int);
 /*
  * Used to automatically update the scoreboard.
  */
-BOOLEAN updateScoreboard(char*, char*, int, struct game_system*);
+BOOLEAN updateScoreboardManually(char*, char*, char*, struct game_system*);
 
 #endif

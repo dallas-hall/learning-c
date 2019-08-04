@@ -134,24 +134,42 @@ createGameResult(char* winner, char* loser, int winningMargin)
 }
 
 BOOLEAN
-updateScoreboardManually(char* winnerName, char* loserName, int winningMargin,
+updateScoreboardManually(char* winnerName, char* loserName, char* winningMargin,
 						 struct game_system* gameSystem)
 {
 	struct game_result* gameResultPtr;
 	struct node* linkedListNodePtr;
 	struct linkedlist* linkedListPtr;
-
-	gameResultPtr = createGameResult(winnerName, loserName, winningMargin);
-
-	if (!gameResultPtr) {
-		fprintf(stderr, "[ERROR] Couldn't create the game result.");
-		return FALSE;
-	}
+	int validatedWinningMargin = 0;
 
 	linkedListNodePtr = createLinkedListNode();
 
 	if (!linkedListNodePtr) {
-		fprintf(stderr, "[ERROR] Couldn't create the linked list node.");
+		fprintf(stderr, "[ERROR] Couldn't create the linked list node.\n");
+		return FALSE;
+	}
+
+	if (!validInputName(winnerName)) {
+		fprintf(stderr, "[ERROR] Winner's name is invalid.\n");
+		return FALSE;
+	}
+
+	if (!validInputName(loserName)) {
+		fprintf(stderr, "[ERROR] Losers's name is invalid.\n");
+		return FALSE;
+	}
+
+	validatedWinningMargin = validWinningMargin(winningMargin);
+	if (validatedWinningMargin == -1) {
+		fprintf(stderr, "[ERROR] Winning margin is invalid.\n");
+		return FALSE;
+	}
+
+	gameResultPtr = createGameResult(winnerName, loserName,
+									 validatedWinningMargin);
+
+	if (!gameResultPtr) {
+		fprintf(stderr, "[ERROR] Couldn't create the game result.\n");
 		return FALSE;
 	}
 
