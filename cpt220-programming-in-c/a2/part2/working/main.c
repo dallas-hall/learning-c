@@ -250,15 +250,13 @@ int main(int argc, char* argv[])
 	updateScoreboardManually("Jamie", "Roger", "1", gameSystemPtr);
 	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
-	quit_program(gameSystemPtr);
-
 	/* start the game, passing in the seed */
-	/*play_game(seed);*/
+	play_game(seed);
 
 	/*
 	 * Cleanup after the game has finished.
 	 */
-
+	quit_program(gameSystemPtr);
 
 	/**
 	 * dead code bug required in order to avoid compiler warnings
