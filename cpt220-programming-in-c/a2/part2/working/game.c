@@ -101,11 +101,13 @@ void play_game(struct falsible_long seed)
 					winner->name, winner->score - loser->score);
 			/*
 			 * TODO update scoreboard
+			 *
+			 * Not sure how to pass the game_system here without violating the
+			 * spec rules and changing the structure of game
 			 */
-
-			updateScoreboard(thegame.current_player->name,
+			/*updateScoreboard(thegame.current_player->name,
 							 thegame.other_player->name,
-							 thegame.current_player->score);
+							 thegame.current_player->score);*/
 			return;
 		}
 		/* otherwise, check if the game has actually been won and if so
@@ -118,9 +120,9 @@ void play_game(struct falsible_long seed)
 			/*
 			 * TODO update scoreboard
 			 */
-			updateScoreboard(thegame.current_player->name,
+			/*updateScoreboard(thegame.current_player->name,
 							 thegame.other_player->name,
-							 thegame.current_player->score);
+							 thegame.current_player->score);*/
 			return;
 		}
 		/**

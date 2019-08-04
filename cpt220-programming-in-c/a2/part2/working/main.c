@@ -19,7 +19,7 @@ const int DEBUGGING_MAIN = 0;
  * the scoreboard. Couldn't think of anything other way to do it with my
  * current design
  */
-struct game_system* gameSystemPtr;
+/*struct game_system* gameSystemPtr;*/
 
 /**
  * function converts string data to a long and sets its BOOLEAN member to FALSE
@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 	/*
 	 * Moved out so I can pass it into scoreboard
 	 */
-	/*struct game_system* gameSystemPtr = NULL;*/
+	struct game_system* gameSystemPtr = NULL;
 	struct linkedlist* linkedListPtr = NULL;
 
 	/*
@@ -99,9 +99,28 @@ int main(int argc, char* argv[])
 	}
 
 	/*
-	 * Create and initialise the linked list
+	 * Testing delete list nodes and list on an empty list
 	 */
-	linkedListPtr = createLinkedList(&gameSystemPtr->scoreboard);
+	if (DEBUGGING_MAIN) {
+		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
+		deleteLinkedList(&gameSystemPtr->scoreboard);
+	}
+
+
+	/*
+	 * Create and initialise the linked list.
+	 *
+	 * Dereference the created linked list and store it int the game_system.
+	 * Grab the address of that and store it in a pointer.
+	 */
+	gameSystemPtr->scoreboard = *createLinkedList();
+	linkedListPtr = &gameSystemPtr->scoreboard;
+
+	if (DEBUGGING_MAIN){
+		printf("The address of gameSystemPtr->scoreboard is %p\n",
+			   &gameSystemPtr->scoreboard);
+		printf("The address of linkedListPtr is %p\n", linkedListPtr);
+	}
 
 	/*
 	 * Same as linkedListPtr == NULL, I tend to switch between both.
@@ -140,11 +159,13 @@ int main(int argc, char* argv[])
 		}
 	}
 
-
 	/*
-	 * Testing delete list on an empty list
+	 * Testing delete list nodes on an empty list
 	 */
-	deleteLinkedListNodes(linkedListPtr);
+	if (DEBUGGING_MAIN) {
+		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
+	}
+
 
 	/*
 	 * Initialise the game system. i.e. load some data boys!
@@ -170,16 +191,47 @@ int main(int argc, char* argv[])
 	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
 	/*
+	 * Testing find a node.
+	 */
+	if (DEBUGGING_MAIN) {
+		findNode(&gameSystemPtr->scoreboard, NULL);
+		findNode(NULL, gameSystemPtr->scoreboard.head->next);
+		if (findNode(&gameSystemPtr->scoreboard,
+					 gameSystemPtr->scoreboard.head->next)) {
+			printf("Node found.\n");
+		}
+		else {
+			printf("Node not found.\n");
+		}
+	}
+
+	/*
+	 * TODO Test save_data here
+	 */
+
+	/*
 	 * Testing delete list on a populated list
 	 */
-	deleteLinkedListNodes(&gameSystemPtr->scoreboard);
-	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
-	
+	if (DEBUGGING_MAIN) {
+		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
+		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+	}
+
+	if (DEBUGGING_MAIN) {
+		printf("The address of gameSystemPtr->scoreboard is %p\n",
+			   &gameSystemPtr->scoreboard);
+		printf("The address of linkedListPtr is %p\n", linkedListPtr);
+	}
+
+	quit_program(gameSystemPtr);
+
 	/* start the game, passing in the seed */
 	play_game(seed);
 
-	deleteGameSystem(gameSystemPtr);
-	deleteLinkedList(linkedListPtr);
+	/*
+	 * Cleanup after the game has finished.
+	 */
+	quit_program(gameSystemPtr);
 
 	/**
 	 * dead code bug required in order to avoid compiler warnings
@@ -193,6 +245,9 @@ int main(int argc, char* argv[])
  **/
 void quit_program(struct game_system* thesystem)
 {
+	save_data(thesystem->datafile, &thesystem->scoreboard);
+	deleteLinkedList((struct linkedlist*) &thesystem->scoreboard);
+	deleteGameSystem(thesystem);
 }
 
 /**
@@ -201,6 +256,8 @@ void quit_program(struct game_system* thesystem)
  **/
 void abort_program(struct game_system* thesystem)
 {
+	deleteLinkedList((struct linkedlist*) &thesystem->scoreboard);
+	deleteGameSystem(thesystem);
 }
 
 /**
@@ -225,10 +282,12 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 	}
 
 	/*
-	 * We need the memory address of the linked list with &, so we can directly
+	 * I thought we were using simulated pass by reference here. Which is
+	 * using the memory address of the linked list with &, so we can directly
 	 * update that memory within the init_system function.
 	 *
-	 * This is simulated pass by reference.
+	 * But I think a copy of game_system is being passed here. Every time I
+	 * think I understand pointers I realise I don't. Not sure how I fix this.
 	 */
 	if (!load_data(fname, &thesystem->scoreboard)) {
 		error_print("Couldn't load the data because of the above error.\n");
@@ -267,7 +326,7 @@ struct game_system* createGameSystem()
 	/*
 	 * Using the global variable instead.
 	 */
-	/*struct game_system* gameSystemPtr;*/
+	struct game_system* gameSystemPtr;
 
 	/*
 	 * malloc tries to allocate memory with the specified bytes.
@@ -318,7 +377,7 @@ struct game_system* createGameSystem()
  * I think this relates to the forward declaration mentioned in main.h for
  * the struct game_system but I am not entirely sure.
  */
-void printDebugGameSystem()
+void printDebugGameSystem(struct game_system* gameSystemPtr)
 {
 	int i;
 
@@ -356,17 +415,14 @@ void printDebugGameSystem()
 }
 
 /*
- * Returns the game_system pointer. Currently being used inside of scoreboard.c
- */
-struct game_system* getGameSystem()
-{
-	return gameSystemPtr;
-}
-
-/*
  * Clean up when ending the game.
+ *
+ * Took me a while to figure this out but eventually https://stackoverflow.com/a/17267808
+ * lead me to the correct implementation.
+ *
+ *
  */
-void deleteGameSystem()
+void deleteGameSystem(struct game_system* gameSystemPtr)
 {
 	/*
 	 * Need to cast to non-const pointer to silence the compiler warning -
