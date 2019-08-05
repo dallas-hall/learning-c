@@ -12,34 +12,43 @@ int main(void)
 	 * Not supported in C90.
 	 * %ls is needed but C90 doesn't support this either.
 	 */
-	printf("Value of i is %d and the address of i is %d\n", i, &i); 
+	printf("Value of i is %d\n", i); 
+	printf("The address of i is %d\n", (int*) &i); 
 	/*
-	 * We are not dereferencing here so we can see the address value of the pointer
+	 * We are not dereferencing here so we can see the address value of the pointer (ie what it points to)
 	 * The value of iPtr will match the address of i.
 	 */ 
-	printf("Value of iPtr is %d and the address of iPtr is %d\n", iPtr, &iPtr); 
+	printf("Value of iPtr is %d\n", *iPtr); 
+	printf("The address iPtr is pointing to is %d\n", (int*) iPtr); 
+	printf("The address iPtr is located at is %d\n", (int*) &iPtr); 
 
-	puts("## Using %p and &");
+	puts("\n## Using %p and &");
 	/*
 	 * Need to cast to a void pointer to silence compiler warning
 	 * The value of iPtr will match the address of i.
 	 */ 
-	printf("Value of i is %d and the address of i is %p\n", i, (void *) &i); 
-	printf("Value of iPtr is %p and the address of iPtr is %p\n", iPtr, (void *) &iPtr); 
+	printf("Value of i is %d\n", i);
+	printf("The address of i is %p\n", (void*) &i);
+	
+	printf("Value of iPtr is %d\n", *iPtr); 
+	printf("The address iPtr is pointing to is %p\n", (void*) iPtr); 
+	printf("The address iPtr is located at is %p\n", (void*) &iPtr); 
 
-	puts("## Using %x and &");
+	puts("\n## Using %x and &");
 	/*
-	 * The value of iPtr will match the address of i.
+	 * Lots of compiler warnings about implicit casts 
 	 */ 
-	printf("Value of i is %d and the address of i is %x\n", i, &i); 
-	printf("Value of iPtr is %x and the address of iPtr is %x\n", iPtr, &iPtr); 
+	printf("Value of iPtr is %d\n", *iPtr); 
+	printf("The address iPtr is pointing to is %x\n", iPtr); 
+	printf("The address iPtr is located at is %x\n", &iPtr); 
 
-	puts("## Using %o and &");
-	/*
-	 * The value of iPtr will match the address of i.
-	 */ 
-	printf("Value of i is %d and the address of i is %o\n", i, &i); 
-	printf("Value of iPtr is %o and the address of iPtr is %o\n", iPtr, &iPtr); 
+	puts("\n## Using %o and &");
+	printf("Value of i is %d\n", i);
+	printf("The address of i is %o\n", &i);
+	
+	printf("Value of iPtr is %d\n", *iPtr); 
+	printf("The address iPtr is pointing to is %o\n", iPtr); 
+	printf("The address iPtr is located at is %o\n", &iPtr); 
 
 
 	return EXIT_SUCCESS;
