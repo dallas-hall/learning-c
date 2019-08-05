@@ -32,11 +32,13 @@ int main(void)
 	 * A manual (int) works, gets the correct number and silences compiler warning.
 	 */ 
 	printf("After intptr_t* iPtr = &i; the value of iPtr is %d\n", (int) *iPtr);
-	printf("After intptr_t* iPtr = &i; the address of iPtr is %p\n", (void*) &iPtr);
+	printf("After intptr_t* iPtr = &i; the address where iPtr is %p\n", (void*) &iPtr);
+	printf("After intptr_t* iPtr = &i; the address iPtr points to is %p\n", (void*) iPtr);
 
 	puts("## uintptr_t");
-	printf("After uintptr_t* iPtr = (uintptr_t*) &i; the value of iPtr is %d\n", (int) *uiPtr);
-	printf("After uintptr_t* iPtr = (uintptr_t*) &i; the address of iPtr is %p\n", (void*) &uiPtr);
+	printf("After uintptr_t* iPtr = (uintptr_t*) &i; the value of uiPtr is %d\n", (int) *uiPtr);
+	printf("After uintptr_t* iPtr = (uintptr_t*) &i; the address where uiPtr is %p\n", (void*) &uiPtr);
+	printf("After uintptr_t* iPtr = (uintptr_t*) &i; the address uiPtr points to is %p\n", (void*) &uiPtr);
 
 	return EXIT_SUCCESS;
 }
