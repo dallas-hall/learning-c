@@ -38,7 +38,7 @@ int main(void)
 	puts("## uintptr_t");
 	printf("After uintptr_t* iPtr = (uintptr_t*) &i; the value of uiPtr is %d\n", (int) *uiPtr);
 	printf("After uintptr_t* iPtr = (uintptr_t*) &i; the address where uiPtr is %p\n", (void*) &uiPtr);
-	printf("After uintptr_t* iPtr = (uintptr_t*) &i; the address uiPtr points to is %p\n", (void*) &uiPtr);
+	printf("After uintptr_t* iPtr = (uintptr_t*) &i; the address uiPtr points to is %p\n", (void*) uiPtr);
 
 	return EXIT_SUCCESS;
 }
