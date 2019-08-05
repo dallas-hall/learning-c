@@ -4,7 +4,7 @@
 int main(void)
 {
 	char* c;
-	short s;
+	short* s;
 	int* i;
 	long* l;
 	float* f;
