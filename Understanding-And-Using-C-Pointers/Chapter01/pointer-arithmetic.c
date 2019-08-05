@@ -31,7 +31,7 @@ int main(void)
 	 */
 	printf("The value of *iPtr is %d\n", *iPtr);
 
-	puts("## ++iPtr");
+	puts("\n## ++iPtr");
 	/*
 	 * Every time you add one to a pointer, you are adding the size of the data type
 	 * that it points to. Since these are integers and my machine has 4 byte ints,
@@ -45,6 +45,35 @@ int main(void)
 
 	printf("The value of vector[1] is %d\n", vector[1]);
 	printf("The value of *iPtr is %d\n", *iPtr);
+
+	/*
+	 * End of the array
+	 */ 
+	puts("\n## ++iPtr");
+	++iPtr;
+
+	printf("The address of vector[2] is %p\n", (void*) &vector[2]);
+	printf("The address that iPtr is holding is %p\n", (void*) iPtr);
+	printf("The address where &iPtr lives is %p\n", (void*) &iPtr);
+
+	printf("The value of vector[2] is %d\n", vector[2]);
+	printf("The value of *iPtr is %d\n", *iPtr);
+
+	/*
+	 * Back to the start
+	 */ 
+	puts("\n## iPtr-=2");
+	iPtr-=2;
+	printf("The address of vector[0] is %p\n", (void*) &vector[0]);
+	printf("The address that iPtr is holding is %p\n", (void*) iPtr);
+	printf("The address where &iPtr lives is %p\n", (void*) &iPtr);
+
+	printf("The value of vector[0] is %d\n", vector[0]);
+	printf("The value of *iPtr is %d\n", *iPtr);
+
+	/*
+	 * Cannot do multiplication or division, as it makes no sense.
+	 */ 
 
 	return EXIT_SUCCESS;
 }
