@@ -54,6 +54,18 @@ void stackFrame2(void)
 	printf("%s\n", heapStringPtr);
 	printf("The address of heapStringPtr is %p\n", (void*) &heapStringPtr);
 	printf("The address heapStringPtr points to is %p\n", (void*) heapStringPtr);
+
+	/*
+	 * Code blocks have their own stack frames created.
+	 */ 
+	{
+		puts("\n## New Stack Frame Created - code block inside stackFrame2()");
+
+		int i = 2;
+		printf("The address of i is %p\n", (void*) &i);
+		puts("Popping code block inside stackFrame2() off the stack.\n");
+	}
+
 	puts("Popping stackFrame2() off the stack.\nFunction returning to caller.\n");
 }
 
