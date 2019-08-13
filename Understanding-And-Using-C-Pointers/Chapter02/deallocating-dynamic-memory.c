@@ -21,5 +21,11 @@ int main(void)
 	 */ 
 	free(iPtr);
 
+	/*
+	 * If we don't update the pointer value, it becomes a dangling pointer. It points to garbage
+	 * Good practice is to allocate to NULL after free.
+	 */
+	iPtr = NULL;
+
 	return EXIT_SUCCESS;
 }
