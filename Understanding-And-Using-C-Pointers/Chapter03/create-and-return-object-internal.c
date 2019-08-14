@@ -35,6 +35,10 @@ int* allocateArray(int size)
 	 */ 
 	int* array = (int*) malloc(sizeof(int) * (unsigned long) size);
 
+	if(!array) {
+		perror("malloc");
+	}
+
 	for(int i = 0; i < size; i++) {
 		array[i] = i * i;
 	}
