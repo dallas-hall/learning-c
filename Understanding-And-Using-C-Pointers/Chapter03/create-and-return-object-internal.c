@@ -14,6 +14,9 @@ int main(void)
 	puts("When creating an object internally within a function with malloc, the caller becomes responsible for using free on the object.");
 
 	array = allocateArray(ARRAY_SIZE);
+	if(!array) {
+		return EXIT_FAILURE;
+	}
 
 	for(int i = 0; i < ARRAY_SIZE; i++) {
 		printf("i is %d and has the value %d\n", i, array[i]);
@@ -37,6 +40,7 @@ int* allocateArray(int size)
 
 	if(!array) {
 		perror("malloc");
+		return NULL;
 	}
 
 	for(int i = 0; i < size; i++) {
