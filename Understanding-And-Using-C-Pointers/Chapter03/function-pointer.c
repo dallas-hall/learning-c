@@ -7,11 +7,18 @@ double squareDouble(double n);
 int main(void)
 {
 	/*
+	 * Can use a type definition for common function pointer definitions.
+	 * This is a typedfe named intFuncPtr that
+	 * a) takes a function pointer a function that takes an int and returns an int.
+	 */ 
+	typedef int (*intFuncPtr)(int);
+
+	/*
 	 * Declare the function pointers
 	 * fptr is a function pointer that takes an int and returns an int.
 	 * We must provide a function's name that matches this signature. The functions name is a pointer itself.
 	 */
-	int (*fptr1)(int);
+	intFuncPtr fptr1;
 	double (*fptr2)(double);
 
 	int i = 2;
