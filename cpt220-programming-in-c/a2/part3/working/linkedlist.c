@@ -407,7 +407,7 @@ void deleteLinkedListNodes(struct linkedlist* linkedListPtr)
 
 	if (currentNodePtr == NULL) {
 		fprintf(stderr,
-				"[ERROR] Cannot delete linked list nodes as the list as it is empty.\n");
+				"[WARNING] Cannot delete linked list nodes as the list as it is empty.\n");
 		return;
 	}
 
