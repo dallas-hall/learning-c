@@ -411,6 +411,9 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
  **/
 void init_main_menu(struct main_menu_entry mainmenu[])
 {
+	/*
+	 * TODO Main menu init
+	 */
 }
 
 /*
