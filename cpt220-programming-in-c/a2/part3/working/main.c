@@ -320,7 +320,7 @@ void quit_program(struct game_system* thesystem)
 	 * We don't need to delete the list as it will be deleted by
 	 * deleteGameSystem. But we need to delete the nodes before calling that.
 	 */
-	deleteLinkedListNodes((struct linkedlist*) &thesystem->scoreboard);
+	remove_all_scores(thesystem);
 	deleteGameSystem(thesystem);
 }
 
@@ -330,7 +330,7 @@ void quit_program(struct game_system* thesystem)
  **/
 void abort_program(struct game_system* thesystem)
 {
-	deleteLinkedListNodes((struct linkedlist*) &thesystem->scoreboard);
+	remove_all_scores(thesystem);
 	deleteGameSystem(thesystem);
 }
 
