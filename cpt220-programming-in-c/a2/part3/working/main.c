@@ -243,19 +243,53 @@ int main(int argc, char* argv[])
 		/*printf("The address of linkedListPtr is %p\n", (void*) linkedListPtr);*/
 	}
 
-	/*
-	 * TODO Add a new score to the list.
-	 *
-	 * Test more thoroughly, there is a bug here.
-	 */
-	updateScoreboardManually("Roger", "Jamie", "15", gameSystemPtr);
-	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+	if (DEBUGGING_MAIN) {
+		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
 
-	updateScoreboardManually("Roger", "Jamie", "7", gameSystemPtr);
-	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+		updateScoreboardManually("Roger", "Jamie", "15", gameSystemPtr);
+		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
-	updateScoreboardManually("Jamie", "Roger", "1", gameSystemPtr);
-	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+		updateScoreboardManually("Roger", "Jamie", "7", gameSystemPtr);
+		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+
+		updateScoreboardManually("Jamie", "Roger", "1", gameSystemPtr);
+		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+
+		updateScoreboardManually("Jamie", "Roger", "5", gameSystemPtr);
+		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+
+		/*
+		 * Should fail as this will be NULL
+		 */
+		/*deleteNode(&gameSystemPtr->scoreboard,
+				   gameSystemPtr->scoreboard.head->next->next->next->next);*/
+		deleteNodeViaPosition(&gameSystemPtr->scoreboard, 5);
+		deleteNodeViaPosition(&gameSystemPtr->scoreboard, -1);
+
+		/*
+		 * Delete the middle
+		 */
+		/*deleteNode(&gameSystemPtr->scoreboard,
+				   gameSystemPtr->scoreboard.head->next);*/
+		deleteNodeViaPosition(&gameSystemPtr->scoreboard, 2);
+		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+
+		/*
+		 * Delete the tail
+		 */
+		/*deleteNode(&gameSystemPtr->scoreboard,
+				   gameSystemPtr->scoreboard.head->next->next);*/
+		deleteNodeViaPosition(&gameSystemPtr->scoreboard, 3);
+		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+
+		/*
+		 * Delete the head
+		 */
+		/*deleteNode(&gameSystemPtr->scoreboard, gameSystemPtr->scoreboard.head);*/
+		deleteNodeViaPosition(&gameSystemPtr->scoreboard, 1);
+		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
+	}
+
 
 	/* start the game, passing in the seed */
 	play_game(seed);
