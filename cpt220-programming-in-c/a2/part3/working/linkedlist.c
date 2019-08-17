@@ -389,7 +389,7 @@ void printCsvLinkedList(struct linkedlist* linkedListPtr, char* delimiter)
 	}
 }
 
-void deleteLinkedListNodes(struct linkedlist* linkedListPtr)
+BOOLEAN deleteLinkedListNodes(struct linkedlist* linkedListPtr)
 {
 	struct node* currentNodePtr;
 	struct node* nextNodePtr;
@@ -400,7 +400,7 @@ void deleteLinkedListNodes(struct linkedlist* linkedListPtr)
 	if (linkedListPtr == NULL) {
 		fprintf(stderr,
 				"[ERROR] Cannot delete linked list nodes as the pointer is NULL.\n");
-		return;
+		return FALSE;
 	}
 
 	currentNodePtr = linkedListPtr->head;
@@ -408,7 +408,7 @@ void deleteLinkedListNodes(struct linkedlist* linkedListPtr)
 	if (currentNodePtr == NULL) {
 		fprintf(stderr,
 				"[WARNING] Cannot delete linked list nodes as the list as it is empty.\n");
-		return;
+		return FALSE;
 	}
 
 	/*
@@ -432,6 +432,8 @@ void deleteLinkedListNodes(struct linkedlist* linkedListPtr)
 
 	linkedListPtr->head = NULL;
 	linkedListPtr->size = 0;
+
+	return TRUE;
 }
 
 void deleteLinkedList(struct linkedlist* linkedListPtr)
