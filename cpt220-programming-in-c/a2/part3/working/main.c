@@ -292,7 +292,7 @@ int main(int argc, char* argv[])
 
 
 	/* start the game, passing in the seed */
-	play_game(seed);
+	/*play_game(seed);*/
 
 	/*
 	 * Cleanup after the game has finished.

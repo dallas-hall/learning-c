@@ -137,8 +137,7 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 {
 	FILE* filePointer;
 	char outputFile[PATH_MAX + FGETS_EXTRA_CHAR];
-	char* strdupPtr;
-	struct node* currentNodePtr;
+	char* strPtr;
 
 	/*
 	 * Using strdup to duplicate the string.
@@ -146,12 +145,12 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 	 * Using strcat to make the output file different from the input file. Used
 	 * for testing and comparing purposes.
 	 */
-	strdupPtr = strdup(fname);
-	strcpy(outputFile, strdupPtr);
+	strPtr = strdup(fname);
+	strcpy(outputFile, strPtr);
 	/*
 	 * Need to free because strdup calls malloc for us.
 	 */
-	free(strdupPtr);
+	free(strPtr);
 	strcat(outputFile, "-output");
 
 	/*
@@ -163,28 +162,19 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 		return FALSE;
 	}
 
-	currentNodePtr = thelist->head;
+	strPtr = getLinesToWrite(thelist);
+	if(1) {
+		puts("[DEBUG] lines to write out to file.");
+		printf("%s", strPtr);
+	}
+
+	fprintf(filePointer, "%s", strPtr);
 
 	/*
-	 * Loop through the list and write it out using our predetermined
-	 * delimiter. The list is already sorted so this will be saved in
-	 * sorted order.
-	 *
+	 * Free up the strPtr as we used strdup which has malloc.
 	 */
-	while (currentNodePtr != NULL) {
-		fprintf(filePointer, "%s%s%s%s%d",
-				currentNodePtr->data->winner, DELIMITER,
-				currentNodePtr->data->loser, DELIMITER,
-				currentNodePtr->data->won_by);
-		currentNodePtr = currentNodePtr->next;
+	free(strPtr);
 
-		/*
-		 * Only print the newline if there is another line to print.
-		 */
-		if (currentNodePtr != NULL) {
-			fprintf(filePointer, "\n");
-		}
-	}
 	/*
 	 * Close our FILE resource since we no longer need it.
 	 */
@@ -407,4 +397,87 @@ int validWinningMargin(char* winningMarginPtr)
 	}
 
 	return (int) winningMargin;
+}
+
+char* getLinesToWrite(const struct linkedlist* linkedlist)
+{
+	char* strPtr;
+	struct node* currentNodePtr;
+	char* currentLinePtr;
+	char* winningMarginPtr;
+
+	currentNodePtr = linkedlist->head;
+
+	if (currentNodePtr == NULL) {
+		/*
+		 * We will create space for an empty string, so we can overwrite an
+		 * existing file with nothing (i.e truncate it). This is for a
+		 * scoreboard that has been deleted.
+		 *
+		 * Remember to free later since strdup has malloc
+		 */
+		strPtr = strdup("");
+
+		return strPtr;
+	}
+	else {
+		/*
+		 * Using malloc to create a string that hold the maximum allowed data
+		 * for the amount of stored game_results.
+		 */
+		strPtr = malloc(sizeof(char) * ((MAXRESULTSTRING + FGETS_EXTRA_CHAR) *
+										linkedlist->size));
+		memset(strPtr, 0, sizeof(char) * ((MAXRESULTSTRING + FGETS_EXTRA_CHAR) *
+										  linkedlist->size));
+	}
+
+	/*
+	 * Loop through the list and write it out using our predetermined
+	 * delimiter. The list is already sorted so this will be saved in
+	 * sorted order.
+	 *
+	 */
+	while (currentNodePtr != NULL) {
+		/*
+		 * Using malloc to create strings for the current line and winning
+		 * margin buffers
+		 */
+		currentLinePtr = malloc(
+				sizeof(char) * (MAXRESULTSTRING + FGETS_EXTRA_CHAR));
+		memset(currentLinePtr, 0, MAXRESULTSTRING + FGETS_EXTRA_CHAR);
+
+		winningMarginPtr = malloc(
+				sizeof(char) * (MAX_WINNING_MARGIN_DIGITS + FGETS_EXTRA_CHAR));
+		memset(winningMarginPtr, 0,
+			   MAX_WINNING_MARGIN_DIGITS + FGETS_EXTRA_CHAR);
+
+		strcat(currentLinePtr, currentNodePtr->data->winner);
+		strcat(currentLinePtr, DELIMITER);
+		strcat(currentLinePtr, currentNodePtr->data->loser);
+		strcat(currentLinePtr, DELIMITER);
+		/*
+		 * Based this on C How To Program 6e chapter 8
+		 */
+		sprintf(winningMarginPtr, "%d", currentNodePtr->data->won_by);
+		strcat(currentLinePtr, winningMarginPtr);
+
+		currentNodePtr = currentNodePtr->next;
+
+		/*
+		 * Only print the newline if there is another line to print.
+		 */
+		if (currentNodePtr != NULL) {
+			strcat(currentLinePtr, "\n");
+		}
+
+		strcat(strPtr, currentLinePtr);
+
+		/*
+		 * Reset our buffers.
+		 */
+		free(currentLinePtr);
+		free(winningMarginPtr);
+	}
+
+	return strPtr;
 }
