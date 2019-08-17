@@ -163,7 +163,7 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 	}
 
 	strPtr = getLinesToWrite(thelist);
-	if(DEBUGGING_FILEIO) {
+	if (DEBUGGING_FILEIO) {
 		printDebug("The lines to write out to file.\n");
 		printf("%s", strPtr);
 	}
@@ -324,22 +324,22 @@ BOOLEAN validInputName(const char* name)
 	 * Must not have any punctuation in it.
 	 *
 	 * Paul did mention on the forum that - is probably acceptable as people
-	 * can have them in their names. But I am taking the hard line approach of
-	 * [^[:punct:]]
+	 * can have them in their names. So I will look for all punctuation except
+	 * a -
 	 *
 	 * The spec also talked about no tabs, but I am taking the hard line
 	 * approach of [^[:space:]]
 	 */
 	for (i = 0; i < nameLength; i++) {
-		if (ispunct(name[i])) {
+		if (ispunct(name[i]) && name[i] != '-') {
 			error_print(
 					"Invalid character found in the name. Must not contain punctuation but found %c\n",
 					name[i]);
 			return FALSE;
 		}
-		if (isspace(name[i])) {
+		if (isspace(name[i]) && name[i] != ' ') {
 			error_print(
-					"Invalid character found in the name. Must not contain white space but found '%c'\n",
+					"Invalid character found in the name. Must not contain white space characters but found '%c'\n",
 					name[i]);
 			return FALSE;
 		}

@@ -206,15 +206,15 @@ int main(int argc, char* argv[])
 		if (DEBUGGING_MAIN) {
 			printDebugGameSystem(gameSystemPtr);
 		}
-
 	}
 
 	/*
 	 * We need to take the address of the list as the function expects a
 	 * pointer.
+	 *
+	 * 	prettyPrintLinkedList(&gameSystemPtr->scoreboard);
+	 * 	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 	 */
-	prettyPrintLinkedList(&gameSystemPtr->scoreboard);
-	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
 	/*
 	 * Testing find a node.
@@ -295,6 +295,7 @@ int main(int argc, char* argv[])
 		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 	}
 
+	print_scores(gameSystemPtr);
 
 	/* start the game, passing in the seed */
 	play_game(seed);
