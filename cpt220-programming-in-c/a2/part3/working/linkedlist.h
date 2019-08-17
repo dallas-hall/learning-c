@@ -52,7 +52,7 @@ void prettyPrintLinkedList(struct linkedlist*);
 
 void printCsvLinkedList(struct linkedlist*, char*);
 
-void deleteLinkedListNodes(struct linkedlist*);
+BOOLEAN deleteLinkedListNodes(struct linkedlist*);
 
 void deleteLinkedList(struct linkedlist*);
 

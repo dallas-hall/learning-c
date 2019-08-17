@@ -186,8 +186,9 @@ int main(int argc, char* argv[])
 	if (DEBUGGING_MAIN) {
 		remove_all_scores(gameSystemPtr);
 
-		if(!remove_all_scores(gameSystemPtr)) {
-			fprintf(stderr, "%s", "[ERROR] The list was empty, couldn't delete any scores.\n");
+		if (!remove_all_scores(gameSystemPtr)) {
+			fprintf(stderr, "%s",
+					"[ERROR] The list was empty, couldn't delete any scores.\n");
 		}
 	}
 
@@ -315,12 +316,23 @@ int main(int argc, char* argv[])
  **/
 void quit_program(struct game_system* thesystem)
 {
-	save_data(thesystem->datafile, &thesystem->scoreboard);
+	BOOLEAN result;
+
+	result = save_data(thesystem->datafile, &thesystem->scoreboard);
+
+	if (!result) {
+		EXIT_FAILURE;
+	}
+
 	/*
 	 * We don't need to delete the list as it will be deleted by
 	 * deleteGameSystem. But we need to delete the nodes before calling that.
 	 */
-	remove_all_scores(thesystem);
+	result = remove_all_scores(thesystem);
+	if (!result) {
+		EXIT_FAILURE;
+	}
+
 	deleteGameSystem(thesystem);
 }
 
@@ -330,7 +342,14 @@ void quit_program(struct game_system* thesystem)
  **/
 void abort_program(struct game_system* thesystem)
 {
-	remove_all_scores(thesystem);
+	BOOLEAN result;
+
+	result = remove_all_scores(thesystem);
+
+	if (!result) {
+		EXIT_FAILURE;
+	}
+
 	deleteGameSystem(thesystem);
 }
 
@@ -340,7 +359,6 @@ void abort_program(struct game_system* thesystem)
  **/
 BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 {
-
 	/*
 	 * if valid load_data and assign filename to thesystem->datafile
 	 * else exit with error
