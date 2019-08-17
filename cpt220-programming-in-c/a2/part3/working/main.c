@@ -301,9 +301,14 @@ int main(int argc, char* argv[])
 	play_game(seed);
 
 	/*
+	 * TODO keep checking the clean up is correct
 	 * Cleanup after the game has finished.
 	 */
 	quit_program(gameSystemPtr);
+
+	/*
+	 * TODO Makefile & readme (remember I tried one bonus marks)
+	 */
 
 	/**
 	 * dead code bug required in order to avoid compiler warnings
