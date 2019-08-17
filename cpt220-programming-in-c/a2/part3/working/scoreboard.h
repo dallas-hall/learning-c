@@ -19,6 +19,21 @@ struct game_system;
 /* the size of the scoreboard menu */
 #define NUM_SCORES_MENU_ITEMS 6
 
+/*
+ * Covers the table delimiter
+ */
+#define TABLE_DELIMITER 1
+
+/*
+ * Covers the ) and trailing space
+ */
+#define ROW_NUMBER_EXTRA_CHARS 2
+
+/*
+ * Covers strlen("Amount Won By");
+ */
+#define WON_BY_AMOUNT 13
+
 /**
  * a scoreboard menu entry - the text for the scoreboard entry and the function
  * that implements that functionality.
@@ -55,5 +70,11 @@ struct game_result* createGameResult(char*, char*, int);
  * Used to automatically update the scoreboard.
  */
 BOOLEAN updateScoreboardManually(char*, char*, char*, struct game_system*);
+
+/*
+ * Used to work out how many chars the size of the linked list will take up
+ * when printed.
+ */
+int getNumberOffset(int);
 
 #endif

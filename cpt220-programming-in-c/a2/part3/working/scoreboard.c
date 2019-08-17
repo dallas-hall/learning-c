@@ -33,7 +33,165 @@ void scores_menu(struct game_system* thesystem)
  **/
 BOOLEAN print_scores(struct game_system* thesystem)
 {
-	return FALSE;
+	int lineNumber;
+	int i;
+	int rowNumberOffset;
+	int nameLength;
+	int printOffset;
+	int totalRowLength;
+	struct node* currentNode;
+
+	rowNumberOffset = getNumberOffset(thesystem->scoreboard.size) +
+					  ROW_NUMBER_EXTRA_CHARS;
+	nameLength = NAME_LEN;
+	totalRowLength = rowNumberOffset + NAME_LEN + TABLE_DELIMITER + NAME_LEN +
+					 TABLE_DELIMITER + WON_BY_AMOUNT;
+
+	/*
+	 * Check if the list is empty.
+	 */
+	if (thesystem->scoreboard.size <= 0) {
+		fprintf(stderr, "%s", "[WARNING] Trying to print an empty scoreboard.");
+		return FALSE;
+	}
+
+	/*
+	 * Print the header.
+	 * I was thinking about modularising this but I didn't really see a
+	 * point making a function for this.
+	 * 
+	 * Print the first 2 lines
+	 *
+	 * 1) The Scoreboard
+	 * 2) ==============
+	 */
+	puts("The Scoreboard");
+	PUTCHARS('=', strlen("The Scoreboard"));
+	printf("\n");
+
+	/*
+	 * Print the Winner heading followed by delimiter.
+	 * The offset is how many characters the largest row number will
+	 * take up when printing.
+	 */
+	for (i = 0; i < rowNumberOffset; i++) {
+		printf(" ");
+	}
+
+	printf("Winner");
+
+	printOffset = strlen("Winner");
+	for (i = 0; i < nameLength - printOffset; i++) {
+		printf(" ");
+	}
+
+	printf("|");
+
+	/*
+	 * Print the Loser heading followed by delimiter.
+	 */
+	printf("Loser");
+
+	printOffset = strlen("Loser");
+	for (i = 0; i < nameLength - printOffset; i++) {
+		printf(" ");
+	}
+
+	printf("|");
+
+	/*
+	 * Print the Amount Won By heading.
+	 */
+	puts("Amount Won By");
+
+	/*
+	 * Print the header underline
+	 * --------------------------
+	 */
+	PUTCHARS('-', totalRowLength);
+	printf("\n");
+
+	/*
+	 * Print the list.
+	 */
+	currentNode = thesystem->scoreboard.head;
+	lineNumber = 1;
+	while (currentNode != NULL) {
+		/*
+		 * Print the
+		 * 1) optional preceding space
+		 * 2) row number
+		 * 3) )
+		 * 4) trailing space.
+		 */
+		printOffset = getNumberOffset(lineNumber);
+
+		/*
+		 * The original printing offset only works for single digit numbers.
+		 * As the number of digits grows, the offset needs to be adjusted.
+		 * Through trial and error, the adjustment that I found that works with
+		 * the provided files (10, 100, 1000, 10000) is below.
+		 */
+		if(lineNumber >= 10) {
+			if(lineNumber != thesystem->scoreboard.size) {
+				printOffset -= (printOffset - 1);
+			}
+			else {
+				printOffset = 0;
+			}
+		}
+
+		for (i = 0; i < printOffset; i++) {
+			printf(" ");
+		}
+
+		printf("%d) ", lineNumber);
+
+		/*
+		 * Print
+		 * 1) The winner's name
+		 * 2) The spaces
+		 * 3) The table delimiter
+		 */
+		printf("%s", currentNode->data->winner);
+		printOffset = (int) strlen(currentNode->data->winner);
+
+		for (i = 0; i < nameLength - printOffset; i++) {
+			printf(" ");
+		}
+		printf("|");
+
+		/*
+		 * Print
+		 * 1) The losers' name
+		 * 2) The spaces
+		 * 3) The table delimiter
+		 */
+		printf("%s", currentNode->data->loser);
+		printOffset = (int) strlen(currentNode->data->loser);
+
+		for (i = 0; i < nameLength - printOffset; i++) {
+			printf(" ");
+		}
+		printf("|");
+
+		/*
+		 * Print winning margin and newline
+		 */
+		printf("%d\n", currentNode->data->won_by);
+
+		currentNode = currentNode->next;
+		++lineNumber;
+	}
+
+	/*
+	 * Print the bottom of the table underline
+	 * ---------------------------------------
+	 */
+	PUTCHARS('-', totalRowLength);
+	printf("\n");
+
+	return TRUE;
 }
 
 /**
@@ -212,4 +370,30 @@ updateScoreboardManually(char* winnerName, char* loserName, char* winningMargin,
 	}
 
 	return TRUE;
+}
+
+int getNumberOffset(int linkedListSize)
+{
+	int offset;
+	int digits;
+
+	offset = 0;
+	digits = linkedListSize;
+
+	if (linkedListSize > 0) {
+		/*
+		 * Need to set it one here in case there is only 1 digit.
+		 */
+		offset = 1;
+
+		while (digits > 9) {
+			/*
+			 * Use division by 10 to remove 1 digit at a time.
+			 */
+			digits /= 10;
+			++offset;
+		}
+	}
+
+	return offset;
 }
