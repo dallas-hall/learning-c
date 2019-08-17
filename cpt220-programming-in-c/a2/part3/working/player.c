@@ -26,6 +26,9 @@ BOOLEAN player_init(struct player* aplayer, struct game* thegame)
 	/**
 	 * read the player's name
 	 **/
+	 /*
+	  * TODO validate the player name with new rules
+	  */
 	while (iresult = read_string("Please enter the name of the player",
 								 name, NAME_LEN),
 			iresult == IR_FAILURE);
