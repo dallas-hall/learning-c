@@ -76,11 +76,6 @@ int main(int argc, char* argv[])
 {
 	struct falsible_long seed = {0};
 	struct game_system* gameSystemPtr = NULL;
-	/*
-	 * Removing this pointer as I lost marks
-	 *
-	 *
-	 */
 	struct linkedlist* linkedListPtr = NULL;
 
 	/*
@@ -141,11 +136,9 @@ int main(int argc, char* argv[])
 	 *
 	 * Dereference the created linked list and store it int the game_system.
 	 * Grab the address of that and store it in a pointer.
-	 *
-	 * linkedListPtr = createLinkedList();
-	 * gameSystemPtr->scoreboard = *linkedListPtr;
+	 * We then free the linked list pointer so we don't have a memory leak
 	 */
-	linkedListPtr = createLinkedList()
+	linkedListPtr = createLinkedList();
 	gameSystemPtr->scoreboard = *linkedListPtr;
 	free(linkedListPtr);
 
