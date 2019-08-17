@@ -79,8 +79,9 @@ int main(int argc, char* argv[])
 	/*
 	 * Removing this pointer as I lost marks
 	 *
-	 * struct linkedlist* linkedListPtr = NULL;
+	 *
 	 */
+	struct linkedlist* linkedListPtr = NULL;
 
 	/*
 	 * We need +1 here because of the program name being passed in automatically
@@ -144,7 +145,9 @@ int main(int argc, char* argv[])
 	 * linkedListPtr = createLinkedList();
 	 * gameSystemPtr->scoreboard = *linkedListPtr;
 	 */
-	gameSystemPtr->scoreboard = *createLinkedList();
+	linkedListPtr = createLinkedList()
+	gameSystemPtr->scoreboard = *linkedListPtr;
+	free(linkedListPtr);
 
 	/*
 	 * Same as linkedListPtr == NULL, I tend to switch between both.
