@@ -19,6 +19,9 @@ const int DEBUGGING_SCOREBOARD = 1;
  **/
 void init_scores_menu(struct scores_menu_entry scores_menu[])
 {
+	/*
+	 * TODO create main menu
+	 */
 }
 
 /**
@@ -26,6 +29,9 @@ void init_scores_menu(struct scores_menu_entry scores_menu[])
  **/
 void scores_menu(struct game_system* thesystem)
 {
+	/*
+	 * TODO create scores menu
+	 */
 }
 
 /**
@@ -201,6 +207,10 @@ BOOLEAN print_scores(struct game_system* thesystem)
  **/
 BOOLEAN add_score(struct game_system* thesystem)
 {
+	/*
+	 * TODO call to updateScoreboardManually
+	 */
+
 	return FALSE;
 }
 
@@ -211,6 +221,9 @@ BOOLEAN add_score(struct game_system* thesystem)
  **/
 BOOLEAN delete_score(struct game_system* thesystem)
 {
+	/*
+	 * TODO call to deleteNodeViaPosition
+	 */
 
 	return FALSE;
 }
@@ -234,6 +247,10 @@ BOOLEAN resave_scores(struct game_system* thesystem)
 {
 	BOOLEAN result;
 
+	/*
+	 * TODO save files to the current known file - call save_data
+	 */
+
 	result = FALSE;
 
 	return result;
@@ -246,7 +263,15 @@ BOOLEAN resave_scores(struct game_system* thesystem)
  **/
 BOOLEAN save_scores(struct game_system* thesystem)
 {
-	return FALSE;
+	BOOLEAN result;
+
+	/*
+	 * TODO save files to the new file - get new file name and call save_data
+	 */
+
+	result = FALSE;
+
+	return result;
 }
 
 struct game_result*

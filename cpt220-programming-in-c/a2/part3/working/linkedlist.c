@@ -204,9 +204,6 @@ BOOLEAN
 deleteNodeViaPosition(struct linkedlist* linkedListPtr,
 					  int nodeToDeletePosition)
 {
-	/*
-	 * TODO Delete a node - test this
-	 */
 	struct node* tempNodePtr;
 	struct node* previousNodePtr;
 	struct node* currentNodePtr;
@@ -300,7 +297,7 @@ deleteNodeViaPosition(struct linkedlist* linkedListPtr,
 BOOLEAN findNode(struct linkedlist* linkedListPtr, struct node* nodeToFindPtr)
 {
 	/*
-	 * TODO find a node - test this
+	 * TODO find a node - test this and make one via winner + loser name + score
 	 */
 	struct node* currentNodePtr;
 
