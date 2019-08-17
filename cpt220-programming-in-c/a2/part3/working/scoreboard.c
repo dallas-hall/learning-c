@@ -53,6 +53,7 @@ BOOLEAN add_score(struct game_system* thesystem)
  **/
 BOOLEAN delete_score(struct game_system* thesystem)
 {
+
 	return FALSE;
 }
 
@@ -61,6 +62,7 @@ BOOLEAN delete_score(struct game_system* thesystem)
  **/
 BOOLEAN remove_all_scores(struct game_system* thesystem)
 {
+	deleteLinkedListNodes(&thesystem->scoreboard);
 	return FALSE;
 }
 
