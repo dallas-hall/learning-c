@@ -163,8 +163,8 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 	}
 
 	strPtr = getLinesToWrite(thelist);
-	if(1) {
-		puts("[DEBUG] lines to write out to file.");
+	if(DEBUGGING_FILEIO) {
+		printDebug("The lines to write out to file.\n");
 		printf("%s", strPtr);
 	}
 

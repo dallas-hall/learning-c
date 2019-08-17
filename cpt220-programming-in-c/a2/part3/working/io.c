@@ -311,9 +311,9 @@ int printDebug(const char format[], ...)
 {
 	int char_count = 0;
 	va_list vlist;
-	char_count += fprintf(stdout, "[DEBUG] ");
+	char_count += fprintf(stderr, "[DEBUG] ");
 	va_start(vlist, format);
-	char_count += vfprintf(stdout, format, vlist);
+	char_count += vfprintf(stderr, format, vlist);
 
 	return char_count;
 }
