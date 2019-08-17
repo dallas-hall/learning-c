@@ -184,7 +184,11 @@ int main(int argc, char* argv[])
 	 * Testing delete list nodes on an empty list
 	 */
 	if (DEBUGGING_MAIN) {
-		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
+		remove_all_scores(gameSystemPtr);
+
+		if(!remove_all_scores(gameSystemPtr)) {
+			fprintf(stderr, "%s", "[ERROR] The list was empty, couldn't delete any scores.\n");
+		}
 	}
 
 	/*
@@ -292,7 +296,7 @@ int main(int argc, char* argv[])
 
 
 	/* start the game, passing in the seed */
-	/*play_game(seed);*/
+	play_game(seed);
 
 	/*
 	 * Cleanup after the game has finished.
