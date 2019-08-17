@@ -44,6 +44,8 @@ BOOLEAN insertNode(struct linkedlist*, struct node*);
 
 BOOLEAN deleteNode(struct linkedlist*, struct node*);
 
+BOOLEAN deleteNodeViaPosition(struct linkedlist*, int);
+
 BOOLEAN findNode(struct linkedlist*, struct node*);
 
 void prettyPrintLinkedList(struct linkedlist*);

@@ -123,9 +123,6 @@ BOOLEAN insertNode(struct linkedlist* linkedListPtr, struct node* newNodePtr)
 BOOLEAN
 deleteNode(struct linkedlist* linkedListPtr, struct node* nodeToDeletePtr)
 {
-	/*
-	 * TODO Delete a node - test this
-	 */
 	struct node* tempNodePtr;
 	struct node* previousNodePtr;
 	struct node* currentNodePtr;
@@ -138,7 +135,7 @@ deleteNode(struct linkedlist* linkedListPtr, struct node* nodeToDeletePtr)
 		return FALSE;
 	}
 
-	if(nodeToDeletePtr == NULL) {
+	if (nodeToDeletePtr == NULL) {
 		fprintf(stderr, "[ERROR] The linked list node pointer is NULL.\n");
 		return FALSE;
 	}
@@ -149,7 +146,7 @@ deleteNode(struct linkedlist* linkedListPtr, struct node* nodeToDeletePtr)
 	/*
 	 * The list is empty.
 	 */
-	if(currentNodePtr == NULL) {
+	if (currentNodePtr == NULL) {
 		return FALSE;
 	}
 
@@ -171,6 +168,8 @@ deleteNode(struct linkedlist* linkedListPtr, struct node* nodeToDeletePtr)
 		linkedListPtr->head = currentNodePtr->next;
 		--linkedListPtr->size;
 		free(tempNodePtr);
+
+		return TRUE;
 	}
 
 	while (currentNodePtr != NULL) {
@@ -201,6 +200,103 @@ deleteNode(struct linkedlist* linkedListPtr, struct node* nodeToDeletePtr)
 	return FALSE;
 }
 
+BOOLEAN
+deleteNodeViaPosition(struct linkedlist* linkedListPtr,
+					  int nodeToDeletePosition)
+{
+	/*
+	 * TODO Delete a node - test this
+	 */
+	struct node* tempNodePtr;
+	struct node* previousNodePtr;
+	struct node* currentNodePtr;
+	int currentNodePosition;
+
+	/*
+	 * Cannot delete from a NULL pointer or delete a NULL pointer.
+	 */
+	if (linkedListPtr == NULL) {
+		fprintf(stderr, "[ERROR] The linked list pointer is NULL.\n");
+		return FALSE;
+	}
+
+	if (nodeToDeletePosition < 0) {
+		fprintf(stderr,
+				"[ERROR] The node position %d is too small. Must be greater than 0\n",
+				nodeToDeletePosition);
+		return FALSE;
+	}
+	else if (nodeToDeletePosition > linkedListPtr->size) {
+		fprintf(stderr,
+				"[ERROR] The node position %d is too large. Must be less than %d\n",
+				nodeToDeletePosition, linkedListPtr->size);
+		return FALSE;
+	}
+
+	previousNodePtr = NULL;
+	currentNodePtr = linkedListPtr->head;
+
+	/*
+	 * The list is empty.
+	 */
+	if (currentNodePtr == NULL) {
+		return FALSE;
+	}
+
+	currentNodePosition = 1;
+
+	/*
+	 * Match found at the head of the list.
+	 */
+	if (currentNodePosition == nodeToDeletePosition) {
+
+		/*
+		 * Update the head of list by
+		 * 1) Storing the current head in a temporary variable
+		 * 2) Update the head to point to the next node
+		 * 3) Update the size of the list.
+		 * 4) Free the old head node.
+		 */
+		tempNodePtr = currentNodePtr;
+		linkedListPtr->head = currentNodePtr->next;
+		--linkedListPtr->size;
+		free(tempNodePtr);
+
+		return TRUE;
+	}
+	else {
+		++currentNodePosition;
+		previousNodePtr = currentNodePtr;
+		currentNodePtr = currentNodePtr->next;
+	}
+
+	while (currentNodePtr != NULL) {
+		/*
+		 * Update the list by
+		 * 1) Storing the current node in a temporary variable
+		 * 2) Update the previous node link to point to the current node link
+		 * 3) Update the size of the list.
+		 * 4) Free the old node.
+		 *
+		 * This works because we have already dealt with the head of the list.
+		 */
+		if (currentNodePosition == nodeToDeletePosition) {
+			tempNodePtr = currentNodePtr;
+			previousNodePtr->next = currentNodePtr->next;
+			--linkedListPtr->size;
+			free(tempNodePtr);
+
+			return TRUE;
+		}
+
+		previousNodePtr = currentNodePtr;
+		currentNodePtr = currentNodePtr->next;
+		++currentNodePosition;
+	}
+
+	return FALSE;
+}
+
 BOOLEAN findNode(struct linkedlist* linkedListPtr, struct node* nodeToFindPtr)
 {
 	/*
@@ -213,7 +309,7 @@ BOOLEAN findNode(struct linkedlist* linkedListPtr, struct node* nodeToFindPtr)
 		return FALSE;
 	}
 
-	if(nodeToFindPtr == NULL) {
+	if (nodeToFindPtr == NULL) {
 		fprintf(stderr, "[ERROR] The linked list node pointer is NULL.\n");
 		return FALSE;
 	}
@@ -223,7 +319,7 @@ BOOLEAN findNode(struct linkedlist* linkedListPtr, struct node* nodeToFindPtr)
 	/*
 	 * The list is empty.
 	 */
-	if(currentNodePtr == NULL) {
+	if (currentNodePtr == NULL) {
 		return FALSE;
 	}
 
