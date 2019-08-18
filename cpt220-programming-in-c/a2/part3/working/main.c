@@ -267,9 +267,9 @@ int main(int argc, char* argv[])
 	if (1) {
 		printDebug("Testing initialising menus.");
 		init_main_menu(gameSystemPtr->the_menus.main_menu);
-		printMainMenu(gameSystemPtr);
+		init_scores_menu(gameSystemPtr->the_menus.scores_menu);
 
-		/*init_scores_menu(gameSystemPtr->the_menus.scores_menu);*/
+		printMainMenu(gameSystemPtr);
 	}
 
 	/*
@@ -537,6 +537,10 @@ void printMainMenu(struct game_system* gameSystemPtr)
 	int choice;
 	enum input_result inputResult;
 
+	/*
+	 * This is an infinite loop but that is okay because the user will exit
+	 * this.
+	 */
 	while(1) {
 		puts("Main Menu");
 		PUTCHARS('=', strlen("Main Menu"));
@@ -563,7 +567,7 @@ void printMainMenu(struct game_system* gameSystemPtr)
 					printScores(gameSystemPtr);
 					break;
 				case 2:
-					printScores(gameSystemPtr);
+					scores_menu(gameSystemPtr);
 					break;
 				case 3:
 					abort_program(gameSystemPtr);
