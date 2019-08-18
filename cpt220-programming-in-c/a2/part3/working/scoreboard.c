@@ -20,9 +20,6 @@ const int DEBUGGING_SCOREBOARD = 1;
 void init_scores_menu(struct scores_menu_entry scores_menu[])
 {
 	/*
-	 * TODO create scores menu
-	 */
-	/*
 	 * Copy the menu item description's in.
 	 */
 	strcpy(scores_menu[SM_PRINT].text, "Print the current scoreboard.");
@@ -42,8 +39,8 @@ void init_scores_menu(struct scores_menu_entry scores_menu[])
 	scores_menu[SM_ADD].function = add_score;
 	scores_menu[SM_DELETE_ONE].function = delete_score;
 	scores_menu[SM_DELETE_ALL].function = remove_all_scores;
-	scores_menu[SM_SAVE].function = save_scores;
-	scores_menu[SM_SAVE_NEW].function = resave_scores;
+	scores_menu[SM_SAVE].function = resave_scores;
+	scores_menu[SM_SAVE_NEW].function = save_scores;
 	/*
 	 * There is no quit function, just call the main menu print function.
 	 */
@@ -55,7 +52,7 @@ void init_scores_menu(struct scores_menu_entry scores_menu[])
 void scores_menu(struct game_system* thesystem)
 {
 	/*
-	 * TODO create scores menu
+	 * TODO test scores menu
 	 */
 	int i;
 	int choice;
@@ -90,7 +87,12 @@ void scores_menu(struct game_system* thesystem)
 		else if (inputResult == IR_QUIT) {
 			/*
 			 * Will return back the main menu on ^D.
+			 *
+			 * Need clear_buffer here so the ^D isn't sent back to the main
+			 * menu and thus exiting the program. This means ^D will only exit
+			 * the sub menu instead of the entire program.
 			 */
+			clear_buffer();
 			return;
 		}
 		else {
@@ -146,7 +148,8 @@ void scores_menu(struct game_system* thesystem)
 							thesystem);
 
 					if (!menuResult) {
-						fprintf(stderr, "Couldn't save scoreboard to disk.\n");
+						fprintf(stderr,
+								"Couldn't save scoreboard to the same file.\n");
 					}
 					else {
 						puts("All scores saved to disk.");
@@ -158,7 +161,7 @@ void scores_menu(struct game_system* thesystem)
 
 					if (!menuResult) {
 						fprintf(stderr,
-								"Couldn't re-save scoreboard to disk.\n");
+								"Couldn't save scoreboard to the new file.\n");
 					}
 					else {
 						puts("All scores re-saved to disk.");
@@ -519,10 +522,6 @@ BOOLEAN resave_scores(struct game_system* thesystem)
 {
 	BOOLEAN result;
 
-	/*
-	 * TODO test this
-	 */
-
 	result = save_data(thesystem->datafile, &thesystem->scoreboard);
 
 	return result;
@@ -536,17 +535,53 @@ BOOLEAN resave_scores(struct game_system* thesystem)
 BOOLEAN save_scores(struct game_system* thesystem)
 {
 	BOOLEAN result;
+	enum input_result inputResult;
+	char outputFilePath[PATH_MAX + FGETS_EXTRA_CHAR];
 
-	/*
-	 * TODO save files to the new file
-	 *
-	 * get new file name and validate length - os will validate if it exists
-	 * call save_data
-	 */
+	while (1) {
+		inputResult = read_string(
+				"Please enter the relative or absolute path to the file you want to save to",
+				outputFilePath, PATH_MAX + FGETS_EXTRA_CHAR);
 
-	result = save_data(thesystem->datafile, &thesystem->scoreboard);
+		if (inputResult == IR_FAILURE) {
+			continue;
+		}
+		else if (inputResult == IR_SKIP_TURN) {
+			/*
+			 * Will return back the main menu on enter.
+			 */
+			return FALSE;
+		}
+		else if (inputResult == IR_QUIT) {
+			/*
+			 * Will return back the main menu on ^D.
+			 */
+			return FALSE;
+		}
+		else {
+			if (strlen(outputFilePath) > PATH_MAX) {
+				error_print(
+						"Output file path is too long, must be <= 4096 characters. Try again.\n");
+			}
+			else {
+				/*
+				 * Free the old file name as it was made with strdup which
+				 * has malloc. So we don't want a memory leak.
+				 *
+				 * Need to cast to (void*) avoid a compiler warning.
+				 */
+				free((void*) thesystem->datafile);
+				thesystem->datafile = strdup(outputFilePath);
 
-	return result;
+				/*
+				 * Try to save the file and then return its result.
+				 */
+				result = save_data(thesystem->datafile, &thesystem->scoreboard);
+
+				return result;
+			}
+		}
+	}
 }
 
 struct game_result*

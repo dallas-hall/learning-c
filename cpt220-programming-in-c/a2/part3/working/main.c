@@ -265,7 +265,7 @@ int main(int argc, char* argv[])
 		print_scores(gameSystemPtr);
 	}
 
-	if (1) {
+	if (DEBUGGING_MAIN) {
 		printDebug("Testing initialising menus.");
 		init_main_menu(gameSystemPtr->the_menus.main_menu);
 		init_scores_menu(gameSystemPtr->the_menus.scores_menu);
@@ -274,14 +274,19 @@ int main(int argc, char* argv[])
 	}
 
 	/*
-	 * TODO loop menu here
+	 * TODO need to pass play_game(seed) to the menu somehow
 	 */
-	/* start the game, passing in the seed */
-	play_game(seed);
+
+	/*
+	 * Set up the menus and load the main menu.
+	 */
+	init_main_menu(gameSystemPtr->the_menus.main_menu);
+	init_scores_menu(gameSystemPtr->the_menus.scores_menu);
+
+	printMainMenu(gameSystemPtr);
 
 	/*
 	 * TODO keep checking the clean up is correct
-	 * Cleanup after the game has finished.
 	 */
 
 	/*
@@ -305,6 +310,10 @@ void quit_program(struct game_system* thesystem)
 	result = save_data(thesystem->datafile, &thesystem->scoreboard);
 
 	if (!result) {
+		/*
+		 * Using exit as we can't return in this function. Got the idea from
+		 * C How To Program 6e Chapter 14
+		 */
 		exit(EXIT_FAILURE);
 	}
 
@@ -394,7 +403,7 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
 void init_main_menu(struct main_menu_entry mainmenu[])
 {
 	/*
-	 * TODO Main menu init
+	 * TODO Main menu init - update MMC_PLAY
 	 */
 
 	/*
@@ -542,13 +551,14 @@ void printMainMenu(struct game_system* gameSystemPtr)
 	 * This is an infinite loop but that is okay because the user will exit
 	 * this.
 	 */
-	while(1) {
+	while (1) {
 		puts("\nMain Menu");
 		PUTCHARS('=', strlen("Main Menu"));
 		printf("\n");
 
 		for (i = 0; i < NUM_MAIN_MENU_ITEMS; i++) {
-			printf("%d) %s\n", i + 1, gameSystemPtr->the_menus.main_menu[i].text);
+			printf("%d) %s\n", i + 1,
+				   gameSystemPtr->the_menus.main_menu[i].text);
 		}
 
 		inputResult = read_int("Enter the number of your choice", &choice);
@@ -563,18 +573,22 @@ void printMainMenu(struct game_system* gameSystemPtr)
 			quit_program(gameSystemPtr);
 		}
 		else {
-			switch(choice) {
+			switch (choice) {
 				case 1:
-					gameSystemPtr->the_menus.main_menu[MMC_PLAY].function(gameSystemPtr);
+					gameSystemPtr->the_menus.main_menu[MMC_PLAY].function(
+							gameSystemPtr);
 					break;
 				case 2:
-					gameSystemPtr->the_menus.main_menu[MMC_SCORES].function(gameSystemPtr);
+					gameSystemPtr->the_menus.main_menu[MMC_SCORES].function(
+							gameSystemPtr);
 					break;
 				case 3:
-					gameSystemPtr->the_menus.main_menu[MMC_ABORT].function(gameSystemPtr);
+					gameSystemPtr->the_menus.main_menu[MMC_ABORT].function(
+							gameSystemPtr);
 					break;
 				case 4:
-					gameSystemPtr->the_menus.main_menu[MMC_QUIT].function(gameSystemPtr);
+					gameSystemPtr->the_menus.main_menu[MMC_QUIT].function(
+							gameSystemPtr);
 					break;
 				default:
 					fprintf(stderr, "Invalid choice, try again.\n");
