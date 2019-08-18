@@ -82,10 +82,16 @@ void scores_menu(struct game_system* thesystem)
 			continue;
 		}
 		else if (inputResult == IR_SKIP_TURN) {
-			printMainMenu(thesystem);
+			/*
+			 * Will return back the main menu on enter.
+			 */
+			return;
 		}
 		else if (inputResult == IR_QUIT) {
-			printMainMenu(thesystem);
+			/*
+			 * Will return back the main menu on ^D.
+			 */
+			return;
 		}
 		else {
 			switch (choice) {
@@ -144,8 +150,10 @@ void scores_menu(struct game_system* thesystem)
 					}
 					break;
 				case 7:
-					printMainMenu(thesystem);
-					break;
+					/*
+					 * Will return back the main menu on 7.
+					 */
+					return;
 				default:
 					fprintf(stderr, "Invalid choice, try again.\n");
 			}
