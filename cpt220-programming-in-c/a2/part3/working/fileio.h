@@ -53,4 +53,6 @@ struct game_result* parseLineData(char*);
 
 char* getLinesToWrite(const struct linkedlist*);
 
+char* getAbsolutePath(char*);
+
 #endif
