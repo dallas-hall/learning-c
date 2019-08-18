@@ -25,24 +25,25 @@ void init_scores_menu(struct scores_menu_entry scores_menu[])
 	/*
 	 * Copy the menu item description's in.
 	 */
-	strcpy(scores_menu[PRINT].text, "Print the current scoreboard.");
-	strcpy(scores_menu[ADD].text, "Add a new score to the scores list.");
-	strcpy(scores_menu[DELETE_ONE].text, "Delete a score from the scores list");
-	strcpy(scores_menu[DELETE_ALL].text,
+	strcpy(scores_menu[SM_PRINT].text, "Print the current scoreboard.");
+	strcpy(scores_menu[SM_ADD].text, "Add a new score to the scores list.");
+	strcpy(scores_menu[SM_DELETE_ONE].text,
+		   "Delete a score from the scores list");
+	strcpy(scores_menu[SM_DELETE_ALL].text,
 		   "Remove all scores from the scores list.");
-	strcpy(scores_menu[SAVE].text,
+	strcpy(scores_menu[SM_SAVE].text,
 		   "Save Scores back to the file they were loaded from.");
-	strcpy(scores_menu[SAVE_NEW].text, "Save scores to a new file name.");
+	strcpy(scores_menu[SM_SAVE_NEW].text, "Save scores to a new file name.");
 
 	/*
 	 * Assign the function pointers.
 	 */
-	scores_menu[PRINT].function = print_scores;
-	scores_menu[ADD].function = add_score;
-	scores_menu[DELETE_ONE].function = delete_score;
-	scores_menu[DELETE_ALL].function = remove_all_scores;
-	scores_menu[SAVE].function = save_scores;
-	scores_menu[SAVE_NEW].function = resave_scores;
+	scores_menu[SM_PRINT].function = print_scores;
+	scores_menu[SM_ADD].function = add_score;
+	scores_menu[SM_DELETE_ONE].function = delete_score;
+	scores_menu[SM_DELETE_ALL].function = remove_all_scores;
+	scores_menu[SM_SAVE].function = save_scores;
+	scores_menu[SM_SAVE_NEW].function = resave_scores;
 	/*
 	 * There is no quit function, just call the main menu print function.
 	 */
@@ -96,17 +97,20 @@ void scores_menu(struct game_system* thesystem)
 					 *
 					 * For everything else we care.
 					 */
-					menuResult = print_scores(thesystem);
+					menuResult = thesystem->the_menus.scores_menu[SM_PRINT].function(
+							thesystem);
 					break;
 				case 2:
-					menuResult = add_score(thesystem);
+					menuResult = thesystem->the_menus.scores_menu[SM_ADD].function(
+							thesystem);
 
 					if (!menuResult) {
 						fprintf(stderr, "Couldn't add score to scoreboard.\n");
 					}
 					break;
 				case 3:
-					menuResult = delete_score(thesystem);
+					menuResult = thesystem->the_menus.scores_menu[SM_DELETE_ONE].function(
+							thesystem);
 
 					if (!menuResult) {
 						fprintf(stderr,
@@ -114,7 +118,8 @@ void scores_menu(struct game_system* thesystem)
 					}
 					break;
 				case 4:
-					menuResult = remove_all_scores(thesystem);
+					menuResult = thesystem->the_menus.scores_menu[SM_DELETE_ALL].function(
+							thesystem);
 
 					if (!menuResult) {
 						fprintf(stderr,
@@ -122,14 +127,16 @@ void scores_menu(struct game_system* thesystem)
 					}
 					break;
 				case 5:
-					menuResult = save_scores(thesystem);
+					menuResult = thesystem->the_menus.scores_menu[SM_SAVE].function(
+							thesystem);
 
 					if (!menuResult) {
 						fprintf(stderr, "Couldn't save scoreboard to disk.\n");
 					}
 					break;
 				case 6:
-					menuResult = resave_scores(thesystem);
+					menuResult = thesystem->the_menus.scores_menu[SM_SAVE_NEW].function(
+							thesystem);
 
 					if (!menuResult) {
 						fprintf(stderr,
@@ -143,7 +150,6 @@ void scores_menu(struct game_system* thesystem)
 					fprintf(stderr, "Invalid choice, try again.\n");
 			}
 		}
-		break;
 	}
 }
 
