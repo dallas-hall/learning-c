@@ -184,17 +184,18 @@ BOOLEAN print_scores(struct game_system* thesystem)
 {
 	int lineNumber;
 	int i;
-	int rowNumberOffset;
+	int numberOfDigits;
+	int numberOfDigitsListSize;
 	int nameLength;
-	int printOffset;
 	int totalRowLength;
 	struct node* currentNode;
 
-	rowNumberOffset = getNumberOffset(thesystem->scoreboard.size) +
-					  ROW_NUMBER_EXTRA_CHARS;
+	numberOfDigitsListSize = getDigitAmount(thesystem->scoreboard.size);
+	numberOfDigits = numberOfDigitsListSize + ROW_NUMBER_EXTRA_CHARS;
 	nameLength = NAME_LEN;
-	totalRowLength = rowNumberOffset + NAME_LEN + TABLE_DELIMITER + NAME_LEN +
-					 TABLE_DELIMITER + WON_BY_AMOUNT;
+	totalRowLength =
+			numberOfDigits + NAME_LEN + TABLE_DELIMITER + NAME_LEN +
+			TABLE_DELIMITER + WON_BY_AMOUNT;
 
 	/*
 	 * Check if the list is empty.
@@ -223,14 +224,14 @@ BOOLEAN print_scores(struct game_system* thesystem)
 	 * The offset is how many characters the largest row number will
 	 * take up when printing.
 	 */
-	for (i = 0; i < rowNumberOffset; i++) {
+	for (i = 0; i < numberOfDigits; i++) {
 		printf(" ");
 	}
 
 	printf("Winner");
 
-	printOffset = strlen("Winner");
-	for (i = 0; i < nameLength - printOffset; i++) {
+	numberOfDigits = strlen("Winner");
+	for (i = 0; i < nameLength - numberOfDigits; i++) {
 		printf(" ");
 	}
 
@@ -241,8 +242,8 @@ BOOLEAN print_scores(struct game_system* thesystem)
 	 */
 	printf("Loser");
 
-	printOffset = strlen("Loser");
-	for (i = 0; i < nameLength - printOffset; i++) {
+	numberOfDigits = strlen("Loser");
+	for (i = 0; i < nameLength - numberOfDigits; i++) {
 		printf(" ");
 	}
 
@@ -268,12 +269,12 @@ BOOLEAN print_scores(struct game_system* thesystem)
 	while (currentNode != NULL) {
 		/*
 		 * Print the
-		 * 1) optional preceding space
+		 * 1) optional preceding space(s)
 		 * 2) row number
 		 * 3) )
 		 * 4) trailing space.
 		 */
-		printOffset = getNumberOffset(lineNumber);
+		numberOfDigits = getDigitAmount(lineNumber);
 
 		/*
 		 * The original printing offset only works for single digit numbers.
@@ -281,16 +282,9 @@ BOOLEAN print_scores(struct game_system* thesystem)
 		 * Through trial and error, the adjustment that I found that works with
 		 * the provided files (10, 100, 1000, 10000) is below.
 		 */
-		if (lineNumber >= 10) {
-			if (lineNumber != thesystem->scoreboard.size) {
-				printOffset -= (printOffset - 1);
-			}
-			else {
-				printOffset = 0;
-			}
-		}
+		numberOfDigits = (numberOfDigitsListSize - numberOfDigits);
 
-		for (i = 0; i < printOffset; i++) {
+		for (i = 0; i < numberOfDigits; i++) {
 			printf(" ");
 		}
 
@@ -303,9 +297,9 @@ BOOLEAN print_scores(struct game_system* thesystem)
 		 * 3) The table delimiter
 		 */
 		printf("%s", currentNode->data->winner);
-		printOffset = (int) strlen(currentNode->data->winner);
+		numberOfDigits = (int) strlen(currentNode->data->winner);
 
-		for (i = 0; i < nameLength - printOffset; i++) {
+		for (i = 0; i < nameLength - numberOfDigits; i++) {
 			printf(" ");
 		}
 		printf("|");
@@ -317,9 +311,9 @@ BOOLEAN print_scores(struct game_system* thesystem)
 		 * 3) The table delimiter
 		 */
 		printf("%s", currentNode->data->loser);
-		printOffset = (int) strlen(currentNode->data->loser);
+		numberOfDigits = (int) strlen(currentNode->data->loser);
 
-		for (i = 0; i < nameLength - printOffset; i++) {
+		for (i = 0; i < nameLength - numberOfDigits; i++) {
 			printf(" ");
 		}
 		printf("|");
@@ -455,7 +449,8 @@ BOOLEAN add_score(struct game_system* thesystem)
 		}
 	}
 
-	puts("Scored added.");
+	updateScoreboardManually(winnerName, loserName, winningMargin, thesystem);
+
 	return TRUE;
 }
 
@@ -610,7 +605,7 @@ createGameResult(char* winner, char* loser, int winningMargin)
 }
 
 BOOLEAN
-updateScoreboardManually(char* winnerName, char* loserName, char* winningMargin,
+updateScoreboardManually(char* winnerName, char* loserName, int winningMargin,
 						 struct game_system* gameSystem)
 {
 	struct game_result* gameResultPtr;
@@ -618,28 +613,11 @@ updateScoreboardManually(char* winnerName, char* loserName, char* winningMargin,
 	struct linkedlist* linkedListPtr;
 	char* validatedWinnersName;
 	char* validatedLosersName;
-	int validatedWinningMargin = 0;
 
 	linkedListNodePtr = createLinkedListNode();
 
 	if (!linkedListNodePtr) {
 		fprintf(stderr, "[ERROR] Couldn't create the linked list node.\n");
-		return FALSE;
-	}
-
-	if (!validInputName(winnerName)) {
-		fprintf(stderr, "[ERROR] Winner's name is invalid.\n");
-		return FALSE;
-	}
-
-	if (!validInputName(loserName)) {
-		fprintf(stderr, "[ERROR] Losers's name is invalid.\n");
-		return FALSE;
-	}
-
-	validatedWinningMargin = validWinningMargin(winningMargin);
-	if (validatedWinningMargin == -1) {
-		fprintf(stderr, "[ERROR] Winning margin is invalid.\n");
 		return FALSE;
 	}
 
@@ -650,7 +628,7 @@ updateScoreboardManually(char* winnerName, char* loserName, char* winningMargin,
 	validatedLosersName = strdup(loserName);
 
 	gameResultPtr = createGameResult(validatedWinnersName, validatedLosersName,
-									 validatedWinningMargin);
+									 winningMargin);
 
 	if (!gameResultPtr) {
 		fprintf(stderr, "[ERROR] Couldn't create the game result.\n");
@@ -681,7 +659,7 @@ updateScoreboardManually(char* winnerName, char* loserName, char* winningMargin,
 	return TRUE;
 }
 
-int getNumberOffset(int linkedListSize)
+int getDigitAmount(int linkedListSize)
 {
 	int offset;
 	int digits;

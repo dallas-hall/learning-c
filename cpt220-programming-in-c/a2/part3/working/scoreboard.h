@@ -84,13 +84,13 @@ struct game_result* createGameResult(char*, char*, int);
 /*
  * Used to automatically update the scoreboard.
  */
-BOOLEAN updateScoreboardManually(char*, char*, char*, struct game_system*);
+BOOLEAN updateScoreboardManually(char*, char*, int, struct game_system*);
 
 /*
  * Used to work out how many chars the size of the linked list will take up
  * when printed.
  */
-int getNumberOffset(int);
+int getDigitAmount(int);
 
 /*
  * To comply with the function pointer expected by main_menu_entry

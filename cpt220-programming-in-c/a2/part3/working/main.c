@@ -207,16 +207,17 @@ int main(int argc, char* argv[])
 		printDebug("Testing delete linked list nodes");
 		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
 
-		updateScoreboardManually("Roger", "Jamie", "15", gameSystemPtr);
+		printDebug("Testing adding valid scores manually");
+		updateScoreboardManually("Roger", "Jamie", 15, gameSystemPtr);
 		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
-		updateScoreboardManually("Roger", "Jamie", "7", gameSystemPtr);
+		updateScoreboardManually("Roger", "Jamie", 7, gameSystemPtr);
 		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
-		updateScoreboardManually("Jamie", "Roger", "1", gameSystemPtr);
+		updateScoreboardManually("Jamie", "Roger", 1, gameSystemPtr);
 		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
-		updateScoreboardManually("Jamie", "Roger", "5", gameSystemPtr);
+		updateScoreboardManually("Jamie", "Roger", 5, gameSystemPtr);
 		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 
 		/*
