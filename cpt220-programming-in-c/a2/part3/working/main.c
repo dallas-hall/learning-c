@@ -274,10 +274,6 @@ int main(int argc, char* argv[])
 	}
 
 	/*
-	 * TODO need to pass play_game(seed) to the menu somehow
-	 */
-
-	/*
 	 * Set up the menus and load the main menu.
 	 */
 	init_main_menu(gameSystemPtr->the_menus.main_menu);
@@ -402,10 +398,6 @@ BOOLEAN init_system(struct game_system* thesystem, const char fname[])
  **/
 void init_main_menu(struct main_menu_entry mainmenu[])
 {
-	/*
-	 * TODO Main menu init - update MMC_PLAY
-	 */
-
 	/*
 	 * Copy the menu item description's in.
 	 */
@@ -541,6 +533,10 @@ void deleteGameSystem(struct game_system* gameSystemPtr)
 	free(gameSystemPtr);
 }
 
+/*
+ * Print main menu and handle user input for applying menu actions within an
+ * infinite loop.
+ */
 void printMainMenu(struct game_system* gameSystemPtr)
 {
 	int i;

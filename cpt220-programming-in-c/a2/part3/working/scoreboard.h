@@ -92,9 +92,5 @@ BOOLEAN updateScoreboardManually(char*, char*, int, struct game_system*);
  */
 int getDigitAmount(int);
 
-/*
- * To comply with the function pointer expected by main_menu_entry
- */
-void printScores(struct game_system*);
 
 #endif

@@ -306,6 +306,10 @@ struct game_result* parseLineData(char* line)
 	return gameResultPtr;
 }
 
+/*
+ * Using the file path in the linked, it opens the file and reads the entire
+ * contents in a string. The string is passed back.
+ */
 char* getLinesToWrite(const struct linkedlist* linkedlist)
 {
 	char* strPtr;

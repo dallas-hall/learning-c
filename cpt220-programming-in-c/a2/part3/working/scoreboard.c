@@ -584,6 +584,10 @@ BOOLEAN save_scores(struct game_system* thesystem)
 	}
 }
 
+/*
+ * Tries to create a game result so it can be inserted into the linked list.
+ * This expects the game result data to be validated already.
+ */
 struct game_result*
 createGameResult(char* winner, char* loser, int winningMargin)
 {
@@ -639,6 +643,10 @@ createGameResult(char* winner, char* loser, int winningMargin)
 	return gameResultPtr;
 }
 
+/*
+ * Tries to create a game result and insert it into the scoreboard. This expects
+ * the input to be validated already.
+ */
 BOOLEAN
 updateScoreboardManually(char* winnerName, char* loserName, int winningMargin,
 						 struct game_system* gameSystem)
@@ -694,6 +702,10 @@ updateScoreboardManually(char* winnerName, char* loserName, int winningMargin,
 	return TRUE;
 }
 
+/*
+ * Works out how many characters are inside an int.
+ * e.g. there are 2 characters in the int 23.
+ */
 int getDigitAmount(int linkedListSize)
 {
 	int offset;
@@ -718,15 +730,4 @@ int getDigitAmount(int linkedListSize)
 	}
 
 	return offset;
-}
-
-/*
- * Needed this to get around the main_menu_entry function pointer
- * excepting a void return. I don't see the point in duplicating the printing
- * scoreboard function twice, one with a BOOLEAN result and one without.
- * So calling the print_scores function and ignoring its return result.
- */
-void printScores(struct game_system* thesystem)
-{
-	print_scores(thesystem);
 }
