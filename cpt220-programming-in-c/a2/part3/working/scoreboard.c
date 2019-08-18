@@ -539,6 +539,10 @@ BOOLEAN save_scores(struct game_system* thesystem)
 struct game_result*
 createGameResult(char* winner, char* loser, int winningMargin)
 {
+	/*
+	 * TODO Fix memory leak
+	 */
+
 	struct game_result* gameResultPtr;
 
 	/*
