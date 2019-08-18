@@ -196,6 +196,9 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
  */
 struct game_result* parseLineData(char* line)
 {
+	/*
+	 * TODO fix memory leak
+	 */
 	char* tokenPtr;
 	char* winnersName;
 	char* losersName;
