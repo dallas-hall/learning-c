@@ -102,8 +102,10 @@ int main(int argc, char* argv[])
 		}
 
 		if (DEBUGGING_MAIN) {
-			printDebug("The file path passed in was %s\n", argv[FILE_PATH_ARG]);
-			printDebug("The seed passed in was %s\n", argv[SEED_ARG]);
+			printDebug("Testing the command line argument parsing.");
+			fprintf(stderr, "The file path passed in was %s\n",
+					argv[FILE_PATH_ARG]);
+			fprintf(stderr, "The seed passed in was %s\n", argv[SEED_ARG]);
 		}
 	}
 
@@ -116,7 +118,9 @@ int main(int argc, char* argv[])
 		error_print("Couldn't create the game system with malloc.\n");
 		return EXIT_FAILURE;
 	}
+
 	if (DEBUGGING_MAIN) {
+		printDebug("Testing that the gameSystemPtr was intialised properly");
 		/*
 		 * From my understanding, everything should either be 0, NULL or '\0'
 		 * at this point.
@@ -125,18 +129,18 @@ int main(int argc, char* argv[])
 	}
 
 	/*
-	 * Testing delete list nodes and list on an empty list
-	 */
-	if (DEBUGGING_MAIN) {
-		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
-	}
-
-	/*
 	 * Create and initialise the linked list.
 	 *
 	 * Dereference the created linked list and store it int the game_system.
 	 * Grab the address of that and store it in a pointer.
-	 * We then free the linked list pointer so we don't have a memory leak
+	 *
+	 * Delete the list because we have dereferenced it, without deleting it here
+	 * we will have a memory leak.
+	 *
+	 * Future calls to deleteLinkedList won't actually work because the list
+	 * inside gameSystemPtr->scoreboard  wasn't created with malloc, it was
+	 * dereferenced into it. We still need to free the nodes of the list and
+	 * other parts of gameSystemPtr. Which are handled elsewhere.
 	 */
 	linkedListPtr = createLinkedList();
 	gameSystemPtr->scoreboard = *linkedListPtr;
@@ -150,36 +154,9 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-
-	/*
-	 * Delete the list because we have dereferenced it, without deleting it here
-	 * we will have a memory leak.
-	 *
-	 * Future calls to deleteLinkedList won't actually work because the list
-	 * inside gameSystemPtr->scoreboard  wasn't created with malloc, it was
-	 * dereferenced into it. We still need to free the nodes of the list and
-	 * other parts of gameSystemPtr. Which are handled elsewhere.
-	 *
-	 * deleteLinkedList(linkedListPtr);
-	 *
-	 * Reassign the data inside game_system->scoreboard to the pointer.
-	 *
-	 * linkedListPtr = &gameSystemPtr->scoreboard;
-	 */
-
 	if (DEBUGGING_MAIN) {
-		/*
-		 * These should be the same.
-		 */
-		printf("The address of gameSystemPtr->scoreboard is %p\n",
-			   (void*) &gameSystemPtr->scoreboard);
-		/*printf("The address of linkedListPtr is %p\n", (void*) linkedListPtr);*/
-	}
-
-	/*
-	 * Testing delete list nodes on an empty list
-	 */
-	if (DEBUGGING_MAIN) {
+		printDebug("Testing deleting from an empty list.");
+		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
 		remove_all_scores(gameSystemPtr);
 
 		if (!remove_all_scores(gameSystemPtr)) {
@@ -200,51 +177,34 @@ int main(int argc, char* argv[])
 		gameSystemPtr->gameseed.thelong = seed.thelong;
 
 		if (DEBUGGING_MAIN) {
+			printDebug(
+					"Testing that the gameSystemPtr was intialised properly");
 			printDebugGameSystem(gameSystemPtr);
 		}
 	}
 
-	/*
-	 * We need to take the address of the list as the function expects a
-	 * pointer.
-	 *
-	 * 	prettyPrintLinkedList(&gameSystemPtr->scoreboard);
-	 * 	printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
-	 */
-
-	/*
-	 * Testing find a node.
-	 */
 	if (DEBUGGING_MAIN) {
+		printDebug("Testing finding node in the linked list.");
 		findNode(&gameSystemPtr->scoreboard, NULL);
 		findNode(NULL, gameSystemPtr->scoreboard.head->next);
 		if (findNode(&gameSystemPtr->scoreboard,
 					 gameSystemPtr->scoreboard.head->next)) {
-			printf("Node found.\n");
+			fprintf(stderr, "Node found.\n");
 		}
 		else {
-			printf("Node not found.\n");
+			fprintf(stderr, "Node not found.\n");
 		}
 	}
 
-	/*
-	 * Testing delete list on a populated list
-	 */
+
 	if (DEBUGGING_MAIN) {
+		printDebug("Testing deleting all nodes in the linked list.");
 		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
 		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 	}
 
 	if (DEBUGGING_MAIN) {
-		/*
-		 * These should be the same.
-		 */
-		printf("The address of gameSystemPtr->scoreboard is %p\n",
-			   (void*) &gameSystemPtr->scoreboard);
-		/*printf("The address of linkedListPtr is %p\n", (void*) linkedListPtr);*/
-	}
-
-	if (DEBUGGING_MAIN) {
+		printDebug("Testing delete linked list nodes");
 		deleteLinkedListNodes(&gameSystemPtr->scoreboard);
 
 		updateScoreboardManually("Roger", "Jamie", "15", gameSystemPtr);
@@ -291,9 +251,19 @@ int main(int argc, char* argv[])
 		printCsvLinkedList(&gameSystemPtr->scoreboard, DELIMITER);
 	}
 
-	print_scores(gameSystemPtr);
-	/*add_score(gameSystemPtr);*/
+	if (DEBUGGING_MAIN) {
+		printDebug("Testing add score.");
+		print_scores(gameSystemPtr);
+		add_score(gameSystemPtr);
+		print_scores(gameSystemPtr);
+	}
 
+	if (DEBUGGING_MAIN) {
+		printDebug("Testing delete score.");
+		delete_score(gameSystemPtr);
+		print_scores(gameSystemPtr);
+	}
+	
 	/* start the game, passing in the seed */
 	play_game(seed);
 
