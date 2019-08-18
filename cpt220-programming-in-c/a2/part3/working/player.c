@@ -25,19 +25,30 @@ BOOLEAN player_init(struct player* aplayer, struct game* thegame)
 	barlist_init(&aplayer->bar_list);
 	/**
 	 * read the player's name
+	 *
+	 * I updated this to handle the new name validation rules.
 	 **/
-	 /*
-	  * TODO validate the player name with new rules
-	  */
-	while (iresult = read_string("Please enter the name of the player",
-								 name, NAME_LEN),
-			iresult == IR_FAILURE);
-	/**
-	 * on ctrl-d or enter, return back to game_init()
-	 **/
-	if (iresult == IR_QUIT || iresult == IR_SKIP_TURN) {
-		return FALSE;
+	while (1) {
+		iresult = read_string("Please enter the name of the player", name,
+							  NAME_LEN);
+
+		/*
+		 * Handle enter and control d
+		 */
+		if (iresult == IR_QUIT || iresult == IR_SKIP_TURN) {
+			return FALSE;
+		}
+
+		/*
+		 * If the input was valid we can check if the name is valid.
+		 */
+		if (iresult == IR_SUCCESS) {
+			if (validInputName(name)) {
+				break;
+			}
+		}
 	}
+
 	/**
 	 * copy in the name entered
 	 **/

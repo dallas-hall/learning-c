@@ -112,6 +112,16 @@ enum token
                 putchar('\n');                                                 \
         }
 
+/*
+ * strtol conversion number system
+ */
+#define BASE_10 10
+
+/*
+ * How many digits a valid winning margin can have
+ */
+#define MAX_WINNING_MARGIN_DIGITS 2
+
 /**
  * part 2 data structures and functions go here
  **/
@@ -156,5 +166,12 @@ int error_print(const char format[], ...);
 int printDebug(const char format[], ...);
 
 void board_print(board, enum orientation);
+
+/*
+ * Added to validate input from stdin
+ */
+BOOLEAN validInputName(const char*);
+
+int validWinningMargin(char* winningMargin);
 
 #endif
