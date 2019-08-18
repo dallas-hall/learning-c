@@ -48,21 +48,6 @@ enum main_menu_choice
 	MMC_INVALID
 };
 
-/*
- * enum of all the scores menu items
- */
-enum scores_menu_choice
-{
-	PRINT,
-	ADD,
-	DELETE_ONE,
-	DELETE_ALL,
-	SAVE,
-	SAVE_NEW,
-	QUIT,
-	INVALID
-};
-
 /* forwards declaration of the game_system so we can declare pointers to one
  * until we declare the game_system itself */
 struct game_system;

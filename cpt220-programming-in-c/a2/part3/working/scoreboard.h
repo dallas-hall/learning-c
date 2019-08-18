@@ -20,6 +20,21 @@ struct game_system;
 #define NUM_SCORES_MENU_ITEMS 6
 
 /*
+ * enum of all the scores menu items
+ */
+enum scores_menu_choice
+{
+	SM_PRINT,
+	SM_ADD,
+	SM_DELETE_ONE,
+	SM_DELETE_ALL,
+	SM_SAVE,
+	SM_SAVE_NEW,
+	SM_QUIT,
+	SM_INVALID
+};
+
+/*
  * Covers the table delimiter
  */
 #define TABLE_DELIMITER 1

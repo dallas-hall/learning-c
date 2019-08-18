@@ -408,7 +408,7 @@ void init_main_menu(struct main_menu_entry mainmenu[])
 	 * Assign the function pointers.
 	 */
 	mainmenu[MMC_PLAY].function = printScores;
-	mainmenu[MMC_SCORES].function = printScores;
+	mainmenu[MMC_SCORES].function = scores_menu;
 	mainmenu[MMC_ABORT].function = abort_program;
 	mainmenu[MMC_QUIT].function = quit_program;
 }
@@ -564,16 +564,16 @@ void printMainMenu(struct game_system* gameSystemPtr)
 		else {
 			switch(choice) {
 				case 1:
-					printScores(gameSystemPtr);
+					gameSystemPtr->the_menus.main_menu[MMC_PLAY].function(gameSystemPtr);
 					break;
 				case 2:
-					scores_menu(gameSystemPtr);
+					gameSystemPtr->the_menus.main_menu[MMC_SCORES].function(gameSystemPtr);
 					break;
 				case 3:
-					abort_program(gameSystemPtr);
+					gameSystemPtr->the_menus.main_menu[MMC_ABORT].function(gameSystemPtr);
 					break;
 				case 4:
-					quit_program(gameSystemPtr);
+					gameSystemPtr->the_menus.main_menu[MMC_QUIT].function(gameSystemPtr);
 					break;
 				default:
 					fprintf(stderr, "Invalid choice, try again.\n");
