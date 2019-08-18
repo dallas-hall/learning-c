@@ -71,7 +71,12 @@ struct game_system;
  **/
 BOOLEAN game_init(struct game* thegame);
 
-void play_game(struct falsible_long);
+/*
+ * Updated so we can use it as a function pointer which requires game_system.
+ *
+ * void play_game(struct falsible_long);
+ */
+void play_game(struct game_system*);
 
 void swap_players(struct player**, struct player**);
 

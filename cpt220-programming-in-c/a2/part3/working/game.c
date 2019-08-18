@@ -35,7 +35,12 @@ BOOLEAN game_init(struct game* thegame)
  * won the game. Please see the assignment specifications for the full detail
  * on what is required here.
  **/
-void play_game(struct falsible_long seed)
+/*
+ * Updated so we can use it as a function pointer which requires game_system.
+ *
+ * void play_game(struct falsible_long seed)
+ */
+void play_game(struct game_system* gameSystemPtr)
 {
 	/**
 	 * declare and allocate memory for the main game struct
@@ -47,8 +52,15 @@ void play_game(struct falsible_long seed)
 	 * set the seed in the game struct - set to the current time unless the
 	 * seed was provided.
 	 **/
-	if (seed.success) {
-		thegame.seed = seed.thelong;
+
+	/*
+	 * Updated so we can use it as a function pointer which requires game_system.
+	 * if (seed.success) {
+	 * 	thegame.seed = seed.thelong;
+	 * 	}
+	 */
+	if (gameSystemPtr->gameseed.success) {
+		thegame.seed = gameSystemPtr->gameseed.thelong;
 	}
 	else {
 		thegame.seed = time(NULL);

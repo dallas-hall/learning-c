@@ -417,7 +417,7 @@ void init_main_menu(struct main_menu_entry mainmenu[])
 	/*
 	 * Assign the function pointers.
 	 */
-	mainmenu[MMC_PLAY].function = printScores;
+	mainmenu[MMC_PLAY].function = play_game;
 	mainmenu[MMC_SCORES].function = scores_menu;
 	mainmenu[MMC_ABORT].function = abort_program;
 	mainmenu[MMC_QUIT].function = quit_program;
