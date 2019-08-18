@@ -404,7 +404,7 @@ BOOLEAN deleteLinkedListNodes(struct linkedlist* linkedListPtr)
 
 	if (currentNodePtr == NULL) {
 		fprintf(stderr,
-				"[WARNING] Cannot delete linked list nodes as the list as it is empty.\n");
+				"[WARNING] Cannot delete linked list nodes as the list is empty.\n");
 		return FALSE;
 	}
 
