@@ -22,13 +22,30 @@ void init_scores_menu(struct scores_menu_entry scores_menu[])
 	/*
 	 * TODO create scores menu
 	 */
-	/*scores_menu[PRINT] = {"Play a game.", print_scores};
-	scores_menu[ADD] = {"High scores menu", add_score};
-	scores_menu[DELETE_ONE] = {"Abort program (no save)", delete_score};
-	scores_menu[DELETE_ALL] = {"Quit program (save)", deleteLinkedListNodes};
-	scores_menu[SAVE] = {"Play a game.", save_data};
-	scores_menu[SAVE_NEW] = {"High scores menu", save_data};
-	scores_menu[QUIT] = {"Quit program (save)", };*/
+	/*
+	 * Copy the menu item description's in.
+	 */
+	strcpy(scores_menu[PRINT].text, "Print the current scoreboard.");
+	strcpy(scores_menu[ADD].text, "Add a new score to the scores list.");
+	strcpy(scores_menu[DELETE_ONE].text, "Delete a score from the scores list");
+	strcpy(scores_menu[DELETE_ALL].text,
+		   "Remove all scores from the scores list.");
+	strcpy(scores_menu[SAVE].text,
+		   "Save Scores back to the file they were loaded from.");
+	strcpy(scores_menu[SAVE_NEW].text, "Save scores to a new file name.");
+
+	/*
+	 * Assign the function pointers.
+	 */
+	scores_menu[PRINT].function = print_scores;
+	scores_menu[ADD].function = add_score;
+	scores_menu[DELETE_ONE].function = delete_score;
+	scores_menu[DELETE_ALL].function = remove_all_scores;
+	scores_menu[SAVE].function = save_scores;
+	scores_menu[SAVE_NEW].function = resave_scores;
+	/*
+	 * There is no quit function, just call the main menu print function.
+	 */
 }
 
 /**
@@ -39,6 +56,95 @@ void scores_menu(struct game_system* thesystem)
 	/*
 	 * TODO create scores menu
 	 */
+	int i;
+	int choice;
+	enum input_result inputResult;
+	BOOLEAN menuResult;
+
+	/*
+	 * This is an infinite loop but that is okay because the user will exit
+	 * this.
+	 */
+	while (1) {
+		puts("Scores Menu");
+		PUTCHARS('=', strlen("Scores Menu"));
+		printf("\n");
+
+		for (i = 0; i < NUM_SCORES_MENU_ITEMS; i++) {
+			printf("%d) %s\n", i + 1, thesystem->the_menus.scores_menu[i].text);
+		}
+		printf("%d) Quit to the main menu.\n", i + 1);
+
+		inputResult = read_int("Enter the number of your choice", &choice);
+
+		if (inputResult == IR_FAILURE) {
+			continue;
+		}
+		else if (inputResult == IR_SKIP_TURN) {
+			printMainMenu(thesystem);
+		}
+		else if (inputResult == IR_QUIT) {
+			printMainMenu(thesystem);
+		}
+		else {
+			switch (choice) {
+				case 1:
+
+					/*
+					 * We don't care about the result here because a false
+					 * is returned when the scoreboard is empty.
+					 *
+					 * For everything else we care.
+					 */
+					menuResult = print_scores(thesystem);
+					break;
+				case 2:
+					menuResult = add_score(thesystem);
+
+					if (!menuResult) {
+						fprintf(stderr, "Couldn't add score to scoreboard.\n");
+					}
+					break;
+				case 3:
+					menuResult = delete_score(thesystem);
+
+					if (!menuResult) {
+						fprintf(stderr,
+								"Couldn't delete score from scoreboard.\n");
+					}
+					break;
+				case 4:
+					menuResult = remove_all_scores(thesystem);
+
+					if (!menuResult) {
+						fprintf(stderr,
+								"Couldn't delete all scores from scoreboard.\n");
+					}
+					break;
+				case 5:
+					menuResult = save_scores(thesystem);
+
+					if (!menuResult) {
+						fprintf(stderr, "Couldn't save scoreboard to disk.\n");
+					}
+					break;
+				case 6:
+					menuResult = resave_scores(thesystem);
+
+					if (!menuResult) {
+						fprintf(stderr,
+								"Couldn't resave scoreboard to disk.\n");
+					}
+					break;
+				case 7:
+					printMainMenu(thesystem);
+					break;
+				default:
+					fprintf(stderr, "Invalid choice, try again.\n");
+			}
+		}
+		break;
+	}
 }
 
 /**
