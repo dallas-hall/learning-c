@@ -151,6 +151,9 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 	 * Need to free because strdup calls malloc for us.
 	 */
 	free(strPtr);
+	/*
+	 * TODO change is to be the same file again.
+	 */
 	strcat(outputFile, "-output");
 
 	/*
