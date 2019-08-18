@@ -49,7 +49,7 @@ debug:CFLAGS+=-g
 debug:clean all
 
 # Memory Address Sanitising
-# Requires scl enable devtoolset-8 bash
+# Requires source /opt/rh/devtoolset-8/enable
 sanitize:CFLAGS+=-fsanitize=address
 sanitize:LFLAGS+=-fsanitize=address
 sanitize:debug
