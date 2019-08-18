@@ -207,14 +207,6 @@ BOOLEAN print_scores(struct game_system* thesystem)
  **/
 BOOLEAN add_score(struct game_system* thesystem)
 {
-	/*
-	 * TODO call to updateScoreboardManually
-	 *
-	 * get winner name and validate
-	 * get loser name and validate
-	 * get winning margin and validate
-	 * call updateScoreboardManually
-	 */
 	char input[MAXPROMPTLEN];
 	char winnerName[NAME_LEN + FGETS_EXTRA_CHAR];
 	char loserName[NAME_LEN + FGETS_EXTRA_CHAR];
@@ -254,7 +246,7 @@ BOOLEAN add_score(struct game_system* thesystem)
 		/*
 		 * If we got an input failure, try again.
 		 */
-		if(inputResult == IR_FAILURE) {
+		if (inputResult == IR_FAILURE) {
 			continue;
 		}
 
@@ -280,7 +272,7 @@ BOOLEAN add_score(struct game_system* thesystem)
 			return FALSE;
 		}
 
-		if(inputResult == IR_FAILURE) {
+		if (inputResult == IR_FAILURE) {
 			continue;
 		}
 
@@ -292,8 +284,6 @@ BOOLEAN add_score(struct game_system* thesystem)
 	}
 
 	while (1) {
-		memset(input, 0, MAXPROMPTLEN);
-
 		inputResult = read_int("Please enter the amount the game was won by",
 							   &winningMargin);
 
@@ -303,7 +293,7 @@ BOOLEAN add_score(struct game_system* thesystem)
 			return FALSE;
 		}
 
-		if(inputResult == IR_FAILURE) {
+		if (inputResult == IR_FAILURE) {
 			continue;
 		}
 
@@ -322,7 +312,7 @@ BOOLEAN add_score(struct game_system* thesystem)
 		}
 	}
 
-	return FALSE;
+	return TRUE;
 }
 
 /**
@@ -332,18 +322,42 @@ BOOLEAN add_score(struct game_system* thesystem)
  **/
 BOOLEAN delete_score(struct game_system* thesystem)
 {
-	/*
-	 * TODO call to deleteNodeViaPosition
-	 *
-	 * print scoreboard with row numbers
-	 * get scoreboard row to delete, validate row
-	 * call deleteNodeViaPosition
-	 */
-	BOOLEAN result;
+	enum input_result inputResult;
+	int nodeToDelete;
 
-	result = FALSE;
+	print_scores(thesystem);
+	while (1) {
+		inputResult = read_int("What score do you want to delete",
+							   &nodeToDelete);
 
-	return result;
+		if (inputResult == IR_QUIT || inputResult == IR_SKIP_TURN) {
+			fprintf(stderr,
+					"[WARNING] Exit condition met, did not update the scoreboard.\n");
+			return FALSE;
+		}
+
+		if (inputResult == IR_FAILURE) {
+			continue;
+		}
+
+		if (nodeToDelete <= 0 || nodeToDelete > thesystem->scoreboard.size) {
+			error_print(
+					"Invalid input in the third token, should be between 1 and %d but was %ld.\n",
+					thesystem->scoreboard.size, nodeToDelete);
+			continue;
+		}
+		else {
+			/*
+			 * Try to delete the node.
+			 */
+			if (deleteNodeViaPosition(&thesystem->scoreboard, nodeToDelete)) {
+				return TRUE;
+			}
+			else {
+				return FALSE;
+			}
+		}
+	}
 }
 
 /**
