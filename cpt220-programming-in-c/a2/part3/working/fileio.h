@@ -42,16 +42,6 @@
  */
 #define DELIMITER ","
 
-/*
- * strtol conversion number system
- */
-#define BASE_10 10
-
-/*
- * How many digits a valid winning margin can have
- */
-#define MAX_WINNING_MARGIN_DIGITS 2
-
 #ifndef FILEIO_H
 #define FILEIO_H
 
@@ -60,10 +50,6 @@ BOOLEAN load_data(const char[], struct linkedlist*);
 BOOLEAN save_data(const char[], const struct linkedlist*);
 
 struct game_result* parseLineData(char*);
-
-BOOLEAN validInputName(const char*);
-
-int validWinningMargin(char* winningMargin);
 
 char* getLinesToWrite(const struct linkedlist*);
 

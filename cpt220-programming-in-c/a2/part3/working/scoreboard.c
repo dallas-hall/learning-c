@@ -138,8 +138,8 @@ BOOLEAN print_scores(struct game_system* thesystem)
 		 * Through trial and error, the adjustment that I found that works with
 		 * the provided files (10, 100, 1000, 10000) is below.
 		 */
-		if(lineNumber >= 10) {
-			if(lineNumber != thesystem->scoreboard.size) {
+		if (lineNumber >= 10) {
+			if (lineNumber != thesystem->scoreboard.size) {
 				printOffset -= (printOffset - 1);
 			}
 			else {
@@ -209,7 +209,119 @@ BOOLEAN add_score(struct game_system* thesystem)
 {
 	/*
 	 * TODO call to updateScoreboardManually
+	 *
+	 * get winner name and validate
+	 * get loser name and validate
+	 * get winning margin and validate
+	 * call updateScoreboardManually
 	 */
+	char input[MAXPROMPTLEN];
+	char output[256];
+	char winnerName[NAME_LEN + FGETS_EXTRA_CHAR];
+	char loserName[NAME_LEN + FGETS_EXTRA_CHAR];
+	int winningMargin;
+	enum input_result inputResult;
+
+	printf("Add a score\n");
+	PUTCHARS('-', strlen("Add a score"));
+	printf("\n");
+
+	while (1) {
+		/*
+		 * Clear the buffer
+		 */
+		memset(input, 0, MAXPROMPTLEN);
+
+		/*
+		 * Using Paul's read_string (io.c) so I don't need to reinvent the wheel.
+		 * It handles a lot of things like clearing buffers, input length
+		 * validation, etcetera..
+		 */
+		inputResult = read_string("Please enter the winner of the game", input,
+								  20);
+
+		/*
+		 * ^D is IR_QUIT
+		 * Enter is IR_SKIP_TURN
+		 *
+		 * Both will exit
+		 */
+		if (inputResult == IR_QUIT || inputResult == IR_SKIP_TURN) {
+			fprintf(stderr,
+					"[WARNING] Exit condition met, did not update the scoreboard.\n");
+			return FALSE;
+		}
+
+		/*
+		 * If we got an input failure, try again.
+		 */
+		if(inputResult == IR_FAILURE) {
+			continue;
+		}
+
+		if (validInputName(input)) {
+			/*
+			 * Remove garbage
+			 */
+			memset(winnerName, 0, NAME_LEN + FGETS_EXTRA_CHAR);
+			strcpy(winnerName, input);
+			break;
+		}
+	}
+
+	while (1) {
+		memset(input, 0, MAXPROMPTLEN);
+
+		inputResult = read_string("Please enter the loser of the game", input,
+								  20);
+
+		if (inputResult == IR_QUIT || inputResult == IR_SKIP_TURN) {
+			fprintf(stderr,
+					"[WARNING] Exit condition met, did not update the scoreboard.\n");
+			return FALSE;
+		}
+
+		if(inputResult == IR_FAILURE) {
+			continue;
+		}
+
+		if (validInputName(input)) {
+			memset(loserName, 0, NAME_LEN + FGETS_EXTRA_CHAR);
+			strcpy(loserName, input);
+			break;
+		}
+	}
+
+	while (1) {
+		memset(input, 0, MAXPROMPTLEN);
+
+		inputResult = read_int("Please enter the amount the game was won by",
+							   &winningMargin);
+
+		if (inputResult == IR_QUIT || inputResult == IR_SKIP_TURN) {
+			fprintf(stderr,
+					"[WARNING] Exit condition met, did not update the scoreboard.\n");
+			return FALSE;
+		}
+
+		if(inputResult == IR_FAILURE) {
+			continue;
+		}
+
+		/*
+		 * Check for invalid numbers, if we got it, try again.
+		 * If not, break out of the loop.
+		 */
+		if (winningMargin <= 0 || winningMargin > 15) {
+			error_print(
+					"Invalid input in the third token, should be between 1 and 15 but was %ld.\n",
+					winningMargin);
+			continue;
+		}
+		else {
+			break;
+		}
+	}
 
 	return FALSE;
 }
@@ -223,9 +335,16 @@ BOOLEAN delete_score(struct game_system* thesystem)
 {
 	/*
 	 * TODO call to deleteNodeViaPosition
+	 *
+	 * print scoreboard with row numbers
+	 * get scoreboard row to delete, validate row
+	 * call deleteNodeViaPosition
 	 */
+	BOOLEAN result;
 
-	return FALSE;
+	result = FALSE;
+
+	return result;
 }
 
 /**
@@ -248,10 +367,10 @@ BOOLEAN resave_scores(struct game_system* thesystem)
 	BOOLEAN result;
 
 	/*
-	 * TODO save files to the current known file - call save_data
+	 * TODO test this
 	 */
 
-	result = FALSE;
+	result = save_data(thesystem->datafile, &thesystem->scoreboard);
 
 	return result;
 }
@@ -266,10 +385,13 @@ BOOLEAN save_scores(struct game_system* thesystem)
 	BOOLEAN result;
 
 	/*
-	 * TODO save files to the new file - get new file name and call save_data
+	 * TODO save files to the new file
+	 *
+	 * get new file name and validate length - os will validate if it exists
+	 * call save_data
 	 */
 
-	result = FALSE;
+	result = save_data(thesystem->datafile, &thesystem->scoreboard);
 
 	return result;
 }

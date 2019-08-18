@@ -292,6 +292,7 @@ int main(int argc, char* argv[])
 	}
 
 	print_scores(gameSystemPtr);
+	/*add_score(gameSystemPtr);*/
 
 	/* start the game, passing in the seed */
 	play_game(seed);
