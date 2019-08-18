@@ -77,6 +77,7 @@ int main(int argc, char* argv[])
 	struct falsible_long seed = {0};
 	struct game_system* gameSystemPtr = NULL;
 	struct linkedlist* linkedListPtr = NULL;
+	char* absolutePath;
 
 	/*
 	 * We need +1 here because of the program name being passed in automatically
@@ -167,14 +168,18 @@ int main(int argc, char* argv[])
 
 	/*
 	 * Initialise the game system. i.e. load some data boys!
+	 *
+	 * Converting to absolute path to save drama later.
 	 */
-	if (!init_system(gameSystemPtr, argv[FILE_PATH_ARG])) {
+	absolutePath = getAbsolutePath(argv[FILE_PATH_ARG]);
+	if (!init_system(gameSystemPtr, absolutePath)) {
 		error_print("Couldn't initialise the game system.\n");
 		return EXIT_FAILURE;
 	}
 	else {
 		gameSystemPtr->gameseed.success = seed.success;
 		gameSystemPtr->gameseed.thelong = seed.thelong;
+		free(absolutePath);
 
 		if (DEBUGGING_MAIN) {
 			printDebug(
@@ -571,8 +576,17 @@ void printMainMenu(struct game_system* gameSystemPtr)
 		else {
 			switch (choice) {
 				case 1:
+					/*
+					 * 1) play the game
+					 * 2) update the result
+					 * Note: memory was freed elsewhere
+					 */
 					gameSystemPtr->the_menus.main_menu[MMC_PLAY].function(
 							gameSystemPtr);
+					updateScoreboardManually(gameSystemPtr->theresult.winner,
+											 gameSystemPtr->theresult.loser,
+											 gameSystemPtr->theresult.won_by,
+											 gameSystemPtr);
 					break;
 				case 2:
 					gameSystemPtr->the_menus.main_menu[MMC_SCORES].function(

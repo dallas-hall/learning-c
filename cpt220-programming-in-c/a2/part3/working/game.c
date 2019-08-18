@@ -54,6 +54,11 @@ void play_game(struct game_system* gameSystemPtr)
 	 **/
 
 	/*
+	 * Needed to update the scoreboard after a game.
+	 */
+	struct game_result* gameResultPtr;
+
+	/*
 	 * Updated so we can use it as a function pointer which requires game_system.
 	 * if (seed.success) {
 	 * 	thegame.seed = seed.thelong;
@@ -111,15 +116,20 @@ void play_game(struct game_system* gameSystemPtr)
 			normal_print(
 					"\nThe winner was %s who won by %d points.\n",
 					winner->name, winner->score - loser->score);
+
 			/*
 			 * TODO update scoreboard
-			 *
-			 * Not sure how to pass the game_system here without violating the
-			 * spec rules and changing the structure of game
 			 */
-			/*updateScoreboard(thegame.current_player->name,
-							 thegame.other_player->name,
-							 thegame.current_player->score);*/
+			/*
+			 * 1) Create a game_result pointer
+			 * 2) Add it into the game_system through dereference
+			 * 3) free the game_result pointer
+			 */
+			gameResultPtr = createGameResult(winner->name, loser->name,
+											 winner->score - loser->score);
+			gameSystemPtr->theresult = *gameResultPtr;
+			free(gameResultPtr);
+
 			return;
 		}
 		/* otherwise, check if the game has actually been won and if so
@@ -132,9 +142,17 @@ void play_game(struct game_system* gameSystemPtr)
 			/*
 			 * TODO update scoreboard
 			 */
-			/*updateScoreboard(thegame.current_player->name,
-							 thegame.other_player->name,
-							 thegame.current_player->score);*/
+			/*
+			 * 1) Create a game_result pointer
+			 * 2) Add it into the game_system through dereference
+			 * 3) free the game_result pointer
+			 */
+			gameResultPtr = createGameResult(thegame.current_player->name,
+											 thegame.other_player->name,
+											 thegame.current_player->score -
+											 thegame.other_player->score);
+			gameSystemPtr->theresult = *gameResultPtr;
+			free(gameResultPtr);
 			return;
 		}
 		/**

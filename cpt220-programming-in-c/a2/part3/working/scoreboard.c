@@ -537,6 +537,7 @@ BOOLEAN save_scores(struct game_system* thesystem)
 	BOOLEAN result;
 	enum input_result inputResult;
 	char outputFilePath[PATH_MAX + FGETS_EXTRA_CHAR];
+	char* absolutePathPtr;
 
 	while (1) {
 		inputResult = read_string(
@@ -568,10 +569,15 @@ BOOLEAN save_scores(struct game_system* thesystem)
 				 * Free the old file name as it was made with strdup which
 				 * has malloc. So we don't want a memory leak.
 				 *
-				 * Need to cast to (void*) avoid a compiler warning.
+				 *  Need to cast to (void*) avoid a compiler warning.
+				 *
+				 * Convert to an absolute, this also uses strdup so we need
+				 * to free after.
 				 */
 				free((void*) thesystem->datafile);
-				thesystem->datafile = strdup(outputFilePath);
+				absolutePathPtr = getAbsolutePath(outputFilePath);
+				thesystem->datafile = strdup(absolutePathPtr);
+				free(absolutePathPtr);
 
 				/*
 				 * Try to save the file and then return its result.
