@@ -263,7 +263,18 @@ int main(int argc, char* argv[])
 		delete_score(gameSystemPtr);
 		print_scores(gameSystemPtr);
 	}
-	
+
+	if (1) {
+		printDebug("Testing initialising menus.");
+		init_main_menu(gameSystemPtr->the_menus.main_menu);
+		printMainMenu(gameSystemPtr);
+
+		/*init_scores_menu(gameSystemPtr->the_menus.scores_menu);*/
+	}
+
+	/*
+	 * TODO loop menu here
+	 */
 	/* start the game, passing in the seed */
 	play_game(seed);
 
@@ -271,7 +282,6 @@ int main(int argc, char* argv[])
 	 * TODO keep checking the clean up is correct
 	 * Cleanup after the game has finished.
 	 */
-	quit_program(gameSystemPtr);
 
 	/*
 	 * TODO Makefile & readme (remember I tried one bonus marks)
@@ -294,7 +304,7 @@ void quit_program(struct game_system* thesystem)
 	result = save_data(thesystem->datafile, &thesystem->scoreboard);
 
 	if (!result) {
-		EXIT_FAILURE;
+		exit(EXIT_FAILURE);
 	}
 
 	/*
@@ -303,10 +313,12 @@ void quit_program(struct game_system* thesystem)
 	 */
 	result = remove_all_scores(thesystem);
 	if (!result) {
-		EXIT_FAILURE;
+		exit(EXIT_FAILURE);
 	}
 
 	deleteGameSystem(thesystem);
+
+	exit(EXIT_SUCCESS);
 }
 
 /**
@@ -320,10 +332,12 @@ void abort_program(struct game_system* thesystem)
 	result = remove_all_scores(thesystem);
 
 	if (!result) {
-		EXIT_FAILURE;
+		exit(EXIT_FAILURE);
 	}
 
 	deleteGameSystem(thesystem);
+
+	exit(EXIT_SUCCESS);
 }
 
 /**
@@ -381,6 +395,22 @@ void init_main_menu(struct main_menu_entry mainmenu[])
 	/*
 	 * TODO Main menu init
 	 */
+
+	/*
+	 * Copy the menu item description's in.
+	 */
+	strcpy(mainmenu[MMC_PLAY].text, "Play a game.");
+	strcpy(mainmenu[MMC_SCORES].text, "High scores menu.");
+	strcpy(mainmenu[MMC_ABORT].text, "Abort program (no save).");
+	strcpy(mainmenu[MMC_QUIT].text, "Quit program (save).");
+
+	/*
+	 * Assign the function pointers.
+	 */
+	mainmenu[MMC_PLAY].function = printScores;
+	mainmenu[MMC_SCORES].function = printScores;
+	mainmenu[MMC_ABORT].function = abort_program;
+	mainmenu[MMC_QUIT].function = quit_program;
 }
 
 /*
@@ -499,4 +529,51 @@ void deleteGameSystem(struct game_system* gameSystemPtr)
 	 */
 	free((char*) gameSystemPtr->datafile);
 	free(gameSystemPtr);
+}
+
+void printMainMenu(struct game_system* gameSystemPtr)
+{
+	int i;
+	int choice;
+	enum input_result inputResult;
+
+	while(1) {
+		puts("Main Menu");
+		PUTCHARS('=', strlen("Main Menu"));
+		printf("\n");
+
+		for (i = 0; i < NUM_MAIN_MENU_ITEMS; i++) {
+			printf("%d) %s\n", i + 1, gameSystemPtr->the_menus.main_menu[i].text);
+		}
+
+		inputResult = read_int("Enter the number of your choice", &choice);
+
+		if (inputResult == IR_FAILURE) {
+			continue;
+		}
+		else if (inputResult == IR_SKIP_TURN) {
+			abort_program(gameSystemPtr);
+		}
+		else if (inputResult == IR_QUIT) {
+			quit_program(gameSystemPtr);
+		}
+		else {
+			switch(choice) {
+				case 1:
+					printScores(gameSystemPtr);
+					break;
+				case 2:
+					printScores(gameSystemPtr);
+					break;
+				case 3:
+					abort_program(gameSystemPtr);
+					break;
+				case 4:
+					quit_program(gameSystemPtr);
+					break;
+				default:
+					fprintf(stderr, "Invalid choice, try again.\n");
+			}
+		}
+	}
 }

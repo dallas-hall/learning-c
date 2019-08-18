@@ -77,4 +77,9 @@ BOOLEAN updateScoreboardManually(char*, char*, char*, struct game_system*);
  */
 int getNumberOffset(int);
 
+/*
+ * To comply with the function pointer expected by main_menu_entry
+ */
+void printScores(struct game_system*);
+
 #endif

@@ -48,6 +48,21 @@ enum main_menu_choice
 	MMC_INVALID
 };
 
+/*
+ * enum of all the scores menu items
+ */
+enum scores_menu_choice
+{
+	PRINT,
+	ADD,
+	DELETE_ONE,
+	DELETE_ALL,
+	SAVE,
+	SAVE_NEW,
+	QUIT,
+	INVALID
+};
+
 /* forwards declaration of the game_system so we can declare pointers to one
  * until we declare the game_system itself */
 struct game_system;
@@ -112,6 +127,14 @@ struct game_system* createGameSystem(void);
 
 struct linkedlist* getLinkedList(void);
 
+/**
+ * end of assignment 2 data structures
+ **/
+
+/**
+ * You may add your own datastructures or function declarations here if you
+ * need to.
+ **/
 /*
  * Free up the game system memory.
  */
@@ -122,11 +145,4 @@ void deleteGameSystem(struct game_system*);
  */
 void printDebugGameSystem(struct game_system*);
 
-/**
- * end of assignment 2 data structures
- **/
-
-/**
- * You may add your own datastructures or function declarations here if you
- * need to.
- **/
+void printMainMenu(struct game_system*);
