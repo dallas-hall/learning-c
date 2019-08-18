@@ -67,7 +67,7 @@ void scores_menu(struct game_system* thesystem)
 	 * this.
 	 */
 	while (1) {
-		puts("Scores Menu");
+		puts("\nScores Menu");
 		PUTCHARS('=', strlen("Scores Menu"));
 		printf("\n");
 
@@ -113,6 +113,9 @@ void scores_menu(struct game_system* thesystem)
 					if (!menuResult) {
 						fprintf(stderr, "Couldn't add score to scoreboard.\n");
 					}
+					else {
+						puts("Score added to the scoreboard.");
+					}
 					break;
 				case 3:
 					menuResult = thesystem->the_menus.scores_menu[SM_DELETE_ONE].function(
@@ -121,6 +124,9 @@ void scores_menu(struct game_system* thesystem)
 					if (!menuResult) {
 						fprintf(stderr,
 								"Couldn't delete score from scoreboard.\n");
+					}
+					else {
+						puts("Score deleted from the scoreboard.");
 					}
 					break;
 				case 4:
@@ -131,6 +137,9 @@ void scores_menu(struct game_system* thesystem)
 						fprintf(stderr,
 								"Couldn't delete all scores from scoreboard.\n");
 					}
+					else {
+						puts("All scores deleted from the scoreboard.");
+					}
 					break;
 				case 5:
 					menuResult = thesystem->the_menus.scores_menu[SM_SAVE].function(
@@ -139,6 +148,9 @@ void scores_menu(struct game_system* thesystem)
 					if (!menuResult) {
 						fprintf(stderr, "Couldn't save scoreboard to disk.\n");
 					}
+					else {
+						puts("All scores saved to disk.");
+					}
 					break;
 				case 6:
 					menuResult = thesystem->the_menus.scores_menu[SM_SAVE_NEW].function(
@@ -146,13 +158,17 @@ void scores_menu(struct game_system* thesystem)
 
 					if (!menuResult) {
 						fprintf(stderr,
-								"Couldn't resave scoreboard to disk.\n");
+								"Couldn't re-save scoreboard to disk.\n");
+					}
+					else {
+						puts("All scores re-saved to disk.");
 					}
 					break;
 				case 7:
 					/*
 					 * Will return back the main menu on 7.
 					 */
+					puts("Returning to main menu.");
 					return;
 				default:
 					fprintf(stderr, "Invalid choice, try again.\n");
@@ -198,7 +214,7 @@ BOOLEAN print_scores(struct game_system* thesystem)
 	 * 1) The Scoreboard
 	 * 2) ==============
 	 */
-	puts("The Scoreboard");
+	puts("\nThe Scoreboard");
 	PUTCHARS('=', strlen("The Scoreboard"));
 	printf("\n");
 
@@ -439,6 +455,7 @@ BOOLEAN add_score(struct game_system* thesystem)
 		}
 	}
 
+	puts("Scored added.");
 	return TRUE;
 }
 
@@ -481,6 +498,7 @@ BOOLEAN delete_score(struct game_system* thesystem)
 				return TRUE;
 			}
 			else {
+				puts("Scored deleted.");
 				return FALSE;
 			}
 		}

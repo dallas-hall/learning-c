@@ -542,7 +542,7 @@ void printMainMenu(struct game_system* gameSystemPtr)
 	 * this.
 	 */
 	while(1) {
-		puts("Main Menu");
+		puts("\nMain Menu");
 		PUTCHARS('=', strlen("Main Menu"));
 		printf("\n");
 
