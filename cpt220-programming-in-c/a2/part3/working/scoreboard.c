@@ -540,7 +540,7 @@ BOOLEAN save_scores(struct game_system* thesystem)
 
 	while (1) {
 		inputResult = read_string(
-				"Please enter the relative or absolute path to the file you want to save to",
+				"Please enter the name of the new filename (absolute or relative path is allowed)",
 				outputFilePath, PATH_MAX + FGETS_EXTRA_CHAR);
 
 		if (inputResult == IR_FAILURE) {
