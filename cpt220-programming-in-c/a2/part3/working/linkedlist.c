@@ -38,6 +38,9 @@ struct linkedlist* createLinkedList()
 	return linkedListPtr;
 }
 
+/*
+ * Create a node on the heap for the linked list. Return its address.
+ */
 struct node* createLinkedListNode(void)
 {
 	struct node* linkedListNodePtr;
@@ -53,6 +56,10 @@ struct node* createLinkedListNode(void)
 	return linkedListNodePtr;
 }
 
+/*
+ * Try to insert a node into the linked list and report the outcome of that
+ * attempt.
+ */
 BOOLEAN insertNode(struct linkedlist* linkedListPtr, struct node* newNodePtr)
 {
 	struct node* previousNodePtr;
@@ -120,6 +127,10 @@ BOOLEAN insertNode(struct linkedlist* linkedListPtr, struct node* newNodePtr)
 	return TRUE;
 }
 
+/*
+ * Try to delete a node from the linked list and report the outcome of that
+ * attempt. Uses a struct node as input.
+ */
 BOOLEAN
 deleteNode(struct linkedlist* linkedListPtr, struct node* nodeToDeletePtr)
 {
@@ -200,6 +211,10 @@ deleteNode(struct linkedlist* linkedListPtr, struct node* nodeToDeletePtr)
 	return FALSE;
 }
 
+/*
+ * Try to delete a node from the linked list and report the outcome of that
+ * attempt. Uses the linked list position as input.
+ */
 BOOLEAN
 deleteNodeViaPosition(struct linkedlist* linkedListPtr,
 					  int nodeToDeletePosition)
@@ -294,6 +309,10 @@ deleteNodeViaPosition(struct linkedlist* linkedListPtr,
 	return FALSE;
 }
 
+/*
+ * Try to find a node from the linked list and report the outcome of that
+ * attempt. Uses a node as input.
+ */
 BOOLEAN findNode(struct linkedlist* linkedListPtr, struct node* nodeToFindPtr)
 {
 	/*
@@ -386,6 +405,10 @@ void printCsvLinkedList(struct linkedlist* linkedListPtr, char* delimiter)
 	}
 }
 
+/*
+ * Try to delete all nodes from the linked list and report the outcome of that
+ * attempt. Uses a linked list as input.
+ */
 BOOLEAN deleteLinkedListNodes(struct linkedlist* linkedListPtr)
 {
 	struct node* currentNodePtr;
@@ -433,6 +456,11 @@ BOOLEAN deleteLinkedListNodes(struct linkedlist* linkedListPtr)
 	return TRUE;
 }
 
+/*
+ * Try to delete the linked list and report the outcome of that attempt. Uses a
+ * linked list as input. If nodes still exist within the linked list, it will
+ * delete them first.
+ */
 void deleteLinkedList(struct linkedlist* linkedListPtr)
 {
 	/*
