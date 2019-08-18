@@ -216,7 +216,6 @@ BOOLEAN add_score(struct game_system* thesystem)
 	 * call updateScoreboardManually
 	 */
 	char input[MAXPROMPTLEN];
-	char output[256];
 	char winnerName[NAME_LEN + FGETS_EXTRA_CHAR];
 	char loserName[NAME_LEN + FGETS_EXTRA_CHAR];
 	int winningMargin;
