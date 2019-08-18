@@ -20,8 +20,15 @@ const int DEBUGGING_SCOREBOARD = 1;
 void init_scores_menu(struct scores_menu_entry scores_menu[])
 {
 	/*
-	 * TODO create main menu
+	 * TODO create scores menu
 	 */
+	/*scores_menu[PRINT] = {"Play a game.", print_scores};
+	scores_menu[ADD] = {"High scores menu", add_score};
+	scores_menu[DELETE_ONE] = {"Abort program (no save)", delete_score};
+	scores_menu[DELETE_ALL] = {"Quit program (save)", deleteLinkedListNodes};
+	scores_menu[SAVE] = {"Play a game.", save_data};
+	scores_menu[SAVE_NEW] = {"High scores menu", save_data};
+	scores_menu[QUIT] = {"Quit program (save)", };*/
 }
 
 /**
@@ -556,4 +563,15 @@ int getNumberOffset(int linkedListSize)
 	}
 
 	return offset;
+}
+
+/*
+ * Needed this to get around the main_menu_entry function pointer
+ * excepting a void return. I don't see the point in duplicating the printing
+ * scoreboard function twice, one with a BOOLEAN result and one without.
+ * So calling the print_scores function and ignoring its return result.
+ */
+void printScores(struct game_system* thesystem)
+{
+	print_scores(thesystem);
 }
