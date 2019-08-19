@@ -29,7 +29,7 @@ void init_scores_menu(struct scores_menu_entry scores_menu[])
 	strcpy(scores_menu[SM_DELETE_ALL].text,
 		   "Remove all scores from the scores list.");
 	strcpy(scores_menu[SM_SAVE].text,
-		   "Save Scores back to the file they were loaded from.");
+		   "Save scores back to the current file.");
 	strcpy(scores_menu[SM_SAVE_NEW].text, "Save scores to a new file name.");
 
 	/*
@@ -51,9 +51,6 @@ void init_scores_menu(struct scores_menu_entry scores_menu[])
  **/
 void scores_menu(struct game_system* thesystem)
 {
-	/*
-	 * TODO test scores menu
-	 */
 	int i;
 	int choice;
 	enum input_result inputResult;
@@ -598,10 +595,6 @@ BOOLEAN save_scores(struct game_system* thesystem)
 struct game_result*
 createGameResult(char* winner, char* loser, int winningMargin)
 {
-	/*
-	 * TODO Fix memory leak
-	 */
-
 	struct game_result* gameResultPtr;
 
 	/*

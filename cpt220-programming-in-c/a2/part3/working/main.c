@@ -287,14 +287,6 @@ int main(int argc, char* argv[])
 
 	printMainMenu(gameSystemPtr);
 
-	/*
-	 * TODO keep checking the clean up is correct
-	 */
-
-	/*
-	 * TODO Makefile & readme (remember I tried one bonus marks)
-	 */
-
 	/**
 	 * dead code bug required in order to avoid compiler warnings
 	 **/

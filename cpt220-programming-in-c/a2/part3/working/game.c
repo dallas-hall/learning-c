@@ -118,9 +118,6 @@ void play_game(struct game_system* gameSystemPtr)
 					winner->name, winner->score - loser->score);
 
 			/*
-			 * TODO update scoreboard
-			 */
-			/*
 			 * 1) Create a game_result pointer
 			 * 2) Add it into the game_system through dereference
 			 * 3) free the game_result pointer
@@ -139,9 +136,7 @@ void play_game(struct game_system* gameSystemPtr)
 						 "with a score of %d\n",
 						 thegame.current_player->name,
 						 thegame.current_player->score);
-			/*
-			 * TODO update scoreboard
-			 */
+
 			/*
 			 * 1) Create a game_result pointer
 			 * 2) Add it into the game_system through dereference
