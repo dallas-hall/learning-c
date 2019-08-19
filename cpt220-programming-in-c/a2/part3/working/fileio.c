@@ -393,38 +393,49 @@ char* getLinesToWrite(const struct linkedlist* linkedlist)
 	return strPtr;
 }
 
+/*
 char* getAbsolutePath(char* pathPtr)
 {
-	/*
+	*/
+/*
 	 * Convert all paths in an absolute path. It just makes life easier.
 	 * Got this idea from https://stackoverflow.com/a/229038
 	 *
 	 * But realpath doesn't seem to handle ~ so I will convert manually.
-	 */
+	 *//*
+
 	int i;
 	char absolutePath[PATH_MAX + FGETS_EXTRA_CHAR];
 	char* absolutePathPtr;
 	char* homePathPtr;
 
 	if(pathPtr[0] == '~') {
-		/*
+		*/
+/*
 		 * Move all the chars down one.
-		 */
+		 *//*
+
 		for(i = 0; i < strlen(pathPtr); i++) {
 			pathPtr[i] = pathPtr [i + 1];
 		}
 
 		homePathPtr = getenv("HOME");
-		/*printf("%s\n", homePathPtr);*/
+		*/
+/*printf("%s\n", homePathPtr);*//*
 
-		/*
+
+		*/
+/*
 		 * Once removing the ~, we can get the current user's home directory.
 		 * Got the idea from https://www.tutorialspoint.com/c_standard_library/c_function_getenv.htm
-		 */
+		 *//*
+
 		strcat(homePathPtr, pathPtr);
 
 		absolutePathPtr = realpath(homePathPtr, absolutePath);
-		/*printf("%s\n", absolutePath);*/
+		*/
+/*printf("%s\n", absolutePath);*//*
+
 	}
 	else {
 		absolutePathPtr = realpath(pathPtr, absolutePath);
@@ -433,4 +444,4 @@ char* getAbsolutePath(char* pathPtr)
 	absolutePathPtr = strdup(absolutePath);
 
 	return absolutePathPtr;
-}
+}*/

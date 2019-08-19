@@ -537,7 +537,7 @@ BOOLEAN save_scores(struct game_system* thesystem)
 	BOOLEAN result;
 	enum input_result inputResult;
 	char outputFilePath[PATH_MAX + FGETS_EXTRA_CHAR];
-	char* absolutePathPtr;
+	/*char* absolutePathPtr;*/
 
 	while (1) {
 		inputResult = read_string(
@@ -575,9 +575,10 @@ BOOLEAN save_scores(struct game_system* thesystem)
 				 * to free after.
 				 */
 				free((void*) thesystem->datafile);
-				absolutePathPtr = getAbsolutePath(outputFilePath);
+				thesystem->datafile = strdup(outputFilePath);
+				/*absolutePathPtr = getAbsolutePath(outputFilePath);
 				thesystem->datafile = strdup(absolutePathPtr);
-				free(absolutePathPtr);
+				free(absolutePathPtr);*/
 
 				/*
 				 * Try to save the file and then return its result.

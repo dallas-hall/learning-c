@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
 	struct falsible_long seed = {0};
 	struct game_system* gameSystemPtr = NULL;
 	struct linkedlist* linkedListPtr = NULL;
-	char* absolutePath;
+	/*char* absolutePath;*/
 
 	/*
 	 * We need +1 here because of the program name being passed in automatically
@@ -171,15 +171,16 @@ int main(int argc, char* argv[])
 	 *
 	 * Converting to absolute path to save drama later.
 	 */
-	absolutePath = getAbsolutePath(argv[FILE_PATH_ARG]);
-	if (!init_system(gameSystemPtr, absolutePath)) {
+	/*absolutePath = getAbsolutePath(argv[FILE_PATH_ARG]);*/
+
+	if (!init_system(gameSystemPtr, argv[FILE_PATH_ARG])) {
 		error_print("Couldn't initialise the game system.\n");
 		return EXIT_FAILURE;
 	}
 	else {
 		gameSystemPtr->gameseed.success = seed.success;
 		gameSystemPtr->gameseed.thelong = seed.thelong;
-		free(absolutePath);
+		/*free(absolutePath);*/
 
 		if (DEBUGGING_MAIN) {
 			printDebug(
