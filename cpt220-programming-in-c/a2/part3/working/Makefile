@@ -9,7 +9,7 @@ CFLAGS=-Wall -ansi -pedantic
 LFLAGS=-lm
 
 # Executable binary file(s) to build
-TARGETS=backgammon.out
+TARGETS=backgammon
 
 # Source files to use
 SOURCES=board.c game.c io.c main.c rules.c player.c bar_list.c helpers.c \
