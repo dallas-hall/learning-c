@@ -111,10 +111,6 @@ void play_game(struct game_system* gameSystemPtr)
 			else {
 				winner = loser = NULL;
 				normal_print("\nThe game was a draw!\n");
-				/*
-				 * Need clear_buffer here so the program doesn't exit.
-				 */
-				clear_buffer();
 				return;
 			}
 			normal_print(
@@ -130,11 +126,6 @@ void play_game(struct game_system* gameSystemPtr)
 											 winner->score - loser->score);
 			gameSystemPtr->theresult = *gameResultPtr;
 			free(gameResultPtr);
-
-			/*
-			 * Need clear_buffer here so the program doesn't exit.
-			 */
-			clear_buffer();
 			return;
 		}
 		/* otherwise, check if the game has actually been won and if so

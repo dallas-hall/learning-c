@@ -576,10 +576,18 @@ void printMainMenu(struct game_system* gameSystemPtr)
 					 */
 					gameSystemPtr->the_menus.main_menu[MMC_PLAY].function(
 							gameSystemPtr);
-					updateScoreboardManually(gameSystemPtr->theresult.winner,
-											 gameSystemPtr->theresult.loser,
-											 gameSystemPtr->theresult.won_by,
-											 gameSystemPtr);
+					/*
+					 * skip draws
+					 */
+					if (gameSystemPtr->theresult.winner != NULL &&
+						gameSystemPtr->theresult.loser != NULL) {
+						updateScoreboardManually(
+								gameSystemPtr->theresult.winner,
+								gameSystemPtr->theresult.loser,
+								gameSystemPtr->theresult.won_by,
+								gameSystemPtr);
+					}
+
 					break;
 				case 2:
 					gameSystemPtr->the_menus.main_menu[MMC_SCORES].function(
