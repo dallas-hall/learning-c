@@ -133,10 +133,10 @@ enum input_result player_take_turn(struct player* current_player)
 	normal_print("You have rolled a %d and a %d.\n", dicerolls[FIRST],
 				 dicerolls[SECOND]);
 	/*
-	 * TODO - check end game result
+	 * Used to play games quickly, for testing the add score functionality.
 	 */
-	current_player->score = 1;
-	return IR_QUIT;
+	/*current_player->score = 1 + rand() % 14;
+	return IR_QUIT;*/
 	
 	do {
 		struct move_pair changes[MAX_MOVES];

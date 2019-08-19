@@ -151,10 +151,6 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
 	 * Need to free because strdup calls malloc for us.
 	 */
 	free(strPtr);
-	/*
-	 * TODO change is to be the same file again.
-	 */
-	strcat(outputFile, "-output");
 
 	/*
 	 * Using w to open in write mode. Create a new file if it doesn't exist or
@@ -199,9 +195,6 @@ BOOLEAN save_data(const char fname[], const struct linkedlist* thelist)
  */
 struct game_result* parseLineData(char* line)
 {
-	/*
-	 * TODO fix memory leak
-	 */
 	char* tokenPtr;
 	char* winnersName;
 	char* losersName;
