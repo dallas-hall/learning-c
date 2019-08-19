@@ -69,6 +69,35 @@ to a list pointer and then dereference that into game_system->scoreboard. I
 then had to free the old pointer otherwise I would have a memory leak when
 running valgrind / libasan.
 
+9) Bash's Tilde Expansion
+So I ran into this 'problem' in part 2 and 3. I am using CLion to develop in
+and thus when I run the program I need to pass in parameters within CLion. It
+took me along time to remember that bash performs ~ expansion, making it the
+value of $HOME. CLion doesn't do this. So I spent a lot of time trying to
+manually convert ~ in $HOME and I ran into smashing the stack again. As I was
+trying to solve my stack smash I realised I am doing this for nothing as the
+command line will solve all my problems.........................................
+
+10) CLion Path Woes
+In addition to the ~ problem, CLion was also causing other path woes. It uses
+CMake to I assume compile and link the program and this created some additional
+folders within my source code. Those additional folders became the program's
+current working directory and before realising that, saving files to the
+current working directory wasn't working as expected. This would have been
+a non-issue if I was testing in the command line................................
+
+11) Bonus Marks
+I tried really hard to free all memory as I went along. My output from valgrind
+and libasan was clean when the program went through its normal execution flow.
+
+12) git Workflow
+In assignment 1 I made the mistake of doing all my development on the master
+branch. That lead to wasted time when trying to roll back problems I introduced.
+So this assignment I used feature and bugfix branches for my development. This
+was great when I explored some paths that were dead ends and I could easily
+roll back to a current working state. This assignment taught me a lot about the
+git workflow and working with git on the command line.
+
 Comments
 --------
 I am still bitterly disappointed about someone taking my code and passing it off
