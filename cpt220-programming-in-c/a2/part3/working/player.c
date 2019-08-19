@@ -137,6 +137,8 @@ enum input_result player_take_turn(struct player* current_player)
 	 */
 	/*current_player->score = 1 + rand() % 14;
 	return IR_QUIT;*/
+
+	return IR_QUIT;
 	
 	do {
 		struct move_pair changes[MAX_MOVES];
