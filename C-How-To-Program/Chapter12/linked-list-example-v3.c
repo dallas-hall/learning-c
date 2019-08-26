@@ -368,9 +368,7 @@ void destroyList(struct list** theListPtr)
 				currentNodePtr = tmpNodePtr;
 			}
 		}
-		else {
-			free(*theListPtr);
-		}
+		free(*theListPtr);
 		puts("Done.");
 	}
 	else {
