@@ -360,6 +360,7 @@ void destroyList(struct list** theListPtr)
 	if(*theListPtr != NULL) {
 		currentNodePtr = (*theListPtr)->head;
 
+		// If the list isn't empty, delete the nodes
 		if(currentNodePtr) {
 			while(currentNodePtr != NULL) {
 				tmpNodePtr = currentNodePtr->next;
@@ -368,6 +369,8 @@ void destroyList(struct list** theListPtr)
 				currentNodePtr = tmpNodePtr;
 			}
 		}
+		
+		// Delete the list.
 		free(*theListPtr);
 		puts("Done.");
 	}
