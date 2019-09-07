@@ -15,6 +15,7 @@ int main(void)
 	int n = 1;
 	int lines;
 
+	puts("# Floyd's Triangle");
 	printf("Enter how many lines of Floyd's Triangle to print: ");
 	scanf("%d", &lines);
 
