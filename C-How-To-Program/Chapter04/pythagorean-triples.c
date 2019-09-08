@@ -17,9 +17,9 @@ int main(void)
 
 	 for (i = 1; i < LIMIT; i++) {
 		 side1Squared = i * i;
-		 for (j = i + 1; j < LIMIT; j++) {
+		 for (j = 1; j < LIMIT; j++) {
 			 side2Squared = j * j;
-			 for (k = j + 1; k < LIMIT; k++) {
+			 for (k = 1; k < LIMIT; k++) {
 				 hyptonuseSquared = k * k;
 				 if(side1Squared + side2Squared == hyptonuseSquared) {
 					 printf("[%u, %u, %u] is a Pythagorean Triple.\n", i, j, k);
