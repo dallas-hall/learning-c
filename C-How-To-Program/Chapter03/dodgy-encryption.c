@@ -15,7 +15,12 @@ int main(void)
 
 	puts("# Dodgy Encrypt / Decrypt");
 	do {
-		// Non-digits become 0.
+		/*
+		 * scanf returns an int representing how many valid values were read.
+		 * For 1 input, scanf will return 0 when the value recieved wasn't the expected type.
+		 * For multiple inputs, scanf will return a number indicating how many successful inputs were read.
+		 * Thus you should check that a) scanf didn't return 0 and b) scanf returned the number of inputs you were expecting.
+		 */
 		printf("Enter a 4 digit integer: ");
 		scanf("%hu", &input);
 	} while(!is4DigitsOrLess(input));
@@ -43,7 +48,6 @@ bool is4DigitsOrLess(unsigned short int n)
 	}
 
 	if(digitCount > 4) {
-		fprintf(stderr, "[ERROR] Number greater than 4 digits.\n");
 		return false;
 	}
 	else {
