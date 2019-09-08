@@ -9,10 +9,10 @@ int main(void)
 	//https://www.mathsisfun.com/numbers/factorial.html
 	puts("# Factorial Numbers");
 	do {
-		printf("Enter an integer greater than 0: ");
+		printf("Enter an integer greater than or equal to 0: ");
 		scanf("%d", &input);
 	}
-	while (input <= 0);
+	while (input < 0);
 
 	total = 1;
 	if (input != 1) {
