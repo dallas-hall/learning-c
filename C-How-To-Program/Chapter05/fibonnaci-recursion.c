@@ -1,24 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-long fibonnaci(long n);
+// After around 30 this really starts to slow down due to all the function call overhead of all the double recursive calls.
+#define LIMIT 40
+
+unsigned long long fibonnaci(int n);
 
 int main(void)
 {
-	int limit, i;
-	printf("# Fibonnaci Series - Recursion\nEnter the calculation limit of the Fibonnaci series: ");
-	scanf("%d", &limit);
+	unsigned int printCounter = 0;
 
-	if(limit < 0) {
-		printf("Can only use positive numbers.\n");
-	}
-	else {
-		printf("The fibonnaci series up to %d is ", limit);
-		for(i = 0; i <= limit; i++) {
-			printf("%ld ", fibonnaci(i));
+	puts("# Fibonnaci Series - Recursion");
+
+	printf("The fibonnaci series up to %d is ", LIMIT);
+	for(int i = 0; i <= LIMIT; i++) {
+		printf("%llu ", fibonnaci(i));
+		++printCounter;
+		if(printCounter % 10 == 0) {
+			puts("");
 		}
-		printf("\n");
 	}
+	printf("\n");
 	
 	return EXIT_SUCCESS;
 }
@@ -28,12 +30,12 @@ int main(void)
  * The next number is taken add added to the result, so 1 + 1 = 2. And so on.
  * The recursive formula is fib(n - 1) + fib (n - 2);
  */ 
-long fibonnaci(long n)
+unsigned long long fibonnaci(int n)
 {
-	long recursionResult1, recursionResult2, finalResult;
+	unsigned long long recursionResult1, recursionResult2, finalResult;
 	
 	if (0 == n) {
-		finalResult = n;
+		finalResult = (unsigned long long) n;
 	}
 	else if (1 == n) {
 		finalResult = 1;
