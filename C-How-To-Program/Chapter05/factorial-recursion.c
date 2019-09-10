@@ -1,33 +1,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-long factorial(long n);
+// Even with unsigned long long it will overflow after 21
+#define LIMIT 22
+
+unsigned long long factorial(unsigned int n);
 
 int main(void)
 {
-	long input;
-	int i;
-
-	printf("# Calculating Factorial - Recursion Example\nEnter a positive integer: ");
-	scanf("%ld", &input);
-
-	if(input < 0) {
-		printf("Can only calculate factorials for positve integers.\n");
-	}
-	else {
-		printf("The factorial of %ld (%ld!) is %ld\n", input, input, factorial(input));
-	}
-
-	printf("\n## Calculating First 20 Factorials\n");
-	for(i = 1; i <= 20; i++) {
-		printf("The factorial of %d (%d!) is %ld\n", i, i, factorial(i));
+	printf("# Calculating First %d Factorials\n", LIMIT);
+	for(unsigned int i = 0; i <= LIMIT; i++) {
+		printf("The factorial of %u (%u!) is %llu\n", i, i, factorial(i));
 	}
 	return EXIT_SUCCESS;
 }
 
-long factorial(long n)
+unsigned long long factorial(unsigned int n)
 {
-	long recursionResult, finalResult;
+	unsigned long long recursionResult, finalResult;
 	finalResult = n;
 
 	/*
