@@ -4,7 +4,7 @@
 // After around 30 this really starts to slow down due to all the function call overhead of all the double recursive calls.
 #define LIMIT 40
 
-unsigned long long fibonnaci(int n);
+unsigned long long fibonacci(int n);
 
 int main(void)
 {
@@ -14,7 +14,7 @@ int main(void)
 
 	printf("The fibonacci series up to %d is ", LIMIT);
 	for(int i = 0; i <= LIMIT; i++) {
-		printf("%llu ", fibonnaci(i));
+		printf("%llu ", fibonacci(i));
 		++printCounter;
 		if(printCounter % 10 == 0) {
 			puts("");
@@ -41,8 +41,8 @@ unsigned long long fibonacci(int n)
 		finalResult = 1;
 	}
 	else {
-		recursionResult1 = fibonnaci(n - 1);
-		recursionResult2 = fibonnaci(n - 2);
+		recursionResult1 = fibonacci(n - 1);
+		recursionResult2 = fibonacci(n - 2);
 		finalResult = recursionResult1 + recursionResult2;
 	}
 	return finalResult;
