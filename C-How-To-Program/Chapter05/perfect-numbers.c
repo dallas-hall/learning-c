@@ -3,7 +3,8 @@
 #include <stdbool.h>
 #include <math.h>
 
-#define LIMIT 16
+// 31 and above takes a long time to calculate.
+#define LIMIT 20
 
 bool isPrime(long long int n);
 bool isMersennePrime(long long int n);
