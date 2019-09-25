@@ -3,7 +3,8 @@
 #include <stdbool.h>
 #include <math.h>
 
-// 31 and above takes a long time to calculate.
+// 31 and above takes a long time to calculate if a perfect number.
+// 17 and above takes a long time to find all the divisors.
 #define LIMIT 20
 
 bool isPrime(long long int n);
@@ -23,10 +24,9 @@ int main(void)
             printf("The Mersenne prime value is %lld\n", getMersennePrimeValue(i));
 			printf("Is %d a perfect number exponent? %s\n", i, isPerfectNumberExponent(i) ? "true" : "false");
 			if (isPerfectNumberExponent(i)) {
-				unsigned long int sum = 0;
 				long long int result = getPerfectNumberFromExponent(i);
 				printf("The perfect number of %d is %lld\n", i, result);
-				printFactors(i);
+				printFactors(result);
 			}
         }
 		puts("");
@@ -114,10 +114,11 @@ long long int getPerfectNumberFromExponent(long long int n)
 // https://www.geeksforgeeks.org/find-divisors-natural-number-set-1/
 void printFactors(long long int n)
 {
-	for (unsigned int i = 1; i <= n; i++) {
+	// We don't want to include n as a perfect number is the sum between all factors 1 through to n, excluding n
+	for (long long int i = 1; i < n; i++) {
 		if(n % (long long int) i == 0) {
-			printf("%u + ", i);
+			printf("%lld + ", i);
 		}
 	}
-	printf("\b\b\b\n");
+	printf("\b\b\b = %lld\n", n);
 }
