@@ -3,28 +3,29 @@
 #include <stdbool.h>
 #include <math.h>
 
-bool isPrime(long n);
-bool isMersennePrime(long n);
-unsigned long getMersennePrimeValue(long n);
-bool isPerfectNumber(long n);
-unsigned long getPerfectNumber(long n);
+#define LIMIT 16
+
+bool isPrime(long long int n);
+bool isMersennePrime(long long int n);
+long long int getMersennePrimeValue(long long int n);
+bool isPerfectNumberExponent(long long int n);
+long long int getPerfectNumberFromExponent(long long int n);
+void printFactors(long long int n);
 
 int main(void)
 {
     puts("# Perfect Number Calculation");
-    for(int i = 0; i < 16; i++) {
+    for(unsigned int i = 0; i < LIMIT; i++) {
         printf("Is %d prime? %s\n", i, isPrime(i) ? "true" : "false");
         printf("Is %d a Mersenne prime exponent? %s\n", i, isMersennePrime(i) ? "true" : "false");
         if(isMersennePrime(i)) {
-            printf("The Mersenne prime value is %lu\n", getMersennePrimeValue(i));
-			printf("Is %d a perfect number exponent? %s\n", i, isPerfectNumber(i) ? "true" : "false");
-			if (isPerfectNumber(i)) {
-				int sum = 0;
-				for (int j = 1; j < i; j++) {
-					sum += j;
-					printf("%d + ", j);
-				}
-				printf("\b\b= %d\n", sum);
+            printf("The Mersenne prime value is %lld\n", getMersennePrimeValue(i));
+			printf("Is %d a perfect number exponent? %s\n", i, isPerfectNumberExponent(i) ? "true" : "false");
+			if (isPerfectNumberExponent(i)) {
+				unsigned long int sum = 0;
+				long long int result = getPerfectNumberFromExponent(i);
+				printf("The perfect number of %d is %lld\n", i, result);
+				printFactors(i);
 			}
         }
 		puts("");
@@ -36,7 +37,7 @@ int main(void)
 // https://www.mathsisfun.com/prime-composite-number.html
 // https://www.mathsisfun.com/numbers/prime-numbers-advanced.html
 // A Prime Number can be divided exactly only by 1 or itself. And it must be a whole number greater than 1.
-bool isPrime(long n)
+bool isPrime(long long int n)
 {
     // Numbers 2 and above can be prime.
     if(n > 1) {
@@ -49,11 +50,10 @@ bool isPrime(long n)
         if(n == 2 || n == 3) {
             return true;
         }
-            // Test all numbers between 3 and n - 1. If any can be evenly divided they are not prime.
+        // Test all numbers between 3 and n - 1. If any can be evenly divided they are not prime.
         else {
-            unsigned long i;
-            for (i = 3; (long) i < n - 1; i++) {
-                if (n % (long) i == 0) {
+            for (unsigned long i = 3; (long long int) i < n - 1; i++) {
+                if (n % (long long int) i == 0) {
                     return false;
                 }
             }
@@ -67,7 +67,8 @@ bool isPrime(long n)
 // https://www.mathsisfun.com/numbers/prime-numbers-advanced.html
 // Mersenne prime numbers of the form 2 ^ n - 1 where n must itself be prime.
 // https://en.wikipedia.org/wiki/Mersenne_prime
-bool isMersennePrime(long n)
+// https://www.mersenne.org/primes/
+bool isMersennePrime(long long int n)
 {
     if(!isPrime(n)) {
         return false;
@@ -82,7 +83,7 @@ bool isMersennePrime(long n)
     }
 }
 
-unsigned long getMersennePrimeValue(long n)
+long long int getMersennePrimeValue(long long int n)
 {
     return pow(2, n) - 1;
 }
@@ -92,9 +93,11 @@ unsigned long getMersennePrimeValue(long n)
 // https://en.wikipedia.org/wiki/Euclid%E2%80%93Euler_theorem
 // A whole number that is equal to the sum of its positive factors (except the number itself). - https://www.mathsisfun.com/definitions/perfect-number.html
 // 2 ^ (p - 1) * ((2 ^ p) - 1) when (2 ^ p) - 1 is a Mersenne Prime
-bool isPerfectNumber(long n)
+bool isPerfectNumberExponent(long long int n)
 {
-	if (isMersennePrime(pow(2, n) - 1)) {
+	// There are no known odd perfect numbers - https://en.wikipedia.org/wiki/Perfect_number#Even_perfect_numbers
+	// https://stackoverflow.com/a/6567128
+	if (isPrime(pow(2, n) - 1) && isPrime(n)) {
 		return true;	
 	}
 	else {
@@ -102,7 +105,18 @@ bool isPerfectNumber(long n)
 	}
 }
 
-unsigned long getPerfectNumber(long n)
+long long int getPerfectNumberFromExponent(long long int n)
 {
 	return pow(2, n - 1) * (pow(2, n) - 1);
+}
+
+// https://www.geeksforgeeks.org/find-divisors-natural-number-set-1/
+void printFactors(long long int n)
+{
+	for (unsigned int i = 1; i <= n; i++) {
+		if(n % (long long int) i == 0) {
+			printf("%u + ", i);
+		}
+	}
+	printf("\b\b\b\n");
 }
