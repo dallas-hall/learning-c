@@ -25,6 +25,14 @@ int main(void)
         bool result = isPrimeRecursive((long long int) i, 3);
         printf("Is %u prime? %s.\n", i, result ? "True" : "False");
     }
+
+	puts("## Mersenne Primes");
+    for(unsigned int i = 0; i <= LIMIT; i++) {
+        bool result = isMersennePrime((long long int) i);
+        printf("Is %u a Mersenne prime? %s.\n", i, result ? "True" : "False");
+    }
+
+
     return EXIT_SUCCESS;
 }
 
