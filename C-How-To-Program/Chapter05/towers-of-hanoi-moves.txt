@@ -1,0 +1,89 @@
+# Towers Of Hanoi
+
+## Rules
+
+Tower of Hanoi consists of three pegs or towers with n disks placed one over the other. The objective of the puzzle is to move the stack to another peg following these simple rules.
+1. Only one disk can be moved at a time.
+2. No disk can be placed on top of the smaller disk
+
+## Resources
+
+https://www.mathsisfun.com/games/towerofhanoi.html
+https://www.hackerearth.com/blog/developers/tower-hanoi-recursion-game-algorithm-explained/
+https://www.geeksforgeeks.org/c-program-for-tower-of-hanoi/
+
+# Pseudocode
+
+TARGET_PEG = C
+
+// Starting move
+if disks % 2 is 0, START_MOVE is A to B
+  else START_MOVE is A to C
+
+// Total moves
+MOVES = 2 ^ disks - 1
+base is MOVES / 2 <- integer division
+base is (MOVES - 1) / 2 + 1 <- division
+
+// Recursive Pattern
+Shift n - 1 disks from A to B.
+Shift last disk from A to C.
+Shift n - 1 disks from B to C.
+
+## 3 Disks
+
+MOVES = 2 ^ 3 - 1 = 7
+
+A (disk 1) to C
+A (disk 2) to B
+C (disk 1) to B
+A (disk 3) to C (base case)
+B (disk 1) to A
+B (disk 2) to C
+A (disk 1) to C
+
+## 4 Disks
+
+MOVES = 2 ^ 4 - 1 = 15
+
+A (disk 1) to B
+A (disk 2) to C
+B (disk 1) to C
+A (disk 3) to B
+C (disk 1) to A
+C (disk 2) to B
+A (disk 1) to B
+A (disk 4) to C (base case)
+B (disk 1) to C
+B (disk 2) to A
+C (disk 1) to A
+B (disk 3) to C
+A (disk 1) to B
+A (disk 2) to C
+B (disk 1) to C
+
+## 5 Disks
+
+MOVES = 2 ^ 5 - 1 = 31
+
+A (disk 1) to C
+A (disk 2) to B
+C (disk 1) to B
+A (disk 3) to C
+B (disk 1) to A
+B (disk 2) to C
+A (disk 1) to C
+A (disk 4) to B
+C (disk 1) to B
+C (disk 2) to A
+B (disk 1) to A
+C (disk 3) to B
+A (disk 1) to C
+A (disk 2) to B
+C (disk 1) to B
+A (disk 5) to C (base case)
+
+
+
+
+
