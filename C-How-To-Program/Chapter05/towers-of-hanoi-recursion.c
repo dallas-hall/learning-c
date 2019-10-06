@@ -5,7 +5,7 @@
 #define SWAP_PEG 'B'
 #define END_PEG 'C'
 
-void towerOfHanoi(int towerOfHanoi, char fromPeg, char ToPeg, char swapPeg);
+void towerOfHanoi(int disksToMove, char fromPeg, char ToPeg, char swapPeg);
 
 int main(void)
 {
