@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define ARRAY_SIZE 13
+
 int main(void)
 {
 	/* Can hold 12 chars plus null control character '\0' */
-	char string1[13];
+	char string1[ARRAY_SIZE];
 	/* Holds 13 chars, the string literal + '\0' */
 	char string2[] = "Hello world!";
 	/* Holds 13 chars - can use ASCII code points or Unicode code points also */
 	char string3[] = {'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!', '\0'};
-	int i;
-
 
 	printf("# Strings Are Really Character Arrays\nEnter a string <= 12 characters: ");
 	/*
@@ -25,7 +25,7 @@ int main(void)
 
 	printf("## string1 - scanf\n### Printing For Loop\n");
 	/* Output characters until '\0' is encountered */
-	for (i = 0; string1[i] != '\0'; i++) {
+	for (size_t i = 0; i < ARRAY_SIZE && string1[i] != '\0'; i++) {
 		printf("%c", string1[i]);
 	}
 	/*
@@ -35,7 +35,7 @@ int main(void)
 	printf("\n### Printing printf\n%s\n", string1);
 
 	printf("\n## string2 - String Literal\n### Printing For Loop\n");	
-	for (i = 0; string2[i] != '\0'; i++) {
+	for (size_t i = 0; i < ARRAY_SIZE && string2[i] != '\0'; i++) {
 		printf("%c", string2[i]);
 	}
 	/*
@@ -45,11 +45,10 @@ int main(void)
 	printf("\n### Printing printf\n%s\n", (char *) &string2);
 
 	printf("\n## string3 - Character List\n### Printing For Loop\n");	
-	for (i = 0; string3[i] != '\0'; i++) {
+	for (size_t i = 0; i < ARRAY_SIZE && string3[i] != '\0'; i++) {
 		printf("%c", string3[i]);
 	}
 	printf("\n### Printing printf\n%s\n", string3);
-
 
 	return EXIT_SUCCESS;
 }
