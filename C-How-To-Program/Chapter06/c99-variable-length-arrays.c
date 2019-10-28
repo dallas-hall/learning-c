@@ -8,7 +8,7 @@ void print1dArray(int a[], size_t length);
 void print2dArray(size_t row, size_t col, int[row][col]);
 
 int main(void) {
-    puts("# c99's Variable Length Array (runtime size creation");
+    puts("# c99's Variable Length Array (runtime size creation)");
     puts("Creating arrays.");
     srand((unsigned int) time(NULL));
 
@@ -22,10 +22,17 @@ int main(void) {
     int a2[a2Row][a2Col];
     populate2dArray(a2Row, a2Col, a2);
 
-    printf("Printing 1d c99 variable length array with function, it has a size of %zu.\n", a1Length);
+	puts("## 1D VLA");
+	// sizeof is calculated at runtime for VLAs
+    printf("The sizeof of an integer on this machine is %lu bytes.\n", sizeof(int));
+    printf("The number of elements in this 1d c99 variable length array is %zu.\n", a1Length);
+    printf("The sizeof this variable length 1D array is %lu bytes * %zu elements which is %lu bytes.\n", sizeof(int), sizeof(a1) / sizeof(int), sizeof(a1));
     print1dArray(a1, a1Length);
 
-    printf("Printing 2d c99 variable length array with function, it has a size of %zu by %zu.\n", a2Row, a2Col);
+	puts("## 2D VLA");
+    printf("The sizeof of an integer on this machine is %lu bytes.\n", sizeof(int));
+    printf("The number of elements in this 2d c99 variable length array is %zu by %zu which is %zu.\n", a2Row, a2Col, a2Row * a2Col);
+    printf("The sizeof this variable length 2D array is %lu bytes * %zu elements which is %lu bytes.\n", sizeof(int), sizeof(a2) / sizeof(int), sizeof(a2));
     print2dArray(a2Row, a2Col, a2);
 
     return EXIT_SUCCESS;
@@ -64,5 +71,5 @@ void print2dArray(size_t row, size_t col, int a[row][col]) {
         }
         printf("\b\b],");
     }
-    printf("\b\n]");
+    printf("\b\n]\n");
 }
