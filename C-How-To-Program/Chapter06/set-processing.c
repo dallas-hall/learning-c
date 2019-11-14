@@ -14,6 +14,9 @@ int getUniqueElementCountTwoSets(int a[], size_t length1, int b[], size_t length
  * https://en.wikipedia.org/wiki/Union_(set_theory)
  */
 void setUnion(int a[], size_t length1, int b[], size_t length2, int c[], size_t length3);
+//https://en.wikipedia.org/wiki/Intersection_(set_theory)
+int getCommonElementCountTwoSets(int a[], size_t length1, int b[], size_t length2);
+void setIntersection(int a[], size_t length1, int b[], size_t length2, int c[], size_t length3);
 
 int main(void) {
     puts("# Union Of 2 Sets");
@@ -40,17 +43,22 @@ int main(void) {
     printf("The amount of unique elements in array2 is %d.\n", getUniqueElementCountOneSet(a2, SIZE));
     printf("The amount of unique elements between both arrays is %d.\n", a3Size);
 
-
+    // Union
     int a3[a3Size];
     setUnion(a1, SIZE, a2, SIZE, a3, a3Size);
     print1dArray(a3, a3Size);
+
+    // Intersection
+    int a4Szie = a3Size;
+    int a4[a4Szie];
+
 
     return EXIT_SUCCESS;
 }
 
 void populate1dArray(int a[], size_t length) {
     for (size_t i = 0; i < length; i++) {
-        // Random number between 0 and 100
+        // Random number between 0 and 100. This doesn't check for duplicates
         a[i] = rand() % 101;
     }
 }
@@ -155,4 +163,18 @@ void setUnion(int a[], size_t length1, int b[], size_t length2, int c[], size_t 
             ++elementsAdded;
         }
     }
+}
+
+int getCommonElementCountTwoSets(int a[], size_t length1, int b[], size_t length2)
+{
+    int result = 0;
+
+
+    return result;
+}
+
+// https://en.wikipedia.org/wiki/Set_(mathematics)#Intersections
+void setIntersection(int a[], size_t length1, int b[], size_t length2, int c[], size_t length3)
+{
+
 }
