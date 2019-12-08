@@ -12,15 +12,15 @@ void bubbleSortAsc(int a[], size_t size);
 void bubbleSortDesc(int a[], size_t size);
 void mergeSortTwoSets(const int a[], size_t length1, const int b[], size_t length2, int c[], size_t length3);
 bool areTwoSortedSetsEqual(const int a[], size_t length1, const int b[], size_t length2);
-int getUniqueElementCountOneSortedSet(const int a[], size_t length1);
-int getUniqueElementCountTwoSortedSets(const int a[], size_t length1, const int b[], size_t length2);
+unsigned long getUniqueElementCountOneSortedSet(const int a[], size_t length1);
+unsigned long getUniqueElementCountTwoSortedSets(const int a[], size_t length1, const int b[], size_t length2);
 /*
  * https://en.wikipedia.org/wiki/Set_theory
  * https://en.wikipedia.org/wiki/Union_(set_theory)
  */
 void twoSortedSetUnion(const int a[], size_t length1, const int b[], size_t length2, int c[], size_t length3);
 //https://en.wikipedia.org/wiki/Intersection_(set_theory)
-int getCommonUniqueElementCountTwoOrderedSets(const int a[], size_t length1, const int b[], size_t length2);
+unsigned long getCommonUniqueElementCountTwoOrderedSets(const int a[], size_t length1, const int b[], size_t length2);
 void twoSortedSetIntersection(int a[], size_t length1, int b[], size_t length2, int c[], size_t length3);
 
 int main(void) {
@@ -65,20 +65,20 @@ int main(void) {
 
 	puts("Comparing arrays.");
 	printf("Are the 2 sorted sets equal? %s\n", areTwoSortedSetsEqual(a1, SIZE, a2, SIZE) ? "true" : "false");
-	printf("The amount of unique elements in a1 is %d.\n", getUniqueElementCountOneSortedSet(a1, SIZE));
-	printf("The amount of unique elements in a2 is %d.\n", getUniqueElementCountOneSortedSet(a2, SIZE));
+	printf("The amount of unique elements in a1 is %lu.\n", getUniqueElementCountOneSortedSet(a1, SIZE));
+	printf("The amount of unique elements in a2 is %lu.\n", getUniqueElementCountOneSortedSet(a2, SIZE));
 
 
 	puts("## Set union.");
-	size_t uniqueElementCountBothSets = getUniqueElementCountTwoSortedSets(a1, SIZE, a2, SIZE);
-	printf("The amount of unique elements in both arrays is %d.\n", (int) uniqueElementCountBothSets);
+	unsigned long uniqueElementCountBothSets = getUniqueElementCountTwoSortedSets(a1, SIZE, a2, SIZE);
+	printf("The amount of unique elements in both arrays is %lu.\n", uniqueElementCountBothSets);
 	int setUnion[uniqueElementCountBothSets];
 	twoSortedSetUnion(a1, SIZE, a2, SIZE, setUnion, uniqueElementCountBothSets);
 	print1dArray(setUnion, uniqueElementCountBothSets);
 
 	puts("## Set intersection.");
-	size_t commonElementsBothSets = getCommonUniqueElementCountTwoOrderedSets(a1, SIZE, a2, SIZE);
-	printf("The amount of common elements between both arrays is %d.\n", (int) commonElementsBothSets);
+	unsigned long commonElementsBothSets = getCommonUniqueElementCountTwoOrderedSets(a1, SIZE, a2, SIZE);
+	printf("The amount of common elements between both arrays is %lu.\n", commonElementsBothSets);
 	int setIntersection[commonElementsBothSets];
 	twoSortedSetIntersection(a1, SIZE, a2, SIZE, setIntersection, commonElementsBothSets);
 	print1dArray(setIntersection, commonElementsBothSets);
@@ -205,8 +205,8 @@ bool areTwoSortedSetsEqual(const int a[], size_t length1, const int b[], size_t 
 	return true;
 }
 
-int getUniqueElementCountOneSortedSet(const int a[], size_t length1) {
-	int count = length1;
+unsigned long getUniqueElementCountOneSortedSet(const int a[], size_t length1) {
+	unsigned long count = length1;
 
 	for (size_t i = 0; i < length1; i++) {
 		// Check all the values inside of a[] against each other
@@ -229,7 +229,7 @@ int getUniqueElementCountOneSortedSet(const int a[], size_t length1) {
 }
 
 
-int getUniqueElementCountTwoSortedSets(const int a[], size_t length1, const int b[], size_t length2) {
+unsigned long getUniqueElementCountTwoSortedSets(const int a[], size_t length1, const int b[], size_t length2) {
 	// Merge the sets
 	size_t mergeSortedLength = length1 + length2;
 	int mergedSorted[mergeSortedLength];
@@ -266,7 +266,7 @@ void twoSortedSetUnion(const int a[], size_t length1, const int b[], size_t leng
 	}
 }
 
-int getCommonUniqueElementCountTwoOrderedSets(const int a[], size_t length1, const int b[], size_t length2)
+unsigned long getCommonUniqueElementCountTwoOrderedSets(const int a[], size_t length1, const int b[], size_t length2)
 {
 	size_t result = 0;
 
