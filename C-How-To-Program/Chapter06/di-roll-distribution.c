@@ -5,8 +5,8 @@
 #define DICE_SIDES 6
 #define MAX_ROLLS 36000
 
-int rollDice(void);
-void printDiRollTable();
+unsigned int rollDice(void);
+void printDiRollTable(void);
 
 int main(void)
 {
@@ -15,16 +15,14 @@ int main(void)
 
 	// Minus 1 because rolls are between 2 and 12, 11 combinations.
 	size_t rollsLength = (DICE_SIDES * 2) - 1;
-	int rolls[rollsLength];
+	unsigned int rolls[rollsLength];
 	for (size_t i = 0; i < rollsLength; i++) {
 		rolls[i] = 0;
 	}
 
-	int di1;
-	int di2;
 	for (size_t i = 0; i < MAX_ROLLS; i++) {
 		// Increment each roll by once when its rolled.
-		int rollTotal = rollDice() + rollDice();
+		unsigned int rollTotal = rollDice() + rollDice();
 		// 0 is 1 + 1 = 2 ... 11 is 6 + 6 = 12
 		switch (rollTotal) {
 			case 2:
@@ -64,8 +62,8 @@ int main(void)
 		}
 	}
 
-	int total = 0;
-	int totalRolled = 0;
+	unsigned int total = 0;
+	unsigned int totalRolled = 0;
 	for (size_t i = 0; i < rollsLength; i++) {
 		switch (i) {
 			case 0:
@@ -123,7 +121,7 @@ int main(void)
 	return EXIT_SUCCESS;
 }
 
-int rollDice(void)
+unsigned int rollDice(void)
 {
 	/*
 	 * rand() produces a random number between 0 and at least 32767
@@ -132,7 +130,7 @@ int rollDice(void)
 	 * We want a number between 1 and 6, so we add 1 before returning.
 	 * After the first execution, rand will produce the same results over and over again. This is useful for debugging.
 	 */
-	return 1 + (rand() % 6);
+	return (unsigned int) 1 + (rand() % 6);
 }
 
 void printDiRollTable()
@@ -147,7 +145,6 @@ void printDiRollTable()
 	puts("");
 
 	// Print body
-	int sideToPrint = 1;
 	for (size_t i = 1; i <= DICE_SIDES; i++) {
 		// Print sides
 		printf("[%-1d]", (int) i);
