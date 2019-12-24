@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <string.h>
 
 // Standard size is 8 x 8
 #define BOARD_SIZE 8
@@ -16,10 +17,13 @@
 #define MAX_LEGAL_MOVE 7
 
 void print2dArray(size_t m, size_t n, int a[][n]);
-void setPossibleKnightMoves(size_t totalPossibleMoves, size_t xyMoves, int possibleMoves[][xyMoves]);
+void setHorizontalMovements(int a[]);
+void setVerticalMovements(int a[]);
+void setAccessibilityMatrix(int accessibilityMatrix[][BOARD_SIZE]);
 void print1dArray(size_t m, int a[]);
-bool allMovesAttempted(size_t m, bool a[]);
+bool allMovesAttempted(size_t m, const bool a[]);
 void resetAttemptedMoves(size_t m, bool a[]);
+void knightsTour(size_t boardSize, int board[][boardSize], const int verticalMovements[], const int horizontalMovements[], int startRow, int startColumn, bool useAccessibility, const int accessibilityMatrix[][boardSize]);
 
 int main(void)
 {
@@ -27,10 +31,21 @@ int main(void)
 	puts("Can a knight on a chessboard tour every part of the chessboard, once and only once?");
 
 	puts("## Setup");
+	/*
+	 * An accessibility matrix is a 2D array that has numerical labels attached to it.
+	 * These labels indicated how many possible moves can be done by a knight from each given square.
+	 * The algorithm should favour going for squares that have the lowest accessibility label, as they are harder to get to.
+	 * https://en.wikipedia.org/wiki/Knight%27s_graph
+	 */
+	int accessibilityMatrix[BOARD_SIZE][BOARD_SIZE] = {0};
+	setAccessibilityMatrix(accessibilityMatrix);
+	puts("Knight your graph accessibility matrix.");
+	print2dArray(BOARD_SIZE, BOARD_SIZE, accessibilityMatrix);
+
 	// Initialise to 0. The move number will be added to the board when the knight lands there.
-	int board[BOARD_SIZE][BOARD_SIZE] = {0};
+	int chessBoard[BOARD_SIZE][BOARD_SIZE] = {0};
 	puts("Chess board starting state.");
-	print2dArray(BOARD_SIZE, BOARD_SIZE, board);
+	print2dArray(BOARD_SIZE, BOARD_SIZE, chessBoard);
 
 	/*
 	 * Not using cartesian x y coordinates. As our 0,0 is the top left, and not in the middle.
@@ -38,28 +53,14 @@ int main(void)
 	 * Negative numbers in vertical mean up and positive means down.
 	 * Combining the values of horizontalMovement[n] and verticalMovement[n] tells us how to move the knight.
 	 */
-	int horizontalMovement[POSSIBLE_MOVES];
-	horizontalMovement[0] = 2; // Move 2 to the right
-	horizontalMovement[1] = 1; // Move 1 to the right
-	horizontalMovement[2] = -1; // Move 1 to the left
-	horizontalMovement[3] = -2; // Move 2 to the left
-	horizontalMovement[4] = -2; // Move 2 to the left
-	horizontalMovement[5] = -1; // Move 1 to the left
-	horizontalMovement[6] = 1; // Move 1 to the right
-	horizontalMovement[7] = 2; // Move 2 to the right
 	puts("Possible horizontal and vertical moves. Combine horizontalMovement[n] and verticalMovement[n] to make a possible move.");
-	print1dArray(POSSIBLE_MOVES, horizontalMovement);
+	int horizontalMovements[POSSIBLE_MOVES];
+	setHorizontalMovements(horizontalMovements);
+	print1dArray(POSSIBLE_MOVES, horizontalMovements);
 
-	int verticalMovement[POSSIBLE_MOVES];
-	verticalMovement[0] = -1; // Move up 1
-	verticalMovement[1] = -2; // Move up 2
-	verticalMovement[2] = -2; // Move up 2
-	verticalMovement[3] = -1; // Move up 1
-	verticalMovement[4] = 1; // Move down 1
-	verticalMovement[5] = 2; // Move down 2
-	verticalMovement[6] = 2; // Move down 2
-	verticalMovement[7] = 1; // Move down 1
-	print1dArray(POSSIBLE_MOVES, verticalMovement);
+	int verticalMovements[POSSIBLE_MOVES];
+	setVerticalMovements(verticalMovements);
+	print1dArray(POSSIBLE_MOVES, verticalMovements);
 
 	puts("## Running");
 	/*
@@ -69,6 +70,139 @@ int main(void)
 	 */
 	int currentRow = 3;
 	int currentColumn = 4;
+	puts("Naive PRN logic.");
+	knightsTour(BOARD_SIZE, chessBoard, verticalMovements, horizontalMovements, currentRow, currentColumn, false, accessibilityMatrix);
+
+	puts("Chess board final state.");
+	print2dArray(BOARD_SIZE, BOARD_SIZE, chessBoard);
+
+	puts("Knights tour graph logic.");
+	// 0 out the array.
+	memset(chessBoard, 0, sizeof(chessBoard));
+	knightsTour(BOARD_SIZE, chessBoard, verticalMovements, horizontalMovements, currentRow, currentColumn, true, accessibilityMatrix);
+
+	puts("Chess board final state.");
+	print2dArray(BOARD_SIZE, BOARD_SIZE, chessBoard);
+
+	return EXIT_SUCCESS;
+}
+
+void print2dArray(size_t m, size_t n, int a[][n])
+{
+	size_t lastLine = m - 1;
+	printf("%s", "[\n");
+	for (size_t i = 0; i < m; i++) {
+		printf("%s", "\t[");
+		for (size_t j = 0; j < n; j++) {
+			printf("%2d, ", a[i][j]);
+		}
+		if (i != lastLine) {
+			printf("%s", "\b\b],\n");
+		}
+		else {
+			printf("%s", "\b\b]\n");
+		}
+	}
+	printf("%s", "]\n");
+}
+
+void setHorizontalMovements(int a[])
+{
+	a[0] = 2; // Move 2 to the right
+	a[1] = 1; // Move 1 to the right
+	a[2] = -1; // Move 1 to the left
+	a[3] = -2; // Move 2 to the left
+	a[4] = -2; // Move 2 to the left
+	a[5] = -1; // Move 1 to the left
+	a[6] = 1; // Move 1 to the right
+	a[7] = 2; // Move 2 to the right
+}
+
+void setVerticalMovements(int a[])
+{
+	a[0] = -1; // Move up 1
+	a[1] = -2; // Move up 2
+	a[2] = -2; // Move up 2
+	a[3] = -1; // Move up 1
+	a[4] = 1; // Move down 1
+	a[5] = 2; // Move down 2
+	a[6] = 2; // Move down 2
+	a[7] = 1; // Move down 1
+}
+
+void print1dArray(size_t m, int a[])
+{
+	printf("[");
+	for (size_t i = 0; i < m; i++) {
+		printf("%d, ", a[i]);
+	}
+	printf("%s", "\b\b]\n");
+}
+
+void setAccessibilityMatrix(int accessibilityMatrix[][BOARD_SIZE])
+{
+	for (size_t i = 0; i < BOARD_SIZE; i++) {
+		switch(i) {
+			case 0:
+			case 7:
+				accessibilityMatrix[i][0] = 2;
+				accessibilityMatrix[i][1] = 3;
+				accessibilityMatrix[i][2] = 4;
+				accessibilityMatrix[i][3] = 4;
+				accessibilityMatrix[i][4] = 4;
+				accessibilityMatrix[i][5] = 4;
+				accessibilityMatrix[i][6] = 3;
+				accessibilityMatrix[i][7] = 2;
+				break;
+			case 1:
+			case 6:
+				accessibilityMatrix[i][0] = 3;
+				accessibilityMatrix[i][1] = 4;
+				accessibilityMatrix[i][2] = 6;
+				accessibilityMatrix[i][3] = 6;
+				accessibilityMatrix[i][4] = 6;
+				accessibilityMatrix[i][5] = 6;
+				accessibilityMatrix[i][6] = 4;
+				accessibilityMatrix[i][7] = 3;
+				break;
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+				accessibilityMatrix[i][0] = 4;
+				accessibilityMatrix[i][1] = 6;
+				accessibilityMatrix[i][2] = 8;
+				accessibilityMatrix[i][3] = 8;
+				accessibilityMatrix[i][4] = 8;
+				accessibilityMatrix[i][5] = 8;
+				accessibilityMatrix[i][6] = 6;
+				accessibilityMatrix[i][7] = 4;
+				break;
+		}
+	}
+}
+
+bool allMovesAttempted(size_t m, bool const a[])
+{
+	for (size_t i = 0; i < m; i++) {
+		if (a[i] !=  true) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void resetAttemptedMoves(size_t m, bool a[])
+{
+	for (size_t i = 0; i < m; i++) {
+		a[i] = false;
+	}
+}
+
+void knightsTour(size_t boardSize, int board[][boardSize], const int verticalMovements[], const int horizontalMovements[], int startRow, int startColumn, bool useAccessibility, const int accessibilityMatrix[][boardSize])
+{
+	int currentRow = startRow;
+	int currentColumn = startColumn;
 	int moveCounter = 0;
 	bool movesAttempted[POSSIBLE_MOVES] = {false};
 	board[currentRow][currentColumn] = ++moveCounter;
@@ -83,7 +217,7 @@ int main(void)
 	int prn = 0;
 	for (size_t i = 0; i < MAX_MOVES; i++) {
 		while(!validMove) {
-			// Reset the variables
+			// Reset the variables, needed for the continue statements
 			moveHasntBeenDoneYet = false;
 			moveStaysOnBoard = false;
 
@@ -110,8 +244,8 @@ int main(void)
 				continue;
 			}
 			movesAttempted[prn] = true;
-			tempRow += verticalMovement[prn];
-			tempColumn += horizontalMovement[prn];
+			tempRow += verticalMovements[prn];
+			tempColumn += horizontalMovements[prn];
 
 			// Test if the move doesn't go off the board
 			if(tempRow >= MIN_LEGAL_MOVE && tempRow <= MAX_LEGAL_MOVE &&
@@ -130,6 +264,15 @@ int main(void)
 				continue;
 			}
 
+			// Test the move is using the best path (ie lowest accessibility label) from the accessibility matrix
+			if(useAccessibility) {
+				// Get accessibility number
+
+				// Check all possible paths
+
+				// See if current path is best, if not use the best path
+			}
+
 			if (moveStaysOnBoard && moveHasntBeenDoneYet) {
 				validMove = true;
 			}
@@ -139,8 +282,8 @@ int main(void)
 		}
 
 		// Make the move
-		currentRow += verticalMovement[prn];
-		currentColumn += horizontalMovement[prn];
+		currentRow += verticalMovements[prn];
+		currentColumn += horizontalMovements[prn];
 		board[currentRow][currentColumn] = ++moveCounter;
 
 		// Reset variables
@@ -148,53 +291,5 @@ int main(void)
 		moveStaysOnBoard = false;
 		validMove = false;
 		resetAttemptedMoves(POSSIBLE_MOVES, movesAttempted);
-	}
-	print2dArray(BOARD_SIZE, BOARD_SIZE, board);
-
-	return EXIT_SUCCESS;
-}
-
-void print2dArray(size_t m, size_t n, int a[][n])
-{
-	size_t lastLine = m - 1;
-	printf("%s", "[\n");
-	for (size_t i = 0; i < m; i++) {
-		printf("%s", "\t[");
-		for (size_t j = 0; j < n; j++) {
-			printf("%2d, ", a[i][j]);
-		}
-		if (i != lastLine) {
-			printf("%s", "\b\b],\n");
-		}
-		else {
-			printf("%s", "\b\b]\n");
-		}
-	}
-	printf("%s", "]\n");
-}
-
-void print1dArray(size_t m, int a[])
-{
-	printf("[");
-	for (size_t i = 0; i < m; i++) {
-		printf("%d, ", a[i]);
-	}
-	printf("%s", "\b\b]\n");
-}
-
-bool allMovesAttempted(size_t m, bool a[])
-{
-	for (size_t i = 0; i < m; i++) {
-		if (a[i] !=  true) {
-			return false;
-		}
-	}
-	return true;
-}
-
-void resetAttemptedMoves(size_t m, bool a[])
-{
-	for (size_t i = 0; i < m; i++) {
-		a[i] = false;
 	}
 }
