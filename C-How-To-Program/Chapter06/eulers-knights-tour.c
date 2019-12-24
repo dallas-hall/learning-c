@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <stdbool.h>
 
 // Standard size is 8 x 8
 #define BOARD_SIZE 8
@@ -10,6 +12,8 @@
  * L shaped moves, 2 in one direction and then over 1 in a perpendicular direction.
  */
 #define POSSIBLE_MOVES 8
+#define MIN_LEGAL_MOVE 0
+#define MAX_LEGAL_MOVE 7
 
 void print2dArray(size_t m, size_t n, int a[][n]);
 void setPossibleKnightMoves(size_t totalPossibleMoves, size_t xyMoves, int possibleMoves[][xyMoves]);
@@ -74,9 +78,51 @@ int main(void)
 	int moveCounter = 0;
 	// Must be between 0 and 7 inclusive, ie 8 possible moves
 	int moveNumber = 0;
-	for (size_t i = 0; i < MAX_MOVES; i++) {
+	// Various variables needed
+	bool moveStaysOnBoard = false;
+	bool moveHasntBeenDoneYet = false;
+	bool validMove = false;
+	int tempRow = currentRow;
+	int tempColumn = currentColumn;
+	int prn = 0;
+	for (size_t i = 0; i < 10; i++) {
+		while(!validMove) {
+			// Select a move, between 0 and 7
+			prn = rand() % 8;
+			tempRow += verticalMovement[prn];
+			tempColumn += horizontalMovement[prn];
 
+			// Test if the move doesn't go off the board
+			if(currentRow + tempRow >= MIN_LEGAL_MOVE && currentRow + tempRow <= MAX_LEGAL_MOVE &&
+			currentColumn + tempColumn >= MIN_LEGAL_MOVE && currentColumn + tempColumn <= MAX_LEGAL_MOVE) {
+				moveStaysOnBoard = true;
+			}
+
+			// Test that moved hasn't been done yet
+			if(board[currentRow][currentColumn] != 0) {
+				moveHasntBeenDoneYet = true;
+			}
+
+			if (moveStaysOnBoard && moveHasntBeenDoneYet) {
+				validMove = true;
+			}
+			else {
+				// Reset the variables
+				moveHasntBeenDoneYet = false;
+				moveStaysOnBoard = false;
+			}
+		}
+		// Make the move
 		++moveCounter;
+		currentRow += verticalMovement[prn];
+		currentColumn += horizontalMovement[prn];
+		board[currentRow][currentColumn] = moveCounter;
+
+		// Reset variables
+		++moveCounter;
+		moveHasntBeenDoneYet = false;
+		moveStaysOnBoard = false;
+		validMove = false;
 	}
 	print2dArray(BOARD_SIZE, BOARD_SIZE, board);
 
