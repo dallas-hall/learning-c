@@ -3,26 +3,82 @@
 
 // Standard size is 8 x 8
 #define BOARD_SIZE 8
-// The knight has 8 possible moves
+// 64 board locations
+#define MAX_MOVES BOARD_SIZE * BOARD_SIZE
+/*
+ * The knight has a maximum of 8 possible moves.
+ * L shaped moves, 2 in one direction and then over 1 in a perpendicular direction.
+ */
 #define POSSIBLE_MOVES 8
-// Store the 2 values [x][y] for the move
-#define X_Y_MOVES 2
 
 void print2dArray(size_t m, size_t n, int a[][n]);
 void setPossibleKnightMoves(size_t totalPossibleMoves, size_t xyMoves, int possibleMoves[][xyMoves]);
+void print1dArray(size_t m, int a[]);
 
 int main(void)
 {
 	puts("# Euler's Knight's Tour Problem");
 	puts("Can a knight on a chessboard tour every part of the chessboard, once and only once?");
 
+	puts("## Setup");
+	// Initialise to 0. The move number will be added to the board when the knight lands there.
 	int board[BOARD_SIZE][BOARD_SIZE] = {0};
+	puts("Chess board starting state.");
 	print2dArray(BOARD_SIZE, BOARD_SIZE, board);
 
-	// [x,y]
-	int possibleMoves[POSSIBLE_MOVES][X_Y_MOVES];
-	setPossibleKnightMoves(POSSIBLE_MOVES, X_Y_MOVES, possibleMoves);
-	print2dArray(POSSIBLE_MOVES, X_Y_MOVES, possibleMoves);
+	/*
+	 * Not using cartesian x y coordinates. As our 0,0 is the top left, and not in the middle.
+	 * Negative numbers in horizontal mean left and positive means right.
+	 * Negative numbers in vertical mean up and positive means down.
+	 * Combining the values of horizontalMovement[n] and verticalMovement[n] tells us how to move the knight.
+	 */
+	int horizontalMovement[POSSIBLE_MOVES];
+	horizontalMovement[0] = 2; // Move 2 to the right
+	horizontalMovement[1] = 1; // Move 1 to the right
+	horizontalMovement[2] = -1; // Move 1 to the left
+	horizontalMovement[3] = -2; // Move 2 to the left
+	horizontalMovement[4] = -2; // Move 2 to the left
+	horizontalMovement[5] = -1; // Move 1 to the left
+	horizontalMovement[6] = 1; // Move 1 to the right
+	horizontalMovement[7] = 2; // Move 2 to the right
+	puts("Possible horizontal and vertical moves. Combine horizontalMovement[n] and verticalMovement[n] to make a possible move.");
+	print1dArray(POSSIBLE_MOVES, horizontalMovement);
+
+	int verticalMovement[POSSIBLE_MOVES];
+	verticalMovement[0] = -1; // Move up 1
+	verticalMovement[1] = -2; // Move up 2
+	verticalMovement[2] = -2; // Move up 2
+	verticalMovement[3] = -1; // Move up 1
+	verticalMovement[4] = 1; // Move down 1
+	verticalMovement[5] = 2; // Move down 2
+	verticalMovement[6] = 2; // Move down 2
+	verticalMovement[7] = 1; // Move down 1
+	print1dArray(POSSIBLE_MOVES, verticalMovement);
+
+	/*
+	 * This is the position of the knight, based on 0,0 being top left of the 8x8 board.
+	 * The book positions the K at row 3, column 4
+	 */
+	int currentRow = 3;
+	int currentColumn = 4;
+
+	puts("## Running");
+	/*
+	 * Choose from one of the 8 possible moves.
+	 * Must test that every move
+	 * a) doesn't land off of the board (outside of 0-7 for x,y)
+	 * b) the knight hasn't been there already. (move number is not 0)
+	 * Use currentRow += verticalMovement[moveNumber] and currentColumn += horizontalMovement[moveNumber]
+	 */
+	// Can't exceed 63, ie 64 moves
+	int moveCounter = 0;
+	// Must be between 0 and 7 inclusive, ie 8 possible moves
+	int moveNumber = 0;
+	for (size_t i = 0; i < MAX_MOVES; i++) {
+
+		++moveCounter;
+	}
+	print2dArray(BOARD_SIZE, BOARD_SIZE, board);
 
 	return EXIT_SUCCESS;
 }
@@ -46,51 +102,11 @@ void print2dArray(size_t m, size_t n, int a[][n])
 	printf("%s", "]\n");
 }
 
-void setPossibleKnightMoves(size_t totalPossibleMoves, size_t xyMoves, int possibleMoves[][xyMoves])
+void print1dArray(size_t m, int a[])
 {
-	for (size_t i = 0; i < totalPossibleMoves; i++) {
-		switch (i) {
-			// Everything here is [x][y]
-			case 0:
-				// Move across 2 to the right and 1 up
-				possibleMoves[i][0] = 2;
-				possibleMoves[i][1] = 1;
-				break;
-			case 1:
-				// Move across 1 to the right and 2 up
-				possibleMoves[i][0] = 1;
-				possibleMoves[i][1] = 2;
-				break;
-			case 2:
-				// Move across 1 to the left and 2 up
-				possibleMoves[i][0] = -1;
-				possibleMoves[i][1] = 2;
-				break;
-			case 3:
-				// Move across 2 to the left and 1 up
-				possibleMoves[i][0] = -2;
-				possibleMoves[i][1] = 1;
-				break;
-			case 4:
-				// Move across 2 to the left and down 1
-				possibleMoves[i][0] = -2;
-				possibleMoves[i][1] = -1;
-				break;
-			case 5:
-				// Move across 1 to the left and down 2
-				possibleMoves[i][0] = -1;
-				possibleMoves[i][1] = -2;
-				break;
-			case 6:
-				// Move across 1 to the right and 2 down
-				possibleMoves[i][0] = 1;
-				possibleMoves[i][1] = -2;
-				break;
-			case 7:
-				// Move across 2 to the right and 1 down
-				possibleMoves[i][0] = 2;
-				possibleMoves[i][1] = -1;
-				break;
-		}
+	printf("[");
+	for (size_t i = 0; i < m; i++) {
+		printf("%d, ", a[i]);
 	}
+	printf("%s", "\b\b]\n");
 }
