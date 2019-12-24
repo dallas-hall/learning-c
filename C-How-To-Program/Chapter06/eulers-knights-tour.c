@@ -18,6 +18,8 @@
 void print2dArray(size_t m, size_t n, int a[][n]);
 void setPossibleKnightMoves(size_t totalPossibleMoves, size_t xyMoves, int possibleMoves[][xyMoves]);
 void print1dArray(size_t m, int a[]);
+bool allMovesAttempted(size_t m, bool a[]);
+void resetAttemptedMoves(size_t m, bool a[]);
 
 int main(void)
 {
@@ -59,70 +61,93 @@ int main(void)
 	verticalMovement[7] = 1; // Move down 1
 	print1dArray(POSSIBLE_MOVES, verticalMovement);
 
+	puts("## Running");
 	/*
 	 * This is the position of the knight, based on 0,0 being top left of the 8x8 board.
 	 * The book positions the K at row 3, column 4
+	 * The starting position will be 1.
 	 */
 	int currentRow = 3;
 	int currentColumn = 4;
-
-	puts("## Running");
-	/*
-	 * Choose from one of the 8 possible moves.
-	 * Must test that every move
-	 * a) doesn't land off of the board (outside of 0-7 for x,y)
-	 * b) the knight hasn't been there already. (move number is not 0)
-	 * Use currentRow += verticalMovement[moveNumber] and currentColumn += horizontalMovement[moveNumber]
-	 */
-	// Can't exceed 63, ie 64 moves
 	int moveCounter = 0;
-	// Must be between 0 and 7 inclusive, ie 8 possible moves
-	int moveNumber = 0;
+	bool movesAttempted[POSSIBLE_MOVES] = {false};
+	board[currentRow][currentColumn] = ++moveCounter;
+
 	// Various variables needed
 	bool moveStaysOnBoard = false;
 	bool moveHasntBeenDoneYet = false;
 	bool validMove = false;
-	int tempRow = currentRow;
-	int tempColumn = currentColumn;
+	bool noMorePossibleMoves = false;
+	int tempRow;
+	int tempColumn;
 	int prn = 0;
-	for (size_t i = 0; i < 10; i++) {
+	for (size_t i = 0; i < MAX_MOVES; i++) {
 		while(!validMove) {
-			// Select a move, between 0 and 7
+			// Reset the variables
+			moveHasntBeenDoneYet = false;
+			moveStaysOnBoard = false;
+
+			// Copy the current position to use for working out valid moves
+			tempRow = currentRow;
+			tempColumn = currentColumn;
+
+			// Maximum possible moves is 8, so that is our attempt limit.
+			if (allMovesAttempted(POSSIBLE_MOVES, movesAttempted)) {
+				noMorePossibleMoves = true;
+				break;
+			}
+
+			/*
+			 * Choose from one of the 8 possible moves.
+			 * Must test that every move
+			 * a) doesn't land off of the board (outside of 0-7 for x,y)
+			 * b) the knight hasn't been there already. (move number is not 0)
+			 * Use currentRow += verticalMovement[moveNumber] and currentColumn += horizontalMovement[moveNumber]
+			 */
 			prn = rand() % 8;
+			// Check that we haven't already tried that move
+			if (movesAttempted[prn] == true) {
+				continue;
+			}
+			movesAttempted[prn] = true;
 			tempRow += verticalMovement[prn];
 			tempColumn += horizontalMovement[prn];
 
 			// Test if the move doesn't go off the board
-			if(currentRow + tempRow >= MIN_LEGAL_MOVE && currentRow + tempRow <= MAX_LEGAL_MOVE &&
-			currentColumn + tempColumn >= MIN_LEGAL_MOVE && currentColumn + tempColumn <= MAX_LEGAL_MOVE) {
+			if(tempRow >= MIN_LEGAL_MOVE && tempRow <= MAX_LEGAL_MOVE &&
+			   tempColumn >= MIN_LEGAL_MOVE && tempColumn <= MAX_LEGAL_MOVE) {
 				moveStaysOnBoard = true;
+			}
+			else {
+				continue;
 			}
 
 			// Test that moved hasn't been done yet
-			if(board[currentRow][currentColumn] != 0) {
+			if(board[tempRow][tempColumn] == 0) {
 				moveHasntBeenDoneYet = true;
+			}
+			else {
+				continue;
 			}
 
 			if (moveStaysOnBoard && moveHasntBeenDoneYet) {
 				validMove = true;
 			}
-			else {
-				// Reset the variables
-				moveHasntBeenDoneYet = false;
-				moveStaysOnBoard = false;
-			}
 		}
+		if(noMorePossibleMoves) {
+			break;
+		}
+
 		// Make the move
-		++moveCounter;
 		currentRow += verticalMovement[prn];
 		currentColumn += horizontalMovement[prn];
-		board[currentRow][currentColumn] = moveCounter;
+		board[currentRow][currentColumn] = ++moveCounter;
 
 		// Reset variables
-		++moveCounter;
 		moveHasntBeenDoneYet = false;
 		moveStaysOnBoard = false;
 		validMove = false;
+		resetAttemptedMoves(POSSIBLE_MOVES, movesAttempted);
 	}
 	print2dArray(BOARD_SIZE, BOARD_SIZE, board);
 
@@ -134,9 +159,9 @@ void print2dArray(size_t m, size_t n, int a[][n])
 	size_t lastLine = m - 1;
 	printf("%s", "[\n");
 	for (size_t i = 0; i < m; i++) {
-			printf("%s", "\t[");
+		printf("%s", "\t[");
 		for (size_t j = 0; j < n; j++) {
-			printf("%d, ", a[i][j]);
+			printf("%2d, ", a[i][j]);
 		}
 		if (i != lastLine) {
 			printf("%s", "\b\b],\n");
@@ -155,4 +180,21 @@ void print1dArray(size_t m, int a[])
 		printf("%d, ", a[i]);
 	}
 	printf("%s", "\b\b]\n");
+}
+
+bool allMovesAttempted(size_t m, bool a[])
+{
+	for (size_t i = 0; i < m; i++) {
+		if (a[i] !=  true) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void resetAttemptedMoves(size_t m, bool a[])
+{
+	for (size_t i = 0; i < m; i++) {
+		a[i] = false;
+	}
 }
