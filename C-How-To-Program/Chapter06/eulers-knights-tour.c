@@ -96,11 +96,20 @@ int main(void)
 	puts("Knights tour graph logic.");
 	// 0 out the array.
 	memset(chessBoard, -1, sizeof(chessBoard));
-	knightsTourAccessibilityMatrix(BOARD_SIZE, chessBoard, verticalMovements, horizontalMovements, currentRow,
-								   currentColumn, accessibilityMatrix);
+	for (int i = 0; i < BOARD_SIZE; i ++) {
+		for (int j = 0; j < BOARD_SIZE; j ++) {
+			// Reset the board and accessibility matrix
+			memset(chessBoard, -1, sizeof(chessBoard));
+			setAccessibilityMatrix(accessibilityMatrix);
 
-	puts("Chess board final state.");
-	print2dArray(BOARD_SIZE, BOARD_SIZE, chessBoard);
+			knightsTourAccessibilityMatrix(BOARD_SIZE, chessBoard, verticalMovements, horizontalMovements, i,
+										   j, accessibilityMatrix);
+			printf("Chess board final state %d,%d.\n", i, j);
+			print2dArray(BOARD_SIZE, BOARD_SIZE, chessBoard);
+			puts("Knight your graph accessibility matrix final state.");
+			print2dArray(BOARD_SIZE, BOARD_SIZE, accessibilityMatrix);
+		}
+	}
 
 	return EXIT_SUCCESS;
 }
@@ -296,7 +305,7 @@ knightsTourPrn(size_t boardSize, int board[][boardSize], const int verticalMovem
 		// Make the move
 		currentRow += verticalMovements[prn];
 		currentColumn += horizontalMovements[prn];
-		board[currentRow][currentColumn] = moveCounter;
+		board[currentRow][currentColumn] = (int) moveCounter;
 
 		// Reset variables
 		moveHasntBeenDoneYet = false;
@@ -312,6 +321,8 @@ void knightsTourAccessibilityMatrix(size_t boardSize, int board[][boardSize], co
 {
 	// Set the start position
 	board[startRow][startColumn] = 0;
+	// The start position is no longer accessible
+	accessibilityMatrix[startRow][startColumn] = 0;
 
 	// Various variables needed
 	int currentRow = startRow;
@@ -373,7 +384,7 @@ void knightsTourAccessibilityMatrix(size_t boardSize, int board[][boardSize], co
 
 			if (moveStaysOnBoard && moveHasntBeenDoneYet) {
 				int currentMoveAccessibilityValue = accessibilityMatrix[tempRow][tempColumn];
-				if (currentMoveAccessibilityValue < currentBestAccessibilityValue) {
+				if (currentMoveAccessibilityValue < currentBestAccessibilityValue && currentMoveAccessibilityValue > 0) {
 					// Reset back to the move numbers start row
 					currentBestRow = currentRow;
 					currentBestColumn = currentColumn;
@@ -390,7 +401,10 @@ void knightsTourAccessibilityMatrix(size_t boardSize, int board[][boardSize], co
 			// Make the best move after testing all possible moves
 			currentRow = currentBestRow;
 			currentColumn = currentBestColumn;
-			board[currentRow][currentColumn] = moveCounter;
+			board[currentRow][currentColumn] = (int) moveCounter;
+
+			// Update accessibility matrix as this square is no longer accessible
+			accessibilityMatrix[currentRow][currentColumn] = 0;
 
 			// Reset variables
 			currentBestAccessibilityValue = INT_MAX;
