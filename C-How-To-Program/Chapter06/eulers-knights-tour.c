@@ -3,6 +3,7 @@
 #include <time.h>
 #include <stdbool.h>
 #include <string.h>
+#include <limits.h>
 
 // Standard size is 8 x 8
 #define BOARD_SIZE 8
@@ -17,13 +18,26 @@
 #define MAX_LEGAL_MOVE 7
 
 void print2dArray(size_t m, size_t n, int a[][n]);
+
 void setHorizontalMovements(int a[]);
+
 void setVerticalMovements(int a[]);
+
 void setAccessibilityMatrix(int accessibilityMatrix[][BOARD_SIZE]);
+
 void print1dArray(size_t m, int a[]);
+
 bool allMovesAttempted(size_t m, const bool a[]);
+
 void resetAttemptedMoves(size_t m, bool a[]);
-void knightsTour(size_t boardSize, int board[][boardSize], const int verticalMovements[], const int horizontalMovements[], int startRow, int startColumn, bool useAccessibility, const int accessibilityMatrix[][boardSize]);
+
+void
+knightsTourPrn(size_t boardSize, int board[][boardSize], const int verticalMovements[], const int horizontalMovements[],
+			   int startRow, int startColumn);
+
+void knightsTourAccessibilityMatrix(size_t boardSize, int board[][boardSize], const int verticalMovements[],
+									const int horizontalMovements[], int startRow, int startColumn,
+									int accessibilityMatrix[][boardSize]);
 
 int main(void)
 {
@@ -37,13 +51,15 @@ int main(void)
 	 * The algorithm should favour going for squares that have the lowest accessibility label, as they are harder to get to.
 	 * https://en.wikipedia.org/wiki/Knight%27s_graph
 	 */
-	int accessibilityMatrix[BOARD_SIZE][BOARD_SIZE] = {0};
+	int accessibilityMatrix[BOARD_SIZE][BOARD_SIZE];
+	memset(accessibilityMatrix, 0, sizeof(accessibilityMatrix));
 	setAccessibilityMatrix(accessibilityMatrix);
 	puts("Knight your graph accessibility matrix.");
 	print2dArray(BOARD_SIZE, BOARD_SIZE, accessibilityMatrix);
 
 	// Initialise to 0. The move number will be added to the board when the knight lands there.
-	int chessBoard[BOARD_SIZE][BOARD_SIZE] = {0};
+	int chessBoard[BOARD_SIZE][BOARD_SIZE];
+	memset(chessBoard, -1, sizeof(chessBoard));
 	puts("Chess board starting state.");
 	print2dArray(BOARD_SIZE, BOARD_SIZE, chessBoard);
 
@@ -71,15 +87,17 @@ int main(void)
 	int currentRow = 3;
 	int currentColumn = 4;
 	puts("Naive PRN logic.");
-	knightsTour(BOARD_SIZE, chessBoard, verticalMovements, horizontalMovements, currentRow, currentColumn, false, accessibilityMatrix);
+	knightsTourPrn(BOARD_SIZE, chessBoard, verticalMovements,
+				   horizontalMovements, currentRow, currentColumn);
 
 	puts("Chess board final state.");
 	print2dArray(BOARD_SIZE, BOARD_SIZE, chessBoard);
 
 	puts("Knights tour graph logic.");
 	// 0 out the array.
-	memset(chessBoard, 0, sizeof(chessBoard));
-	knightsTour(BOARD_SIZE, chessBoard, verticalMovements, horizontalMovements, currentRow, currentColumn, true, accessibilityMatrix);
+	memset(chessBoard, -1, sizeof(chessBoard));
+	knightsTourAccessibilityMatrix(BOARD_SIZE, chessBoard, verticalMovements, horizontalMovements, currentRow,
+								   currentColumn, accessibilityMatrix);
 
 	puts("Chess board final state.");
 	print2dArray(BOARD_SIZE, BOARD_SIZE, chessBoard);
@@ -142,7 +160,7 @@ void print1dArray(size_t m, int a[])
 void setAccessibilityMatrix(int accessibilityMatrix[][BOARD_SIZE])
 {
 	for (size_t i = 0; i < BOARD_SIZE; i++) {
-		switch(i) {
+		switch (i) {
 			case 0:
 			case 7:
 				accessibilityMatrix[i][0] = 2;
@@ -185,7 +203,7 @@ void setAccessibilityMatrix(int accessibilityMatrix[][BOARD_SIZE])
 bool allMovesAttempted(size_t m, bool const a[])
 {
 	for (size_t i = 0; i < m; i++) {
-		if (a[i] !=  true) {
+		if (a[i] != true) {
 			return false;
 		}
 	}
@@ -199,15 +217,17 @@ void resetAttemptedMoves(size_t m, bool a[])
 	}
 }
 
-void knightsTour(size_t boardSize, int board[][boardSize], const int verticalMovements[], const int horizontalMovements[], int startRow, int startColumn, bool useAccessibility, const int accessibilityMatrix[][boardSize])
+void
+knightsTourPrn(size_t boardSize, int board[][boardSize], const int verticalMovements[], const int horizontalMovements[],
+			   int startRow, int startColumn)
 {
-	int currentRow = startRow;
-	int currentColumn = startColumn;
-	int moveCounter = 0;
-	bool movesAttempted[POSSIBLE_MOVES] = {false};
-	board[currentRow][currentColumn] = ++moveCounter;
+	// Set the start location
+	board[startRow][startColumn] = 0;
 
 	// Various variables needed
+	int currentRow = startRow;
+	int currentColumn = startColumn;
+	bool movesAttempted[POSSIBLE_MOVES] = {false};
 	bool moveStaysOnBoard = false;
 	bool moveHasntBeenDoneYet = false;
 	bool validMove = false;
@@ -215,8 +235,9 @@ void knightsTour(size_t boardSize, int board[][boardSize], const int verticalMov
 	int tempRow;
 	int tempColumn;
 	int prn = 0;
-	for (size_t i = 0; i < MAX_MOVES; i++) {
-		while(!validMove) {
+
+	for (size_t moveCounter = 1; moveCounter < MAX_MOVES; moveCounter++) {
+		while (!validMove) {
 			// Reset the variables, needed for the continue statements
 			moveHasntBeenDoneYet = false;
 			moveStaysOnBoard = false;
@@ -248,8 +269,8 @@ void knightsTour(size_t boardSize, int board[][boardSize], const int verticalMov
 			tempColumn += horizontalMovements[prn];
 
 			// Test if the move doesn't go off the board
-			if(tempRow >= MIN_LEGAL_MOVE && tempRow <= MAX_LEGAL_MOVE &&
-			   tempColumn >= MIN_LEGAL_MOVE && tempColumn <= MAX_LEGAL_MOVE) {
+			if ((tempRow >= MIN_LEGAL_MOVE && tempRow <= MAX_LEGAL_MOVE) &&
+				(tempColumn >= MIN_LEGAL_MOVE && tempColumn <= MAX_LEGAL_MOVE)) {
 				moveStaysOnBoard = true;
 			}
 			else {
@@ -257,34 +278,25 @@ void knightsTour(size_t boardSize, int board[][boardSize], const int verticalMov
 			}
 
 			// Test that moved hasn't been done yet
-			if(board[tempRow][tempColumn] == 0) {
+			if (board[tempRow][tempColumn] == -1) {
 				moveHasntBeenDoneYet = true;
 			}
 			else {
 				continue;
 			}
 
-			// Test the move is using the best path (ie lowest accessibility label) from the accessibility matrix
-			if(useAccessibility) {
-				// Get accessibility number
-
-				// Check all possible paths
-
-				// See if current path is best, if not use the best path
-			}
-
 			if (moveStaysOnBoard && moveHasntBeenDoneYet) {
 				validMove = true;
 			}
 		}
-		if(noMorePossibleMoves) {
+		if (noMorePossibleMoves) {
 			break;
 		}
 
 		// Make the move
 		currentRow += verticalMovements[prn];
 		currentColumn += horizontalMovements[prn];
-		board[currentRow][currentColumn] = ++moveCounter;
+		board[currentRow][currentColumn] = moveCounter;
 
 		// Reset variables
 		moveHasntBeenDoneYet = false;
@@ -293,3 +305,104 @@ void knightsTour(size_t boardSize, int board[][boardSize], const int verticalMov
 		resetAttemptedMoves(POSSIBLE_MOVES, movesAttempted);
 	}
 }
+
+void knightsTourAccessibilityMatrix(size_t boardSize, int board[][boardSize], const int verticalMovements[],
+									const int horizontalMovements[], int startRow, int startColumn,
+									int accessibilityMatrix[][boardSize])
+{
+	// Set the start position
+	board[startRow][startColumn] = 0;
+
+	// Various variables needed
+	int currentRow = startRow;
+	int currentColumn = startColumn;
+	bool movesAttempted[POSSIBLE_MOVES] = {false};
+	bool moveStaysOnBoard = false;
+	bool moveHasntBeenDoneYet = false;
+	bool moveFound = false;
+	int tempRow;
+	int tempColumn;
+	int currentBestRow;
+	int currentBestColumn;
+	int currentBestAccessibilityValue = INT_MAX;
+
+	// Start at 1 as we aren't including the starting position
+	for (size_t moveCounter = 1; moveCounter < MAX_MOVES; moveCounter++) {
+		currentBestRow = currentRow;
+		currentBestColumn = currentColumn;
+		/*
+		 * Examine all possible moves and pick the one with the lowest accessibility score. Ties not dealt with.
+		 * Must test that every move
+		 * a) doesn't land off of the board (outside of 0-7 for x,y)
+		 * b) the knight hasn't been there already. (move number is not 0)
+		 * c) Use the lowest accessibilty score.
+		 * Use currentRow += verticalMovement[moveNumber] and currentColumn += horizontalMovement[moveNumber]
+		 */
+		for (size_t moveNumber = 0; moveNumber < POSSIBLE_MOVES; moveNumber++) {
+			// Reset the variables, needed for the continue statements
+			moveHasntBeenDoneYet = false;
+			moveStaysOnBoard = false;
+
+			// Copy the current position to use for working out valid moves
+			tempRow = currentRow;
+			tempColumn = currentColumn;
+
+			// Flag the current move number as tested
+			movesAttempted[moveNumber] = true;
+
+			// Get the current move number and do the checks
+			tempRow += verticalMovements[moveNumber];
+			tempColumn += horizontalMovements[moveNumber];
+
+			// Test if the move doesn't go off the board
+			if ((tempRow >= MIN_LEGAL_MOVE && tempRow <= MAX_LEGAL_MOVE) &&
+				(tempColumn >= MIN_LEGAL_MOVE && tempColumn <= MAX_LEGAL_MOVE)) {
+				moveStaysOnBoard = true;
+			}
+			else {
+				continue;
+			}
+
+			// Test that moved hasn't been done yet
+			if (board[tempRow][tempColumn] == -1) {
+				moveHasntBeenDoneYet = true;
+			}
+			else {
+				continue;
+			}
+
+			if (moveStaysOnBoard && moveHasntBeenDoneYet) {
+				int currentMoveAccessibilityValue = accessibilityMatrix[tempRow][tempColumn];
+				if (currentMoveAccessibilityValue < currentBestAccessibilityValue) {
+					// Reset back to the move numbers start row
+					currentBestRow = currentRow;
+					currentBestColumn = currentColumn;
+
+					// Store the best accessibility details
+					moveFound = true;
+					currentBestAccessibilityValue = currentMoveAccessibilityValue;
+					currentBestRow += verticalMovements[moveNumber];
+					currentBestColumn += horizontalMovements[moveNumber];
+				}
+			}
+		}
+		if (moveFound) {
+			// Make the best move after testing all possible moves
+			currentRow = currentBestRow;
+			currentColumn = currentBestColumn;
+			board[currentRow][currentColumn] = moveCounter;
+
+			// Reset variables
+			currentBestAccessibilityValue = INT_MAX;
+			resetAttemptedMoves(POSSIBLE_MOVES, movesAttempted);
+			moveFound = false;
+
+//			printf("moveCounter %ld\n", moveCounter);
+//			print2dArray(boardSize, boardSize, board);
+		}
+		else {
+			break;
+		}
+	}
+}
+
