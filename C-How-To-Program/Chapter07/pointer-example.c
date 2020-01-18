@@ -26,17 +26,22 @@ int main(void)
 	 * %p is used to print the memory address in hex
 	 * Need to cast with (void*) as this is happening implicitly. The compiler is warning without this.
 	 */
-	printf("The address of n is %p\nThe direct value of nPointer is %p\n", (void*) &n, (void*) nPointer);
-	printf("The address of m is %p\nThe direct value of mPointer is %p\n", (void*) &m, (void*) mPointer);
+	printf("%-35s%p\n", "The address of n via &n is ", (void*) &n);
+	printf("%-35s%p\n", "The direct value of nPointer is ", (void*) nPointer);
+	printf("%-35s%p\n", "The address of m via &m is ", (void*) &m);
+	printf("%-35s%p\n", "The direct value of mPointer is ", (void*) mPointer);
 
 	printf("\n# Memory Values\n");
 	/* The star here returns the value that is being pointed to. This is called dereferrncing a pointer. */
-	printf("The direct value of n is %d\nThe indirect (i.e. dereferenced) value of nPointer is %d\n", n, *nPointer);
-	printf("The direct value of m is %d\nThe indirect (i.e. dereferenced)  value of mPointer is %d\n", m, *mPointer);
+	printf("%-48s%d\n", "The direct value of n is ", n);
+	printf("%-48s%d\n", "The indirect value of nPointer via *nPointer is ", *nPointer);
+	printf("%-48s%d\n", "TThe direct value of m is ", m);
+	printf("%-48s%d\n", "The indirect value of mPointer via *mPointer is ", *mPointer);
 
-	printf("\nThis shows that * and & are complements of each other.\n");
+	printf("\n# Pointer Memory Address\n");
 	printf("&*nPointer = %p\n*&nPointer = %p\n&*mPointer = %p\n*&mPointer = %p\n",
 		   (void*) &*nPointer, (void*) *&nPointer, (void*) &*nPointer, (void*) *&nPointer);
+	printf("\nThis shows that * and & are complements of each other. I prefer &*var as left to right it means 'get the address of the pointer var'.\n");
 
 	return EXIT_SUCCESS;
 }
