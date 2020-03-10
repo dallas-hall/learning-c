@@ -35,12 +35,12 @@ int main(void)
 	/* The star here returns the value that is being pointed to. This is called dereferrncing a pointer. */
 	printf("%-48s%d\n", "The direct value of n is ", n);
 	printf("%-48s%d\n", "The indirect value of nPointer via *nPointer is ", *nPointer);
-	printf("%-48s%d\n", "TThe direct value of m is ", m);
+	printf("%-48s%d\n", "The direct value of m is ", m);
 	printf("%-48s%d\n", "The indirect value of mPointer via *mPointer is ", *mPointer);
 
 	printf("\n# Pointer Memory Address\n");
 	printf("&*nPointer = %p\n*&nPointer = %p\n&*mPointer = %p\n*&mPointer = %p\n",
-		   (void*) &*nPointer, (void*) *&nPointer, (void*) &*nPointer, (void*) *&nPointer);
+		   (void*) &*nPointer, (void*) *&nPointer, (void*) &*mPointer, (void*) *&mPointer);
 	printf("\nThis shows that * and & are complements of each other. I prefer &*var as left to right it means 'get the address of the pointer var'.\n");
 
 	return EXIT_SUCCESS;
