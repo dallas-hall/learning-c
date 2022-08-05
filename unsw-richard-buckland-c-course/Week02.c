@@ -1,7 +1,7 @@
 /*
  * Week 2 demo code.
  *
- * author: blindcant
+ * author: dhall
  * date: 26-03-2019
  *
  */
