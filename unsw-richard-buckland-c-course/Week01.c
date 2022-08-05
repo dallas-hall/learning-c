@@ -1,6 +1,6 @@
 /*
  * Demo code written in lecture 4 week 1 comp191 
- * by: blindcant
+ * by: dhall
  * date: 26-03-2019
  */
 
